@@ -1,3 +1,5 @@
+import path from 'path'
+
 const config = {
   projectName: 'quanliucheng-react',
   date: '2021-11-8',
@@ -11,6 +13,14 @@ const config = {
   outputRoot: 'dist',
   plugins: [],
   defineConstants: {
+  },
+  alias: {
+    '@/components': path.resolve(__dirname, '..', 'src/components'),
+    '@/pages': path.resolve(__dirname, '..', 'src/pages'),
+    '@/utils': path.resolve(__dirname, '..', 'src/utils'),
+    '@/package': path.resolve(__dirname, '..', 'package.json'),
+    '@/project': path.resolve(__dirname, '..', 'project.config.json'),
+    '@/images': path.resolve(__dirname, '..', 'src/images'),
   },
   copy: {
     patterns: [
