@@ -21,6 +21,7 @@ const config = {
     '@/package': path.resolve(__dirname, '..', 'package.json'),
     '@/project': path.resolve(__dirname, '..', 'project.config.json'),
     '@/images': path.resolve(__dirname, '..', 'src/images'),
+    '@/config': path.resolve(__dirname, '..', 'src/config'),
   },
   copy: {
     patterns: [
