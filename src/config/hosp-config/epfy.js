@@ -41,7 +41,7 @@ export default {
     
     quickEntrance: {
       enable: true,
-      tabs: [
+      tabList: [
         {
           title: "其他",
           entrances:[
@@ -49,9 +49,49 @@ export default {
               name: "自助核酸缴费",
               icon: imgUrl.new_home_icon10,
               event: "toAcidSelfPayment"
+            },
+            {
+              name: "住院登记",
+              icon: imgUrl.new_home_icon10,
+              event: "toAcidSelfPayment"
+            },
+            {
+              name: "自助核酸缴费",
+              icon: imgUrl.new_home_icon10,
+              event: "toAcidSelfPayment"
+            },
+            {
+              name: "住院登记",
+              icon: imgUrl.new_home_icon10,
+              event: "toAcidSelfPayment"
+            },
+            {
+              name: "自助核酸缴费",
+              icon: imgUrl.new_home_icon10,
+              event: "toAcidSelfPayment"
+            },
+            {
+              name: "住院登记",
+              icon: imgUrl.new_home_icon10,
+              event: "toAcidSelfPayment"
             }
           ]
-        }
+        },
+        {
+          title: "住院",
+          entrances:[
+            {
+              name: "住院登记",
+              icon: imgUrl.new_home_icon10,
+              event: "toAcidSelfPayment"
+            },
+            {
+              name: "自助核酸缴费",
+              icon: imgUrl.new_home_icon10,
+              event: "toAcidSelfPayment"
+            }
+          ]
+        },
       ]
     },
     hospBlog: {

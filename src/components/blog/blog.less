@@ -1,0 +1,36 @@
+.blog{
+  display: flex;
+  justify-content: space-between;
+  margin-top: 40rpx;
+  &-banner{
+    width: 200rpx;
+    height: 120rpx;
+    border-radius: 20rpx;
+  } 
+  &-info{
+    width: 430rpx;
+    display: flex;
+    flex-direction: column;
+    &-title{
+      font-size: 28rpx;
+      color: #333333;
+      width: 430rpx;
+      overflow:hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    &-desc{
+      font-size: 24rpx;
+      color:#666666;
+      flex:1;
+      width: 430rpx;
+      overflow:hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    &-date{
+      font-size: 20rpx;
+      color: #666666;
+    }
+  }
+}

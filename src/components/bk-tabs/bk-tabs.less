@@ -1,0 +1,30 @@
+@import '../../color.less';
+
+.bk-tabs{
+  display: flex;
+  padding: 0 20rpx;
+  .bk-tab {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding:20rpx 20rpx 0;
+
+    &-title{
+      font-size: 34rpx;
+      color: #666666;
+    }
+    &-line{
+      margin-top: 10rpx;
+      height: 8rpx;
+      width: 50rpx;
+      border-radius: 1rem;
+      background-color: @primary-color
+    }
+  }
+  .active{
+    color: @primary-color
+  }
+  .inactive{
+    color: #666666;
+  }
+}

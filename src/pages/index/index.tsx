@@ -10,6 +10,7 @@ import FunctionBoxes from '@/components/function-boxes/function-boxes'
 import HealthCards from '@/components/health-cards/health-cards'
 import NavCard from '@/components/nav-card/nav-card'
 import QuickEntrance from '@/components/quick-entrance/quick-entrance'
+import HospBlog from '@/components/hosp-blog/hosp-blog'
 import { MyContext } from '@/utils/my-context'
 import './index.less'
 
@@ -22,6 +23,7 @@ export default function Index() {
  
   useEffect(() => {
     Taro.setNavigationBarTitle({title: config.hospitalName})
+    console.log('config',config)
     return () => {
       // cleanup
     }
@@ -33,8 +35,8 @@ export default function Index() {
         {indexPage.healthCard.enable ? <HealthCards>healthCard</HealthCards> : ''}
         {indexPage.navCard.enable ? <NavCard>navCard</NavCard> : ''}
         {indexPage.functionBox.enable? <FunctionBoxes >funbox</FunctionBoxes> : ''}
-        {indexPage.quickEntrance.enable? <QuickEntrance>quickEntrance</QuickEntrance> : ''}
-        {indexPage.hospBlog.enable ? <View>hospBlog</View> : ''}
+        {indexPage.quickEntrance.enable? <QuickEntrance quickEntrance={indexPage.quickEntrance}>quickEntrance</QuickEntrance> : ''}
+        {indexPage.hospBlog.enable ? <HospBlog>hospBlog</HospBlog> : ''}
       </MyContext.Provider>
       
       {/* <BkButton name='click me!'  setSubmit={onSubmit} theme='danger'></BkButton> */}
