@@ -9508,6 +9508,7 @@
   "version" "3.4.4"
 
 "miniprogram-compiler@latest":
+  "integrity" "sha512-RvAtq5QKLRSD2VZ3+bgXHN+cO3uJBFSpICUDhmgsiJX4ZNpKYAuHjW2U78XLBWM6hwVXNwWFudF3x9V6lTkG7w=="
   "version" "0.1.3"
   dependencies:
     "glob" "^7.1.3"

@@ -1,0 +1,15 @@
+<view class="cardsContainer">
+  <health-card-users
+    type="auth"
+    hospitalId="100001"
+    bind:select="selectCallback"
+    bind:addCard="addCard"
+    bind:switchType="switchTypeCallback"
+  />
+</view>
+
+<!--
+type：页面初始状态，auth-选卡，manage-管理健康卡
+hospitalId：带上医院id，可在卡片上显示是否与医院关联
+-->
+

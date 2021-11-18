@@ -6,9 +6,10 @@
       "@/components/*": ["./src/components/*"],
       "@/pages/*": ["./src/pages/*"],
       "@/utils/*": ["./src/utils/*"],
-      "@/package": ["./package.json"],
-      "@/project": ["./project.config.json"],
-      "@/config/*": ["./src/config/*"]
+      // "@/package": ["./package.json"],
+      // "@/project": ["./project.config.json"],
+      "@/config/*": ["./src/config/*"],
+      "@/service/*": ["./src/service/*"]
     }
   }
 }

@@ -1,7 +1,6 @@
 import * as Taro from '@tarojs/taro'
-import { Component, useEffect, useState } from 'react'
-import { View, Text, Image } from '@tarojs/components'
-import { AtButton } from 'taro-ui'
+import { useEffect, useState } from 'react'
+import { View, Image } from '@tarojs/components'
 import * as React from 'react'
 import BkButton from '@/components/bk-button/bk-button'
 import "taro-ui/dist/style/components/button.scss" // 按需引入
@@ -16,17 +15,8 @@ import './index.less'
 
 export default function Index() {
   const [indexPage] = useState(config.indexPage)
-  
-  const onSubmit = (e) => {
-    console.log('onSubmit',e)
-  }
- 
   useEffect(() => {
     Taro.setNavigationBarTitle({title: config.hospitalName})
-    console.log('config',config)
-    return () => {
-      // cleanup
-    }
   }, [])
   return (
     <View className='index'>

@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "health-card-users": "plugin://healthCardPlugins/healthCardUsers"
+  },
+  "navigationBarTitleText": "健康卡"
+}

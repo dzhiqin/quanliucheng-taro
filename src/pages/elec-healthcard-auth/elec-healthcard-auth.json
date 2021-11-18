@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "电子健康卡授权",
+  "usingComponents": {
+    "health-card-login": "plugin://healthCardPlugins/healthCardLogin"
+
+  }
+}

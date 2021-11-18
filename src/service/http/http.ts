@@ -1,4 +1,4 @@
-import Taro from '@tarojs/taro'
+import * as Taro from '@tarojs/taro'
 
 interface Response {
   code: number
@@ -16,15 +16,21 @@ export interface UploadResponse extends Response {
   data?: object | string
 }
 const getHeaderAuth = () => {
-  let auth = Taro.getStorageSync('auth')
-  let headerAuth = {}
-  if(auth) {
-    auth = JSON.parse(auth)
-    headerAuth = {
-      'access-token': auth ? auth.accessToken : '',
-      client: auth ? auth.client : '',
-      uid: auth ? auth.uid : ''
-    }
+  // let auth = Taro.getStorageSync('auth')
+  // let headerAuth = {}
+  // if(auth) {
+  //   auth = JSON.parse(auth)
+  //   headerAuth = {
+  //     'access-token': auth ? auth.accessToken : '',
+  //     client: auth ? auth.client : '',
+  //     uid: auth ? auth.uid : ''
+  //   }
+  // }
+  // return headerAuth
+  let token = Taro.getStorageSync('token')
+  let headerAuth = {token:''}
+  if(token){
+    headerAuth.token = token
   }
   return headerAuth
 }

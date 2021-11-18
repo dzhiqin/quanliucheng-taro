@@ -1,14 +1,14 @@
 import * as Taro from '@tarojs/taro'
-import { Get, fullUrl } from "../http";
+import config from '@/config/index'
+import { Get, fullUrl, Post } from "../http";
 
-const baseUrl = 'http://192.168.2.34:3001'
+const baseUrl = config.baseUrl
 
 export const login = (data) => {
   return new Promise((resolve, reject) => {
     Taro.request({
       method:'POST',
-      url: baseUrl + '/api/wechat/login',
-      // url: fullUrl('api/wechat/login'),
+      url: baseUrl + '/Authorized/Login',
       data: data,
       header: {
         'content-Type': 'application/json',
@@ -21,4 +21,10 @@ export const login = (data) => {
       }
     })
   })
+}
+export const updateUserInfo = (data:any={}) => {
+  return Post(fullUrl('Authorized/GetUserInfo'),data)
+}
+export const getHealthCards = () => {
+  return Post(fullUrl('Card'))
 }

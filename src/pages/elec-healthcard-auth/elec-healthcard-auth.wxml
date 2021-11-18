@@ -1,0 +1,25 @@
+<view class='health-card-auth'>
+  <view class='health-card-content'>
+    <view class='health-card-content-title'>电子健康卡</view>
+    <view class='health-card-content-info'>
+      <view class='health-card-content-info-txt'>小程序正使用电子健康卡提供的服务，电子健康卡将使用</view>
+      <view style='display: flex; align-items:center; margin-top: 20rpx;'>
+        <view class='health-card-content-info-dot'></view>
+        <view class='health-card-content-info-subtxt'>获取你的公开信息（昵称及头像）</view>
+      </view>
+    </view>
+    <view class='health-card-btns'>
+      <health-card-login
+        encrypt="{{true}}"
+        authLogin="{{false}}"
+        bind:authFail="authFail"
+        bind:authSucess="authSuccess"
+        bind:authCancel="authCancel"
+        wechatcode="{{true}}"
+      >
+        <view class='health-card-btn primary'>授权登录</view>
+      </health-card-login>
+      <view class='health-card-btn cancel' bindtap="onCancel">取消</view>
+    </view>
+  </view>
+</view>

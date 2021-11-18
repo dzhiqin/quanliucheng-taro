@@ -1,0 +1,36 @@
+{
+  "setting": {},
+  "condition": {
+    "plugin": {
+      "list": []
+    },
+    "game": {
+      "list": []
+    },
+    "gamePlugin": {
+      "list": []
+    },
+    "miniprogram": {
+      "list": [
+        {
+          "name": "elec-healthcard-auth",
+          "pathName": "pages/elec-healthcard-auth/elec-healthcard-auth",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/custom-page/custom-page",
+          "pathName": "pages/custom-page/custom-page",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "bind-card",
+          "pathName": "pages/bind-card/bind-card",
+          "query": "",
+          "scene": null
+        }
+      ]
+    }
+  }
+}

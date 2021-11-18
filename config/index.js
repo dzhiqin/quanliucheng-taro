@@ -18,10 +18,11 @@ const config = {
     '@/components': path.resolve(__dirname, '..', 'src/components'),
     '@/pages': path.resolve(__dirname, '..', 'src/pages'),
     '@/utils': path.resolve(__dirname, '..', 'src/utils'),
-    '@/package': path.resolve(__dirname, '..', 'package.json'),
-    '@/project': path.resolve(__dirname, '..', 'project.config.json'),
+    // '@/package': path.resolve(__dirname, '..', 'package.json'),
+    // '@/project': path.resolve(__dirname, '..', 'project.config.json'),
     '@/images': path.resolve(__dirname, '..', 'src/images'),
     '@/config': path.resolve(__dirname, '..', 'src/config'),
+    '@/service': path.resolve(__dirname, '..', 'src/service')
   },
   copy: {
     patterns: [

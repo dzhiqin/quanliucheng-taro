@@ -1,0 +1,346 @@
+import * as Taro from '@tarojs/taro'
+import * as React from 'react'
+import { View, Picker } from '@tarojs/components'
+import { AtInput, AtForm, AtButton,AtIcon, AtList, AtListItem } from 'taro-ui'
+import "taro-ui/dist/style/components/button.scss"
+import "taro-ui/dist/style/components/input.scss"
+import "taro-ui/dist/style/components/icon.scss"
+import "taro-ui/dist/style/components/list.scss";
+import config from '@/config/index'
+import { idCardValidator, getBirthdayByIdCard, getGenderByIdCard, validateMessages, phoneValidator, birthdayValidator } from '@/utils'
+
+import {cardTypeOptions} from '../../utils/select-options'
+import './bind-card.less'
+// import { humanDate } from '../../utils/format'
+
+export default class BindCard extends React.Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      currentCardTypeIndex: 0,
+      currentCardTypeValue: '身份证',
+      cardTypeNames: [],
+      genders: ['男','女'],
+      currentGenderIndex: 0,
+      currentGenderValue: '请选择性别',
+      selectedDate: '请选择出生日期',
+      bindCardConfig: '',
+      // currentDate: '',
+      card: {
+        name: '',
+        cardType: '',
+        idCardNo: '',
+        gender: '',
+        birthday: '',
+        cellphone: '',
+        address: '',
+        isDefault: true,
+        hasHospitalCard: false,
+        hospitalCardNo: '',
+        marital: '未婚',
+        nationality: '',
+        parentName: '',
+        parentId: ''
+      }
+    }
+    
+  }
+
+  componentDidMount() {
+    cardTypeOptions.forEach(item => this.state.cardTypeNames.push(item.name))
+    // const currentDate = humanDate(new Date())
+    // this.setState({currentDate})
+    this.setState({
+      bindCardConfig: config.feat.bindCard,
+      card: {
+        ...this.state.card,
+        cardType: cardTypeOptions[0].id
+      }
+    })
+  }
+  loadIdCardInfo() {
+  }
+
+  onSubmit() {
+    const {result,msg}= this.formValidator()
+    console.log(result,msg)
+    console.log(this.state)
+  }
+  formValidator() {
+    const keys = Object.keys(this.state.card)
+    const card = this.state.card
+    let result = true
+    let msg = ''
+    for(let i =0 ;i<keys.length;i++){
+      const key = keys[i]
+      const value = card[keys[i]]
+      if(typeof value === 'boolean' || value === 0) continue
+      if(!value){
+        // console.log('key=',keys[i],'value=',card[keys[i]])
+        if(this.state.currentCardTypeValue === '儿童(无证件)' && key === 'idCardNo') continue
+        if(!this.state.bindCardConfig.nationality && key === 'nationality') continue
+        if(!card.hasHospitalCard && key === 'hospitalCardNo') continue
+        msg = validateMessages[keys[i]]
+        result = false
+        break
+      }
+      if(key === 'cellphone' && !phoneValidator(value)) {
+        result = false
+        msg = '请输入正确的手机号'
+      }
+      if((key === 'idCardNo') && !idCardValidator(value)) {
+        result = false
+        msg = '请输入正确的证件号'
+      }
+      if(key === 'birthday' && !birthdayValidator(value)) {
+        result = false
+        msg = '请输入正确的出生日期'
+      }
+    }
+    return {result, msg}
+  }
+  handleCardChange (stateName,value) {
+    if(typeof value === 'string'){
+      value = value.trim()
+    }
+    if(stateName === 'idCardNo' && idCardValidator(value)) {
+      const birthday = getBirthdayByIdCard(value)
+      const gender = getGenderByIdCard(value)
+      this.setState({
+        selectedDate: birthday,
+        currentGenderValue: gender,
+        card: {
+          ...this.state.card,
+          birthday,
+          gender,
+          [stateName]: value
+        }
+      })
+    }else{
+      this.setState({
+        card: {
+          ...this.state.card,
+          [stateName]: value
+        }
+      })
+    }
+    
+  }
+
+  onCardTypeChange(e) {
+    const index = e.detail.value
+    const name =this.state.cardTypeNames[index]
+    const item = cardTypeOptions.find(i => i.name === name)
+    
+    this.setState({
+      currentCardTypeIndex: index,
+      currentCardTypeValue: name
+    })
+    this.handleCardChange('cardType',item.id)
+  }
+  onGenderChange(e){
+    const index = e.detail.value
+    const value = this.state.genders[index]
+    this.setState({
+      currentGenderIndex: index,
+      currentGenderValue: value
+    })
+    this.handleCardChange('gender',value)
+  }
+  onDateChange(e){
+    const value = e.detail.value
+    this.setState({
+      selectedDate: value
+    })
+    this.handleCardChange('birthday',value)
+  }
+  onDefaultChange(value){
+    this.handleCardChange('isDefault',value)
+  }
+  onHashospitalCardChange(value){
+    this.handleCardChange('hasHospitalCard',value)
+  }
+  onMaritalChange(value){
+    this.handleCardChange('marital',value)
+  }
+  render() {
+    return (
+      <View className='bind-card'>
+        <ocr-navigator onSuccess={this.loadIdCardInfo} certificateType='idCard' opposite={false}>
+          <View>123</View>
+        </ocr-navigator>
+        <AtForm
+          onSubmit={this.onSubmit.bind(this)}
+        >
+          <AtInput 
+            name='name' 
+            title='姓名' 
+            type='text' 
+            placeholder='请输入姓名' 
+            value={this.state.card.name} 
+            onChange={this.handleCardChange.bind(this,'name')} 
+          />
+
+          <Picker mode='selector' range={this.state.cardTypeNames} onChange={this.onCardTypeChange.bind(this)} value={this.state.currentCardTypeIndex}>
+            <AtList>
+              <AtListItem
+                title='证件类型'
+                extraText={this.state.currentCardTypeValue}
+              >
+              </AtListItem>
+            </AtList>
+          </Picker>
+
+          {
+            this.state.currentCardTypeValue !== '儿童(无证件)' || !this.state.bindCardConfig.parentInfo ? 
+            <AtInput 
+              name='idCardNo' 
+              title='证件号码' 
+              type='text' 
+              placeholder='请输入证件号码' 
+              value={this.state.card.idCardNo} 
+              onChange={this.handleCardChange.bind(this,'idCardNo')} 
+            >
+            </AtInput> : 
+            ''
+          }
+        
+          {
+            this.state.currentCardTypeValue !== '门诊卡' ? 
+            <Picker mode='selector' range={this.state.genders} onChange={this.onGenderChange.bind(this)} value={this.state.currentGenderIndex}>
+              <AtList>
+                <AtListItem
+                  title='性别'
+                  extraText={this.state.currentGenderValue}
+                >
+                </AtListItem>
+              </AtList>
+            </Picker> :
+            ''
+          }
+          
+          {
+            this.state.currentCardTypeValue !== '门诊卡' ? 
+            <Picker mode='date' onChange={this.onDateChange.bind(this)} value={this.state.selectedDate}>
+              <AtList>
+                <AtListItem
+                  title='出生日期'
+                  extraText={this.state.selectedDate}
+                >
+                </AtListItem>
+              </AtList>
+            </Picker> : 
+            ''
+          }
+
+          <AtInput 
+            name='cellphone' 
+            title='电话号码' 
+            type='number' 
+            placeholder='请输入电话号码' 
+            value={this.state.card.cellphone} 
+            onChange={this.handleCardChange.bind(this,'cellphone')} 
+          />
+
+          <AtInput 
+            name='address' 
+            title='详细地址' 
+            type='text' 
+            placeholder='请输入详细地址' 
+            value={this.state.card.address} 
+            onChange={this.handleCardChange.bind(this,'address')}
+          >
+            <AtIcon value='map-pin' size='20' color='#56A1F4'></AtIcon>
+          </AtInput>
+
+          {
+            this.state.bindCardConfig.hospitalCard ? 
+            <AtInput 
+              name='hasHospitalCard' 
+              title='院内就诊卡' 
+              type='number' 
+              placeholder='' 
+            >
+              <View className={`btn ${this.state.card.hasHospitalCard ? 'primary' : 'cancel'}`} onClick={this.onHashospitalCardChange.bind(this, true)}>有</View>
+              <View className={`btn ${this.state.card.hasHospitalCard ? 'cancel' : 'primary'}`} onClick={this.onHashospitalCardChange.bind(this,false)}>无</View>
+            </AtInput> : 
+            ''
+          }
+          
+          {
+            this.state.bindCardConfig.hospitalCard && this.state.card.hasHospitalCard ? 
+            <AtInput 
+              name='hospitalCardNo' 
+              title='就诊卡号' 
+              type='text' 
+              placeholder='请输入就诊卡号' 
+              value={this.state.card.hospitalCardNo} 
+              onChange={this.handleCardChange.bind(this,'hospitalCardNo')} 
+            /> : 
+            ''
+          }
+          
+          {
+            this.state.bindCardConfig.maritalStatus ? 
+            <AtInput 
+              name='marital' 
+              title='婚姻状况' 
+              type='number' 
+              placeholder='' 
+            >
+              <View className={`btn ${this.state.card.marital === '未婚' ? 'info' : 'cancel'}`} onClick={this.onMaritalChange.bind(this, '未婚')}>未婚</View>
+              <View className={`btn ${this.state.card.marital === '已婚' ? 'info' : 'cancel'}`} onClick={this.onMaritalChange.bind(this, '已婚')}>已婚</View>
+              <View className={`btn ${this.state.card.marital === '离婚' ? 'info' : 'cancel'}`} onClick={this.onMaritalChange.bind(this, '离婚')}>离婚</View>
+              <View className={`btn ${this.state.card.marital === '丧偶' ? 'info' : 'cancel'}`} onClick={this.onMaritalChange.bind(this, '丧偶')}>丧偶</View>
+            </AtInput> :
+            ''
+          }
+
+          {
+            this.state.bindCardConfig.nationality ?
+            <AtInput 
+              name='nationality' 
+              title='国籍' 
+              type='text' 
+              placeholder='请输入国籍' 
+              value={this.state.card.nationality} 
+              onChange={this.handleCardChange.bind(this,'nationality')} 
+            /> :
+            ''
+          }
+
+          <AtInput 
+            name='isDefault' 
+            title='是否设置为默认健康卡' 
+            type='number' 
+            placeholder='' 
+          >
+            <View className={`btn ${this.state.card.isDefault ? 'info' : 'cancel'}`} onClick={this.onDefaultChange.bind(this, true)}>是</View>
+            <View className={`btn ${this.state.card.isDefault ? 'cancel' : 'info'}`} onClick={this.onDefaultChange.bind(this,false)}>否</View>
+          </AtInput>
+
+          <AtInput 
+            name='parentName' 
+            title='监护人姓名' 
+            type='text' 
+            placeholder='请输入监护人姓名' 
+            value={this.state.card.parentName} 
+            onChange={this.handleCardChange.bind(this,'parentName')} 
+          />
+
+          <AtInput 
+            name='parentId' 
+            title='监护人身份证号' 
+            type='text' 
+            placeholder='请输入监护人身份证' 
+            value={this.state.card.parentId} 
+            onChange={this.handleCardChange.bind(this,'parentId')} 
+          />
+          <View style='padding: 60rpx;'>
+            <AtButton type='primary' circle onClick={this.onSubmit.bind(this)}>立即绑定</AtButton>
+          </View>
+        </AtForm>
+      </View>
+    )
+  }
+}

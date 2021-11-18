@@ -4,27 +4,52 @@ import * as Taro from '@tarojs/taro'
 import { View,Swiper,SwiperItem,Image } from '@tarojs/components'
 import { useState,useEffect } from 'react'
 import * as React from 'react'
+import { getSetting, wxSubscribeMessage } from '@/service/api/taro-api'
+import templateId from '@/utils/templateId'
+import subscribeNoticeImg from '@/images/subscribe_notice.png'
+
 import qrcodeImg from '../../images/icons/qrcode.png'
 import './health-cards.less'
 
 export default function HealthCards(props: any) {
-  const [userInfo, setUserInfo] = useState({cards:[1,2]})
-  
+  const [userInfo, setUserInfo] = useState({cards:[]})
+  const [showNotice,setShowNotice] = useState(false)
   useEffect(() => {
     // const userInfo = Taro.getStorageSync('userInfo')
     // console.log('userInfo:',userInfo)
     // setUserInfo(userInfo)
+    console.log('healthcard on load')
     return () => {
       // cleanup
+      console.log('health card unload')
     }
   })
+  const handleLogin =() =>{
+    getSetting()
+    const tempIds = templateId.longterm.treatmentAndPayment()
+    wxSubscribeMessage(
+      tempIds, 
+      () => {
+        console.log('success')
+        Taro.navigateTo({
+          url: '/pages/login/login'
+        })
+      },
+      (res) => {
+        console.log('fail',res)
+        // setShowNotice(true)
+      })
+  }
   if(userInfo.cards.length === 0 ){
     return (
-      <View style='padding:20rpx'>
-        <View className='login-card'>
+      <View style='padding:40rpx 40rpx 0'>
+        <View className='login-card' onClick={handleLogin}>
             <Image src='https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/applets-imgs/man.png' className='login-card-avatar'></Image>
             <View className='login-card-txt'>请先登录</View>
         </View>
+        {showNotice ? <View className='subscribe-notice'>
+          <Image src={subscribeNoticeImg}></Image>
+        </View> : ''}
       </View>
     )
   }else{

@@ -3,7 +3,7 @@ import imgUrl from '@/utils/imgs'
 export default {
   hospName: "epfy",
   hospitalName: "恩平市妇幼保健院",
-  apiUrl: "https://epsfy.joyfulboo.com/api/",
+  baseUrl: "https://epsfy.joyfulboo.com/api",
   indexPage: {
     banner: {
       enable: true,
@@ -50,48 +50,8 @@ export default {
               icon: imgUrl.new_home_icon10,
               event: "toAcidSelfPayment"
             },
-            {
-              name: "住院登记",
-              icon: imgUrl.new_home_icon10,
-              event: "toAcidSelfPayment"
-            },
-            {
-              name: "自助核酸缴费",
-              icon: imgUrl.new_home_icon10,
-              event: "toAcidSelfPayment"
-            },
-            {
-              name: "住院登记",
-              icon: imgUrl.new_home_icon10,
-              event: "toAcidSelfPayment"
-            },
-            {
-              name: "自助核酸缴费",
-              icon: imgUrl.new_home_icon10,
-              event: "toAcidSelfPayment"
-            },
-            {
-              name: "住院登记",
-              icon: imgUrl.new_home_icon10,
-              event: "toAcidSelfPayment"
-            }
           ]
-        },
-        {
-          title: "住院",
-          entrances:[
-            {
-              name: "住院登记",
-              icon: imgUrl.new_home_icon10,
-              event: "toAcidSelfPayment"
-            },
-            {
-              name: "自助核酸缴费",
-              icon: imgUrl.new_home_icon10,
-              event: "toAcidSelfPayment"
-            }
-          ]
-        },
+        }
       ]
     },
     hospBlog: {
@@ -99,6 +59,9 @@ export default {
     }
   },
   feat:{
-    
+    bindCard: {
+      electronicHealthCard: false,
+      parent: true
+    }
   }
 }

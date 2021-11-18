@@ -1,4 +1,4 @@
-import config from '../../global'
+import config from '@/config/index'
 
 const baseUrl = config.baseUrl
 
