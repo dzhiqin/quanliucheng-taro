@@ -1,0 +1,21 @@
+.scan-wrap {
+  height: 116rpx;
+  margin: 40rpx 0;
+  border: 1px dashed #56A1F4;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(86,161,244,0.10)
+
+}
+.scan-wrap image{
+  width: 36rpx;
+  height: 28rpx;
+  padding-right: 20rpx;
+}
+.scan-tips {
+  font-size: 28rpx;
+  color: #56A1F4;
+  margin-left: 20rpx;
+}

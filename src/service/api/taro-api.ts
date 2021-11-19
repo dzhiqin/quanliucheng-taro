@@ -1,6 +1,6 @@
 import * as Taro from '@tarojs/taro'
 
-export const wxSubscribeMessage = (tempIds, successCallback, failCallback) => {
+export const taroSubscribeMessage = (tempIds, successCallback, failCallback) => {
   if(!tempIds || tempIds.length === 0) {
     return failCallback('没有订阅任何模板消息')
   }else if(tempIds.length > 3) {
@@ -9,8 +9,12 @@ export const wxSubscribeMessage = (tempIds, successCallback, failCallback) => {
     Taro.requestSubscribeMessage({
       tmplIds: tempIds,
       success: (res) =>{
-        // console.log('reqeust subscribe :',res)
-        successCallback()
+        console.log('reqeust subscribe :',res)
+        if(Object.values(res).includes('reject')){
+          failCallback('未授权')
+        }else{
+          successCallback()
+        }
       },
       fail: res => {
         failCallback(res)

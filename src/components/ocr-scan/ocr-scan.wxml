@@ -1,0 +1,8 @@
+<view>
+  <ocr-navigator bind:onSuccess="onSuccess" certificateType="idCard" opposite="{{false}}">
+    <view class='scan-wrap'>
+      <image src="{{photoUrl}}"></image>
+      <text class='scan-tips'>身份证拍照自动获取信息</text>
+    </view>
+  </ocr-navigator>
+</view>

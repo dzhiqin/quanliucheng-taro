@@ -28,3 +28,6 @@ export const updateUserInfo = (data:any={}) => {
 export const getHealthCards = () => {
   return Post(fullUrl('Card'))
 }
+export const createCard = (data: any) => {
+  return Post(fullUrl('Card/CreateCardWX'),data)
+}

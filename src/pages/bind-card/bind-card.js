@@ -7,9 +7,14 @@ import "taro-ui/dist/style/components/input.scss"
 import "taro-ui/dist/style/components/icon.scss"
 import "taro-ui/dist/style/components/list.scss";
 import config from '@/config/index'
-import { idCardValidator, getBirthdayByIdCard, getGenderByIdCard, validateMessages, phoneValidator, birthdayValidator } from '@/utils'
+import { 
+  idCardValidator, getBirthdayByIdCard, getGenderByIdCard, validateMessages, phoneValidator, birthdayValidator,
+  cardTypeOptions, onetimeSubscribe 
+} from '@/utils'
+import { taroSubscribeMessage } from '@/service/api/taro-api'
+import SubscribeNotice from '@/components/subscribe-notice/subscribe-notice'
+import { createCard } from '@/service/api/user-api'
 
-import {cardTypeOptions} from '../../utils/select-options'
 import './bind-card.less'
 // import { humanDate } from '../../utils/format'
 
@@ -17,6 +22,7 @@ export default class BindCard extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
+      showNotice: false,
       currentCardTypeIndex: 0,
       currentCardTypeValue: '身份证',
       cardTypeNames: [],
@@ -58,13 +64,28 @@ export default class BindCard extends React.Component {
       }
     })
   }
-  loadIdCardInfo() {
-  }
 
   onSubmit() {
     const {result,msg}= this.formValidator()
-    console.log(result,msg)
-    console.log(this.state)
+    if(result){
+      taroSubscribeMessage(
+        onetimeSubscribe.bindCard(), 
+        () => {
+          this.handleCreateCard()
+        }, 
+        () => {this.setState({showNotice: true})
+      })
+    }else{
+      Taro.showToast({
+        title: msg,
+        icon: 'none'
+      })
+    }
+  }
+  handleCreateCard() {
+    createCard(this.state.card).then(res => {
+      console.log('create card', res);
+    })
   }
   formValidator() {
     const keys = Object.keys(this.state.card)
@@ -163,12 +184,14 @@ export default class BindCard extends React.Component {
   onMaritalChange(value){
     this.handleCardChange('marital',value)
   }
+  onScanResult(e) {
+    console.log('scanresult',e.mpEvent.detail)
+  }
   render() {
     return (
       <View className='bind-card'>
-        <ocr-navigator onSuccess={this.loadIdCardInfo} certificateType='idCard' opposite={false}>
-          <View>123</View>
-        </ocr-navigator>
+        <SubscribeNotice show={this.state.showNotice} />
+        <ocr-scan onsuccess={this.onScanResult.bind(this)}></ocr-scan>
         <AtForm
           onSubmit={this.onSubmit.bind(this)}
         >

@@ -4,10 +4,9 @@ import * as Taro from '@tarojs/taro'
 import { View,Swiper,SwiperItem,Image } from '@tarojs/components'
 import { useState,useEffect } from 'react'
 import * as React from 'react'
-import { getSetting, wxSubscribeMessage } from '@/service/api/taro-api'
-import templateId from '@/utils/templateId'
+import { getSetting, taroSubscribeMessage } from '@/service/api/taro-api'
 import subscribeNoticeImg from '@/images/subscribe_notice.png'
-
+import { longtermSubscribe } from '@/utils/index'
 import qrcodeImg from '../../images/icons/qrcode.png'
 import './health-cards.less'
 
@@ -26,8 +25,8 @@ export default function HealthCards(props: any) {
   })
   const handleLogin =() =>{
     getSetting()
-    const tempIds = templateId.longterm.treatmentAndPayment()
-    wxSubscribeMessage(
+    const tempIds = longtermSubscribe.treatmentAndPayment()
+    taroSubscribeMessage(
       tempIds, 
       () => {
         console.log('success')
