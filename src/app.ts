@@ -20,7 +20,8 @@ class App extends Component {
           }
         }).catch(() => {
           Taro.showToast({
-            title: '获取token失败'
+            title: '获取token失败',
+            icon: 'none'
           })
         })
       }

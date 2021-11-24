@@ -1,6 +1,6 @@
-import config from '@/config/index'
+import custom from '@/custom/index'
 
-const hospName = config.hospName
+const hospName = custom.hospName
 export const longtermSubscribe = {
   treatmentAndPayment: () => {
     let tempIds = []

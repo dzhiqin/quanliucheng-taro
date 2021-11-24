@@ -1,5 +1,5 @@
 
-const hospName = 'default'
+const hospName = 'epfy'
 const hospConfig = require(`./hosp-config/${hospName}`)
 const config = hospConfig.default
 

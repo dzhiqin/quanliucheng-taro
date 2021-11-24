@@ -4,6 +4,7 @@ export default {
   hospName: "epfy",
   hospitalName: "恩平市妇幼保健院",
   baseUrl: "https://epsfy.joyfulboo.com/api",
+  // baseUrl: "https://applets.gdbkyz.com/api/applet",
   indexPage: {
     banner: {
       enable: true,
@@ -61,7 +62,10 @@ export default {
   feat:{
     bindCard: {
       electronicHealthCard: false,
-      parent: true
+      parentInfo: true,
+      nationality: false,
+      hospitalCard: false,
+      maritalStatus: false
     }
   }
 }

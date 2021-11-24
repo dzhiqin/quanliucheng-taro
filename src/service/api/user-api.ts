@@ -1,8 +1,8 @@
 import * as Taro from '@tarojs/taro'
-import config from '@/config/index'
+import custom from '@/custom/index'
 import { Get, fullUrl, Post } from "../http";
 
-const baseUrl = config.baseUrl
+const baseUrl = custom.baseUrl
 
 export const login = (data) => {
   return new Promise((resolve, reject) => {

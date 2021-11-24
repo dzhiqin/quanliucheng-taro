@@ -6,10 +6,10 @@ import "taro-ui/dist/style/components/button.scss"
 import "taro-ui/dist/style/components/input.scss"
 import "taro-ui/dist/style/components/icon.scss"
 import "taro-ui/dist/style/components/list.scss";
-import config from '@/config/index'
+import custom from '@/custom/index'
 import { 
   idCardValidator, getBirthdayByIdCard, getGenderByIdCard, validateMessages, phoneValidator, birthdayValidator,
-  cardTypeOptions, onetimeSubscribe 
+  idenTypeOptions, onetimeSubscribe 
 } from '@/utils'
 import { taroSubscribeMessage } from '@/service/api/taro-api'
 import SubscribeNotice from '@/components/subscribe-notice/subscribe-notice'
@@ -23,9 +23,9 @@ export default class BindCard extends React.Component {
     super(props)
     this.state = {
       showNotice: false,
-      currentCardTypeIndex: 0,
-      currentCardTypeValue: '身份证',
-      cardTypeNames: [],
+      currentIdenTypeIndex: 0,
+      currentIdenTypeValue: '身份证',
+      idenTypeNames: [],
       genders: ['男','女'],
       currentGenderIndex: 0,
       currentGenderValue: '请选择性别',
@@ -33,12 +33,12 @@ export default class BindCard extends React.Component {
       bindCardConfig: '',
       // currentDate: '',
       card: {
-        name: '',
-        cardType: '',
+        patientName: '',
+        idenType: '',
         idCardNo: '',
         gender: '',
         birthday: '',
-        cellphone: '',
+        phone: '',
         address: '',
         isDefault: true,
         hasHospitalCard: false,
@@ -53,14 +53,14 @@ export default class BindCard extends React.Component {
   }
 
   componentDidMount() {
-    cardTypeOptions.forEach(item => this.state.cardTypeNames.push(item.name))
+    idenTypeOptions.forEach(item => this.state.idenTypeNames.push(item.name))
     // const currentDate = humanDate(new Date())
     // this.setState({currentDate})
     this.setState({
-      bindCardConfig: config.feat.bindCard,
+      bindCardConfig: custom.feat.bindCard,
       card: {
         ...this.state.card,
-        cardType: cardTypeOptions[0].id
+        idenType: idenTypeOptions[0].id
       }
     })
   }
@@ -83,9 +83,19 @@ export default class BindCard extends React.Component {
     }
   }
   handleCreateCard() {
+    console.log('params',this.buildCardParams())
     createCard(this.state.card).then(res => {
       console.log('create card', res);
     })
+  }
+  buildCardParams() {
+    const card = this.state.card
+    let params = {
+      ...card,
+      isHaveCard: card.hasHospitalCard,
+    }
+
+    return params
   }
   formValidator() {
     const keys = Object.keys(this.state.card)
@@ -98,14 +108,15 @@ export default class BindCard extends React.Component {
       if(typeof value === 'boolean' || value === 0) continue
       if(!value){
         // console.log('key=',keys[i],'value=',card[keys[i]])
-        if(this.state.currentCardTypeValue === '儿童(无证件)' && key === 'idCardNo') continue
+        if(this.state.currentIdenTypeValue === '儿童(无证件)' && key === 'idCardNo') continue
         if(!this.state.bindCardConfig.nationality && key === 'nationality') continue
         if(!card.hasHospitalCard && key === 'hospitalCardNo') continue
+        if(this.state.currentIdenTypeValue !== '儿童(无证件)' && (key === 'parentName' || key === 'parentId')) continue
         msg = validateMessages[keys[i]]
         result = false
         break
       }
-      if(key === 'cellphone' && !phoneValidator(value)) {
+      if(key === 'phone' && !phoneValidator(value)) {
         result = false
         msg = '请输入正确的手机号'
       }
@@ -148,16 +159,16 @@ export default class BindCard extends React.Component {
     
   }
 
-  onCardTypeChange(e) {
+  onIdenTypeChange(e) {
     const index = e.detail.value
-    const name =this.state.cardTypeNames[index]
-    const item = cardTypeOptions.find(i => i.name === name)
+    const name =this.state.idenTypeNames[index]
+    const item = idenTypeOptions.find(i => i.name === name)
     
     this.setState({
-      currentCardTypeIndex: index,
-      currentCardTypeValue: name
+      currentIdenTypeIndex: index,
+      currentIdenTypeValue: name
     })
-    this.handleCardChange('cardType',item.id)
+    this.handleCardChange('idenType',item.id)
   }
   onGenderChange(e){
     const index = e.detail.value
@@ -196,26 +207,26 @@ export default class BindCard extends React.Component {
           onSubmit={this.onSubmit.bind(this)}
         >
           <AtInput 
-            name='name' 
+            name='patientName' 
             title='姓名' 
             type='text' 
             placeholder='请输入姓名' 
-            value={this.state.card.name} 
-            onChange={this.handleCardChange.bind(this,'name')} 
+            value={this.state.card.patientName} 
+            onChange={this.handleCardChange.bind(this,'patientName')} 
           />
 
-          <Picker mode='selector' range={this.state.cardTypeNames} onChange={this.onCardTypeChange.bind(this)} value={this.state.currentCardTypeIndex}>
+          <Picker mode='selector' range={this.state.idenTypeNames} onChange={this.onIdenTypeChange.bind(this)} value={this.state.currentIdenTypeIndex}>
             <AtList>
               <AtListItem
                 title='证件类型'
-                extraText={this.state.currentCardTypeValue}
+                extraText={this.state.currentIdenTypeValue}
               >
               </AtListItem>
             </AtList>
           </Picker>
 
           {
-            this.state.currentCardTypeValue !== '儿童(无证件)' || !this.state.bindCardConfig.parentInfo ? 
+            this.state.currentIdenTypeValue !== '儿童(无证件)' || !this.state.bindCardConfig.parentInfo ? 
             <AtInput 
               name='idCardNo' 
               title='证件号码' 
@@ -229,7 +240,7 @@ export default class BindCard extends React.Component {
           }
         
           {
-            this.state.currentCardTypeValue !== '门诊卡' ? 
+            this.state.currentIdenTypeValue !== '门诊卡' &&
             <Picker mode='selector' range={this.state.genders} onChange={this.onGenderChange.bind(this)} value={this.state.currentGenderIndex}>
               <AtList>
                 <AtListItem
@@ -238,12 +249,11 @@ export default class BindCard extends React.Component {
                 >
                 </AtListItem>
               </AtList>
-            </Picker> :
-            ''
+            </Picker> 
           }
           
           {
-            this.state.currentCardTypeValue !== '门诊卡' ? 
+            this.state.currentIdenTypeValue !== '门诊卡' &&
             <Picker mode='date' onChange={this.onDateChange.bind(this)} value={this.state.selectedDate}>
               <AtList>
                 <AtListItem
@@ -252,17 +262,16 @@ export default class BindCard extends React.Component {
                 >
                 </AtListItem>
               </AtList>
-            </Picker> : 
-            ''
+            </Picker> 
           }
 
           <AtInput 
-            name='cellphone' 
+            name='phone' 
             title='电话号码' 
             type='number' 
             placeholder='请输入电话号码' 
-            value={this.state.card.cellphone} 
-            onChange={this.handleCardChange.bind(this,'cellphone')} 
+            value={this.state.card.phone} 
+            onChange={this.handleCardChange.bind(this,'phone')} 
           />
 
           <AtInput 
@@ -277,7 +286,7 @@ export default class BindCard extends React.Component {
           </AtInput>
 
           {
-            this.state.bindCardConfig.hospitalCard ? 
+            this.state.bindCardConfig.hospitalCard &&
             <AtInput 
               name='hasHospitalCard' 
               title='院内就诊卡' 
@@ -286,12 +295,11 @@ export default class BindCard extends React.Component {
             >
               <View className={`btn ${this.state.card.hasHospitalCard ? 'primary' : 'cancel'}`} onClick={this.onHashospitalCardChange.bind(this, true)}>有</View>
               <View className={`btn ${this.state.card.hasHospitalCard ? 'cancel' : 'primary'}`} onClick={this.onHashospitalCardChange.bind(this,false)}>无</View>
-            </AtInput> : 
-            ''
+            </AtInput> 
           }
           
           {
-            this.state.bindCardConfig.hospitalCard && this.state.card.hasHospitalCard ? 
+            this.state.bindCardConfig.hospitalCard && this.state.card.hasHospitalCard &&
             <AtInput 
               name='hospitalCardNo' 
               title='就诊卡号' 
@@ -299,12 +307,11 @@ export default class BindCard extends React.Component {
               placeholder='请输入就诊卡号' 
               value={this.state.card.hospitalCardNo} 
               onChange={this.handleCardChange.bind(this,'hospitalCardNo')} 
-            /> : 
-            ''
+            /> 
           }
           
           {
-            this.state.bindCardConfig.maritalStatus ? 
+            this.state.bindCardConfig.maritalStatus &&
             <AtInput 
               name='marital' 
               title='婚姻状况' 
@@ -315,12 +322,11 @@ export default class BindCard extends React.Component {
               <View className={`btn ${this.state.card.marital === '已婚' ? 'info' : 'cancel'}`} onClick={this.onMaritalChange.bind(this, '已婚')}>已婚</View>
               <View className={`btn ${this.state.card.marital === '离婚' ? 'info' : 'cancel'}`} onClick={this.onMaritalChange.bind(this, '离婚')}>离婚</View>
               <View className={`btn ${this.state.card.marital === '丧偶' ? 'info' : 'cancel'}`} onClick={this.onMaritalChange.bind(this, '丧偶')}>丧偶</View>
-            </AtInput> :
-            ''
+            </AtInput> 
           }
 
           {
-            this.state.bindCardConfig.nationality ?
+            this.state.bindCardConfig.nationality &&
             <AtInput 
               name='nationality' 
               title='国籍' 
@@ -328,8 +334,7 @@ export default class BindCard extends React.Component {
               placeholder='请输入国籍' 
               value={this.state.card.nationality} 
               onChange={this.handleCardChange.bind(this,'nationality')} 
-            /> :
-            ''
+            /> 
           }
 
           <AtInput 
@@ -342,23 +347,30 @@ export default class BindCard extends React.Component {
             <View className={`btn ${this.state.card.isDefault ? 'cancel' : 'info'}`} onClick={this.onDefaultChange.bind(this,false)}>否</View>
           </AtInput>
 
-          <AtInput 
-            name='parentName' 
-            title='监护人姓名' 
-            type='text' 
-            placeholder='请输入监护人姓名' 
-            value={this.state.card.parentName} 
-            onChange={this.handleCardChange.bind(this,'parentName')} 
-          />
-
-          <AtInput 
-            name='parentId' 
-            title='监护人身份证号' 
-            type='text' 
-            placeholder='请输入监护人身份证' 
-            value={this.state.card.parentId} 
-            onChange={this.handleCardChange.bind(this,'parentId')} 
-          />
+          {
+            this.state.currentIdenTypeValue === '儿童(无证件)' &&
+            <AtInput 
+              name='parentName' 
+              title='监护人姓名' 
+              type='text' 
+              placeholder='请输入监护人姓名' 
+              value={this.state.card.parentName} 
+              onChange={this.handleCardChange.bind(this,'parentName')} 
+            />
+          }
+          
+          {
+            this.state.currentIdenTypeValue === '儿童(无证件)' &&
+            <AtInput 
+              name='parentId' 
+              title='监护人身份证号' 
+              type='text' 
+              placeholder='请输入监护人身份证' 
+              value={this.state.card.parentId} 
+              onChange={this.handleCardChange.bind(this,'parentId')} 
+            />
+          }
+          
           <View style='padding: 60rpx;'>
             <AtButton type='primary' circle onClick={this.onSubmit.bind(this)}>立即绑定</AtButton>
           </View>

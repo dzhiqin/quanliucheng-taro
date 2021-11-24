@@ -21,7 +21,7 @@ const config = {
     // '@/package': path.resolve(__dirname, '..', 'package.json'),
     // '@/project': path.resolve(__dirname, '..', 'project.config.json'),
     '@/images': path.resolve(__dirname, '..', 'src/images'),
-    '@/config': path.resolve(__dirname, '..', 'src/config'),
+    '@/custom': path.resolve(__dirname, '..', 'src/custom'),
     '@/service': path.resolve(__dirname, '..', 'src/service')
   },
   copy: {

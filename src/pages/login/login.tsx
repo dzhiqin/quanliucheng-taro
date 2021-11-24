@@ -4,7 +4,7 @@ import BkButton from '@/components/bk-button/bk-button'
 import * as Taro from '@tarojs/taro'
 import { useEffect } from 'react'
 import { updateUserInfo, getHealthCards } from '@/service/api/user-api'
-import config from '@/config/index'
+import custom from '@/custom/index'
 import Cards from '@/utils/cards'
 
 import './login.less'
@@ -38,7 +38,7 @@ export default function Login() {
           getHealthCards().then(object=>{
             Cards.saveCards(object.data)
           })
-          if(config.feat.bindCard.electronicHealthCard){
+          if(custom.feat.bindCard.electronicHealthCard){
             Taro.navigateTo({
               url: '/pages/elec-healthcard-auth/elec-healthcard-auth'
             })
