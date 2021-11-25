@@ -29,6 +29,12 @@
           "pathName": "pages/bind-card/bind-card",
           "query": "",
           "scene": null
+        },
+        {
+          "name": "/branch-hospitals",
+          "pathName": "pages/register/branch-hospitals/branch-hospitals",
+          "query": "",
+          "scene": null
         }
       ]
     }

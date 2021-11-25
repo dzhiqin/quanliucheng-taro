@@ -17,6 +17,12 @@ export default function Index() {
   const [indexPage] = useState(custom.indexPage)
   useEffect(() => {
     Taro.setNavigationBarTitle({title: custom.hospitalName})
+
+    // Taro.login({
+    //   success: res => {
+    //     console.log('code',res.code);
+    //   }
+    // })
   }, [])
   return (
     <View className='index'>

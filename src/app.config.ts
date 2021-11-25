@@ -7,6 +7,16 @@ export default {
     'pages/official/official',
     'pages/personal/personal'
   ],
+  subpackages: [
+    {
+      root: 'pages/register',
+      name: 'register',
+      pages: [
+        'branch-hospitals/branch-hospitals',
+        'clinics/clinics'
+      ]
+    }
+  ],
   window: {
     backgroundTextStyle: 'light',
     navigationBarBackgroundColor: '#fff',

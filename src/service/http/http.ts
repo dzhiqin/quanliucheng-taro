@@ -1,11 +1,13 @@
 import * as Taro from '@tarojs/taro'
 
 interface Response {
-  code: number
-  msg?: string
+  resultCode: number
+  message?: string
+  result?: boolean
+  popUpCode?: number
 }
 export interface HttpResponse extends Response {
-  data?: object | string
+  data?: object | string | any
 }
 
 export interface DownloadResponse extends Response {
@@ -58,7 +60,7 @@ const Request = (
         resolve(res.data as HttpResponse)
       },
       fail: (err: Taro.General.CallbackResult) => {
-        const resp: HttpResponse = { code: -1, msg: err.errMsg }
+        const resp: HttpResponse = { resultCode: -1, message: err.errMsg }
         reject(resp)
       },
     })
@@ -76,12 +78,12 @@ const DownloadFile = (url: string, header?: {}): Promise<DownloadResponse> => {
       header: Object.assign(getHeaderAuth(), header),
       success: (res: Taro.downloadFile.FileSuccessCallbackResult) => {
         resolve({
-          code: res.statusCode,
+          resultCode: res.statusCode,
           tempFilePath: res.tempFilePath,
         })
       },
       fail: (err: Taro.General.CallbackResult) => {
-        const resp: DownloadResponse = { code: -1, msg: err.errMsg }
+        const resp: DownloadResponse = { resultCode: -1, message: err.errMsg }
         reject(resp)
       }
     })
@@ -103,10 +105,10 @@ const UploadFile = (
       header: Object.assign(getHeaderAuth(), header),
       formData,
       success: (res: Taro.uploadFile.SuccessCallbackResult) => {
-        resolve({ code: res.statusCode, data: res.data })
+        resolve({ resultCode: res.statusCode, data: res.data })
       },
       fail: (err: Taro.General.CallbackResult) => {
-        const resp: UploadResponse = { code: -1, msg: err.errMsg }
+        const resp: UploadResponse = { resultCode: -1, message: err.errMsg }
         reject(resp)
       },
     })

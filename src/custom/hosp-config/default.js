@@ -21,7 +21,7 @@ export default {
         {
           icon: imgUrl.new_home_icon3,
           title: '预约挂号',
-          event: 'toRegIndex',
+          event: 'toRegister',
           desc: '专家名医提前约'
         },
         {
@@ -125,6 +125,10 @@ export default {
       nationality: false,
       hospitalCard: true,
       maritalStatus: true
+    },
+    register: {
+      bookingAndIntraday: true,
+      popupNotice: false
     }
   }
 }
