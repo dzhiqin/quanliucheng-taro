@@ -32,7 +32,19 @@
         },
         {
           "name": "/branch-hospitals",
-          "pathName": "pages/register/branch-hospitals/branch-hospitals",
+          "pathName": "pages/register-pack/branch-hospitals/branch-hospitals",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/official/official",
+          "pathName": "pages/official/official",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "personal",
+          "pathName": "pages/personal/personal",
           "query": "",
           "scene": null
         }

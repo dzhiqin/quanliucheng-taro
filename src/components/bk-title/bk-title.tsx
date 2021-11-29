@@ -11,7 +11,7 @@ export default function BkTitle(props: any) {
   const [more] = useState(props.more || false)
   const {onClick} = props
   return (
-    <View className='bk-title'>
+    <View className='bk-title' style={props.style ? props.style : ''}>
       <View className='bk-title-devider'></View>
       <View className='bk-title-name'>{title}</View>
       {more ? <View className='bk-title-more' onClick={() => onClick()}>

@@ -25,9 +25,3 @@ export const login = (data) => {
 export const updateUserInfo = (data:any={}) => {
   return Post(fullUrl('Authorized/GetUserInfo'),data)
 }
-export const getHealthCards = () => {
-  return Post(fullUrl('Card'))
-}
-export const createCard = (data: any) => {
-  return Post(fullUrl('Card/CreateCardWX'),data)
-}

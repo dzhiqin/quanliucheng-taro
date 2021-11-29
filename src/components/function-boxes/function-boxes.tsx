@@ -32,11 +32,11 @@ export default function FunctionBoxes(props) {
     const navToPage = () => {
       if(hospitalCount === 1){
         Taro.navigateTo({
-          url: `/pages/register/clinics/clinics?banchId=${hospitalInfo.branchId}&hospitalName=${hospitalInfo.hospitalName}`
+          url: `/pages/register-pack/clinics/clinics?banchId=${hospitalInfo.branchId}&hospitalName=${hospitalInfo.hospitalName}`
         })
       }else{
         Taro.navigateTo({
-          url: '/pages/register/branch-hospitals/branch-hospitals'
+          url: '/pages/register-pack/branch-hospitals/branch-hospitals'
         })
       }
     } 

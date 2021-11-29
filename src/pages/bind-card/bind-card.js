@@ -13,7 +13,8 @@ import {
 } from '@/utils'
 import { taroSubscribeMessage } from '@/service/api/taro-api'
 import SubscribeNotice from '@/components/subscribe-notice/subscribe-notice'
-import { createCard } from '@/service/api/user-api'
+import { createCard } from '@/service/api'
+import cardsHealper from '@/utils/cards-healper'
 
 import './bind-card.less'
 // import { humanDate } from '../../utils/format'
@@ -35,7 +36,7 @@ export default class BindCard extends React.Component {
       card: {
         patientName: '',
         idenType: '',
-        idCardNo: '',
+        idenNo: '',
         gender: '',
         birthday: '',
         phone: '',
@@ -43,7 +44,7 @@ export default class BindCard extends React.Component {
         isDefault: true,
         hasHospitalCard: false,
         hospitalCardNo: '',
-        marital: '未婚',
+        maritalStatus: '未婚',
         nationality: '',
         parentName: '',
         parentId: ''
@@ -83,8 +84,11 @@ export default class BindCard extends React.Component {
     }
   }
   handleCreateCard() {
-    console.log('params',this.buildCardParams())
-    createCard(this.state.card).then(res => {
+    createCard(this.buildCardParams()).then(res => {
+      if(res.resultCode === 0){
+        const card = res.data
+        cardsHealper.add(card)
+      }
       console.log('create card', res);
     })
   }
@@ -108,7 +112,7 @@ export default class BindCard extends React.Component {
       if(typeof value === 'boolean' || value === 0) continue
       if(!value){
         // console.log('key=',keys[i],'value=',card[keys[i]])
-        if(this.state.currentIdenTypeValue === '儿童(无证件)' && key === 'idCardNo') continue
+        if(this.state.currentIdenTypeValue === '儿童(无证件)' && key === 'idenNo') continue
         if(!this.state.bindCardConfig.nationality && key === 'nationality') continue
         if(!card.hasHospitalCard && key === 'hospitalCardNo') continue
         if(this.state.currentIdenTypeValue !== '儿童(无证件)' && (key === 'parentName' || key === 'parentId')) continue
@@ -120,7 +124,7 @@ export default class BindCard extends React.Component {
         result = false
         msg = '请输入正确的手机号'
       }
-      if((key === 'idCardNo') && !idCardValidator(value)) {
+      if((key === 'idenNo') && !idCardValidator(value)) {
         result = false
         msg = '请输入正确的证件号'
       }
@@ -135,7 +139,7 @@ export default class BindCard extends React.Component {
     if(typeof value === 'string'){
       value = value.trim()
     }
-    if(stateName === 'idCardNo' && idCardValidator(value)) {
+    if(stateName === 'idenNo' && idCardValidator(value)) {
       const birthday = getBirthdayByIdCard(value)
       const gender = getGenderByIdCard(value)
       this.setState({
@@ -192,8 +196,8 @@ export default class BindCard extends React.Component {
   onHashospitalCardChange(value){
     this.handleCardChange('hasHospitalCard',value)
   }
-  onMaritalChange(value){
-    this.handleCardChange('marital',value)
+  onMaritalStatusChange(value){
+    this.handleCardChange('maritalStatus',value)
   }
   onScanResult(e) {
     console.log('scanresult',e.mpEvent.detail)
@@ -228,12 +232,12 @@ export default class BindCard extends React.Component {
           {
             this.state.currentIdenTypeValue !== '儿童(无证件)' || !this.state.bindCardConfig.parentInfo ? 
             <AtInput 
-              name='idCardNo' 
+              name='idenNo' 
               title='证件号码' 
               type='text' 
               placeholder='请输入证件号码' 
-              value={this.state.card.idCardNo} 
-              onChange={this.handleCardChange.bind(this,'idCardNo')} 
+              value={this.state.card.idenNo} 
+              onChange={this.handleCardChange.bind(this,'idenNo')} 
             >
             </AtInput> : 
             ''
@@ -313,15 +317,15 @@ export default class BindCard extends React.Component {
           {
             this.state.bindCardConfig.maritalStatus &&
             <AtInput 
-              name='marital' 
+              name='maritalStatus' 
               title='婚姻状况' 
               type='number' 
               placeholder='' 
             >
-              <View className={`btn ${this.state.card.marital === '未婚' ? 'info' : 'cancel'}`} onClick={this.onMaritalChange.bind(this, '未婚')}>未婚</View>
-              <View className={`btn ${this.state.card.marital === '已婚' ? 'info' : 'cancel'}`} onClick={this.onMaritalChange.bind(this, '已婚')}>已婚</View>
-              <View className={`btn ${this.state.card.marital === '离婚' ? 'info' : 'cancel'}`} onClick={this.onMaritalChange.bind(this, '离婚')}>离婚</View>
-              <View className={`btn ${this.state.card.marital === '丧偶' ? 'info' : 'cancel'}`} onClick={this.onMaritalChange.bind(this, '丧偶')}>丧偶</View>
+              <View className={`btn ${this.state.card.maritalStatus === '未婚' ? 'info' : 'cancel'}`} onClick={this.onMaritalStatusChange.bind(this, '未婚')}>未婚</View>
+              <View className={`btn ${this.state.card.maritalStatus === '已婚' ? 'info' : 'cancel'}`} onClick={this.onMaritalStatusChange.bind(this, '已婚')}>已婚</View>
+              <View className={`btn ${this.state.card.maritalStatus === '离婚' ? 'info' : 'cancel'}`} onClick={this.onMaritalStatusChange.bind(this, '离婚')}>离婚</View>
+              <View className={`btn ${this.state.card.maritalStatus === '丧偶' ? 'info' : 'cancel'}`} onClick={this.onMaritalStatusChange.bind(this, '丧偶')}>丧偶</View>
             </AtInput> 
           }
 

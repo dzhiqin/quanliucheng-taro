@@ -3,9 +3,9 @@ import { View } from '@tarojs/components'
 import BkButton from '@/components/bk-button/bk-button'
 import * as Taro from '@tarojs/taro'
 import { useEffect } from 'react'
-import { updateUserInfo, getHealthCards } from '@/service/api/user-api'
+import { updateUserInfo, getHealthCards } from '@/service/api/'
 import custom from '@/custom/index'
-import Cards from '@/utils/cards'
+import cardsHealper from '@/utils/cards-healper'
 
 import './login.less'
 
@@ -33,20 +33,28 @@ export default function Login() {
         const data = {
           nickName,gender,city,province,country,avatarUrl
         }
+
         updateUserInfo(data).then(result => {
           Taro.setStorageSync('userInfo',result.data)
-          getHealthCards().then(object=>{
-            Cards.saveCards(object.data)
-          })
-          if(custom.feat.bindCard.electronicHealthCard){
-            Taro.navigateTo({
-              url: '/pages/elec-healthcard-auth/elec-healthcard-auth'
-            })
+        })
+
+        getHealthCards().then(result=>{
+          if(result.resultCode === 0){
+            cardsHealper.saveCards(result.data)
+            Taro.navigateBack()
           }else{
-            Taro.navigateTo({
-              url: '/pages/bind-card/bind-card'
-            })
+            if(custom.feat.bindCard.electronicHealthCard){
+              Taro.navigateTo({
+                url: '/pages/elec-healthcard-auth/elec-healthcard-auth'
+              })
+            }else{
+              Taro.navigateTo({
+                url: '/pages/bind-card/bind-card'
+              })
+            }
           }
+        }).finally(() => {
+          Taro.hideLoading()
         })
       }
     })

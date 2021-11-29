@@ -1,0 +1,76 @@
+
+.official {
+  &-banner{
+    >image{
+      height: 400rpx;
+      width: 100%;
+    }
+  }
+  &-header{
+    border-radius: 40rpx 40rpx 0 0;
+    padding: 40rpx 40rpx 0;
+    position: relative;
+    top: -40rpx;
+    background-color: white;
+    display: flex;
+    >image{
+      width: 64rpx;
+      height: 64rpx;
+    }
+    &-wrap{
+      margin-left: 20rpx;
+    }
+    &-title{
+      font-size: 34rpx;
+      color: #333;
+      font-weight: 500;
+    }
+    &-tabs{
+      display: flex;
+      margin-top: 20rpx;
+    }
+    &-tab{
+      font-size: 20rpx;
+      color: white;
+      border-radius: 8rpx;
+      padding: 10rpx;
+      margin-right: 20rpx;
+    }
+  }
+
+  &-contact{
+    display: flex;
+    flex-wrap: wrap;
+    &-item{
+      width: 335rpx;
+      display: flex;
+      align-items: center;
+    }
+    &-icon{
+      width: 40rpx;
+      height: 40rpx;
+    }
+    &-text{
+      font-size: 28rpx;
+      color: #666666;
+      font-weight: 300;
+      margin-left: 30rpx;
+      padding: 10rpx
+    }
+  }
+  &-service {
+    display: flex;
+    &-item{
+      margin-left: 30rpx;
+      &-icon{
+        width: 120rpx;
+        height: 120rpx;
+      }
+      &-name{
+        font-size: 28rpx;
+        color: #333;
+        font-weight: 300;
+      }
+    }
+  }
+}

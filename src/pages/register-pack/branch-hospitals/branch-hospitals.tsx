@@ -20,7 +20,7 @@ export default function BranchHospitals() {
   const navToRegisterPage = () => {
     console.log('nav to register page');
     Taro.redirectTo({
-      url: '/pages/register/clinics/clinics'
+      url: '/pages/register-pack/clinics/clinics'
     })
   }
   const checkRegisterMode = () => {

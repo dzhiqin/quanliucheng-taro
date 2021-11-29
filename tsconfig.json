@@ -10,7 +10,8 @@
       // "@/package": ["./package.json"],
       // "@/project": ["./project.config.json"],
       "@/custom/*": ["src/custom/*"],
-      "@/service/*": ["./src/service/*"]
+      "@/service/*": ["./src/service/*"],
+      "@/images/*": ["./src/images"]
     }
   }
 }

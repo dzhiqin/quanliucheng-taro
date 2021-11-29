@@ -9,11 +9,19 @@ export default {
   ],
   subpackages: [
     {
-      root: 'pages/register',
+      root: 'pages/register-pack',
       name: 'register',
       pages: [
         'branch-hospitals/branch-hospitals',
         'clinics/clinics'
+      ]
+    },
+    {
+      root: 'pages/official-pack',
+      name: 'official',
+      pages: [
+        'clinic-list/clinic-list',
+        'guide-list/guide-list'
       ]
     }
   ],

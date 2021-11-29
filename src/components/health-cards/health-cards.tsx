@@ -1,45 +1,67 @@
-/* eslint-disable react/jsx-no-duplicate-props */
-import { MyContext } from '@/utils/my-context'
 import * as Taro from '@tarojs/taro'
+import { AtIcon } from 'taro-ui'
 import { View,Swiper,SwiperItem,Image } from '@tarojs/components'
 import { useState,useEffect } from 'react'
 import * as React from 'react'
 import { getSetting, taroSubscribeMessage } from '@/service/api/taro-api'
 import subscribeNoticeImg from '@/images/subscribe_notice.png'
 import { longtermSubscribe } from '@/utils/index'
+import "taro-ui/dist/style/components/icon.scss"
+import cardsHealper from '@/utils/cards-healper'
 import qrcodeImg from '../../images/icons/qrcode.png'
 import './health-cards.less'
 
 export default function HealthCards(props: any) {
-  const [userInfo, setUserInfo] = useState({cards:[]})
+  const [token, setToken] = useState('')
   const [showNotice,setShowNotice] = useState(false)
+  const [cards,setCards] = useState(props.cards || [])
+  const [currentCard,setCurrentCard] = useState(0)
   useEffect(() => {
-    // const userInfo = Taro.getStorageSync('userInfo')
-    // console.log('userInfo:',userInfo)
-    // setUserInfo(userInfo)
-    console.log('healthcard on load')
-    return () => {
-      // cleanup
-      console.log('health card unload')
+    const res = Taro.getStorageSync('token')
+    if(res){
+      setToken(res)    
     }
-  })
+  },[])
+  useEffect(() => {
+    if(props.cards && props.cards.length > 0){
+      setCards(props.cards)
+      for(let i =0; i< props.cards.length;i++){
+        if(props.cards[i].isDefault){
+          setCurrentCard(i)
+          break
+        }
+      }
+    }
+  },[props.cards])
   const handleLogin =() =>{
     getSetting()
     const tempIds = longtermSubscribe.treatmentAndPayment()
     taroSubscribeMessage(
       tempIds, 
       () => {
-        console.log('success')
         Taro.navigateTo({
           url: '/pages/login/login'
         })
       },
-      (res) => {
-        console.log('fail',res)
-        // setShowNotice(true)
+      (err) => {
+        // console.log('fail',err)
+        setShowNotice(true)
       })
   }
-  if(userInfo.cards.length === 0 ){
+  const handleAddCard = () => {
+    Taro.navigateTo({url: '/pages/bind-card/bind-card'})
+  }
+  const onCardChange = (e) => {
+    const index = e.detail.current
+    const cardId = cards[index].id
+    setCurrentCard(index)
+    cardsHealper.setDefault(cardId)
+    Taro.showToast({
+      title: '您已切换默认卡',
+      icon: 'none'
+    })
+  }
+  if(!token){
     return (
       <View style='padding:40rpx 40rpx 0'>
         <View className='login-card' onClick={handleLogin}>
@@ -51,23 +73,36 @@ export default function HealthCards(props: any) {
         </View> : ''}
       </View>
     )
+  }else if(cards.length === 0){
+    return (
+      <View style='padding:40rpx 40rpx 0'>
+        <View className='add-card' onClick={handleAddCard}>
+            <View style='margin-left: 40rpx'>
+              <AtIcon value='add-circle' size='30' color='#FFF'></AtIcon>
+            </View>
+            <View className='login-card-txt'>添加就诊人</View>
+        </View>
+      </View>
+    )
   }else{
     return (
       <View className='health-cards'>
         <Swiper
-          className={userInfo.cards.length < 2 ? 'swiper-single' : 'swiper-complex'}
+          className={cards.length < 2 ? 'swiper-single' : 'swiper-complex'}
           indicatorColor='#999'
           indicatorActiveColor='#56A1F4'
           circular
-          indicatorDots={userInfo.cards.length < 2 ? false : true}
+          indicatorDots={cards.length < 2 ? false : true}
+          onChange={onCardChange.bind(this)}
+          current={currentCard}
         >
           {
-            userInfo.cards && userInfo.cards.map((item,index) => 
-              <SwiperItem key={index} className={userInfo.cards.length < 2 ? '' : 'swiper-item-wrap'}>
+            cards && cards.map((item,index) => 
+              <SwiperItem key={index} className={cards.length < 2 ? '' : 'swiper-item-wrap'}>
                 <View className='swiper-item'>
                   <View className='swiper-item-info'>
-                    <View>您好，丹青</View>
-                    <View>诊疗卡号：12345678</View>
+                    <View>您好，{item.name}</View>
+                    <View>诊疗卡号：{item.cardNo}</View>
                   </View>
                   <Image className='swiper-item-icon' src={qrcodeImg}></Image>
                 </View>
