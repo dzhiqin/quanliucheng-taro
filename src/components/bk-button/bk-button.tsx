@@ -1,27 +1,36 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import * as React from 'react'
 import "taro-ui/dist/style/components/icon.scss";
 import { Image, View } from "@tarojs/components"
 // import imageUrl from '@/images/wechat.png'
+import { AtIcon } from 'taro-ui'
 
 import './bk-button.less'
 
 
 export default function BkButton(props){
-  const [name] = useState(props.name || "click")
   const {onClick} = props
   const [icon] = useState(props.icon || "")
-  const [theme] = useState(props.theme || "primary")
-  const [disabled] = useState(props.disabled || false)
-  const [style] = useState(props.style || '')
+  const [disabled,setDisabled] = useState(props.disabled || false)
+  const [loading,setLoading] = useState(props.loading)
   const getIcon = () => {
     return `../../images/${icon}`
   }
- 
+  useEffect(() => {
+    setLoading(props.loading)
+  },[props.loading])
+  useEffect(() => {
+    setDisabled(props.disabled)
+  },[props.disabled])
+  const handleClick = () => {
+    if(typeof onClick === 'undefined' || loading || disabled) return
+    onClick()
+  }
   return (
-    <View style={style} className={`button ${theme} ${disabled ? 'disabled' : ''}`} onClick={() => {onClick()}}>
-      { icon !== ""? <Image className='button-icon' src={getIcon()}></Image> : null}
-    {name}
+    <View style={props.style} className={`button ${props.theme || 'primary'} ${disabled ? 'disabled' : ''}`} onClick={handleClick}>
+      { icon !== "" && <Image className='button-icon' src={getIcon()}></Image> }
+      { loading && <AtIcon value='loading-2' size='20' color='#ffffff'></AtIcon> }
+      { props.title || 'click' }
     </View>
   )
 } 

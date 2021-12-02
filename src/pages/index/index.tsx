@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react'
 import { View, Image } from '@tarojs/components'
 import { useDidShow } from '@tarojs/taro'
 import * as React from 'react'
-import BkButton from '@/components/bk-button/bk-button'
 import "taro-ui/dist/style/components/button.scss" // 按需引入
 import custom from '@/custom/index'
 import FunctionBoxes from '@/components/function-boxes/function-boxes'
@@ -21,7 +20,7 @@ export default function Index() {
     Taro.setNavigationBarTitle({title: custom.hospitalName})
   }, [])
   useDidShow(() => {
-    const res = Taro.getStorageSync('cards') || []
+    let res = Taro.getStorageSync('cards')
     setCards(res)
   })
   return (
@@ -34,9 +33,6 @@ export default function Index() {
         {indexPage.quickEntrance.enable && <QuickEntrance quickEntrance={indexPage.quickEntrance}>quickEntrance</QuickEntrance>}
         {indexPage.hospBlog.enable && <HospBlog>hospBlog</HospBlog>}
       </MyContext.Provider>
-      
-      {/* <BkButton name='click me!'  setSubmit={onSubmit} theme='danger'></BkButton> */}
-      {/* <BkButton name='click here' icon='wechat.png' setSubmit={this.onSubmit.bind(this)} theme='info'></BkButton> */}
     </View>
   )
 }

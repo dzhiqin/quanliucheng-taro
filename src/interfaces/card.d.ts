@@ -11,7 +11,7 @@ export interface Card {
   birthday: string;
   patientId: string;  // 患者id，后端返回，同cardNo？
   isGetCode?: true;
-  cardType: 0;          // 证件类型
+  cardType: string;          // 证件类型
   parentId?: string;     // 监护人证件号
   parentName?: string;   // 监护人姓名
   isHaveCard: true;     // 是否有院内就诊卡

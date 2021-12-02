@@ -63,7 +63,7 @@ export default function Login() {
   return (
     <View className='login'>
       <View className='login-txt'>您尚未绑定账户，请点击账户绑定</View>
-      <BkButton name='账户绑定' theme='primary' onClick={onClick}></BkButton>
+      <BkButton title='账户绑定' theme='primary' onClick={onClick}></BkButton>
     </View>
   )
 }

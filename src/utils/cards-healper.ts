@@ -2,14 +2,15 @@
 // const { unique } = require('./util')
 // import {cardSetDefault} from './WX_api'
 import * as Taro from '@tarojs/taro'
-import { setDefaultCard } from '@/service/api'
+import { setDefaultCard, deleteCard } from '@/service/api'
 
 import {Card} from '../interfaces/card'
 
-let cards = Taro.getStorageSync('cards')
 
 export default {
   add: (card: Card)=> {
+    console.log('add');
+    let cards = Taro.getStorageSync('cards')
     const item = cards.find((i) => i.id === card.id)
     if(item){
       cards = cards.map(obj => {
@@ -22,16 +23,43 @@ export default {
     }else{
       cards.push(card)
     }
-    Taro.setStorageSync('cards',JSON.stringify(cards))
+    Taro.setStorageSync('cards',cards)
   },
-  delete: (cardId:string)=> {
+  delete: (cardId:number)=> {
+    let cards = Taro.getStorageSync('cards')
+    const card = cards.find(item => item.id === cardId)
+    return new Promise((resolve,reject) => {
+      if(!card) {
+        reject('没有找到对应的卡')
+      }
 
+      deleteCard({id:cardId}).then(res => {
+        if(res.resultCode === 0){
+          resolve(res.message)
+          let index =0
+          for(let i=0;i<cards.length;i++){
+            if(cards[i].id === cardId){
+              index = i
+              break
+            }
+          }
+          cards.splice(index,1)
+          Taro.setStorageSync('cards',cards)
+        }
+      }).catch(err => {
+        reject(err)
+      })
+    })
+    
     // app.globalData.userCards = app.globalData.userCards.filter(item => {
     //   return item.id != cardId
     // })
     // wx.setStorageSync('cards', app.globalData.userCards)
   },
   setDefault: (cardId:string) => {
+    let cards = Taro.getStorageSync('cards')
+    console.log('default-cards',cards);
+    
     const newCards = cards.map(item => {
       return{
         ...item,
@@ -44,6 +72,7 @@ export default {
     })
   },
   getDefault: () => {
+    let cards = Taro.getStorageSync('cards')
     const card = cards.find(item => item.isDefault)
     return card
    

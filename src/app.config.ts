@@ -5,7 +5,9 @@ export default {
     'pages/bind-card/bind-card',
     'pages/elec-healthcard-auth/elec-healthcard-auth',
     'pages/official/official',
-    'pages/personal/personal'
+    'pages/personal/personal',
+    'pages/cards-list/cards-list',
+    'pages/card-detail/card-detail'
   ],
   subpackages: [
     {

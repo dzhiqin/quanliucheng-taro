@@ -8,7 +8,9 @@ import './bk-panel.less'
 export default function BkPanel(props: any) {
   const { onClick } = props
   const onclick = () => {
-    onClick()
+    if(typeof onClick !== 'undefined'){
+      onclick && onClick()
+    }
   }
   return(
     <View style={props.style ? props.style : ''} className='bk-panel' onClick={onclick.bind(this)}>

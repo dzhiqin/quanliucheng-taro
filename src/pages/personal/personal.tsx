@@ -16,15 +16,21 @@ import './personal.less'
 export default function Personal() {
   const [cards,setCards] = useState()
 
-  const onClickPanel = () => {
-    console.log('click panel');
+  const onClickPanel = (e) => {
+
+    console.log('click panel',e);
     Taro.showToast({
       title: '开发中……',
       icon: 'loading'
     })
+    if(e){
+      Taro.navigateTo({
+        url: e
+      })
+    }
   }
   useDidShow(() => {
-    const res = Taro.getStorageSync('cards') || []
+    let res = Taro.getStorageSync('cards')
     setCards(res)
   })
   return (
@@ -59,7 +65,7 @@ export default function Personal() {
             <View className='panel-name'>检查检验单</View>
           </View>
         </BkPanel>
-        <BkPanel arrow onClick={onClickPanel.bind(this)} style='margin-top: 20rpx'>
+        <BkPanel arrow onClick={onClickPanel.bind(this,'/pages/cards-list/cards-list')} style='margin-top: 20rpx'>
           <View className='panel'>
             <Image src={healthCardPng} className='panel-icon'></Image>
             <View className='panel-name'>电子健康卡</View>

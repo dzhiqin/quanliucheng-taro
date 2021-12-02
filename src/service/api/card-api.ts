@@ -9,8 +9,8 @@ export const getHealthCards = () => {
 export const createCard = (data: any) => {
   return Post(fullUrl('Card/CreateCardWX'),data)
 }
-export const deleteCard = () => {
-
+export const deleteCard = (data: any) => {
+  return Post(fullUrl(`Card/Delete?id=${data.id}`),data)
 }
 export const setDefaultCard = (data: any) => {
   return Post(fullUrl(`Card/SetDefault?id=${data.id}`),data)

@@ -47,6 +47,12 @@
           "pathName": "pages/personal/personal",
           "query": "",
           "scene": null
+        },
+        {
+          "name": "cards-list",
+          "pathName": "pages/cards-list/cards-list",
+          "query": "",
+          "scene": null
         }
       ]
     }

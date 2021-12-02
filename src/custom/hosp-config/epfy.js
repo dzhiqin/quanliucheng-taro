@@ -61,11 +61,13 @@ export default {
   },
   feat:{
     bindCard: {
-      electronicHealthCard: false,
+      electronicHealthCard: false, // 电子健康卡
       parentInfo: true,
       nationality: false,
       hospitalCard: false,
-      maritalStatus: false
+      maritalStatus: false,
+      oneClickAuth: false,    // 一键授权，直接绑定健康卡
+      bindYiBaoCard: false, // 绑定医保卡
     },
     register: {
       bookingAndIntraday:false,

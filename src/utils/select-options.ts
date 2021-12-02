@@ -5,10 +5,10 @@ export const  idenTypeOptions =
     id: 0,
     name: '身份证'
   },
-  {
-    id:4,
-    name: '门诊卡'
-  },
+  // {
+  //   id:4,
+  //   name: '门诊卡'
+  // },
   {
     id:20,
     name: '儿童(无证件)'
