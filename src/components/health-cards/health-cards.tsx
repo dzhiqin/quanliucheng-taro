@@ -8,33 +8,44 @@ import subscribeNoticeImg from '@/images/subscribe_notice.png'
 import { longtermSubscribe } from '@/utils/index'
 import "taro-ui/dist/style/components/icon.scss"
 import cardsHealper from '@/utils/cards-healper'
+import { useDidShow } from '@tarojs/taro'
 import qrcodeImg from '../../images/icons/qrcode.png'
 import './health-cards.less'
 
 export default function HealthCards(props: any) {
-  const [token, setToken] = useState('')
+  const [isLogin, setLoginStatus] = useState(false)
   const [showNotice,setShowNotice] = useState(false)
   const [cards,setCards] = useState(props.cards || [])
   const [currentCard,setCurrentCard] = useState(0)
-  useEffect(() => {
-    const res = Taro.getStorageSync('token')
+ 
+  // useEffect(() => {
+  //   console.log('cards change',props.cards)
+  //   if(props.cards && props.cards.length > 0){
+  //     setCards(props.cards)
+  //     for(let i =0; i< props.cards.length;i++){
+  //       if(props.cards[i].isDefault){
+  //         setCurrentCard(i)
+  //         break
+  //       }
+  //     }
+  //   }
+  // },[props.cards])
+  useDidShow(() => {
+    const res = Taro.getStorageSync('userInfo')
     if(res){
-      setToken(res)    
+      setLoginStatus(true)
     }
-  },[])
-  useEffect(() => {
-    if(props.cards && props.cards.length > 0){
-      setCards(props.cards)
-      for(let i =0; i< props.cards.length;i++){
-        if(props.cards[i].isDefault){
-          setCurrentCard(i)
-          break
-        }
+    const cardsList = Taro.getStorageSync('cards')
+    setCards(cardsList)
+    for(let i =0;i< cardsList.length;i++){
+      if(cardsList[i].isDefault){
+        setCurrentCard(i)
+        break
       }
     }
-  },[props.cards])
+  })
   const handleLogin =() =>{
-    getSetting()
+    // getSetting()
     const tempIds = longtermSubscribe.treatmentAndPayment()
     taroSubscribeMessage(
       tempIds, 
@@ -61,7 +72,7 @@ export default function HealthCards(props: any) {
       icon: 'none'
     })
   }
-  if(!token){
+  if(!isLogin){
     return (
       <View style='padding:40rpx 40rpx 0'>
         <View className='login-card' onClick={handleLogin}>

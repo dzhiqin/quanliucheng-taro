@@ -15,7 +15,9 @@ export default {
       name: 'register',
       pages: [
         'branch-hospitals/branch-hospitals',
-        'clinics/clinics'
+        'clinics/clinics',
+        'notice/notice',
+        'doctor-list/doctor-list'
       ]
     },
     {

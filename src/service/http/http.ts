@@ -55,7 +55,7 @@ const Request = (
       method,
       url,
       data,
-      header: Object.assign(getHeaderAuth(), header),
+      header: Object.assign({},header,getHeaderAuth()),
       success: (res: Taro.request.SuccessCallbackResult) => {
         resolve(res.data as HttpResponse)
       },

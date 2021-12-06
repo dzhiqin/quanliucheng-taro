@@ -14,7 +14,6 @@ export default function FunctionBoxes(props) {
    const {functionBox} = useContext(MyContext)
    const [show,setShow] = useState(false)
    const [hospitalCount,setHospitalCount] = useState()
-   const [hospitalInfo,setHospitalInfo] = useState({branchId: '',hospitalName: ''})
    const onItemClick = (event) => {
       if(event === 'toRegister'){
         if(custom.feat.register.popupNotice){
@@ -31,9 +30,13 @@ export default function FunctionBoxes(props) {
     }
     const navToPage = () => {
       if(hospitalCount === 1){
-        Taro.navigateTo({
-          url: `/pages/register-pack/clinics/clinics?banchId=${hospitalInfo.branchId}&hospitalName=${hospitalInfo.hospitalName}`
-        })
+        let url = ''
+        if(custom.feat.register.guangSanMode){
+          url = `/pages/register-pack/notice/notice`
+        }else{
+          url = `/pages/register-pack/clinics/clinics`
+        }
+        Taro.navigateTo({url})
       }else{
         Taro.navigateTo({
           url: '/pages/register-pack/branch-hospitals/branch-hospitals'
@@ -42,15 +45,19 @@ export default function FunctionBoxes(props) {
     } 
     useEffect(() => {
       getBranchHospital({branchId: ''}).then(res => {
-        console.log('res',res);
-        
         if(res.resultCode === 0){
           const hospital = res.data[0]
+          const { branchId, hospitalName } = hospital
           setHospitalCount(res.data.length)
-          setHospitalInfo({
-            branchId: hospital.branchId,
-            hospitalName: hospital.hospitalName
-          })
+          // setHospitalInfo({
+          //   branchId: hospital.branchId,
+          //   hospitalName: hospital.hospitalName
+          // })
+          const hospitalInfo = {
+            branchId,
+            hospitalName
+          }
+          Taro.setStorageSync('hospitalInfo',hospitalInfo)
         }
       })
      

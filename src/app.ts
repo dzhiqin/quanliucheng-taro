@@ -10,10 +10,13 @@ class App extends Component {
   componentDidMount () {}
 
   componentDidShow () {
+    // const token = Taro.getStorageSync('token')
+    // if(token) return
     Taro.login({
       success: res => {
         let { code } = res
         login({code}).then((result:any) => {
+          // console.log('login res',result)
           if(result.statusCode === 200) {
             const {data: {data}} = result
             Taro.setStorageSync('token', data.token)

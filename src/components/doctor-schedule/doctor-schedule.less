@@ -1,0 +1,67 @@
+@import '../../color.less';
+
+.doctor-schedule{
+  padding: 40rpx;
+  display: flex;
+  align-items: center;
+  border-radius: 16rpx;
+  box-shadow: 0px 2px 10px 0px rgba(189,189,189,0.27); 
+  background-color: white;
+  .doctor-avatar {
+    width: 94rpx;
+    height: 94rpx;
+    border-radius: 50%;
+  }
+  .doctor-content{
+    margin-left: 18rpx;
+    flex: 1;
+  }
+  .doctor-info{
+    display: flex;
+    align-items: baseline;
+    &-name{
+      font-size: 32rpx;
+
+    }
+    &-title{
+      font-size: 26rpx;
+      color: #999;
+      margin-left: 18rpx;
+    }
+
+  }
+  .doctor-btn{
+    font-size: 24rpx;
+    border-radius: 20rpx;
+    padding: 5rpx 10rpx;
+  }
+  .doctor-major{
+    font-size: 26rpx;
+    color: #999;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 400rpx;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    display: -moz-box;
+    -moz-line-clamp: 2;
+    -moz-box-orient: vertical;
+    word-wrap: break-word;
+    word-break: break-all;
+    white-space: normal;
+  }
+
+  .enable{
+    background-color: @primary-color;
+    color: white;
+  }
+  .unable{
+    background-color: @cancel-color;
+    color: #999;
+  }
+
+  .doctor-fee{
+    color: #FF7C25;
+  }
+}

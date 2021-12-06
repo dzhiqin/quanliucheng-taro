@@ -53,6 +53,18 @@
           "pathName": "pages/cards-list/cards-list",
           "query": "",
           "scene": null
+        },
+        {
+          "name": "register-pack/clinics/clinics",
+          "pathName": "pages/register-pack/clinics/clinics",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/register-pack/doctor-list/doctor-list",
+          "pathName": "pages/register-pack/doctor-list/doctor-list",
+          "query": "deptId=128",
+          "scene": null
         }
       ]
     }

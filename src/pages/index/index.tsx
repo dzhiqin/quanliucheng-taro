@@ -1,7 +1,6 @@
 import * as Taro from '@tarojs/taro'
 import { useEffect, useState } from 'react'
 import { View, Image } from '@tarojs/components'
-import { useDidShow } from '@tarojs/taro'
 import * as React from 'react'
 import "taro-ui/dist/style/components/button.scss" // 按需引入
 import custom from '@/custom/index'
@@ -15,19 +14,15 @@ import './index.less'
 
 export default function Index() {
   const [indexPage] = useState(custom.indexPage)
-  const [cards,setCards] = useState()
   useEffect(() => {
     Taro.setNavigationBarTitle({title: custom.hospitalName})
   }, [])
-  useDidShow(() => {
-    let res = Taro.getStorageSync('cards')
-    setCards(res)
-  })
+
   return (
     <View className='index'>
       <MyContext.Provider value={indexPage}>
         {indexPage.banner.enable && <Image src={indexPage.banner.url} className='banner'></Image>}
-        {indexPage.healthCard.enable && <HealthCards cards={cards}>healthCard</HealthCards>}
+        {indexPage.healthCard.enable && <HealthCards>healthCard</HealthCards>}
         {indexPage.navCard.enable && <NavCard>navCard</NavCard>}
         {indexPage.functionBox.enable && <FunctionBoxes >funbox</FunctionBoxes>}
         {indexPage.quickEntrance.enable && <QuickEntrance quickEntrance={indexPage.quickEntrance}>quickEntrance</QuickEntrance>}

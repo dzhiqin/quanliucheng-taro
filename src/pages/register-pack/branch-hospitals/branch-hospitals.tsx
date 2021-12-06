@@ -7,7 +7,7 @@ import { getBranchHospital } from '@/service/api/register-api'
 export default function BranchHospitals() {
   useEffect(() => {
     getBranchHospital({branchId: ''}).then((res) => {
-      console.log('branch hospitals',res);
+      // console.log('branch hospitals',res);
       if(res.resultCode === 0){
         if(res.data.length === 1){
           navToRegisterPage()

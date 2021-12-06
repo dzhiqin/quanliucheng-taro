@@ -1,0 +1,51 @@
+.week-schedule{
+  .days{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10rpx;
+    &-item{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-weight: 300;
+      color: #333;
+      &-week{
+        font-size: 24rpx;
+        color: inherit;
+      }
+      &-day{
+        width: 52rpx;
+        height: 52rpx;
+        border-radius: 50%;
+        color: inherit;
+        font-size: 30rpx;
+        text-align: center;
+        margin: 10rpx;
+        line-height: 52rpx;
+        
+      }
+      &-icon{
+        width: 76rpx;
+        height: 76rpx;
+        position: absolute;
+      }
+      .day-selected{
+        background-color: #FF7C25;
+        font-weight: 500;
+        color: white;
+      }
+      .day-unselect{
+        font-weight: 400;
+      }
+    }
+  }
+  .month{
+    color: #56A1F4;
+    font-weight: 500;
+  }
+  .disable{
+    pointer-events: none;
+    color: #aaa;
+  }
+}
