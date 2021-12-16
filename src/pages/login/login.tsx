@@ -3,7 +3,7 @@ import { View } from '@tarojs/components'
 import BkButton from '@/components/bk-button/bk-button'
 import * as Taro from '@tarojs/taro'
 import { useEffect } from 'react'
-import { updateUserInfo, getHealthCards } from '@/service/api/'
+import { updateUserInfo, fetchHealthCards } from '@/service/api/'
 import custom from '@/custom/index'
 import cardsHealper from '@/utils/cards-healper'
 
@@ -38,7 +38,7 @@ export default function Login() {
           Taro.setStorageSync('userInfo',result.data)
         })
 
-        getHealthCards().then(result=>{
+        fetchHealthCards().then(result=>{
           if(result.resultCode === 0){
             cardsHealper.saveCards(result.data)
             Taro.navigateBack()

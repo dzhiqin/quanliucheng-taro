@@ -2,7 +2,7 @@
   "miniprogramRoot": "dist/",
   "projectname": "quanliucheng-react",
   "description": "全流程小程序端",
-  "appid": "wxefa4a18bcb0b7cb9",
+  "appid": "wx4d35223b6ad22fb1",
   "setting": {
     "urlCheck": false,
     "es6": false,
@@ -31,7 +31,7 @@
       "outputPath": ""
     },
     "enableEngineNative": false,
-    "useIsolateContext": true,
+    "useIsolateContext": false,
     "userConfirmedBundleSwitch": false,
     "packNpmManually": false,
     "packNpmRelationList": [],

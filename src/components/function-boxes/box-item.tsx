@@ -7,7 +7,7 @@ export default function BoxItem(props) {
   const {onClick} = props
   const [item] = useState(props.item || {})
   const onItemClick = () => {
-    onClick(item.event)
+    onClick(item)
   }
   return (
     <View className='box-item' onClick={onItemClick}>

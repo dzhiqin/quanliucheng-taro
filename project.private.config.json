@@ -49,13 +49,13 @@
           "scene": null
         },
         {
-          "name": "cards-list",
+          "name": "健康卡列表",
           "pathName": "pages/cards-list/cards-list",
           "query": "",
           "scene": null
         },
         {
-          "name": "register-pack/clinics/clinics",
+          "name": "科室列表",
           "pathName": "pages/register-pack/clinics/clinics",
           "query": "",
           "scene": null
@@ -64,6 +64,12 @@
           "name": "pages/register-pack/doctor-list/doctor-list",
           "pathName": "pages/register-pack/doctor-list/doctor-list",
           "query": "deptId=128",
+          "scene": null
+        },
+        {
+          "name": "挂号须知",
+          "pathName": "pages/register-pack/notice/notice",
+          "query": "",
           "scene": null
         }
       ]

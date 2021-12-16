@@ -1,9 +1,9 @@
 import imgUrl from '@/utils/imgs'
 
 export default {
-  hospName: "gysy",
+  hospName: "gysylw",
   hospitalName: "广州医科大学附属第三医院",
-  baseUrl: "http://applets.gdbkyz.com/api/", // 倍康测试
+  baseUrl: "https://applets.gdbkyz.com/api/applet", // 倍康测试
   indexPage: {
     banner: {
       enable: true,
@@ -21,20 +21,22 @@ export default {
         {
           icon: imgUrl.new_home_icon3,
           title: '预约挂号',
-          event: 'toRegister',
+          event: 'register',
           desc: '专家名医提前约'
         },
         {
           icon: imgUrl.new_home_icon4,
           title: '就诊缴费',
-          event: 'toPayCost',
-          desc: '线上缴费免排队'
+          event: 'jump',
+          desc: '线上缴费免排队',
+          url: '/pages/payments-pack/payment-list/payment-list'
         },
         {
           icon: imgUrl.new_home_icon5,
           title: '查看报告',
-          event: 'toCheckList',
-          desc: '检查检验随时查'
+          event: 'jump',
+          desc: '检查检验随时查',
+          url: '/pages/reports-pack/report-list/report-list'
         }
       ]
     },
@@ -62,15 +64,15 @@ export default {
     bindCard: {
       electronicHealthCard: false, // 电子健康卡
       parentInfo: true,
-      nationality: false,
+      nationality: true,
       hospitalCard: false,
       maritalStatus: false,
       oneClickAuth: false,    // 一键授权，直接绑定健康卡
       bindYiBaoCard: false, // 绑定医保卡
     },
     register: {
-      bookingAndIntraday:false,
-      popupNotice: true,
+      bookingAndIntraday:true,
+      popupNotice: false,
       guangSanMode: true
     }
   }

@@ -18,18 +18,6 @@ export default function HealthCards(props: any) {
   const [cards,setCards] = useState(props.cards || [])
   const [currentCard,setCurrentCard] = useState(0)
  
-  // useEffect(() => {
-  //   console.log('cards change',props.cards)
-  //   if(props.cards && props.cards.length > 0){
-  //     setCards(props.cards)
-  //     for(let i =0; i< props.cards.length;i++){
-  //       if(props.cards[i].isDefault){
-  //         setCurrentCard(i)
-  //         break
-  //       }
-  //     }
-  //   }
-  // },[props.cards])
   useDidShow(() => {
     const res = Taro.getStorageSync('userInfo')
     if(res){
@@ -45,7 +33,6 @@ export default function HealthCards(props: any) {
     }
   })
   const handleLogin =() =>{
-    // getSetting()
     const tempIds = longtermSubscribe.treatmentAndPayment()
     taroSubscribeMessage(
       tempIds, 
@@ -55,7 +42,7 @@ export default function HealthCards(props: any) {
         })
       },
       (err) => {
-        // console.log('fail',err)
+        console.log('fail',err)
         setShowNotice(true)
       })
   }
@@ -72,12 +59,17 @@ export default function HealthCards(props: any) {
       icon: 'none'
     })
   }
+  const onSwitch = () => {
+    Taro.navigateTo({
+      url: '/pages/cards-list/cards-list?action=switchCard'
+    })
+  }
   if(!isLogin){
     return (
       <View style='padding:40rpx 40rpx 0'>
         <View className='login-card' onClick={handleLogin}>
             <Image src='https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/applets-imgs/man.png' className='login-card-avatar'></Image>
-            <View className='login-card-txt'>请先登录</View>
+            <View className='login-card-name'>请先登录</View>
         </View>
         {showNotice ? <View className='subscribe-notice'>
           <Image src={subscribeNoticeImg}></Image>
@@ -95,25 +87,46 @@ export default function HealthCards(props: any) {
         </View>
       </View>
     )
+  }else if(cards.length === 1){
+    return (
+      <View style='padding:40rpx 40rpx 0'>
+        <View className='add-card single-card'>
+            <View className='single-card-content'>
+              <View>
+                <View style='color: white'>您好，{cards[0].name}</View>
+                <View className='single-card-txt'>诊疗卡号{cards[0].cardNo}</View>
+              </View>
+              {
+                !props.switch
+                ? <View className='single-card-switch' onClick={onSwitch}>
+                    切换就诊人
+                    <AtIcon value='chevron-right' size='20' color='#0A3A6E'></AtIcon>
+                  </View>
+                : <Image className='single-card-icon' src={qrcodeImg}></Image>
+              }
+            </View>
+        </View>
+      </View>
+    )
   }else{
     return (
       <View className='health-cards'>
         <Swiper
-          className={cards.length < 2 ? 'swiper-single' : 'swiper-complex'}
+          className='swiper'
           indicatorColor='#999'
           indicatorActiveColor='#56A1F4'
           circular
-          indicatorDots={cards.length < 2 ? false : true}
+          indicatorDots
           onChange={onCardChange.bind(this)}
           current={currentCard}
         >
           {
             cards && cards.map((item,index) => 
-              <SwiperItem key={index} className={cards.length < 2 ? '' : 'swiper-item-wrap'}>
+              <SwiperItem key={index} className='swiper-item-wrap'>
                 <View className='swiper-item'>
                   <View className='swiper-item-info'>
-                    <View>您好，{item.name}</View>
-                    <View>诊疗卡号：{item.cardNo}</View>
+                    <View className='swiper-item-name'>您好，{item.name}</View>
+                    <View className='swiper-item-card'>诊疗卡号{item.cardNo}</View>
                   </View>
                   <Image className='swiper-item-icon' src={qrcodeImg}></Image>
                 </View>

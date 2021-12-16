@@ -13,7 +13,7 @@ export default function Card(props: any) {
   }
   const onClickCard = (e) => {
     if(props.action === 'switchCard'){
-      cardsHealper.setDefault(props.id)
+      cardsHealper.setDefault(props.card.id)
       Taro.navigateBack()
     }else{
       Taro.navigateTo({url: `/pages/card-detail/card-detail?card=${JSON.stringify(props.card)}`})

@@ -3,7 +3,7 @@ import * as Taro from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import { useState,useEffect } from 'react'
 import { useRouter } from '@tarojs/taro'
-import { getDoctorsByDefault, getDoctorsByDate } from '@/service/api'
+import { fetchDoctorsByDefault, getDoctorsByDate } from '@/service/api'
 import WeekSchedule from '@/components/week-schedule/week-schedule'
 import DoctorSchedule from '@/components/doctor-schedule/doctor-schedule'
 
@@ -21,7 +21,7 @@ export default function DoctorList() {
     const _deptId = JSON.parse(router.params.deptId).toString()
     const hospitalInfo = Taro.getStorageSync('hospitalInfo')
     setDeptId(_deptId)
-    getDoctorsByDefault({deptId: _deptId,branchId: hospitalInfo.branchId}).then(res => {
+    fetchDoctorsByDefault({deptId: _deptId,branchId: hospitalInfo.branchId}).then(res => {
       console.log(res);
       if(res.resultCode === 0){
         setWeek(res.data.regDays)

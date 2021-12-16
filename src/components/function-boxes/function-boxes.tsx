@@ -3,7 +3,7 @@ import * as React from 'react'
 import * as Taro from '@tarojs/taro'
 import { MyContext } from '@/utils/my-context'
 import { View } from '@tarojs/components'
-import { getBranchHospital } from '@/service/api/register-api'
+import { fetchBranchHospital } from '@/service/api/register-api'
 import custom from '@/custom/index'
 
 import RegisterNoticeModal from '../register-notice-modal/register-notice-modal'
@@ -14,13 +14,15 @@ export default function FunctionBoxes(props) {
    const {functionBox} = useContext(MyContext)
    const [show,setShow] = useState(false)
    const [hospitalCount,setHospitalCount] = useState()
-   const onItemClick = (event) => {
-      if(event === 'toRegister'){
+   const onItemClick = (item) => {
+      if(item.event === 'register'){
         if(custom.feat.register.popupNotice){
           setShow(true)
         }else{
           navToPage()
         }
+      }else{
+        Taro.navigateTo({url: item.url})
       }
    }
  
@@ -44,7 +46,7 @@ export default function FunctionBoxes(props) {
       }
     } 
     useEffect(() => {
-      getBranchHospital({branchId: ''}).then(res => {
+      fetchBranchHospital().then(res => {
         if(res.resultCode === 0){
           const hospital = res.data[0]
           const { branchId, hospitalName } = hospital

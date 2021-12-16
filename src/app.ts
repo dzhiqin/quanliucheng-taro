@@ -9,9 +9,9 @@ class App extends Component {
   props: any
   componentDidMount () {}
 
-  componentDidShow () {
-    // const token = Taro.getStorageSync('token')
-    // if(token) return
+  onLaunch () {
+    const token = Taro.getStorageSync('token')
+    if(token) return
     Taro.login({
       success: res => {
         let { code } = res

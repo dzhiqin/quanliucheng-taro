@@ -2,7 +2,7 @@ import * as React from 'react'
 import { AtModal,AtModalContent } from 'taro-ui'
 import { useState,useEffect } from 'react'
 import "taro-ui/dist/style/components/modal.scss";
-import { getRegisterNotice } from '@/service/api/card-api'
+import { fetchRegisterNotice } from '@/service/api/card-api'
 import { View, RichText } from '@tarojs/components'
 
 import './register-notice-modal.less'
@@ -49,7 +49,7 @@ export default function RegisterNoticeModal(props: {show: boolean,onConfirm?:Fun
   },[count])
  
   useEffect(() => {
-    getRegisterNotice().then((res) => {
+    fetchRegisterNotice().then((res) => {
       if(res.resultCode === 0){
         setNoticeContent(res.data)
       }

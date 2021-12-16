@@ -1,10 +1,10 @@
 import * as Taro from '@tarojs/taro'
 import custom from '@/custom/index'
-import { Get, fullUrl, Post } from "../http";
+import { fullUrl, Post } from "../http";
 
 const baseUrl = custom.baseUrl
 
-export const login = (data) => {
+export const login = (data:{code: string}) => {
   return new Promise((resolve, reject) => {
     Taro.request({
       method:'POST',

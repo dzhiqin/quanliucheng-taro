@@ -6,7 +6,8 @@ import locationPng from '@/images/icons/location2.png'
 import { AtSearchBar, AtTabs, AtTabsPane } from 'taro-ui'
 import "taro-ui/dist/style/components/search-bar.scss"
 import "taro-ui/dist/style/components/tabs.scss"
-import { getDepatmentList, getPreviousVisits } from '@/service/api'
+import { fetchDepatmentList, fetchPreviousVisits } from '@/service/api'
+import { toastService } from '@/service/taost-service'
 import ClinicList from './clinic-list'
 import DoctorCard from './doctor-card'
 import './clinics.less'
@@ -15,6 +16,7 @@ export default function Clinics() {
   const [value,setValue] = useState('')
   const [currentDept,setCurrentDept] = useState(0)
   const [deptList,setDeptList] = useState([])
+  const [doctors,setDoctors] = useState([])
   const [clinicList,setClinicList] = useState([])
   const [tabs,setTabs] = useState([])
   const [hospitalInfo,setHospitalInfo] = useState({
@@ -28,11 +30,12 @@ export default function Clinics() {
     const res = Taro.getStorageSync('hospitalInfo')
     if(res){
       setHospitalInfo(res)
-      getPreviousVisits({branchId: res.branchId}).then(result => {
-        console.log('get previous',result);
-        
+      fetchPreviousVisits().then(result => {
+        if(result.resultCode === 0){
+          setDoctors(result.data)
+        }
       })
-      getDepatmentList({branchId: res.branchId}).then(result => {
+      fetchDepatmentList({branchId: res.branchId}).then(result => {
         if(result.resultCode === 0){
           const deptListData = result.data.firstDeptInfos
           setDeptList(deptListData)
@@ -51,7 +54,12 @@ export default function Clinics() {
     setValue(e)
   }
   const onActionClick = () => {
-    console.log('action click',value);
+    const searchValue = value.trim()
+    if(searchValue){
+      Taro.navigateTo({url: '/pages/register-pack/search-result/search-result?value='+searchValue})
+    }else{
+      toastService({title: '请输入医生或科室'})
+    }
     
   }
   const onDeptChange = (e) => {
@@ -79,11 +87,9 @@ export default function Clinics() {
         />
       </View>
       <view className='previous'>
-        <DoctorCard />
-        <DoctorCard />
-        <DoctorCard />
-        <DoctorCard />
-        <DoctorCard />
+        {
+          doctors.length && doctors.map((item,index) => <DoctorCard key={index} doctor={item} />)
+        }
       </view>
       <View className='clinics-content'>
         <AtTabs

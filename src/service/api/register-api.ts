@@ -1,17 +1,21 @@
+import { getBranchId, getRegType } from "@/utils/tools";
 import { fullUrl, Post } from "../http";
 
-export const getBranchHospital = (data) => {
-  return Post(fullUrl('SignalSource/GetHospitalAll'),data)
+export const fetchBranchHospital = () => {
+  return Post(fullUrl('SignalSource/GetHospitalAll'),{branchId: getBranchId()})
 }
-export const getDepatmentList = (data) => {
+export const fetchDepatmentList = (data) => {
   return Post(fullUrl('SignalSource/GetAllDeptInfo'),data)
 }
-export const getPreviousVisits = (data) => {
-  return Post(fullUrl('SignalSource/GetRegisterOrder'),data)
+export const searchDeptOrDoctor = (data: {keyword: string}) => {
+  return Post(fullUrl('SignalSource/SearchDepartOrDr'),{...data,branchId: getBranchId()})
 }
-export const getDoctorsByDefault = (data) => {
-  return Post(fullUrl('SignalSource/GetScheduleDays'),data)
+export const fetchPreviousVisits = () => {
+  return Post(fullUrl('SignalSource/GetRegisterOrder'),{branchId: getBranchId()})
 }
-export const getDoctorsByDate = (data) => {
-  return Post(fullUrl('SignalSource/GetTimeSlicesBySchedule'),data)
+export const fetchDoctorsByDefault = (data: {deptId: string,doctorId: string}) => {
+  return Post(fullUrl('SignalSource/GetScheduleDays'),{...data, branchId: getBranchId(), isReg: getRegType()})
+}
+export const getDoctorsByDate = (data: {deptId: string, doctorId: string, regDate: string}) => {
+  return Post(fullUrl('SignalSource/GetTimeSlicesBySchedule'),{...data, branchId: getBranchId(), isReg: getRegType()})
 }

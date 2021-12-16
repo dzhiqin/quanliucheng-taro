@@ -17,7 +17,9 @@ export default {
         'branch-hospitals/branch-hospitals',
         'clinics/clinics',
         'notice/notice',
-        'doctor-list/doctor-list'
+        'doctor-list/doctor-list',
+        'doctor-detail/doctor-detail',
+        'search-result/search-result'
       ]
     },
     {
@@ -26,6 +28,20 @@ export default {
       pages: [
         'clinic-list/clinic-list',
         'guide-list/guide-list'
+      ]
+    },
+    {
+      root: 'pages/reports-pack',
+      name: 'reports',
+      pages: [
+        'report-list/report-list'
+      ]
+    },
+    {
+      root: 'pages/payments-pack',
+      name: 'payments',
+      pages: [
+        'payment-list/payment-list'
       ]
     }
   ],

@@ -15,7 +15,7 @@ import { taroSubscribeMessage } from '@/service/api/taro-api'
 import SubscribeNotice from '@/components/subscribe-notice/subscribe-notice'
 import { createCard } from '@/service/api'
 import cardsHealper from '@/utils/cards-healper'
-
+import { toastService } from '@/service/taost-service'
 import './bind-card.less'
 // import { humanDate } from '../../utils/format'
 
@@ -45,7 +45,7 @@ export default class BindCard extends React.Component {
         hasHospitalCard: false,
         hospitalCardNo: '',
         maritalStatus: '未婚',
-        nationality: '',
+        nationality: '中国',
         parentName: '',
         parentId: ''
       }
@@ -88,6 +88,16 @@ export default class BindCard extends React.Component {
       if(res.resultCode === 0){
         const card = res.data
         cardsHealper.add(card)
+      }else{
+        let msg = ''
+        if (/成功创建患者档案信息/.test(res.message)) {
+          msg = '健康卡创建失败，但诊疗卡创建成功且支持挂号'
+          cardsHealper.updateAllCards()
+          toastService({title: msg,onClose:()=> Taro.navigateBack()})
+        }else{
+          msg = res.message
+          toastService({title: msg})
+        }
       }
       console.log('create card', res);
     })

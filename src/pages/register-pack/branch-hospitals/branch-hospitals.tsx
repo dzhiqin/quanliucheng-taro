@@ -2,11 +2,11 @@ import * as React from 'react'
 import * as Taro from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import { useEffect } from 'react'
-import { getBranchHospital } from '@/service/api/register-api'
+import { fetchBranchHospital } from '@/service/api/register-api'
 
 export default function BranchHospitals() {
   useEffect(() => {
-    getBranchHospital({branchId: ''}).then((res) => {
+    fetchBranchHospital({branchId: ''}).then((res) => {
       // console.log('branch hospitals',res);
       if(res.resultCode === 0){
         if(res.data.length === 1){

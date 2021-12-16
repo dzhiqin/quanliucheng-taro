@@ -1,3 +1,5 @@
+import * as Taro from '@tarojs/taro'
+
 export const getBirthdayByIdCard = (id) => {
   let date = ''
   if (id.length == 15) {
@@ -21,4 +23,17 @@ export const getGenderByIdCard = (idCard) => {
     sexStr = '女';
   }
   return sexStr;
+}
+export const getBranchId = () => {
+  const hospitalInfo = Taro.getStorageSync('hospitalInfo')
+  if(hospitalInfo){
+    return hospitalInfo.branchId
+  }else{
+    return ''
+  }
+}
+export const getRegType = () => {
+  // 预约挂号0 当天挂号1
+  const regType = Taro.getStorageSync('regType')
+  return regType ? regType : '0'
 }

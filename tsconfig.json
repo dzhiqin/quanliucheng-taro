@@ -11,7 +11,8 @@
       // "@/project": ["./project.config.json"],
       "@/custom/*": ["src/custom/*"],
       "@/service/*": ["./src/service/*"],
-      "@/images/*": ["./src/images"]
+      "@/images/*": ["./src/images"],
+      "@/enums/*": ["./src/enums"]
     }
   }
 }

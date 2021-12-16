@@ -1,11 +1,7 @@
-// const app = getApp()
-// const { unique } = require('./util')
-// import {cardSetDefault} from './WX_api'
 import * as Taro from '@tarojs/taro'
-import { setDefaultCard, deleteCard } from '@/service/api'
+import { setDefaultCard, deleteCard, fetchHealthCards } from '@/service/api'
 
 import {Card} from '../interfaces/card'
-
 
 export default {
   add: (card: Card)=> {
@@ -50,16 +46,9 @@ export default {
         reject(err)
       })
     })
-    
-    // app.globalData.userCards = app.globalData.userCards.filter(item => {
-    //   return item.id != cardId
-    // })
-    // wx.setStorageSync('cards', app.globalData.userCards)
   },
   setDefault: (cardId:string) => {
     let cards = Taro.getStorageSync('cards')
-    console.log('default-cards',cards);
-    
     const newCards = cards.map(item => {
       return{
         ...item,
@@ -77,28 +66,13 @@ export default {
     return card
    
   },
-  getDefaultHospCard () {
-    // let defaultCard = wx.getStorageSync('hospCard').find(item => {
-    //   return item.isDefault == true
-    // })
-    // return defaultCard || app.globalData.hospCards[0] || {}
-  },
-  select (cardId) {
-    // app.globalData.userCards = app.globalData.userCards.map(item => {
-    //   if (item.id == cardId) {
-    //     item.isSelected = true
-    //   } else {
-    //     item.isSelected = false
-    //   }
-    //   wx.setStorageSync('cards', app.globalData.userCards)
-    //   return item
-    // })
-  },
-  getSelected () {
-    // let isSelected = app.globalData.userCards.find(item => {
-    //   return item.isSelected == true
-    // })
-    // return isSelected || app.globalData.userCards[0]
+  updateAllCards: () => {
+    fetchHealthCards().then(res => {
+      if(res.resultCode === 0){
+        const cards = res.data
+        Taro.setStorageSync('cards',cards)
+      }
+    })
   },
   saveCards (value: any) {
     if(!value || value.length === 0) return

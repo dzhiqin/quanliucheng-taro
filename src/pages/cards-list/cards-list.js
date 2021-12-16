@@ -13,6 +13,7 @@ export default class CardList2 extends React.Component {
     super(props)
     this.state = {
       cards: [],
+      params: Taro.getCurrentInstance().router.params
     }
   }
   componentDidMount() {
@@ -46,7 +47,7 @@ export default class CardList2 extends React.Component {
       <View className='cards-list'>
         {
           this.state.cards && this.state.cards.length > 0 ?
-          this.state.cards.map(item => <Card card={item} key={item.id} style='margin-bottom: 40rpx' />) : 
+          this.state.cards.map(item => <Card card={item} key={item.id} style='margin-bottom: 40rpx' action={this.state.params.action} />) : 
           <View className='empty'>
             <Image src={noCardPng} className='empty-icon'></Image>
             <View className='empty-txt'>暂无健康卡</View>
