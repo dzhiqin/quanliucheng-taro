@@ -15,7 +15,7 @@ import { taroSubscribeMessage } from '@/service/api/taro-api'
 import SubscribeNotice from '@/components/subscribe-notice/subscribe-notice'
 import { createCard } from '@/service/api'
 import cardsHealper from '@/utils/cards-healper'
-import { toastService } from '@/service/taost-service'
+import { toastService } from '@/service/toast-service'
 import './bind-card.less'
 // import { humanDate } from '../../utils/format'
 

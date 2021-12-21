@@ -73,7 +73,8 @@ export default {
     register: {
       bookingAndIntraday:true,
       popupNotice: false,
-      guangSanMode: true
+      guangSanMode: true,
+      type: 'embed'
     }
   }
 }

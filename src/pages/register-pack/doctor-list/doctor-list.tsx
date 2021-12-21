@@ -3,8 +3,8 @@ import * as Taro from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import { useState,useEffect } from 'react'
 import { useRouter } from '@tarojs/taro'
-import { fetchDoctorsByDefault, getDoctorsByDate } from '@/service/api'
-import WeekSchedule from '@/components/week-schedule/week-schedule'
+import { fetchDoctorsByDefault, fetchDoctorsByDate } from '@/service/api'
+import ScheduleDays from '@/components/schedule-days/schedule-days'
 import DoctorSchedule from '@/components/doctor-schedule/doctor-schedule'
 
 export default function DoctorList() {
@@ -19,9 +19,8 @@ export default function DoctorList() {
   }
   useEffect(() => {
     const _deptId = JSON.parse(router.params.deptId).toString()
-    const hospitalInfo = Taro.getStorageSync('hospitalInfo')
     setDeptId(_deptId)
-    fetchDoctorsByDefault({deptId: _deptId,branchId: hospitalInfo.branchId}).then(res => {
+    fetchDoctorsByDefault({deptId: _deptId}).then(res => {
       console.log(res);
       if(res.resultCode === 0){
         setWeek(res.data.regDays)
@@ -33,8 +32,7 @@ export default function DoctorList() {
   },[router.params.deptId])
   useEffect(() => {
     if(!deptId || !selectedDate) return
-    const hospitalInfo = Taro.getStorageSync('hospitalInfo')
-    getDoctorsByDate({deptId, branchId: hospitalInfo.branchId, regDate: selectedDate}).then(res => {
+    fetchDoctorsByDate({deptId, regDate: selectedDate}).then(res => {
       console.log(res);
       if(res.resultCode === 0){
         setDoctors(res.data)
@@ -44,7 +42,7 @@ export default function DoctorList() {
   return(
     <View className='doctor-list'>
       <View style='padding: 20rpx 40rpx; background: white'>
-        <WeekSchedule week={week} defaultDay={defaultDay} onChange={onDateChange} />
+        <ScheduleDays days={week} defaultDay={defaultDay} onChange={onDateChange} />
       </View>
       <View style='padding: 40rpx; background: #f5f5f5'>
         {

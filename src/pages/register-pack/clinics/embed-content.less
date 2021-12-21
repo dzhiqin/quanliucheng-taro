@@ -1,0 +1,21 @@
+@import '../../../color.less';
+
+.embed-content{
+  .filter{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    &-item {
+      color: #333;
+      font-size: 32rpx;
+      flex:1;
+      padding: 12rpx;
+      text-align: center;
+    }
+    &-item-active{
+      color: @primary-color;
+      // background-color: @primary-color;
+      border-bottom: 2rpx solid @primary-color;
+    }
+  }
+}

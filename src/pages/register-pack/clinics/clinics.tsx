@@ -3,52 +3,42 @@ import { View, Image } from '@tarojs/components'
 import * as Taro from '@tarojs/taro'
 import { useState,useEffect } from 'react'
 import locationPng from '@/images/icons/location2.png'
-import { AtSearchBar, AtTabs, AtTabsPane } from 'taro-ui'
+import { AtSearchBar } from 'taro-ui'
 import "taro-ui/dist/style/components/search-bar.scss"
-import "taro-ui/dist/style/components/tabs.scss"
 import { fetchDepatmentList, fetchPreviousVisits } from '@/service/api'
-import { toastService } from '@/service/taost-service'
+import { toastService } from '@/service/toast-service'
+import custom from '@/custom/index'
+import BkVerticalTab from '@/components/bk-vertical-tab/bk-vertical-tab'
 import ClinicList from './clinic-list'
+import EmbedContent from './embed-content'
 import DoctorCard from './doctor-card'
 import './clinics.less'
 
 export default function Clinics() {
+  const registerConfig = custom.feat.register
   const [value,setValue] = useState('')
-  const [currentDept,setCurrentDept] = useState(0)
   const [deptList,setDeptList] = useState([])
   const [doctors,setDoctors] = useState([])
   const [clinicList,setClinicList] = useState([])
-  const [tabs,setTabs] = useState([])
-  const [hospitalInfo,setHospitalInfo] = useState({
-    hospitalName: '',
-    branchId: ''
-  })
+  const [deptId,setDeptId] = useState()
+  const hospitalInfo = Taro.getStorageSync('hospitalInfo')
   
   useEffect(() => {
-    Taro.getSystemInfo().then(res => console.log(res))
-    
-    const res = Taro.getStorageSync('hospitalInfo')
-    if(res){
-      setHospitalInfo(res)
-      fetchPreviousVisits().then(result => {
-        if(result.resultCode === 0){
-          setDoctors(result.data)
-        }
-      })
-      fetchDepatmentList({branchId: res.branchId}).then(result => {
-        if(result.resultCode === 0){
-          const deptListData = result.data.firstDeptInfos
-          setDeptList(deptListData)
-          let tabsData = []
-          deptListData && deptListData.forEach(ele => {
-            tabsData.push({title: ele.deptName})
-          });
-          const clinicData = deptListData ? deptListData[0].secondDeptInfos : []
-          setClinicList(clinicData)
-          setTabs(tabsData)
-        }
-      })
-    }
+    fetchPreviousVisits().then(result => {
+      if(result.resultCode === 0){
+        setDoctors(result.data)
+      }
+    })
+    fetchDepatmentList().then(result => {
+      if(result.resultCode === 0){
+        const deptListData = result.data.firstDeptInfos
+        setDeptList(deptListData)
+        Taro.setStorageSync('deptInfo',deptListData[0])
+        setDeptId(deptListData[0].deptId)
+        const clinicData = deptListData ? deptListData[0].secondDeptInfos : []
+        setClinicList(clinicData)
+      }
+    })
   },[])
   const onChange = (e) => {
     setValue(e)
@@ -62,20 +52,29 @@ export default function Clinics() {
     }
     
   }
-  const onDeptChange = (e) => {
-    setCurrentDept(e)
-    console.log('on Dept change',currentDept);
-
+  const onTabChange = (item) => {
+    if(item.deptId !== deptId){
+      setDeptId(item.deptId)
+      Taro.setStorageSync('deptInfo',item)
+      toastService({title: `已选择${item.deptName}`,duration: 800})
+    }
   }
-  const onClickItem = (e) => {
-    console.log(e);
-    
+
+  const onClickClinicItem = (e) => {
+    Taro.navigateTo({
+      url: `/pages/register-pack/classify-doctor-list/classify-doctor-list?deptId=${deptId}&clinic=${e.specializedSubject}`
+    })
+  }
+  const onClickDate = (date:string) => {
+    Taro.navigateTo({
+      url: `/pages/register-pack/classify-doctor-list/classify-doctor-list?deptId=${deptId}&date=${date}`
+    })
   }
   return(
     <View className='clinics'>
       <View className='header'>
         <Image src={locationPng} className='header-icon' />
-        <View className='header-title'>医院分院名称</View>
+        <View className='header-title'>{hospitalInfo.hospitalName}</View>
       </View>
       <View className='search'>
         <AtSearchBar
@@ -86,30 +85,24 @@ export default function Clinics() {
           value={value}
         />
       </View>
-      <view className='previous'>
-        {
-          doctors.length && doctors.map((item,index) => <DoctorCard key={index} doctor={item} />)
-        }
-      </view>
-      <View className='clinics-content'>
-        <AtTabs
-          current={currentDept}
-          scroll
-          height='850rpx'
-          tabDirection='vertical'
-          tabList={tabs}
-          onClick={onDeptChange}
-        >
+      {
+        doctors.length > 0 && 
+        <View className='previous'>
           {
-            deptList.map((deptEle,index) => 
-              <AtTabsPane tabDirection='vertical' current={currentDept} index={index} key={index}>
-                <View style='font-size:18px;text-align:center;height:850rpx;'>
-                  <ClinicList key={index} clinics={deptEle.secondDeptInfos} />
-                </View>
-              </AtTabsPane>
-            )
+            doctors.map((item,index) => <DoctorCard key={index} doctor={item} />)
           }
-        </AtTabs>
+        </View>
+      }
+      <View className='clinics-content'>
+        {
+          deptList.length > 0 && <BkVerticalTab list={deptList} name='deptName' key='deptId' style='flex: 2' onChange={onTabChange} />
+        }
+        {
+          registerConfig.type === 'embed' && <EmbedContent deptId={deptId} style='flex: 3' onClickItem={onClickClinicItem} onClickDate={onClickDate} />
+        }
+        {
+          registerConfig.type === 'tabs' && <ClinicList />
+        }
       </View>
     </View>
   )

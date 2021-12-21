@@ -1,0 +1,48 @@
+@import '../../../color.less';
+.classify-doctor-list{
+  .ticket-btn-active{
+    .item-extra__info{
+      background-color: @primary-color;
+      border-radius: 20rpx;
+      color: white;
+      font-size: 26rpx;
+      padding: 0 10rpx;
+  
+    }
+  }
+  .ticket-btn-unactive{
+    .item-extra__info{
+      background-color: @cancel-color;
+      border-radius: 20rpx;
+      color: white;
+      font-size: 26rpx;
+      padding: 0 10rpx;
+  
+    }
+  }
+  .date{
+    background-color: #F5F5F5;
+    padding: 20rpx 40rpx;
+    &-value{
+      color: @danger-color;
+    }
+  }
+  .content{
+    padding: 0 40rpx 40rpx;
+  }
+  .dept{
+    padding: 40rpx 40rpx 0;
+    display: flex;
+    margin-bottom: 20rpx;
+    align-items: center;
+    &-icon{
+      width: 40rpx;
+      height: 40rpx;
+    }
+    &-name{
+      margin-left: 20rpx;
+      font-size: 34rpx;
+      color: #333;
+    }
+  }
+}

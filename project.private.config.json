@@ -71,6 +71,18 @@
           "pathName": "pages/register-pack/notice/notice",
           "query": "",
           "scene": null
+        },
+        {
+          "name": "医生主页",
+          "pathName": "pages/register-pack/doctor-detail/doctor-detail",
+          "query": "doctorId=0000226",
+          "scene": null
+        },
+        {
+          "name": "挂号详情",
+          "pathName": "pages/register-pack/order-create/order-create",
+          "query": "",
+          "scene": null
         }
       ]
     }

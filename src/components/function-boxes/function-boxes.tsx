@@ -9,11 +9,11 @@ import custom from '@/custom/index'
 import RegisterNoticeModal from '../register-notice-modal/register-notice-modal'
 import BoxItem from './box-item'
 import './function-boxes.less'
+import { toastService } from '@/service/toast-service'
 
 export default function FunctionBoxes(props) {
    const {functionBox} = useContext(MyContext)
    const [show,setShow] = useState(false)
-   const [hospitalCount,setHospitalCount] = useState()
    const onItemClick = (item) => {
       if(item.event === 'register'){
         if(custom.feat.register.popupNotice){
@@ -31,40 +31,30 @@ export default function FunctionBoxes(props) {
       navToPage()
     }
     const navToPage = () => {
-      if(hospitalCount === 1){
-        let url = ''
-        if(custom.feat.register.guangSanMode){
-          url = `/pages/register-pack/notice/notice`
-        }else{
-          url = `/pages/register-pack/clinics/clinics`
-        }
-        Taro.navigateTo({url})
-      }else{
-        Taro.navigateTo({
-          url: '/pages/register-pack/branch-hospitals/branch-hospitals'
-        })
-      }
-    } 
-    useEffect(() => {
+      Taro.showLoading({title: '加载中 ……',mask: true})
       fetchBranchHospital().then(res => {
         if(res.resultCode === 0){
-          const hospital = res.data[0]
-          const { branchId, hospitalName } = hospital
-          setHospitalCount(res.data.length)
-          // setHospitalInfo({
-          //   branchId: hospital.branchId,
-          //   hospitalName: hospital.hospitalName
-          // })
-          const hospitalInfo = {
-            branchId,
-            hospitalName
+          const hospitalCount = res.data.length
+          if(hospitalCount === 1){
+            let url = ''
+            if(custom.feat.register.guangSanMode){
+              url = `/pages/register-pack/notice/notice`
+            }else{
+              url = `/pages/register-pack/clinics/clinics`
+            }
+            Taro.navigateTo({url})
+          }else{
+            Taro.navigateTo({
+              url: '/pages/register-pack/branch-hospitals/branch-hospitals'
+            })
           }
-          Taro.setStorageSync('hospitalInfo',hospitalInfo)
+        }else{
+          toastService({title: '获取分院出错：' + res.message})
         }
+      }).finally(() => {
+        Taro.hideLoading()
       })
-     
-    }, [])
-
+    } 
     return (
       <View className='function-box-container'>
         {

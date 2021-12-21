@@ -23,7 +23,8 @@ const config = {
     '@/images': path.resolve(__dirname, '..', 'src/images'),
     '@/custom': path.resolve(__dirname, '..', 'src/custom'),
     '@/service': path.resolve(__dirname, '..', 'src/service'),
-    '@/enums': path.resolve(__dirname,'..','src/enums')
+    '@/enums': path.resolve(__dirname,'..','src/enums'),
+    '@/interfaces': path.resolve(__dirname, '..','src/interfaces')
   },
   copy: {
     patterns: [

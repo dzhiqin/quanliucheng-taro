@@ -6,7 +6,7 @@ import { useDidShow } from '@tarojs/taro'
 import fullPng from '@/images/icons/isFull.png'
 import nonePng from '@/images/icons/wu.png'
 
-import './week-schedule.less'
+import './schedule-days.less'
 
 const weeks = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"]
 const today = humanDate(new Date())
@@ -51,8 +51,8 @@ export default function WeekSchedule(props) {
   useEffect(() => {
     let months = []
     let schedulesData = []
-    if(props.week){
-      schedulesData = props.week.map(item => {
+    if(props.days){
+      schedulesData = props.days.map(item => {
         const month = item.date.split('-')[1]
         if(months.indexOf(month) === -1){
           months.push(month)
@@ -70,10 +70,13 @@ export default function WeekSchedule(props) {
     // console.log(schedulesData.slice(0,7));
     setSchedules(schedulesData.slice(0,7))
     setMonthSpan(months.join('~'))
-  }, [props.week,props.defaultDay])
+  }, [props.days,props.defaultDay])
   return (
     <View className='week-schedule'>
-      <View className='month'>{monthSpan}月</View>
+      {
+        props.showMonth &&
+        <View className='month'>{monthSpan}月</View>
+      }
       <View className='days'>
         {
           schedules.map((schedule,index) => 
