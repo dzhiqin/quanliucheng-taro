@@ -1,4 +1,4 @@
-const delay = (mileSeconds = 1000) =>{
+const delay = (mileSeconds = 2000) =>{
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve('')
@@ -18,7 +18,7 @@ const recursion = (promise, resolve, reject, count, totalCount) => {
     })
   })
 }
-export const requestTry = (promise, totalCount) => {
+export const requestTry = (promise, totalCount = 5) => {
   return new Promise((resolve,reject) => {
     let count = 1
     promise().then(res => {

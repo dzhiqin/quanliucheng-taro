@@ -53,3 +53,19 @@ interface fetchOrderFeeParams {
 export const fetchOrderFee = (data: fetchOrderFeeParams) => {
   return Post(fullUrl('Reg/GetRegMoney'),{...data, isReg: getRegType()})
 }
+export const fetchRegFeeType = () => {
+  return Post(fullUrl('Reg/GetRegFeeType'))
+}
+export const createRegOrder = (data) => {
+  return Post(fullUrl('Reg/GetCreateRegOrder'),data)
+}
+export const fetchRegOrderStatus = (data: {orderId: string}) => {
+  // 特殊处理，参数放在url里
+  return Post(fullUrl('Reg/GetRegStatus?orderId=' + data.orderId),data)
+}
+export const fetchRegOrderList = (data:{type: string}) => {
+  return Post(fullUrl('Reg/GetOrderList'),data)
+}
+export const cancelAppointment = (data: {orderId: string}) => {
+  return Post(fullUrl('Reg/RefundAppt?orderId=' + data.orderId),data)
+}

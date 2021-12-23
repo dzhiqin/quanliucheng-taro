@@ -3,7 +3,7 @@ import { AtIcon } from 'taro-ui'
 import { View,Swiper,SwiperItem,Image } from '@tarojs/components'
 import { useState,useEffect } from 'react'
 import * as React from 'react'
-import { getSetting, taroSubscribeMessage } from '@/service/api/taro-api'
+import { taroSubscribeMessage } from '@/service/api/taro-api'
 import subscribeNoticeImg from '@/images/subscribe_notice.png'
 import { longtermSubscribe } from '@/utils/index'
 import "taro-ui/dist/style/components/icon.scss"
@@ -17,8 +17,13 @@ export default function HealthCards(props: any) {
   const [showNotice,setShowNotice] = useState(false)
   const [cards,setCards] = useState(props.cards || [])
   const [currentCard,setCurrentCard] = useState(0)
- 
+  const [selectedCard, setSelected] = useState({
+    name: '',
+    cardNo: ''
+  })
   useDidShow(() => {
+    console.log('usedidshow');
+    
     const res = Taro.getStorageSync('userInfo')
     if(res){
       setLoginStatus(true)
@@ -28,6 +33,7 @@ export default function HealthCards(props: any) {
     for(let i =0;i< cardsList.length;i++){
       if(cardsList[i].isDefault){
         setCurrentCard(i)
+        setSelected(cardsList[i])
         break
       }
     }
@@ -96,46 +102,67 @@ export default function HealthCards(props: any) {
                 <View style='color: white'>您好，{cards[0].name}</View>
                 <View className='single-card-txt'>诊疗卡号{cards[0].cardNo}</View>
               </View>
-              {
+              {/* {
                 !props.switch
                 ? <View className='single-card-switch' onClick={onSwitch}>
                     切换就诊人
                     <AtIcon value='chevron-right' size='20' color='#0A3A6E'></AtIcon>
                   </View>
                 : <Image className='single-card-icon' src={qrcodeImg}></Image>
-              }
+              } */}
+              <Image className='single-card-icon' src={qrcodeImg}></Image>
             </View>
         </View>
       </View>
     )
   }else{
-    return (
-      <View className='health-cards'>
-        <Swiper
-          className='swiper'
-          indicatorColor='#999'
-          indicatorActiveColor='#56A1F4'
-          circular
-          indicatorDots
-          onChange={onCardChange.bind(this)}
-          current={currentCard}
-        >
-          {
-            cards && cards.map((item,index) => 
-              <SwiperItem key={index} className='swiper-item-wrap'>
-                <View className='swiper-item'>
-                  <View className='swiper-item-info'>
-                    <View className='swiper-item-name'>您好，{item.name}</View>
-                    <View className='swiper-item-card'>诊疗卡号{item.cardNo}</View>
-                  </View>
-                  <Image className='swiper-item-icon' src={qrcodeImg}></Image>
+    if(props.switch){
+      return (
+        <View style='padding:40rpx 40rpx 0'>
+          <View className='add-card single-card'>
+              <View className='single-card-content'>
+                <View>
+                  <View style='color: white'>您好，{selectedCard.name}</View>
+                  <View className='single-card-txt'>诊疗卡号{selectedCard.cardNo}</View>
                 </View>
-              </SwiperItem>  
-            )
-          }
-        </Swiper>
-      </View>
-    )
+                <View className='single-card-switch' onClick={onSwitch}>
+                  切换就诊人
+                  <AtIcon value='chevron-right' size='20' color='#0A3A6E'></AtIcon>
+                </View>
+              </View>
+          </View>
+        </View>
+      )
+    }else{
+      return (
+        <View className='health-cards'>
+          <Swiper
+            className='swiper'
+            indicatorColor='#999'
+            indicatorActiveColor='#56A1F4'
+            circular
+            indicatorDots
+            onChange={onCardChange.bind(this)}
+            current={currentCard}
+          >
+            {
+              cards && cards.map((item,index) => 
+                <SwiperItem key={index} className='swiper-item-wrap'>
+                  <View className='swiper-item'>
+                    <View className='swiper-item-info'>
+                      <View className='swiper-item-name'>您好，{item.name}</View>
+                      <View className='swiper-item-card'>诊疗卡号{item.cardNo}</View>
+                    </View>
+                    <Image className='swiper-item-icon' src={qrcodeImg}></Image>
+                  </View>
+                </SwiperItem>  
+              )
+            }
+          </Swiper>
+        </View>
+      )
+    }
+    
   }
   
 }

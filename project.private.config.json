@@ -83,6 +83,18 @@
           "pathName": "pages/register-pack/order-create/order-create",
           "query": "",
           "scene": null
+        },
+        {
+          "name": "缴费成功",
+          "pathName": "pages/register-pack/order-create/order-create",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "挂号订单列表",
+          "pathName": "pages/register-pack/order-list/order-list",
+          "query": "",
+          "scene": null
         }
       ]
     }

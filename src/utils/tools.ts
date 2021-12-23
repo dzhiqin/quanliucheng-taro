@@ -37,3 +37,9 @@ export const getRegType = () => {
   const regType = Taro.getStorageSync('regType')
   return regType ? regType : '0'
 }
+export const checkOverDate = (date: string) => {
+  if(!date) return false
+  const current = new Date().getTime()
+  const dateTime = new Date(date).getTime()
+  return current > dateTime
+}

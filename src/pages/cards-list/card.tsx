@@ -11,9 +11,9 @@ export default function Card(props: any) {
     console.log('click icon',e);
     e.stopPropagation()
   }
-  const onClickCard = (e) => {
+  const onClickCard = async (e) => {
     if(props.action === 'switchCard'){
-      cardsHealper.setDefault(props.card.id)
+      await cardsHealper.setDefault(props.card.id)
       Taro.navigateBack()
     }else{
       Taro.navigateTo({url: `/pages/card-detail/card-detail?card=${JSON.stringify(props.card)}`})

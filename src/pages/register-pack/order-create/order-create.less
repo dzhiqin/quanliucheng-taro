@@ -1,6 +1,7 @@
+@import '../../../color.less';
 .order-create{
-  padding: 40rpx;
   &-title{
+    padding: 0 40rpx;
     color: #999;
     margin: 40rpx 0 20rpx;
   }
@@ -15,12 +16,36 @@
       color: #333;
     }
     &-value{
-      margin-left: 40rpx
-      
+      margin-left: 40rpx;
+      flex: 1;
     }
   }
   &-notice{
+    padding: 0 40rpx 40rpx 40rpx;
     color: #999;
     font-size: 26rpx;
+  }
+}
+.order-result{
+  padding: 40rpx;
+  
+  &-item{
+    display: flex;
+    margin-bottom: 10rpx;
+    font-size: 30rpx;
+  }
+  &-title{
+    text-align: justify;
+    text-align-last: justify;
+    width: 150rpx;
+    color: #333;
+  }
+  &-value{
+    margin-left: 20rpx;
+    color: #aaa;
+  }
+  &-price{
+    margin-left: 20rpx;
+    color: @danger-color
   }
 }

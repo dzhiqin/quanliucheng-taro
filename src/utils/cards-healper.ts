@@ -47,7 +47,7 @@ export default {
       })
     })
   },
-  setDefault: (cardId:string) => {
+  setDefault: async (cardId:string) => {
     let cards = Taro.getStorageSync('cards')
     const newCards = cards.map(item => {
       return{
@@ -55,14 +55,22 @@ export default {
         isDefault: item.id === cardId
       }
     })
-
-    setDefaultCard({id: cardId}).then(res => {
-      Taro.setStorageSync('cards',newCards)
+    return new Promise((resolve,reject) => {
+      setDefaultCard({id: cardId}).then(res => {
+        Taro.setStorageSync('cards',newCards)
+        resolve(res)
+      }).catch(err => {
+        reject(err)
+      })
     })
+    
   },
   getDefault: () => {
     let cards = Taro.getStorageSync('cards')
-    const card = cards.find(item => item.isDefault)
+    let card = null
+    if(cards){
+      card = cards.find(i => i.isDefault) || cards[0]
+    }
     return card
    
   },

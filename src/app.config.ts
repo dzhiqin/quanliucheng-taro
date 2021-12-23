@@ -21,7 +21,8 @@ export default {
         'doctor-detail/doctor-detail',
         'search-result/search-result',
         'classify-doctor-list/classify-doctor-list',
-        'order-create/order-create'
+        'order-create/order-create',
+        'order-list/order-list'
       ]
     },
     {

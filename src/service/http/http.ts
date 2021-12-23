@@ -1,4 +1,5 @@
 import * as Taro from '@tarojs/taro'
+import { toastService } from '../toast-service'
 
 interface Response {
   resultCode: number
@@ -60,6 +61,7 @@ const Request = (
         resolve(res.data as HttpResponse)
       },
       fail: (err: Taro.General.CallbackResult) => {
+        toastService({title: '请求失败：' + err})
         const resp: HttpResponse = { resultCode: -1, message: err.errMsg }
         reject(resp)
       },

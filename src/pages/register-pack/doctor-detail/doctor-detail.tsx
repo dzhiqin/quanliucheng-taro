@@ -61,7 +61,7 @@ export default function DoctorDefault(props) {
         sourceType: doctorInfo.sourceType,
         sourceId: doctorInfo.regType,
         regNo: '',
-        feeType: '0',
+        feeType: '0',   // 对应feeCode字段
         regFee: doctorInfo.regFee,
         treatFee: '',
         address: doctorInfo.address,
@@ -92,7 +92,7 @@ export default function DoctorDefault(props) {
       deptId: deptInfo.deptId, 
       regDate: params.regDate || '' 
     }).then((res:any) => {
-      console.log(res);
+      // console.log(res);
       if(res.resultCode === 0){
         setDoctorDetail(res.data.doctorDetail)
         setDoctorInfo(res.data.timeSliceDoctorInfo)

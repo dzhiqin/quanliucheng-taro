@@ -31,4 +31,19 @@ export const getSetting = () => {
     }
   })
 }
-
+interface paymentParams {
+  nonceStr: string,
+  package: string,
+  paySign: string,
+  timeStamp: string,
+  signType?: 'HMAC-SHA256' | 'MD5',
+}
+export const TaroRequestPayment = (params: paymentParams) => {
+  return new Promise((resolve,reject) => {
+    Taro.requestPayment({
+      ...params,
+      fail: (err) => {reject({result: 'fail',data:err})},
+      success: (res) => {resolve({result: 'success', data: res})}
+    })
+  })
+}

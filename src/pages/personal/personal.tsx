@@ -17,17 +17,15 @@ export default function Personal() {
   const [cards,setCards] = useState()
 
   const onClickPanel = (e) => {
-
-    console.log('click panel',e);
-    Taro.showToast({
-      title: '开发中……',
-      icon: 'loading'
-    })
     if(e){
-      Taro.navigateTo({
-        url: e
+      Taro.navigateTo({url: e})
+    }else{
+      Taro.showToast({
+        title: '开发中……',
+        icon: 'loading'
       })
     }
+    console.log('click panel',e);
   }
   useDidShow(() => {
     let res = Taro.getStorageSync('cards')
@@ -47,7 +45,7 @@ export default function Personal() {
         <HealthCards cards={cards}></HealthCards>
       </View>
       <View className='content'>
-        <BkPanel arrow onClick={onClickPanel.bind(this)} >
+        <BkPanel arrow onClick={onClickPanel.bind(this,'/pages/register-pack/order-list/order-list')} >
           <View className='panel'>
             <Image src={orderBluePng} className='panel-icon'></Image>
             <View className='panel-name'>挂号订单</View>
