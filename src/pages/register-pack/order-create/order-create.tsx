@@ -8,11 +8,13 @@ import { useState,useEffect } from 'react'
 import BkPanel from '@/components/bk-panel/bk-panel'
 import BkButton from '@/components/bk-button/bk-button'
 import { AtIcon } from 'taro-ui'
-import { createRegOrder, fetchOrderFee, fetchRegFeeType, fetchRegOrderStatus, TaroRequestPayment } from '@/service/api'
+import { createRegOrder, fetchOrderFee, fetchRegFeeType, fetchRegOrderStatus, subscribeService, TaroRequestPayment } from '@/service/api'
 import cardsHealper from '@/utils/cards-healper'
 import { toastService } from '@/service/toast-service'
 import { requestTry } from '@/utils/retry'
 import ResultPage from '@/components/result-page/result-page'
+import { onetimeTemplates } from '@/utils/templateId'
+import SubscribeNotice from '@/components/subscribe-notice/subscribe-notice'
 
 export default function OrderCreate() {
   const [order,setOrder] = useState({
@@ -40,12 +42,13 @@ export default function OrderCreate() {
     fail = 'fail'
   }
   // 后端字段没统一，导致有2个金额字段 ╮(╯▽╰)╭
-  const [regFee,setRegFee] = useState('')
-  const [treatFee,setTreatFee] = useState('')
+  const [regFee,setRegFee] = useState(null)
+  const [treatFee,setTreatFee] = useState(null)
   const [feeTypes,setFeeTypes] = useState([])
   const [feeType,setCurrentFeeType] = useState('')
   const [result,setResult] = useState(resultEnum.default)
   const [feeOptions,setFeeOptions] = useState([])
+  const [showNotice,setShowNotice] = useState(false)
   const buildOrderParams = () => {
     const orderParams = Taro.getStorageSync('orderParams')
     const card = cardsHealper.getDefault()
@@ -85,7 +88,6 @@ export default function OrderCreate() {
   const checkOrderStatus = (orderId: string) => {
     return new Promise((resolve,reject) => {
       fetchRegOrderStatus({orderId}).then(res => {
-        console.log('orderstatus',res);
         if(res.resultCode === 0 && res.data.isSuccess){
           resolve(res.message)
         }else{
@@ -96,39 +98,53 @@ export default function OrderCreate() {
       })
     })
   }
-  const handleSubmit = () => {
-    if( (!regFee && !treatFee) || feeTypes.length === 0 ) {
+  const handleTaroPayment = (params:{nonceStr: string, paySign: string,timeStamp: string,package: string, signType: 'HMAC-SHA256' | 'MD5'},orderId: string) => {
+    TaroRequestPayment(params).then(taroRes => {
+      requestTry(checkOrderStatus.bind(null,orderId)).then(checkRes => {
+        setResult(resultEnum.success)
+      }).catch(checkErr=>{
+        setResult(resultEnum.fail)
+      })
+    }).catch(taroErr => {
+      if(taroErr.data.errMsg === 'requestPayment:fail cancel'){
+        toastService({title: '您已取消缴费'})
+        // do nothing ...
+        // Taro.navigateTo({url: '/pages/register-pack/order-list/order-list'})
+      }else{
+        console.log('支付失败:',taroErr.data);
+      }
+    })
+  }
+  const handleSubmit = async() => {
+    const subsRes = await subscribeService(onetimeTemplates.registration())
+    if(!subsRes.result){
+      setShowNotice(true)
+      return
+    }
+    if( (!regFee && !treatFee && regFee !== 0 && treatFee !== 0) || feeTypes.length === 0 ) {
       toastService({title: '正在获取费用信息，请稍后……'})
       return
     }
     createRegOrder(buildOrderParams()).then(res => {
-      console.log('build order:',res);
       if(res.resultCode === 0){
         const {nonceStr, orderId, paySign, signType, payString, timeStamp} = res.data
-        TaroRequestPayment({
-          nonceStr,
-          paySign,
-          timeStamp,
-          package: payString,
-          signType      
-        }).then(taroRes => {
-          console.log('tarores',taroRes);
+        if(payString){
+          const payParams = {
+            nonceStr,
+            paySign,
+            timeStamp,
+            package: payString,
+            signType  
+          }
+          handleTaroPayment(payParams,orderId)
+        }else{
+          // some order no need to pay
           requestTry(checkOrderStatus.bind(null,orderId)).then(checkRes => {
             setResult(resultEnum.success)
           }).catch(checkErr=>{
             setResult(resultEnum.fail)
           })
-          // checkOrderStatus(orderId)
-        }).catch(taroErr => {
-          if(taroErr.data.errMsg === 'requestPayment:fail cancel'){
-            toastService({title: '您已取消缴费'})
-            // navigate to regiter order list
-            Taro.navigateTo({url: '/pages/register-pack/order-list/order-list'})
-          }else{
-            console.log('支付失败:',taroErr.data);
-          }
-          
-        })
+        }
       }else{
         toastService({title: res.message})
       }
@@ -167,6 +183,7 @@ export default function OrderCreate() {
   if(result === ''){
     return(
       <View className='order-create'>
+        <SubscribeNotice show={showNotice} />
         <HealthCards switch />
         <View className='order-create-title'>挂号详情</View>
         <BkPanel style='margin: 40rpx'>
@@ -253,8 +270,12 @@ export default function OrderCreate() {
               <View className='order-result-price'>{regFee ? regFee : treatFee} 元</View>
             </View>
           </BkPanel>
-          <View style='padding-top: 80rpx'>
-            <BkButton title='返回' onClick={() => Taro.navigateBack()} />
+          <View style='padding-top: 80rpx;'>
+            <BkButton title='返回' onClick={() => Taro.navigateBack()} style='margin-bottom: 40rpx' />
+            {
+              result === 'success' &&
+              <BkButton title='查看订单' onClick={() => Taro.redirectTo({url: '/pages/register-pack/order-list/order-list'})} theme='info' />
+            }
           </View>
         </View>
        

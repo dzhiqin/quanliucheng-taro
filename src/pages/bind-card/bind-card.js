@@ -9,7 +9,7 @@ import "taro-ui/dist/style/components/list.scss";
 import custom from '@/custom/index'
 import { 
   idCardValidator, getBirthdayByIdCard, getGenderByIdCard, validateMessages, phoneValidator, birthdayValidator,
-  idenTypeOptions, onetimeSubscribe 
+  idenTypeOptions, onetimeTemplates 
 } from '@/utils'
 import { taroSubscribeMessage } from '@/service/api/taro-api'
 import SubscribeNotice from '@/components/subscribe-notice/subscribe-notice'
@@ -70,7 +70,7 @@ export default class BindCard extends React.Component {
     const {result,msg}= this.formValidator()
     if(result){
       taroSubscribeMessage(
-        onetimeSubscribe.bindCard(), 
+        onetimeTemplates.bindCard(), 
         () => {
           this.handleCreateCard()
         }, 

@@ -3,9 +3,9 @@ import { AtIcon } from 'taro-ui'
 import { View,Swiper,SwiperItem,Image } from '@tarojs/components'
 import { useState,useEffect } from 'react'
 import * as React from 'react'
-import { taroSubscribeMessage } from '@/service/api/taro-api'
+import { taroSubscribeMessage, subscribeService } from '@/service/api/taro-api'
 import subscribeNoticeImg from '@/images/subscribe_notice.png'
-import { longtermSubscribe } from '@/utils/index'
+import { longtermTemplates } from '@/utils/index'
 import "taro-ui/dist/style/components/icon.scss"
 import cardsHealper from '@/utils/cards-healper'
 import { useDidShow } from '@tarojs/taro'
@@ -38,19 +38,27 @@ export default function HealthCards(props: any) {
       }
     }
   })
-  const handleLogin =() =>{
-    const tempIds = longtermSubscribe.treatmentAndPayment()
-    taroSubscribeMessage(
-      tempIds, 
-      () => {
-        Taro.navigateTo({
-          url: '/pages/login/login'
-        })
-      },
-      (err) => {
-        console.log('fail',err)
-        setShowNotice(true)
+  const handleLogin = async () =>{
+    const tempIds = longtermTemplates.treatmentAndPayment()
+    // taroSubscribeMessage(
+    //   tempIds, 
+    //   () => {
+    //     Taro.navigateTo({
+    //       url: '/pages/login/login'
+    //     })
+    //   },
+    //   (err) => {
+    //     console.log('fail',err)
+    //     setShowNotice(true)
+    //   })
+    let subsRes = await subscribeService(tempIds)
+    if(!subsRes.result){
+      setShowNotice(true)
+    }else{
+      Taro.navigateTo({
+        url: '/pages/login/login'
       })
+    }
   }
   const handleAddCard = () => {
     Taro.navigateTo({url: '/pages/bind-card/bind-card'})

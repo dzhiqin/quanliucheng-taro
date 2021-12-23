@@ -6,7 +6,7 @@ import './order-list.less'
 import { cancelAppointment, fetchRegOrderList } from '@/service/api'
 import HealthCards from '@/components/health-cards/health-cards'
 import BkTabs from '@/components/bk-tabs/bk-tabs'
-import { useState } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { toastService } from '@/service/toast-service'
 import BkNone from '@/components/bk-none/bk-none'
 import BkButton from '@/components/bk-button/bk-button'
@@ -43,17 +43,15 @@ export default function OrderList() {
   }
   const onTabChange = (e) => {
     setCurrentTab(e)
-    getList()
   }
   const showCancelModal = (e) => {
-    console.log('cancel',e);
     setOrder(e)
     setShow(true)
   }
-  const getList = () => {
+  const getList = useCallback(() => {
+    setList([])
     Taro.showLoading({title: '加载中……'})
     fetchRegOrderList({type: tabs[currentTab].value}).then(res => {
-      console.log(res);
       if(res.resultCode === 0){
         setList(res.data)
       }else{
@@ -62,14 +60,17 @@ export default function OrderList() {
     }).finally(() => {
       Taro.hideLoading()
     })
-  }
+  },[currentTab])
+  useEffect(() => {
+    getList()
+  },[currentTab,getList])
   useDidShow(() => {
     getList()
   })
   return(
     <View className='order-list'>
       <HealthCards switch />
-      <BkTabs tabs={tabs} onTabChange={onTabChange} />
+      <BkTabs tabs={tabs} onTabChange={onTabChange} current={currentTab} />
       {
         list && list.length > 0 
         ?

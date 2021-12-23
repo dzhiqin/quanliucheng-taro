@@ -5,17 +5,15 @@ import HealthCards from '@/components/health-cards/health-cards'
 import BkPanel from '@/components/bk-panel/bk-panel'
 import { useDidShow } from '@tarojs/taro'
 import { useState } from 'react'
-
 import orderBluePng from '@/images/icons/order_blue.png'
 import orderYellowPng from '@/images/icons/order_yellow.png'
 import orderGreenPng from '@/images/icons/order_green.png'
 import healthCardPng from '@/images/icons/health_card.png'
-
 import './personal.less'
 
 export default function Personal() {
   const [cards,setCards] = useState()
-
+  const userInfo = Taro.getStorageSync('userInfo')
   const onClickPanel = (e) => {
     if(e){
       Taro.navigateTo({url: e})
@@ -36,10 +34,10 @@ export default function Personal() {
       <View className='header'>
         <View className='header-title'>个人中心</View>
         <View className='header-info'>
-          <Image className='header-info-avatar' src='http://storage.360buyimg.com/mtd/home/32443566_635798770100444_2113947400891531264_n1533825816008.jpg'></Image>
+          <Image className='header-info-avatar' src={userInfo.avatarUrl}></Image>
           <View>
-            <View className='header-info-name'>紫竹</View>
-            <View className='header-info-number'>1234567</View>
+            <View className='header-info-name'>{userInfo.nickName}</View>
+            {/* <View className='header-info-number'>1234567</View> */}
           </View>
         </View>
         <HealthCards cards={cards}></HealthCards>

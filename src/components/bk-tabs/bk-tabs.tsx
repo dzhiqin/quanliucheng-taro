@@ -12,10 +12,12 @@ export default function BkTabs(props: any) {
     setCurrent(index)
     onTabChange(index)
   }
+ 
   useEffect(() => {
+    setCurrent(props.current || 0)
     setList(props.tabs)
-  }, [props.tabs])
-  
+
+  }, [props])
   return (
     <View className='bk-tabs'>
       {

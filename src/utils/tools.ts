@@ -33,8 +33,8 @@ export const getBranchId = () => {
   }
 }
 export const getRegType = () => {
-  // 预约挂号0 当天挂号1
-  const regType = Taro.getStorageSync('regType')
+  // 预约挂号0 当天挂号1, 默认为0
+  const regType = Taro.getStorageSync('isReg')
   return regType ? regType : '0'
 }
 export const checkOverDate = (date: string) => {

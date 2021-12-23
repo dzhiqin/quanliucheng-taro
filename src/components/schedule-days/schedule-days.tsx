@@ -67,8 +67,8 @@ export default function WeekSchedule(props) {
         }
       })
     }
-    // console.log(schedulesData.slice(0,7));
-    setSchedules(schedulesData.slice(0,7))
+    setSchedules(schedulesData)
+    // setSchedules(schedulesData.slice(0,7)) // 默认返回了8天的排班，如果需要7天的，可以截取前7天
     setMonthSpan(months.join('~'))
   }, [props.days,props.defaultDay])
   return (

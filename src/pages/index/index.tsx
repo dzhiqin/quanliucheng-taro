@@ -16,6 +16,7 @@ export default function Index() {
   const [indexPage] = useState(custom.indexPage)
   useEffect(() => {
     Taro.setNavigationBarTitle({title: custom.hospitalName})
+    Taro.removeStorageSync('isReg')
   }, [])
 
   return (

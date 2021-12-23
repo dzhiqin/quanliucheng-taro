@@ -64,8 +64,11 @@ export const fetchRegOrderStatus = (data: {orderId: string}) => {
   return Post(fullUrl('Reg/GetRegStatus?orderId=' + data.orderId),data)
 }
 export const fetchRegOrderList = (data:{type: string}) => {
-  return Post(fullUrl('Reg/GetOrderList'),data)
+  return Post(fullUrl('Reg/GetOrderList?type='+data.type),data)
 }
 export const cancelAppointment = (data: {orderId: string}) => {
   return Post(fullUrl('Reg/RefundAppt?orderId=' + data.orderId),data)
+}
+export const fetchDeptsOrDoctors = (data:{keyword: string}) => {
+  return Post(fullUrl('SignalSource/SearchDepartOrDr'),{...data, branchId: getBranchId()})
 }

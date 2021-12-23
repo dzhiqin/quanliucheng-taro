@@ -19,7 +19,7 @@ export default function BkPanel(props: any) {
       </View>
       {
         props.arrow &&
-        <View>
+        <View style='display:flex;align-items: center'>
           <AtIcon size='20' value='chevron-right' color='#C3C3C7' />
         </View>
       }

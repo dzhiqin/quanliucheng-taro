@@ -7,7 +7,6 @@ import { useRouter } from '@tarojs/taro'
 import { toastService } from '@/service/toast-service'
 import ScheduleDays from '@/components/schedule-days/schedule-days'
 import { AtList, AtListItem } from "taro-ui"
-// import "taro-ui/dist/style/components/list.scss"
 import BkNone from '@/components/bk-none/bk-none'
 import './doctor-detail.less'
 import cardsHealper from '@/utils/cards-healper'
@@ -34,7 +33,8 @@ export default function DoctorDefault(props) {
     regType:'',
     regFee: '',
     address: '',
-    regTypeId:''
+    regTypeId:'',
+    specializedSubject:''
   })
   const onClickItem = (item) => {
     const hospitalInfo = Taro.getStorageSync('hospitalInfo')
@@ -47,7 +47,7 @@ export default function DoctorDefault(props) {
         branchId: hospitalInfo.branchId,
         patientId: card.patientId,
         patientName: card.name,
-        deptId: deptInfo.deptId,
+        deptId: deptInfo.deptId, 
         deptName: deptInfo.deptName,
         doctorId: doctorDetail.doctorId,
         doctorName: doctorDetail.name || doctorDetail.doctorName,
@@ -76,6 +76,7 @@ export default function DoctorDefault(props) {
   } 
   const onDateChange = (date) => {
     if(!date) return
+    setSelectedDate(date)
     Taro.showLoading({title: '加载中……'})
     fetchTimeListByDate({deptId: deptInfo.deptId, regDate: date, doctorId: doctorDetail.doctorId}).then(res => {
       if(res.resultCode === 0){
@@ -92,8 +93,11 @@ export default function DoctorDefault(props) {
       deptId: deptInfo.deptId, 
       regDate: params.regDate || '' 
     }).then((res:any) => {
-      // console.log(res);
       if(res.resultCode === 0){
+        if(res.data.defaultSelectedDay === '无剩余号源'){
+          toastService({title: '无剩余号源',onClose: () => {Taro.navigateBack()}})
+          return
+        }
         setDoctorDetail(res.data.doctorDetail)
         setDoctorInfo(res.data.timeSliceDoctorInfo)
         setSelectedDate(res.data.defaultSelectedDay)
@@ -112,14 +116,14 @@ export default function DoctorDefault(props) {
           <Image src={doctorDetail.faceUrl} className='avatar' />
         <View style='margin-left: 20rpx;'>
           <View>
-            <text className='doctor-detail-name'>{doctorDetail.doctorName}</text>
+            <text className='doctor-detail-name'>{doctorDetail.name}</text>
             <text className='doctor-detail-title'>{doctorDetail.deptName}</text>
             <text className='doctor-detail-title'>{doctorDetail.title}</text>
           </View>
           {
             doctorDetail.specialty && 
             <View className='doctor-detail-skilled'>
-              擅长领域：{doctorDetail.specialty}
+              擅长领域：{doctorInfo.specializedSubject}
             </View>
           }
           

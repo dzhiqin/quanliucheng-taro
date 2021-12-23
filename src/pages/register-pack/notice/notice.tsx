@@ -18,7 +18,7 @@ export default function Notice() {
   }
   const [current,setCurrent] = useState(0)
   const onClick = () => {
-    Taro.navigateTo({url: '/pages/register-pack/clinics/clinics'})
+    Taro.redirectTo({url: '/pages/register-pack/clinics/clinics'})
   }
   useEffect(() => {
     Taro.setStorageSync('isReg', regType.introday)

@@ -23,7 +23,30 @@ export const taroSubscribeMessage = (tempIds, successCallback, failCallback) => 
     
   }
 }
-
+type subscribeServiceRes =  {result: boolean, msg: string }
+export const subscribeService = (tempIds) => {
+  if(!tempIds || tempIds.length === 0) {
+    return {result: false,msg: '没有订阅任何模板消息'}
+  }else if(tempIds.length > 3) {
+    return {result: false, msg: '一次最多订阅3条消息'}
+  }
+  return new Promise<subscribeServiceRes>((resolve,reject) => {
+    Taro.requestSubscribeMessage({
+      tmplIds: tempIds,
+      success: (res) =>{
+        // console.log('reqeust subscribe :',res)
+        if(Object.values(res).includes('reject')){
+          resolve({result: false, msg: '未授权'})
+        }else{
+          resolve({result: true, msg: 'ok'})
+        }
+      },
+      fail: res => {
+        reject({result: false, msg: '授权失败:'+res})
+      }
+    })
+  })
+}
 export const getSetting = () => {
   Taro.getSetting({
     success: (res) => {

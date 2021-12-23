@@ -1,7 +1,8 @@
 import custom from '@/custom/index'
 
 const hospName = custom.hospName
-export const longtermSubscribe = {
+export const longtermTemplates = {
+  // 就诊提醒和待缴费提醒
   treatmentAndPayment: () => {
     let tempIds = []
     switch (hospName) {
@@ -12,9 +13,7 @@ export const longtermSubscribe = {
         tempIds = ['4RckgEP-B5zFYHkMDdrSvmB1unuU7LDhH9ZGf4MJ0eI', 'nJMfTeNcCIRAOC3agtrH2sEw_rb9MQXVC2eK0dEJgvM', '1Y7Iu0-grEtMsexRhqB1Q4cHgTspOggU5Y6bhufypaI']
         break
       case 'jayy':
-        tempIds = ['zLSrCmv8JJW4t6aWO8qBGK0Z1kR2aHW5fmNxo3KzE3Q',
-        '9CpAcDEV4hmz_c3SIRu0-Al9dE0fBd_cfvf2ykqadnc',
-        'oDZ3NDPB_-YEy6nkEKuxcjr_q8Rp0C7G9PFCpuVLPfU']
+        tempIds = ['zLSrCmv8JJW4t6aWO8qBGK0Z1kR2aHW5fmNxo3KzE3Q','9CpAcDEV4hmz_c3SIRu0-Al9dE0fBd_cfvf2ykqadnc','oDZ3NDPB_-YEy6nkEKuxcjr_q8Rp0C7G9PFCpuVLPfU']
         break
       case 'epfy':
         tempIds = ['bSRjI78XTOZypmNQrXjjdvP8S8EoFmKpXXUIUPevuOI','7K1_PxerIwdUR6AAMkW_toK5kcwAxRkA3dYsjiSzfRw','Kw34uIwJA3OJkX8gFLWvVV_eIKzymIniLGLoaQdIlBA']
@@ -29,7 +28,7 @@ export const longtermSubscribe = {
     return tempIds
   },
 }
-export const onetimeSubscribe = {
+export const onetimeTemplates = {
   bindCard: () => {
     let tempIds = []
     switch (hospName) {
@@ -65,9 +64,7 @@ export const onetimeSubscribe = {
         tempIds = ['jh9Xi4Jt1kQ3ypscIy_9u-mImT9wwKp7zkMSO_zBCk8', 'Ui8MCcOjbu6vLSk1KD5U_eaBeQeYMKX-ghGb9LKYB9Q', 'LbSvzH4CbYtgOIOESN4fAS8jCn3hZH_D2wTYE1mA-j4']
         break
       case 'jayy':
-        tempIds = ['6P8zfCAbaN9PMv6ZPivqaFgW6SPPzSDlIA3udO362Pk',
-        '1-X3_PZlN5uko1RXdFcUhSlvep9Y9wWHPn1MBk8nGa0',
-        'vnSTkAGWrjDfAKNmZ5apLLaiqBlgns77lLiGdDOiRJo']
+        tempIds = ['6P8zfCAbaN9PMv6ZPivqaFgW6SPPzSDlIA3udO362Pk','1-X3_PZlN5uko1RXdFcUhSlvep9Y9wWHPn1MBk8nGa0','vnSTkAGWrjDfAKNmZ5apLLaiqBlgns77lLiGdDOiRJo']
         break
       case 'epfy':
         tempIds = ['e0FDjk3sWMLKIdu91xKfeOoSZc87JSDjOEmaT7Aq8RQ','xh0vmL6oGpjiM6el5JmgyZfo4gZFvMcRFr_R5eXsNSg','NdfPzIXyqwkEnCRI_dn67KbG79fZsVjaXlrVstAjC1A']
@@ -92,8 +89,7 @@ export const onetimeSubscribe = {
         tempIds = ['JQvwUruyBZSNoWmyPb-DurwKwRax2PB_Rzhg4TyM6x8', 'LbSvzH4CbYtgOIOESN4fAS8jCn3hZH_D2wTYE1mA-j4']
         break
       case 'jayy':
-        tempIds = ['34InUe4hYzcUsLANM1tACXX4Rv8cXqAbOKLtOpZljow',
-        'vnSTkAGWrjDfAKNmZ5apLLaiqBlgns77lLiGdDOiRJo']
+        tempIds = ['34InUe4hYzcUsLANM1tACXX4Rv8cXqAbOKLtOpZljow','vnSTkAGWrjDfAKNmZ5apLLaiqBlgns77lLiGdDOiRJo']
         break
       case 'epfy':
         tempIds = ['kDLSFZPddBJ4LLo3JsSU8oqwXh0GkBWKEeX0EFTkTrY','NdfPzIXyqwkEnCRI_dn67KbG79fZsVjaXlrVstAjC1A']

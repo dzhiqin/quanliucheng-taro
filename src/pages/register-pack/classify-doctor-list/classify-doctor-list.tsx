@@ -23,7 +23,7 @@ export default function ClassifyDoctorList(props) {
       toastService({title: '没号了~请重新选择'})
       return
     }
-    Taro.navigateTo({url: '/pages/register-pack/doctor-detail/doctor-detail?doctorId='+doctor.doctorId})
+    Taro.navigateTo({url: `/pages/register-pack/doctor-detail/doctor-detail?doctorId=${doctor.doctorId}&regDate=${regDate}`})
   }
   
   useEffect(() => {
