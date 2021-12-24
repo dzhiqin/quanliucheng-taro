@@ -29,7 +29,7 @@ export default {
           title: '就诊缴费',
           event: 'jump',
           desc: '线上缴费免排队',
-          url: '/pages/payments-pack/payment-list/payment-list'
+          url: '/pages/payment-pack/payment-list/payment-list'
         },
         {
           icon: imgUrl.new_home_icon5,

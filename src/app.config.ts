@@ -41,10 +41,11 @@ export default {
       ]
     },
     {
-      root: 'pages/payments-pack',
+      root: 'pages/payment-pack',
       name: 'payments',
       pages: [
-        'payment-list/payment-list'
+        'payment-list/payment-list',
+        'payment-detail/payment-detail'
       ]
     }
   ],

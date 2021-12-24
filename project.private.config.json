@@ -95,6 +95,12 @@
           "pathName": "pages/register-pack/order-list/order-list",
           "query": "",
           "scene": null
+        },
+        {
+          "name": "缴费列表",
+          "pathName": "pages/payment-pack/payment-list/payment-list",
+          "query": "",
+          "scene": null
         }
       ]
     }

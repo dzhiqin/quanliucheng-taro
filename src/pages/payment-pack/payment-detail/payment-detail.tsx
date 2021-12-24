@@ -1,8 +1,8 @@
 import * as React from 'react'
 import { View } from '@tarojs/components'
 
-export default function PaymentList() {
+export default function PaymentDetail() {
   return(
-    <View>payment list</View>
+    <View>payment detail</View>
   )
 }

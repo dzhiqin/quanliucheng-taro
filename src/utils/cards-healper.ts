@@ -67,7 +67,7 @@ export default {
   },
   getDefault: () => {
     let cards = Taro.getStorageSync('cards')
-    let card = null
+    let card:Card = null
     if(cards){
       card = cards.find(i => i.isDefault) || cards[0]
     }

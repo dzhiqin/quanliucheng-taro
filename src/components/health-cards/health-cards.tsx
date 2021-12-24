@@ -22,8 +22,6 @@ export default function HealthCards(props: any) {
     cardNo: ''
   })
   useDidShow(() => {
-    console.log('usedidshow');
-    
     const res = Taro.getStorageSync('userInfo')
     if(res){
       setLoginStatus(true)
