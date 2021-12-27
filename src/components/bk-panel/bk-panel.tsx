@@ -5,6 +5,12 @@ import "taro-ui/dist/style/components/icon.scss"
 
 import './bk-panel.less'
 
+/**
+ * 
+ * @param onClick
+ * @param arrow: boolean 
+ * @returns 
+ */
 export default function BkPanel(props: any) {
   const { onClick } = props
   const onclick = () => {

@@ -16,7 +16,7 @@ export default function ClassifyDoctorList(props) {
   const deptId = router.params.deptId
   const deptInfo = Taro.getStorageSync('deptInfo')
   const specializedSubject = router.params.clinic
-  const regDate = router.params.date
+  const regDate = router.params.date || ''
   const [list,setList] = useState([])
   const onClick = (doctor) => {
     if(doctor.leaveTotalCount === 0){

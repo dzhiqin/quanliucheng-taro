@@ -85,7 +85,7 @@
           "scene": null
         },
         {
-          "name": "缴费成功",
+          "name": "挂号详情",
           "pathName": "pages/register-pack/order-create/order-create",
           "query": "",
           "scene": null

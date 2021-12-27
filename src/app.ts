@@ -5,7 +5,6 @@ import * as Taro from '@tarojs/taro'
 import "taro-ui/dist/style/index.scss"
 import './app.less'
 import { fetchBranchHospital } from './service/api'
-import { toastService } from './service/toast-service'
 
 class App extends Component {
   props: any

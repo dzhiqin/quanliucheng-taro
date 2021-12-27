@@ -37,7 +37,9 @@ export default {
       root: 'pages/reports-pack',
       name: 'reports',
       pages: [
-        'report-list/report-list'
+        'reports-list/reports-list',
+        'reports-type/reports-type',
+        'reports-detail/reports-detail',
       ]
     },
     {

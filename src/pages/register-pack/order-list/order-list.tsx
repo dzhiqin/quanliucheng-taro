@@ -41,8 +41,8 @@ export default function OrderList() {
   const onCancel = () => {
     setShow(false)
   }
-  const onTabChange = (e) => {
-    setCurrentTab(e)
+  const onTabChange = (index) => {
+    setCurrentTab(index)
   }
   const showCancelModal = (e) => {
     setOrder(e)

@@ -36,7 +36,7 @@ export default {
           title: '查看报告',
           event: 'jump',
           desc: '检查检验随时查',
-          url: '/pages/reports-pack/report-list/report-list'
+          url: '/pages/reports-pack/reports-type/reports-type'
         }
       ]
     },
@@ -76,5 +76,8 @@ export default {
       guangSanMode: true,
       type: 'embed'
     }
+  },
+  reportsPage:{
+    urlDetail: true
   }
 }

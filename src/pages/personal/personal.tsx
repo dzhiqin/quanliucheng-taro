@@ -23,7 +23,6 @@ export default function Personal() {
         icon: 'loading'
       })
     }
-    console.log('click panel',e);
   }
   useDidShow(() => {
     let res = Taro.getStorageSync('cards')
@@ -49,13 +48,13 @@ export default function Personal() {
             <View className='panel-name'>挂号订单</View>
           </View>
         </BkPanel>
-        <BkPanel arrow onClick={onClickPanel.bind(this)} style='margin-top: 20rpx'>
+        <BkPanel arrow onClick={onClickPanel.bind(this,'/pages/payment-pack/payment-list/payment-list')} style='margin-top: 20rpx'>
           <View className='panel'>
             <Image src={orderYellowPng} className='panel-icon'></Image>
             <View className='panel-name'>缴费订单</View>
           </View>
         </BkPanel>
-        <BkPanel arrow onClick={onClickPanel.bind(this)} style='margin-top: 20rpx'>
+        <BkPanel arrow onClick={onClickPanel.bind(this,'/pages/reports-pack/reports-type/reports-type')} style='margin-top: 20rpx'>
           <View className='panel'>
             <Image src={orderGreenPng} className='panel-icon'></Image>
             <View className='panel-name'>检查检验单</View>
