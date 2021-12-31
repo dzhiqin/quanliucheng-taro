@@ -2,7 +2,6 @@ import * as React from 'react'
 import * as Taro from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import { AtList, AtListItem } from 'taro-ui'
-import "taro-ui/dist/style/components/list.scss"
 
 export default function ClinicList(props) {
   const onClickItem = (clinic) => {

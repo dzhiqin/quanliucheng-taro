@@ -1,8 +1,6 @@
 import * as React from 'react'
 import { View } from '@tarojs/components'
 import { AtIcon } from 'taro-ui'
-import "taro-ui/dist/style/components/icon.scss"
-
 import './bk-panel.less'
 
 /**

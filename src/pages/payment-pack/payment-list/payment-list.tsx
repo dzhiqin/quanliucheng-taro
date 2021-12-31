@@ -19,23 +19,19 @@ export default function PaymentList() {
       toastService({title: '请先绑卡'})
       return
     }
+    Taro.showLoading({title: '加载中……'})
     fetchPaymentList({cardId: card.id}).then(res => {
       if(res.resultCode === 0){
         setList(res.data.bills)
       }
+    }).finally(() => {
+      Taro.hideLoading()
     })
   })
-  const handleWechatPay = (item) => {
-    console.log('wx pay', item);
-    
-  }
-  const handleYiBaoPay = (item) => {
-    console.log('yb pay',item);
-    
-  }
   const handleClick = (item) => {
     console.log(item);
-    Taro.navigateTo({url: '/pages/payment-pack/payment-detail/payment-detail'})
+    // 缴费单的信息要从列表带过去
+    Taro.navigateTo({url: `/pages/payment-pack/payment-detail/payment-detail?orderInfo=${JSON.stringify(item)}`})
   }
   return(
     <View className='payment-list'>
@@ -45,40 +41,6 @@ export default function PaymentList() {
           list.length > 0 
           ?
             <View>
-              {/* {
-                list.map((item) => 
-                  <View key={item.clinicNo} className='box-shadow-radius' style='margin-bottom: 40rpx'>
-                    <View className='flex'>
-                      <View className='flat-title'>订单编号：</View>
-                      <View className='sub-text-color'>{item.clinicNo}</View>
-                    </View>
-                    <View className='dashed-devider'></View>
-                    <View className='flex'>
-                      <View className='flat-title'>开单科室：</View>
-                      <View className='sub-text-color'>{item.orderDept}</View>
-                    </View>
-                    <View className='flex'>
-                      <View className='flat-title'>开单医生：</View>
-                      <View className='sub-text-color'>{item.orderDoctor}</View>
-                    </View>
-                    <View className='flex'>
-                      <View className='flat-title'>就诊时间：</View>
-                      <View className='sub-text-color'>{item.orderDate}</View>
-                    </View>
-                    <View className='flex'>
-                      <View className='flat-title'>总金额：</View>
-                      <View className='sub-text-color price-color'>{item.prescMoney} 元</View>
-                    </View>
-                    <View className='flex-around' style='margin-top: 20rpx'>
-                      {
-                        item.orderType = 'YiBao' &&
-                        <BkButton title='医保支付' theme='primary' icon='icons/card.png' onClick={handleYiBaoPay.bind(null, item)} />
-                      }
-                      <BkButton title='微信支付' theme='info' icon='icons/wechat.png' onClick={handleWechatPay.bind(null, item)} />
-                    </View>
-                  </View>
-                )
-              } */}
               {
                 list.map((item) => 
                   <View key={item.clinicNo} className='box-shadow-radius flex' style='margin-bottom: 40rpx' onClick={handleClick.bind(null,item)}>
@@ -94,7 +56,7 @@ export default function PaymentList() {
               }
             </View>
           :
-            <BkNone />
+            <BkNone msg='暂无缴费单' />
         }
       </View>
     </View>

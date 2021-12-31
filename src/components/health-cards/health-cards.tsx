@@ -1,16 +1,15 @@
 import * as Taro from '@tarojs/taro'
 import { AtIcon } from 'taro-ui'
 import { View,Swiper,SwiperItem,Image } from '@tarojs/components'
-import { useState,useEffect } from 'react'
+import { useState } from 'react'
 import * as React from 'react'
-import { taroSubscribeMessage, subscribeService } from '@/service/api/taro-api'
-import subscribeNoticeImg from '@/images/subscribe_notice.png'
+import { subscribeService } from '@/service/api/taro-api'
 import { longtermTemplates } from '@/utils/index'
-import "taro-ui/dist/style/components/icon.scss"
 import cardsHealper from '@/utils/cards-healper'
 import { useDidShow } from '@tarojs/taro'
 import qrcodeImg from '../../images/icons/qrcode.png'
 import './health-cards.less'
+import SubscribeNotice from '../subscribe-notice/subscribe-notice'
 
 export default function HealthCards(props: any) {
   const [isLogin, setLoginStatus] = useState(false)
@@ -83,9 +82,10 @@ export default function HealthCards(props: any) {
             <Image src='https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/applets-imgs/man.png' className='login-card-avatar'></Image>
             <View className='login-card-name'>请先登录</View>
         </View>
-        {showNotice ? <View className='subscribe-notice'>
-          <Image src={subscribeNoticeImg}></Image>
-        </View> : ''}
+        {
+          showNotice &&
+          <SubscribeNotice show={showNotice} />
+        }
       </View>
     )
   }else if(cards.length === 0){

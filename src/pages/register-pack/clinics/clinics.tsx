@@ -4,7 +4,6 @@ import * as Taro from '@tarojs/taro'
 import { useState,useEffect } from 'react'
 import locationPng from '@/images/icons/location2.png'
 import { AtSearchBar } from 'taro-ui'
-import "taro-ui/dist/style/components/search-bar.scss"
 import { fetchDepatmentList, fetchPreviousVisits } from '@/service/api'
 import { toastService } from '@/service/toast-service'
 import custom from '@/custom/index'

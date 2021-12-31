@@ -3,18 +3,16 @@ import * as React from 'react'
 import { View } from '@tarojs/components'
 import BkPanel from '@/components/bk-panel/bk-panel'
 import BkButton from '@/components/bk-button/bk-button'
-import { useRouter, useReady } from '@tarojs/taro'
+import {  useReady } from '@tarojs/taro'
 import { useState } from 'react'
 import { AtSwitch } from 'taro-ui'
-import "taro-ui/dist/style/components/switch.scss"
 import cardsHealper from '@/utils/cards-healper'
-import { deleteCard } from '@/service/api'
 import './card-detail.less'
+import { toastService } from '@/service/toast-service'
 
 export default function CardDetail(props: any) {
-  const router = useRouter()
   const [busy,setBusy] = useState(false)
-  const [isDefault,setDefault] = useState(false)
+  const [isDefault,setIsDefault] = useState(false)
   const [card,setCard] = useState({
     name: '',
     id: '',
@@ -28,14 +26,13 @@ export default function CardDetail(props: any) {
     type: ''
   })
   useReady(() => {
-    const obj = JSON.parse(router.params.card)
-    console.log('useReady',obj)
-    setDefault(obj.isDefault)
-    setCard(obj)
+    const currentCard = Taro.getStorageSync('card')
+    setIsDefault(currentCard.isDefault)
+    setCard(currentCard)
     
   })
   const handleChange = (e) => {
-    setDefault(true)
+    setIsDefault(true)
     if(e){
       cardsHealper.setDefault(card.id)
       Taro.showToast({
@@ -47,9 +44,8 @@ export default function CardDetail(props: any) {
   const handleUnBind = () => {
     setBusy(true)
     cardsHealper.delete(Number(card.id)).then(res => {
-      console.log('delte success',res);
+      toastService({title: '解绑成功', onClose: () =>{Taro.navigateBack()} })
       setBusy(false)
-      Taro.navigateBack()
     })
   }
   

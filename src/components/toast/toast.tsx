@@ -1,8 +1,6 @@
 import * as React from 'react'
 import { View } from '@tarojs/components'
 import { AtToast } from 'taro-ui'
-import "taro-ui/dist/style/components/toast.scss"
-import "taro-ui/dist/style/components/icon.scss"
 import { useState, useEffect } from 'react'
 
 export default function Toast(props) {

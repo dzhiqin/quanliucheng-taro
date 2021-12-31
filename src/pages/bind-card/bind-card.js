@@ -2,10 +2,6 @@ import * as Taro from '@tarojs/taro'
 import * as React from 'react'
 import { View, Picker } from '@tarojs/components'
 import { AtInput, AtForm, AtButton,AtIcon, AtList, AtListItem } from 'taro-ui'
-import "taro-ui/dist/style/components/button.scss"
-import "taro-ui/dist/style/components/input.scss"
-import "taro-ui/dist/style/components/icon.scss"
-import "taro-ui/dist/style/components/list.scss";
 import custom from '@/custom/index'
 import { 
   idCardValidator, getBirthdayByIdCard, getGenderByIdCard, validateMessages, phoneValidator, birthdayValidator,

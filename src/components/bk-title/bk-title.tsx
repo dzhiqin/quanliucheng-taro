@@ -2,8 +2,6 @@ import * as React from 'react'
 import { View } from '@tarojs/components'
 import { useState } from 'react'
 import { AtIcon } from 'taro-ui'
-import "taro-ui/dist/style/components/icon.scss";
-
 import './bk-title.less'
 
 export default function BkTitle(props: any) {

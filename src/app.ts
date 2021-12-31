@@ -2,7 +2,7 @@
 import { Component } from 'react'
 import { login } from '@/service/api/user-api'
 import * as Taro from '@tarojs/taro'
-import "taro-ui/dist/style/index.scss"
+import "taro-ui/dist/style/index.scss"  // 全局引入样式
 import './app.less'
 import { fetchBranchHospital } from './service/api'
 

@@ -1,8 +1,13 @@
 import * as React from 'react'
 import { View, Image } from '@tarojs/components'
 import nonePng from '@/images/none.png'
-
-export default function BkNone(props){
+/**
+ * 
+ * @param size: 'small' || ''
+ * @param msg: string 
+ * @returns 
+ */
+export default function BkNone(props:{size?:'small' | '', msg?: string}){
   const normalImage = {
     width: '500rpx',
     height: '400rpx'

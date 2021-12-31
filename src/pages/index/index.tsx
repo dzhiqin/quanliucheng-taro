@@ -2,7 +2,6 @@ import * as Taro from '@tarojs/taro'
 import { useEffect, useState } from 'react'
 import { View, Image } from '@tarojs/components'
 import * as React from 'react'
-import "taro-ui/dist/style/components/button.scss" // 按需引入
 import custom from '@/custom/index'
 import FunctionBoxes from '@/components/function-boxes/function-boxes'
 import HealthCards from '@/components/health-cards/health-cards'

@@ -5,7 +5,6 @@ import { AtSegmentedControl } from 'taro-ui'
 import { useState, useEffect } from 'react'
 import { regType } from '@/enums/index'
 import BkButton from '@/components/bk-button/bk-button'
-import "taro-ui/dist/style/components/segmented-control.scss";
 import IntrodayRegNotice from './introday-reg-notice'
 import PreRegNotice from './pre-reg-notice'
 import './notice.less'

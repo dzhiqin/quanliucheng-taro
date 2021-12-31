@@ -1,7 +1,6 @@
 import * as React from 'react'
 import { AtModal,AtModalContent } from 'taro-ui'
 import { useState,useEffect } from 'react'
-import "taro-ui/dist/style/components/modal.scss";
 import { fetchRegisterNotice } from '@/service/api/card-api'
 import { View, RichText } from '@tarojs/components'
 

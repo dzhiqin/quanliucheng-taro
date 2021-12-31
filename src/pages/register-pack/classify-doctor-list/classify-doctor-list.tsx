@@ -7,7 +7,6 @@ import { useRouter } from '@tarojs/taro'
 import BkNone from '@/components/bk-none/bk-none'
 import { toastService } from '@/service/toast-service'
 import { AtList, AtListItem } from "taro-ui"
-import "taro-ui/dist/style/components/list.scss";
 import './classify-doctor-list.less'
 import crossFlagPng from '@/images/icons/cross_flag.png'
 

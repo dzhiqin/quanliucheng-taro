@@ -1,7 +1,6 @@
 import { View,Image } from '@tarojs/components'
 import { useState,useEffect } from 'react'
 import * as React from 'react'
-import "taro-ui/dist/style/components/grid.scss";
 import BkTabs from '../bk-tabs/bk-tabs'
 import './quick-entrance.less'
 

@@ -2,12 +2,9 @@ import * as React from 'react'
 import * as Taro from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import { useState,useEffect } from 'react'
-import "taro-ui/dist/style/components/tabs.scss"
 import './embed-content.less'
 import { fetchClinicsByDeptId,fetchDoctorsByDept, fetchScheduleDays } from '@/service/api'
 import { AtList, AtListItem } from "taro-ui"
-// import "taro-ui/dist/style/components/icon.scss"
-// import "taro-ui/dist/style/components/list.scss"
 import { toastService } from '@/service/toast-service'
 import BkNone from '@/components/bk-none/bk-none'
 

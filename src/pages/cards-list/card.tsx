@@ -16,7 +16,8 @@ export default function Card(props: any) {
       await cardsHealper.setDefault(props.card.id)
       Taro.navigateBack()
     }else{
-      Taro.navigateTo({url: `/pages/card-detail/card-detail?card=${JSON.stringify(props.card)}`})
+      Taro.setStorageSync('card',props.card)
+      Taro.navigateTo({url: `/pages/card-detail/card-detail`})
     }
   }
   return (

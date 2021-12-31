@@ -48,7 +48,7 @@ export default function Personal() {
             <View className='panel-name'>挂号订单</View>
           </View>
         </BkPanel>
-        <BkPanel arrow onClick={onClickPanel.bind(this,'/pages/payment-pack/payment-list/payment-list')} style='margin-top: 20rpx'>
+        <BkPanel arrow onClick={onClickPanel.bind(this,'/pages/payment-pack/order-list/order-list')} style='margin-top: 20rpx'>
           <View className='panel'>
             <Image src={orderYellowPng} className='panel-icon'></Image>
             <View className='panel-name'>缴费订单</View>

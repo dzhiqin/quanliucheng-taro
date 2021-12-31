@@ -29,3 +29,40 @@ export enum reportItemType_CN {
   '超声' = 'U',// 超声
   '放射' = 'R'   // 放射
 }
+export enum pactCode_EN {
+  'selfPay' = '1',
+  'YiBao' = '3'
+}
+export enum orderPayType_CN {
+  '自费' = '0',
+  '医保' = '1'
+}
+export enum orderStatus_EN {
+  unpay = 0,
+  paying = 1,
+  paySuccess = 2,
+  payFailed = 3,
+  paySuccess_and_His_success = 4,   // 支付成功，通知His成功
+  paySuccess_and_His_fail = 5,      // 支付成功，但通知His失败
+  cancelPay = 6
+}
+export enum orderStatus_CN {
+  '未缴费' = 0,
+  '缴费中' = 1,
+  '支付成功' = 2,
+  '支付失败' = 3,
+  '缴费成功' = 4,   // 支付成功，通知His成功
+  '缴费失败' = 5,      // 支付成功，但通知His失败
+  '取消支付' = 6
+}
+export enum payStatus_EN {
+  unpay = 0, 
+  paid = 1,
+  refunded = 2,
+  refundFailed = 3,
+  refunding = 4
+}
+export enum orderSearchType_EN {
+  current = 'current',
+  history = 'history'
+}

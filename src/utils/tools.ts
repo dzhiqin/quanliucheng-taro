@@ -39,6 +39,9 @@ export const getRegType = () => {
 }
 export const checkOverDate = (date: string) => {
   if(!date) return false
+  if(date.length === 10){
+    date = date + ' ' + '20:00'
+  }
   const current = new Date().getTime()
   const dateTime = new Date(date).getTime()
   return current > dateTime

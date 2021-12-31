@@ -5,7 +5,6 @@ import BkButton from '@/components/bk-button/bk-button'
 import noCardPng from '@/images/no_card.png'
 import custom from '@/custom/'
 import Card from './card'
-// import { componentDidShow } from '@tarojs/taro'
 import './cards-list.less'
 
 export default class CardList2 extends React.Component {

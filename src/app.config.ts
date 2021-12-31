@@ -47,7 +47,8 @@ export default {
       name: 'payments',
       pages: [
         'payment-list/payment-list',
-        'payment-detail/payment-detail'
+        'payment-detail/payment-detail',
+        'order-list/order-list'
       ]
     }
   ],

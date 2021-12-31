@@ -8,7 +8,7 @@ export const login = (data:{code: string}) => {
   return new Promise((resolve, reject) => {
     Taro.request({
       method:'POST',
-      url: baseUrl + '/Authorized/Login',
+      url: baseUrl + '/patient/Authorized/Login',
       data: data,
       header: {
         'content-Type': 'application/json',
@@ -23,5 +23,5 @@ export const login = (data:{code: string}) => {
   })
 }
 export const updateUserInfo = (data:any={}) => {
-  return Post(fullUrl('Authorized/GetUserInfo'),data)
+  return Post(fullUrl('patient/Authorized/GetUserInfo'),data)
 }

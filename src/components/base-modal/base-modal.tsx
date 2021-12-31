@@ -2,7 +2,7 @@ import * as React from 'react'
 import { Button } from '@tarojs/components'
 import { AtModal,AtModalContent,AtModalHeader,AtModalAction } from 'taro-ui'
 import { useState,useEffect } from 'react'
-// import "taro-ui/dist/style/components/modal.scss";
+
 interface ModalParams {
   show: boolean,
   confirm?:Function,
