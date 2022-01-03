@@ -70,3 +70,13 @@ export const TaroRequestPayment = (params: paymentParams) => {
     })
   })
 }
+export const TaroGetLocation = () => {
+  return new Promise((resolve,reject) => {
+    Taro.getLocation({
+      type: 'gcj02',
+      isHighAccuracy: true,
+      success: (res) => {resolve(res)},
+      fail: (res) => {reject(res)}
+    })
+  })
+}

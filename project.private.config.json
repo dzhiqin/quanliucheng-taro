@@ -107,6 +107,12 @@
           "pathName": "pages/payment-pack/order-list/order-list",
           "query": "",
           "scene": null
+        },
+        {
+          "name": "自助报到",
+          "pathName": "pages/service-pack/arrival/arrival",
+          "query": "",
+          "scene": null
         }
       ]
     }

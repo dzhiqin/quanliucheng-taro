@@ -4,7 +4,12 @@ import { useState } from 'react'
 import { AtIcon } from 'taro-ui'
 import './bk-title.less'
 
-export default function BkTitle(props: any) {
+export default function BkTitle(props: {
+  title?: string,
+  more?: boolean,
+  onClickMore?: any,
+  style?: string
+}) {
   const [title] = useState(props.title || '')
   const [more] = useState(props.more || false)
   const {onClickMore} = props

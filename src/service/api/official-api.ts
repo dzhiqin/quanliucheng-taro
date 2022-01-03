@@ -1,5 +1,5 @@
 import { fullUrl, Post } from "../http";
 
-export const getOfficialContent = () => {
+export const fetchOfficialContent = () => {
   return Post(fullUrl('content/Micro/GetHome'))
 }

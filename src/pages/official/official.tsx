@@ -3,7 +3,7 @@ import * as Taro from '@tarojs/taro'
 import { useEffect,useState } from 'react'
 import { View, Image, RichText } from '@tarojs/components'
 import BkTitle from '@/components/bk-title/bk-title'
-import { getOfficialContent } from '@/service/api/official-api'
+import { fetchOfficialContent } from '@/service/api/official-api'
 import crossPng from '@/images/icons/cross.png'
 import phonePng from '@/images/icons/phone.png'
 import globalPng from '@/images/icons/global.png'
@@ -34,7 +34,7 @@ export default function Official() {
     })
   }
   useEffect(() => {
-    getOfficialContent().then(res => {
+    fetchOfficialContent().then(res => {
       if(res.resultCode === 0){
         setHospInfo(res.data.hospInfo)
         if(res.data.banners.length > 0){

@@ -45,15 +45,72 @@ export default {
       enable: true,
       tabList: [
         {
-          title: "其他",
-          entrances:[
+          title: '门诊',
+          entrances: [
             {
-              name: "自助核酸缴费",
-              icon: imgUrl.new_home_icon10,
-              event: "toAcidSelfPayment"
-            },
+              icon: imgUrl.new_home_icon6,
+              name: '报到候诊',
+              event: 'jump',
+              url: '/pages/service-pack/arrival-service/arrival-service'
+            }, 
+            // {
+            //   icon: imgUrl.new_home_icon7,
+            //   name: '检查预约',
+            //   event: 'jump',
+            // }, 
+            // {
+            //   icon: imgUrl.new_home_icon8,
+            //   name: '满意度调查',
+            //   event: 'jump',
+            // }
           ]
-        }
+        },
+        {
+          title: '住院',
+          entrances: [
+            // {
+            //   icon: imgUrl.new_home_icon9,
+            //   name: '住院登记',
+            //   event: 'jump',
+            // }, 
+            // {
+            //   icon: imgUrl.zybk,
+            //   name: '住院绑卡',
+            //   event: 'jump',
+            // }, 
+            // {
+            //   icon: imgUrl.new_home_icon10,
+            //   name: '住院押金',
+            //   event: 'jump',
+            // }, 
+            {
+              icon: imgUrl.new_home_icon11,
+              name: '每日清单',
+              event: 'jump',
+              url: '/pages/hosp-pack/checklist/checklist',
+            },
+            // {
+            //   icon: imgUrl.cyjs,
+            //   name: '出院结算',
+            //   event: 'jump',
+            // },
+            // {
+            //   icon: imgUrl.bafy,
+            //   name: '病案复印',
+            //   event: 'toMiniProgram',
+            // }
+          ]
+        },
+        // {
+        //   title: "其他",
+        //   entrances:[
+        //     {
+        //       name: "自助核酸缴费",
+        //       icon: imgUrl.new_home_icon10,
+        //       event: "jump"
+        //     },
+        //   ]
+        // }
       ]
     },
     hospBlog: {

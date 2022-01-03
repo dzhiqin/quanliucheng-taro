@@ -50,6 +50,25 @@ export default {
         'payment-detail/payment-detail',
         'order-list/order-list'
       ]
+    },
+    {
+      root: 'pages/hosp-pack',
+      name: 'hospitalization',
+      pages: [
+        'checklist/checklist',
+        'checkin/checkin',
+        'binding-card/binding-card',
+        'deposit/deposit',
+      ]
+    },
+    {
+      root: 'pages/service-pack',
+      name: 'service',
+      pages: [
+        'arrival/arrival',
+        'waiting-list/waiting-list',
+        'arrival-service/arrival-service'
+      ]
     }
   ],
   window: {

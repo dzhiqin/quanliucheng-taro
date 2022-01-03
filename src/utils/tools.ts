@@ -46,3 +46,24 @@ export const checkOverDate = (date: string) => {
   const dateTime = new Date(date).getTime()
   return current > dateTime
 }
+export const computeDistanceFromLatLong = (lat1,lon1,lat2,lon2) => {
+  // lat1 用户的纬度
+  // lon1 用户的经度
+  // lat2 医院的纬度
+  // lon2 医院的经度
+  var R = 6378137; // Radius of the earth in m
+  var dLat = deg2rad(lat2-lat1);  // deg2rad below
+  var dLon = deg2rad(lon2-lon1); 
+  var a = 
+    Math.sin(dLat/2) * Math.sin(dLat/2) +
+    Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * 
+    Math.sin(dLon/2) * Math.sin(dLon/2)
+    ; 
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+  var d = R * c; // Distance in m
+  return d.toFixed(2);
+}
+
+function deg2rad(deg) {
+  return deg * (Math.PI/180)
+}
