@@ -113,6 +113,12 @@
           "pathName": "pages/service-pack/arrival/arrival",
           "query": "",
           "scene": null
+        },
+        {
+          "name": "webview",
+          "pathName": "pages/web-view-page/web-view-page",
+          "query": "",
+          "scene": null
         }
       ]
     }

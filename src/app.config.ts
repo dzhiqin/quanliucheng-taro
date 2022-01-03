@@ -7,7 +7,8 @@ export default {
     'pages/official/official',
     'pages/personal/personal',
     'pages/cards-list/cards-list',
-    'pages/card-detail/card-detail'
+    'pages/card-detail/card-detail',
+    'pages/web-view-page/web-view-page'
   ],
   subpackages: [
     {

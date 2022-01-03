@@ -72,3 +72,6 @@ export const cancelAppointment = (data: {orderId: string}) => {
 export const fetchDeptsOrDoctors = (data:{keyword: string}) => {
   return Post(fullUrl('appt/SignalSource/SearchDepartOrDr'),{...data, branchId: getBranchId()})
 }
+export const fetchRegInvoiceInfo = (data: {serialNo: string}) => {
+  return Post(fullUrl('appt/Reg/GetRegInvoiceInfo'),data)
+}

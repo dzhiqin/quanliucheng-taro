@@ -3,7 +3,7 @@ import * as Taro from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import { useDidShow } from '@tarojs/taro'
 import './order-list.less'
-import { cancelAppointment, fetchRegOrderList } from '@/service/api'
+import { cancelAppointment, fetchRegInvoiceInfo, fetchRegOrderList } from '@/service/api'
 import HealthCards from '@/components/health-cards/health-cards'
 import BkTabs from '@/components/bk-tabs/bk-tabs'
 import { useState, useEffect, useCallback } from 'react'
@@ -47,6 +47,20 @@ export default function OrderList() {
   const showCancelModal = (e) => {
     setOrder(e)
     setShow(true)
+  }
+  const showInvoice = (item) => {
+    Taro.showLoading({title: '加载中……',mask:true})
+    fetchRegInvoiceInfo({serialNo: item.serialNo}).then(res => {
+      if(res.resultCode === 0){
+        const invoiceUrl = res.data.invoiceUrl
+        Taro.setStorageSync('webViewSrc',invoiceUrl)
+        Taro.navigateTo({url: '/pages/web-view-page/web-view-page'})
+      }else{
+        toastService({title: '获取电子发票失败：' + res.message})
+      }
+    }).finally(() => {
+      Taro.hideLoading()
+    })
   }
   const getList = useCallback(() => {
     setList([])
@@ -127,6 +141,13 @@ export default function OrderList() {
                   <View className='order-list-card-item'>
                     <View className='order-list-card-title'>就诊地址：</View>
                     <View className='order-list-card-text'>{item.location}</View>
+                  </View>
+                }
+                {
+                  item.serialNo && 
+                  <View className='order-list-card-item'>
+                    <View className='order-list-card-title'>电子发票：</View>
+                    <View className='order-list-card-text clickable' onClick={showInvoice.bind(null,item)}>点击查看</View>
                   </View>
                 }
                 {

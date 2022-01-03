@@ -2,7 +2,17 @@ import * as Taro from '@tarojs/taro'
 import * as React from 'react'
 import { View,Image } from '@tarojs/components'
 import { useRouter , useDidShow, useReady } from '@tarojs/taro'
-import { createPaymentOrder, fetchPaymentDetail, subscribeService, PayOrderParams, handlePayment, fetchPaymentOrderStatus, cancelPayment, fetchPaymentOrderDetailByQRCode } from '@/service/api'
+import { 
+  createPaymentOrder, 
+  fetchPaymentDetail, 
+  subscribeService, 
+  PayOrderParams, 
+  handlePayment, 
+  fetchPaymentOrderStatus, 
+  cancelPayment, 
+  fetchPaymentOrderDetailByQRCode,
+  fetchPaymentOrderInvoice
+} from '@/service/api'
 import cardsHealper from '@/utils/cards-healper'
 import './payment-detail.less'
 import BkPanel from '@/components/bk-panel/bk-panel'
@@ -37,7 +47,8 @@ export default function PaymentDetail() {
     orderDept: '',
     orderDoctor: '',
     orderType: '',
-    prescMoney: ''
+    prescMoney: '',
+    serialNo: ''
   }
   let fromList = null
   let scanParams = null
@@ -172,7 +183,20 @@ export default function PaymentDetail() {
     }
     return paymentParams
   }
- 
+  const showInvoice = (item) => {
+    Taro.showLoading({title: '加载中……',mask:true})
+    fetchPaymentOrderInvoice({serialNo: item.serialNo}).then(res => {
+      if(res.resultCode === 0){
+        const invoiceUrl = res.data.invoiceUrl
+        Taro.setStorageSync('webViewSrc',invoiceUrl)
+        Taro.navigateTo({url: '/pages/web-view-page/web-view-page'})
+      }else{
+        toastService({title: '获取电子发票失败：' + res.message})
+      }
+    }).finally(() => {
+      Taro.hideLoading()
+    })
+  }
   useDidShow(() => {
     if(_orderId){
       setBusy(true)
@@ -203,7 +227,8 @@ export default function PaymentDetail() {
             orderDept: data.orderDept,
             orderDoctor: data.orderDoctor,
             orderType: data.pactCode === pactCode_EN.selfPay ? orderPayType_CN.自费 : orderPayType_CN.医保 ,
-            prescMoney: data.sumMoney
+            prescMoney: data.sumMoney,
+            serialNo: data.serialNo
           }
         }else{
           toastService({title: '获取数据失败:' + res.message})
@@ -261,6 +286,13 @@ export default function PaymentDetail() {
             <View className='flat-title'>总金额</View>
             <View className='payment-detail-item-text price-color'>{orderInfo.prescMoney} 元</View>
           </View>
+          {
+            orderInfo.serialNo && 
+            <View className='flex'>
+              <View className='flat-title'>电子发票</View>
+              <View className='payment-detail-item-text clickable' onClick={showInvoice.bind(null,orderInfo)}>点击查看</View>
+            </View>
+          }
         </BkPanel>
         {
           list.length > 0 &&

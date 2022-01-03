@@ -54,3 +54,7 @@ export const fetchPaymentInvoice = (data: {serialNo: string}) => {
 export const fetchPaymentOrderDetailByQRCode = (data: {clinicNo:string,cardNo:string,patientId: string}) => {
   return Post(fullUrl('paybill/Bill/GetPrescriptionQRCodeInfo'),data)
 }
+export const fetchPaymentOrderInvoice = (data: {serialNo: string}) => {
+  return Post(fullUrl('paybill/Bill/GetBillInvoiceInfo'))
+
+}
