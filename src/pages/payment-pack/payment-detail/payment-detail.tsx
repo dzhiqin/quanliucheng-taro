@@ -11,7 +11,9 @@ import {
   fetchPaymentOrderStatus, 
   cancelPayment, 
   fetchPaymentOrderDetailByQRCode,
-  fetchPaymentOrderInvoice
+  fetchPaymentOrderInvoice,
+  TaroNavToZhongXun,
+  handleHeSuanRefund
 } from '@/service/api'
 import cardsHealper from '@/utils/cards-healper'
 import './payment-detail.less'
@@ -21,34 +23,49 @@ import BkButton from '@/components/bk-button/bk-button'
 import sighPng from '@/images/icons/sigh.png'
 import { onetimeTemplates } from '@/utils/templateId'
 import SubscribeNotice from '@/components/subscribe-notice/subscribe-notice'
-import { orderPayType_CN, orderStatus_EN, pactCode_EN } from '@/enums/index'
+import { orderPayType_CN, orderStatus_EN, pactCode_EN, payStatus_EN } from '@/enums/index'
 import { toastService } from '@/service/toast-service'
 import { requestTry } from '@/utils/retry'
 import ResultPage from '@/components/result-page/result-page'
+import custom from '@/custom/index'
 
 enum resultEnum {
   default = '',
   success = 'success',
   fail = 'fail'
 }
+interface OrderInfoParams {
+  orderId: string,
+  clinicNo: string,
+  createdTime?: string,
+  orderDate: string,
+  recipeSeq: string,
+  orderDept: string,
+  orderDoctor: string,
+  orderType: orderPayType_CN | string,
+  prescMoney: string,
+  serialNo: string,
+  payState?: payStatus_EN
+}
 // 注意进入页面场景有3：
 // 1-从缴费列表进入；2-从订单列表进入；3-扫码进入
 export default function PaymentDetail() {
+  const featConfig = custom.feat
   const router = useRouter()
   const params = router.params
   const card = cardsHealper.getDefault()
   const [busy,setBusy] = useState(false)
-  let orderInfo = {
+  let orderInfo: OrderInfoParams = {
     orderId: '',
     clinicNo: '',
-    // createdTime: '',
     orderDate: '',
     recipeSeq: '',
     orderDept: '',
     orderDoctor: '',
-    orderType: '',
+    orderType: orderPayType_CN.自费,
     prescMoney: '',
-    serialNo: ''
+    serialNo: '',
+    payState: payStatus_EN.unpay
   }
   let fromList = null
   let scanParams = null
@@ -197,6 +214,23 @@ export default function PaymentDetail() {
       Taro.hideLoading()
     })
   }
+  const handleClickNavitator = (execRoom) => {
+    TaroNavToZhongXun(execRoom)
+  }
+  const handleCancel = () => {
+    Taro.showLoading({title: '取消中……',mask:true})
+    setBusy(true)
+    handleHeSuanRefund({orderId: orderInfo.orderId}).then(res => {
+      if(res.resultCode === 0){
+        toastService({title: '取消成功', onClose: () => {Taro.navigateBack()}})
+      }else{
+        toastService({title: '取消失败：' + res.message})
+      }
+    }).finally(() => {
+      setBusy(false)
+      Taro.hideLoading()
+    })
+  }
   useDidShow(() => {
     if(_orderId){
       setBusy(true)
@@ -293,6 +327,12 @@ export default function PaymentDetail() {
               <View className='payment-detail-item-text clickable' onClick={showInvoice.bind(null,orderInfo)}>点击查看</View>
             </View>
           }
+          {
+            orderInfo.orderDept === '新冠疫苗/核酸' && orderInfo.payState === payStatus_EN.paid && 
+            <View className='flex'>
+              <BkButton title='取消预约' theme='danger' disabled={busy} onClick={handleCancel} />
+            </View>
+          }
         </BkPanel>
         {
           list.length > 0 &&
@@ -326,6 +366,13 @@ export default function PaymentDetail() {
                     <text>小计：</text>
                     <text>{item.money}元</text>
                   </View>
+                  {
+                    featConfig.hospitalNavigation && item.execRoom && 
+                    <View className='payment-detail-medicine-item'>
+                      <text>院内导航：</text>
+                      <text className='clickable' onClick={handleClickNavitator}>一键导航</text>
+                    </View>
+                  }
                 </View>  
               )
             }

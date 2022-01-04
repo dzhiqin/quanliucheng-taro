@@ -56,5 +56,7 @@ export const fetchPaymentOrderDetailByQRCode = (data: {clinicNo:string,cardNo:st
 }
 export const fetchPaymentOrderInvoice = (data: {serialNo: string}) => {
   return Post(fullUrl('paybill/Bill/GetBillInvoiceInfo'))
-
+}
+export const handleHeSuanRefund = (data:{orderId: string}) => {
+  return Post(fullUrl('subApi/api/customize/applet/HeSuan/HeSuanRefund'),data)
 }

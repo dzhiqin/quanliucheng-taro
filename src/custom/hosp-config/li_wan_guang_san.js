@@ -4,6 +4,7 @@ export default {
   hospName: "gysylw",
   hospitalName: "广州医科大学附属第三医院",
   baseUrl: "https://applets.gdbkyz.com/api/applet", // 倍康测试
+  subUrl: 'https://gysycustomize.wedoublecare.com', // 核酸退费
   indexPage: {
     banner: {
       enable: true,
@@ -132,7 +133,8 @@ export default {
       popupNotice: false,
       guangSanMode: true,
       type: 'embed'
-    }
+    },
+    hospitalNavigation: true  // 院内导航
   },
   reportsPage:{
     urlDetail: true

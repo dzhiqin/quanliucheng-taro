@@ -80,3 +80,14 @@ export const TaroGetLocation = () => {
     })
   })
 }
+export const TaroNavToZhongXun = (execRoom) => {
+  // 跳转到众寻导航小程序
+  Taro.navigateToMiniProgram({
+    appId: 'wx8735a8a39cf58b5e',
+    path: `pages/index?id=t6KedvW21W&appKey=xnyabeAZzP&poi=${execRoom}`,
+    success(res) {
+      // 打开成功
+      console.log(res);
+    }
+  })
+}

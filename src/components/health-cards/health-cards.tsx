@@ -49,6 +49,8 @@ export default function HealthCards(props: any) {
     //     setShowNotice(true)
     //   })
     let subsRes = await subscribeService(tempIds)
+    console.log('subRes',subsRes);
+    
     if(!subsRes.result){
       setShowNotice(true)
     }else{

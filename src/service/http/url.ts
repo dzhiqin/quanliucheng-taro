@@ -1,9 +1,15 @@
 import config from '@/custom/index'
 
 const baseUrl = config.baseUrl
-
+const subUrl = config.subUrl
 const fullUrl = (url: string, params?: { [key: string]: any }) => {
-  let a = `${baseUrl}/${url}`
+  let a
+  if(/^subApi/.test(url)){
+    a = `${subUrl}/${url}`
+  }else{
+    a = `${baseUrl}/${url}`
+  }
+  
   if (!a.includes('?')) a += '?'
   if (params) {
     Object.keys(params).forEach((key, index) => {
