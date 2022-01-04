@@ -29,7 +29,7 @@ export default function PaymentList() {
     })
   })
   const handleClick = (item) => {
-    console.log(item);
+    // console.log(item);
     // 缴费单的信息要从列表带过去
     Taro.navigateTo({url: `/pages/payment-pack/payment-detail/payment-detail?orderInfo=${JSON.stringify(item)}`})
   }

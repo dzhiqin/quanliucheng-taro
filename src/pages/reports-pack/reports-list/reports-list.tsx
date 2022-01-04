@@ -12,6 +12,7 @@ import BkNone from '@/components/bk-none/bk-none'
 import './reports-list.less'
 import { humanDateAndTime } from '@/utils/format'
 import { toastService } from '@/service/toast-service'
+import cardsHealper from '@/utils/cards-healper'
 
 export default function ReportList() {
   const router = useRouter()
@@ -52,6 +53,11 @@ export default function ReportList() {
   }
 
   useDidShow(() => {
+    const card = cardsHealper.getDefault()
+    if(!card){
+      toastService({title: '请先绑卡'})
+      return
+    }
     getList(itemType)
   })
   const onClickItem = (e) => {

@@ -8,7 +8,7 @@ import { useState,useEffect } from 'react'
 import BkPanel from '@/components/bk-panel/bk-panel'
 import BkButton from '@/components/bk-button/bk-button'
 import { AtIcon } from 'taro-ui'
-import { createRegOrder, fetchOrderFee, fetchRegFeeType, fetchRegOrderStatus, subscribeService, TaroRequestPayment } from '@/service/api'
+import { cancelRegOrder, createRegOrder, fetchOrderFee, fetchRegFeeType, fetchRegOrderStatus, subscribeService, TaroRequestPayment } from '@/service/api'
 import cardsHealper from '@/utils/cards-healper'
 import { toastService } from '@/service/toast-service'
 import { requestTry } from '@/utils/retry'
@@ -108,8 +108,7 @@ export default function OrderCreate() {
     }).catch(taroErr => {
       if(taroErr.data.errMsg === 'requestPayment:fail cancel'){
         toastService({title: '您已取消缴费'})
-        // do nothing ...
-        // Taro.navigateTo({url: '/pages/register-pack/order-list/order-list'})
+        cancelRegOrder({orderId: orderId})
       }else{
         console.log('支付失败:',taroErr.data);
       }

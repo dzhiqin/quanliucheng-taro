@@ -56,12 +56,17 @@ export default function BindingCard() {
     }else{
       fetchOfficialContent().then(res => {
         if(res.resultCode === 0){
-          const hospInfo = res.data.hospInfo
-          setHospLatLong({
-            latitude: hospInfo.latitude,
-            longitude: hospInfo.golden
-          })
-          computeDistance(userLat,userLong,hospInfo.latitude,hospInfo.golden)
+          if(res.data){
+            const hospInfo = res.data.hospInfo
+            setHospLatLong({
+              latitude: hospInfo.latitude,
+              longitude: hospInfo.golden
+            })
+            computeDistance(userLat,userLong,hospInfo.latitude,hospInfo.golden)
+          }else{
+            toastService({title: '获取不到医院经纬度信息'})
+          }
+          
         }else{
           toastService({title: '获取医院经纬度失败：'+res.message})
         }

@@ -6,7 +6,6 @@ import { useEffect } from 'react'
 import { updateUserInfo, fetchHealthCards } from '@/service/api/'
 import custom from '@/custom/index'
 import cardsHealper from '@/utils/cards-healper'
-
 import './login.less'
 
 export default function Login() {
@@ -41,7 +40,11 @@ export default function Login() {
         fetchHealthCards().then(result=>{
           if(result.resultCode === 0){
             cardsHealper.saveCards(result.data)
-            Taro.navigateBack()
+            if(result.data.length === 0){
+              Taro.redirectTo({url: '/pages/bind-card/bind-card'})
+            }else{
+              Taro.navigateBack()
+            }
           }else{
             if(custom.feat.bindCard.electronicHealthCard){
               Taro.navigateTo({
@@ -56,6 +59,9 @@ export default function Login() {
         }).finally(() => {
           Taro.hideLoading()
         })
+      },
+      fail: (res) => {
+        Taro.showToast({title: '您已拒绝授权',icon: 'none'})
       }
     })
   }

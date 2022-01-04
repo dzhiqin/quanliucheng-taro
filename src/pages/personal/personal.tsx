@@ -10,8 +10,10 @@ import orderYellowPng from '@/images/icons/order_yellow.png'
 import orderGreenPng from '@/images/icons/order_green.png'
 import healthCardPng from '@/images/icons/health_card.png'
 import './personal.less'
+import LoginRemindModal from '@/components/login-remind-modal/login-remind-modal'
 
 export default function Personal() {
+  const [loginRemind,setLoginRemind] = useState(false)
   const [cards,setCards] = useState()
   const userInfo = Taro.getStorageSync('userInfo')
   const onClickPanel = (e) => {
@@ -27,9 +29,14 @@ export default function Personal() {
   useDidShow(() => {
     let res = Taro.getStorageSync('cards')
     setCards(res)
+    const user = Taro.getStorageSync('userInfo')
+    if(!user){
+      setLoginRemind(true)
+    }
   })
   return (
     <View className='personal'>
+      <LoginRemindModal show={loginRemind} />
       <View className='header'>
         <View className='header-title'>个人中心</View>
         <View className='header-info'>

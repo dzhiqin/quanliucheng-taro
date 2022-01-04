@@ -34,14 +34,17 @@ export default function Official() {
     })
   }
   useEffect(() => {
+    Taro.showLoading({title: '加载中……'})
     fetchOfficialContent().then(res => {
-      if(res.resultCode === 0){
+      if(res.resultCode === 0 && res.data){
         setHospInfo(res.data.hospInfo)
         if(res.data.banners.length > 0){
           setBanner(res.data.banners[0])
         }
         setDesc(res.data.introduce)
       }
+    }).finally(() => {
+      Taro.hideLoading()
     })
   }, [])
   return (

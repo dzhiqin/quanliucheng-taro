@@ -13,7 +13,6 @@ import { createCard } from '@/service/api'
 import cardsHealper from '@/utils/cards-healper'
 import { toastService } from '@/service/toast-service'
 import './bind-card.less'
-// import { humanDate } from '../../utils/format'
 
 export default class BindCard extends React.Component {
   constructor (props) {
@@ -80,6 +79,7 @@ export default class BindCard extends React.Component {
     }
   }
   handleCreateCard() {
+    Taro.showLoading({title: '创建中……'})
     createCard(this.buildCardParams()).then(res => {
       if(res.resultCode === 0){
         const card = res.data
@@ -96,6 +96,8 @@ export default class BindCard extends React.Component {
         }
       }
       console.log('create card', res);
+    }).finally(() => {
+      Taro.hideLoading()
     })
   }
   buildCardParams() {

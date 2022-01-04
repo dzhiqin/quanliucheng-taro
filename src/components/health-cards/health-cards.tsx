@@ -37,20 +37,7 @@ export default function HealthCards(props: any) {
   })
   const handleLogin = async () =>{
     const tempIds = longtermTemplates.treatmentAndPayment()
-    // taroSubscribeMessage(
-    //   tempIds, 
-    //   () => {
-    //     Taro.navigateTo({
-    //       url: '/pages/login/login'
-    //     })
-    //   },
-    //   (err) => {
-    //     console.log('fail',err)
-    //     setShowNotice(true)
-    //   })
     let subsRes = await subscribeService(tempIds)
-    console.log('subRes',subsRes);
-    
     if(!subsRes.result){
       setShowNotice(true)
     }else{

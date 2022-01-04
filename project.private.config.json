@@ -55,7 +55,7 @@
           "scene": null
         },
         {
-          "name": "科室列表",
+          "name": "科室列表clinics",
           "pathName": "pages/register-pack/clinics/clinics",
           "query": "",
           "scene": null

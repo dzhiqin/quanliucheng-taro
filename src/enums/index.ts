@@ -2,11 +2,7 @@ export enum regType {
   appointment = '0',  // 预约挂号
   introday = '1'      // 当天挂号
 }
-export enum payType {
-  // 值待定
-  selfPay = '',// 自费
-  yiBao = ''   // 医保
-}
+
 export enum reportType_EN {
   clinic = '0',   // 门诊报告
   hospitalization = '1'// 住院报告

@@ -105,12 +105,17 @@ export default {
   },
   "plugins": {
     "healthCardPlugins": {
-      "version": "3.1.7",
+      "version": "3.1.8",
       "provider": "wxee969de81bba9a45"
     },
     "ocr-plugin": {
-      "version": "3.1.0",
+      "version": "3.1.2",
       "provider": "wx4418e3e031e551be"
+    }
+  },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "你的位置信息将用于小程序定位"
     }
   }
 }
