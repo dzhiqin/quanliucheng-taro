@@ -12,6 +12,7 @@ import BkPanel from '@/components/bk-panel/bk-panel'
 import { computeDistanceFromLatLong } from '@/utils/tools'
 import { toastService } from '@/service/toast-service'
 import BkButton from '@/components/bk-button/bk-button'
+import custom from '@/custom/index'
 
 export default function BindingCard() {
   const [loading,setLoading] = useState(false)
@@ -54,23 +55,24 @@ export default function BindingCard() {
       const value = computeDistanceFromLatLong(userLat,userLong,hospLat,hospLong)
       setDistance(value)
     }else{
-      fetchOfficialContent().then(res => {
-        if(res.resultCode === 0){
-          if(res.data){
-            const hospInfo = res.data.hospInfo
-            setHospLatLong({
-              latitude: hospInfo.latitude,
-              longitude: hospInfo.golden
-            })
-            computeDistance(userLat,userLong,hospInfo.latitude,hospInfo.golden)
-          }else{
-            toastService({title: '获取不到医院经纬度信息'})
-          }
-          
-        }else{
-          toastService({title: '获取医院经纬度失败：'+res.message})
-        }
+      setHospLatLong({
+        latitude: custom.latitude,
+        longitude: custom.longitude
       })
+      computeDistance(userLat,userLong,custom.latitude,custom.longitude)
+      // fetchOfficialContent().then(res => {
+      //   if(res.resultCode === 0 && res.data ){
+      //     const hospInfo = res.data.hospInfo
+      //     setHospLatLong({
+      //       latitude: hospInfo.latitude,
+      //       longitude: hospInfo.golden
+      //     })
+          
+      //     computeDistance(userLat,userLong,hospInfo.latitude,hospInfo.golden)
+      //   }else{
+      //     toastService({title: '获取医院经纬度失败'})
+      //   }
+      // })
     }
     
   }

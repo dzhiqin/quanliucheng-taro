@@ -1,6 +1,8 @@
 import imgUrl from '@/utils/imgs'
 
 export default {
+  latitude: 23.122721,
+  longitude: 113.240994,
   hospName: "gysylw",
   hospitalName: "广州医科大学附属第三医院",
   // baseUrl: "https://applets.gdbkyz.com/api/applet", // 倍康测试
