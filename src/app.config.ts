@@ -31,7 +31,9 @@ export default {
       name: 'official',
       pages: [
         'clinic-list/clinic-list',
-        'guide-list/guide-list'
+        'guide-list/guide-list',
+        'clinic-intro/clinic-intro',
+        'doctor-detail/doctor-detail'
       ]
     },
     {

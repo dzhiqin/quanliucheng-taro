@@ -14,3 +14,14 @@ export const toastService = (props: {title: string,duration?: number,onClose?: F
     }
   })
 }
+export const loadingService = (show: boolean, msg?: string) => {
+  if(show){
+
+    Taro.showLoading({
+      title: msg || '加载中……',
+      mask:true
+    })
+  }else{
+    Taro.hideLoading()
+  }
+}

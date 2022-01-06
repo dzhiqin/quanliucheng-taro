@@ -119,6 +119,12 @@
           "pathName": "pages/web-view-page/web-view-page",
           "query": "",
           "scene": null
+        },
+        {
+          "name": "官网科室列表",
+          "pathName": "pages/official-pack/clinic-list/clinic-list",
+          "query": "",
+          "scene": null
         }
       ]
     }

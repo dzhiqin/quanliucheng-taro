@@ -9,7 +9,12 @@ import './bk-panel.less'
  * @param arrow: boolean 
  * @returns 
  */
-export default function BkPanel(props: any) {
+export default function BkPanel(props: {
+  arrow?: boolean,
+  style?: string,
+  children?: any,
+  onClick?: Function,
+}) {
   const { onClick } = props
   const onclick = () => {
     if(typeof onClick !== 'undefined'){
