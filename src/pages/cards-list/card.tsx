@@ -31,13 +31,11 @@ export default function Card(props: {
         p_hisPatientId: props.card.patientId
       }
       const alySign = encryptByDES(JSON.stringify(params))
-      console.log('alySign',alySign);
-      console.log('params',JSON.stringify(params))
       const path = 'https://ivf.gy3y.com/patients/#/SubscribeListNum'
       const branchId = getBranchId()
       TaroNavToMiniProgram({
         appId: 'wx2958acfb26e6b4cd',
-        path: `pages/toLogin/toLogin?url=${encodeURIComponent(path)}&type=wxChat&unitId=${branchId}&alySign=${alySign}`
+        path: `pages/toLogin/tologin?url=${encodeURIComponent(path)}&type=wxChat&unitId=${branchId}&alySign=${alySign}`
       }).then(res => {
         console.log(res);
       }).catch(err => {
