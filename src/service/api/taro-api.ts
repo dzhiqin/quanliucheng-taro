@@ -91,3 +91,15 @@ export const TaroNavToZhongXun = (execRoom) => {
     }
   })
 }
+
+export const TaroNavToMiniProgram = (data:{appId: string, path: string}) => {
+  return new Promise((resolve,reject)=>{
+    Taro.navigateToMiniProgram({
+      appId:data.appId,
+      path:data.path,
+      success: (res) => {resolve(res)},
+      fail: (err) => {reject(err)},
+      complete: () => {}
+    })
+  })
+}

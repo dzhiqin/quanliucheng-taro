@@ -6,6 +6,7 @@ import noCardPng from '@/images/no_card.png'
 import custom from '@/custom/'
 import Card from './card'
 import './cards-list.less'
+import { toastService } from '@/service/toast-service'
 
 export default class CardList2 extends React.Component {
   constructor(props){
@@ -24,6 +25,13 @@ export default class CardList2 extends React.Component {
   componentDidShow() {
     let res = Taro.getStorageSync('cards')
     this.setState({cards:res})
+    if(this.state.params.action === 'jumpOut'){
+      if(res){
+        toastService({title: '点击卡片后将跳转柔济孕宝小程序'})
+      }else{
+        toastService({title: '请先添加健康卡'})
+      }
+    }
   }
   
   onLoginResult(e){

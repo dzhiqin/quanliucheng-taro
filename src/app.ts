@@ -13,6 +13,7 @@ class App extends Component {
   onLaunch () {
     // const token = Taro.getStorageSync('token')
     // if(token) return
+    this.checkUpdate()
     Taro.login({
       success: res => {
         let { code } = res
@@ -40,7 +41,40 @@ class App extends Component {
   componentDidHide () {}
 
   componentDidCatchError () {}
-
+  checkUpdate(){
+    if(Taro.canIUse('getUpdateManager')){
+      const updateManager = Taro.getUpdateManager()
+      updateManager.onCheckForUpdate((res) => {
+        if(res.hasUpdate){
+          updateManager.onUpdateReady(() => {
+            Taro.showModal({
+              title: '更新提示',
+              content: '新版本已经准备好，请您重启小程序同步更新~',
+              showCancel: false,
+              success: (result) => {
+                if(result.confirm){
+                  updateManager.applyUpdate()
+                }
+              }
+            })
+          })
+          updateManager.onUpdateFailed(() => {
+            Taro.showModal({
+              title: '更新提示',
+              content: '请您删除当前小程序，到微信 “发现-小程序” 页，重新搜索打开',
+              showCancel: false
+            })
+          })
+        }
+      })
+    }else{
+      Taro.showModal({
+        title: '更新提示',
+        content: '请您删除当前小程序，到微信 “发现-小程序” 页，重新搜索打开',
+        showCancel: false
+      })
+    }
+  }
   render () {
     return this.props.children
   }

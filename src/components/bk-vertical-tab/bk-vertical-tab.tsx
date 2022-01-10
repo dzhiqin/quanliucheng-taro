@@ -1,24 +1,36 @@
 import * as React from 'react'
 import * as Taro from '@tarojs/taro'
 import { View } from '@tarojs/components'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './bk-vertical-tab.less'
 
-export default function BkVerticalTab(props:any){
+export default function BkVerticalTab(props:{
+  name: string,
+  key?: string,
+  onChange?: Function,
+  style?: string,
+  list: any[],
+  current?: number 
+}){
   const name = props.name
   const key = props.key
-  const [current,setCurrent] = useState(0)
+  const [current,setCurrent] = useState(props.current)
   const onChange = props.onChange
   const onClick = (index,item) => {
-    setCurrent(index)
+    // setCurrent(index)
     if(typeof onChange === 'function'){
-      onChange(item)
+      onChange(item,index)
     }
     Taro.pageScrollTo({
       scrollTop: 0,
       duration: 300
     })
   }
+  useEffect(() => {
+    if(props.current && props.current !== current){
+      setCurrent(props.current)
+    }
+  }, [props,current])
   return(
     <View className='bk-vertical-tab' style={props.style ? props.style : ''}>
       {

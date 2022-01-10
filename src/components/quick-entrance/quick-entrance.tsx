@@ -20,7 +20,7 @@ export default function QuickEntrance(props: any) {
     setEntrances(quickEntrance.tabList[e].entrances)
   }
   const onClickItem = (item) => {
-    if(item.event==='jump'){
+    if(item.event==='navigate'){
       Taro.navigateTo({url: item.url})
     }
   }

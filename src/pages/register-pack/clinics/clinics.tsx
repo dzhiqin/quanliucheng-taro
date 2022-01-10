@@ -20,6 +20,7 @@ export default function Clinics() {
   const [doctors,setDoctors] = useState([])
   const [clinicList,setClinicList] = useState([])
   const [deptId,setDeptId] = useState()
+  const [currentDept,setCurrentDept] = useState(0)
   const hospitalInfo = Taro.getStorageSync('hospitalInfo')
   
   useEffect(() => {
@@ -51,8 +52,14 @@ export default function Clinics() {
     }
     
   }
-  const onTabChange = (item) => {
+  const onTabChange = (item,index) => {
+    if(custom.hospName === 'gysylw' && item.deptName === '生殖助孕'){
+      // 特殊处理广三老院区荔湾的生殖助孕门诊
+      Taro.navigateTo({url: '/pages/cards-list/cards-list?action=jumpOut'})
+      return
+    }
     if(item.deptId !== deptId){
+      setCurrentDept(index)
       setDeptId(item.deptId)
       Taro.setStorageSync('deptInfo',item)
       toastService({title: `已选择${item.deptName}`,duration: 800})
@@ -94,7 +101,7 @@ export default function Clinics() {
       }
       <View className='clinics-content'>
         {
-          deptList.length > 0 && <BkVerticalTab list={deptList} name='deptName' key='deptId' style='flex: 2' onChange={onTabChange} />
+          deptList.length > 0 && <BkVerticalTab list={deptList} name='deptName' current={currentDept} key='deptId' style='flex: 2' onChange={onTabChange} />
         }
         {
           registerConfig.type === 'embed' && <EmbedContent deptId={deptId} style='flex: 3' onClickItem={onClickClinicItem} onClickDate={onClickDate} />

@@ -4,9 +4,16 @@ import { View, Image } from '@tarojs/components'
 import crossPng from '@/images/icons/cross.png'
 import cardsHealper from '@/utils/cards-healper'
 import './cards-list.less'
+import { encryptByDES, getBranchId } from '@/utils/tools'
+import { toastService } from '@/service/toast-service'
+import { TaroNavToMiniProgram } from '@/service/api'
 
-export default function Card(props: any) {
-
+export default function Card(props: {
+  action?: string,
+  card:any,
+  style?: string
+}) {
+  
   const onClickIcon = (e) => {
     console.log('click icon',e);
     e.stopPropagation()
@@ -15,6 +22,27 @@ export default function Card(props: any) {
     if(props.action === 'switchCard'){
       await cardsHealper.setDefault(props.card.id)
       Taro.navigateBack()
+    }else if(props.action === 'jumpOut'){
+      const params = {
+        p_mobile: props.card.cellphone,
+        p_name: props.card.name,
+        p_identity: props.card.idenNo,
+        p_visitCard: props.card.cardNo,
+        p_hisPatientId: props.card.patientId
+      }
+      const alySign = encryptByDES(JSON.stringify(params))
+      console.log('alySign',alySign);
+      console.log('params',JSON.stringify(params))
+      const path = 'https://ivf.gy3y.com/patients/#/SubscribeListNum'
+      const branchId = getBranchId()
+      TaroNavToMiniProgram({
+        appId: 'wx2958acfb26e6b4cd',
+        path: `pages/toLogin/toLogin?url=${encodeURIComponent(path)}&type=wxChat&unitId=${branchId}&alySign=${alySign}`
+      }).then(res => {
+        console.log(res);
+      }).catch(err => {
+        console.log(err);
+      })
     }else{
       Taro.setStorageSync('card',props.card)
       Taro.navigateTo({url: `/pages/card-detail/card-detail`})

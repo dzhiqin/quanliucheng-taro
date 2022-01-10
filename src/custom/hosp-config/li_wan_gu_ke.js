@@ -27,14 +27,14 @@ export default {
         {
           icon: imgUrl.new_home_icon4,
           title: '就诊缴费',
-          event: 'jump',
+          event: 'navigate',
           desc: '线上缴费免排队',
           url: '/pages/payment-pack/payment-list/payment-list'
         },
         {
           icon: imgUrl.new_home_icon5,
           title: '查看报告',
-          event: 'jump',
+          event: 'navigate',
           desc: '检查检验随时查',
           url: '/pages/reports-pack/reports-type/reports-type'
         }

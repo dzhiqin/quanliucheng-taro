@@ -31,14 +31,14 @@ export default {
         {
           icon: imgUrl.new_home_icon4,
           title: '就诊缴费',
-          event: 'jump',
+          event: 'navigate',
           desc: '线上缴费免排队',
           url: '/pages/payment-pack/payment-list/payment-list'
         },
         {
           icon: imgUrl.new_home_icon5,
           title: '查看报告',
-          event: 'jump',
+          event: 'navigate',
           desc: '检查检验随时查',
           url: '/pages/reports-pack/reports-type/reports-type'
         }
@@ -54,18 +54,18 @@ export default {
             {
               icon: imgUrl.new_home_icon6,
               name: '报到候诊',
-              event: 'jump',
+              event: 'navigate',
               url: '/pages/service-pack/arrival-service/arrival-service'
             }, 
             // {
             //   icon: imgUrl.new_home_icon7,
             //   name: '检查预约',
-            //   event: 'jump',
+            //   event: 'navigate',
             // }, 
             // {
             //   icon: imgUrl.new_home_icon8,
             //   name: '满意度调查',
-            //   event: 'jump',
+            //   event: 'navigate',
             // }
           ]
         },
@@ -75,28 +75,28 @@ export default {
             // {
             //   icon: imgUrl.new_home_icon9,
             //   name: '住院登记',
-            //   event: 'jump',
+            //   event: 'navigate',
             // }, 
             // {
             //   icon: imgUrl.zybk,
             //   name: '住院绑卡',
-            //   event: 'jump',
+            //   event: 'navigate',
             // }, 
             // {
             //   icon: imgUrl.new_home_icon10,
             //   name: '住院押金',
-            //   event: 'jump',
+            //   event: 'navigate',
             // }, 
             {
               icon: imgUrl.new_home_icon11,
               name: '每日清单',
-              event: 'jump',
+              event: 'navigate',
               url: '/pages/hosp-pack/checklist/checklist',
             },
             // {
             //   icon: imgUrl.cyjs,
             //   name: '出院结算',
-            //   event: 'jump',
+            //   event: 'navigate',
             // },
             // {
             //   icon: imgUrl.bafy,

@@ -1,5 +1,9 @@
 import * as Taro from '@tarojs/taro'
+import UTF8 from 'crypto-js/enc-utf8'
+import CryptoJS from 'crypto-js/crypto-js'
 
+const key = '5cf59db892044f7c84d02aeb'
+const iv = 'cf0d3a19'
 export const getBirthdayByIdCard = (id) => {
   let date = ''
   if (id.length == 15) {
@@ -66,4 +70,24 @@ export const computeDistanceFromLatLong = (lat1,lon1,lat2,lon2) => {
 
 function deg2rad(deg) {
   return deg * (Math.PI/180)
+}
+export const encryptByDES = (message) => {
+  const encrypted = CryptoJS.DES.encrypt(message, UTF8.parse(key), {
+    iv: UTF8.parse(iv),
+    mode: CryptoJS.mode.CBC,
+    padding: CryptoJS.pad.Pkcs7
+  });
+  return encrypted.ciphertext.toString();
+}
+export function decryptByDES(ciphertext) {
+  const keyHex = UTF8.parse(key);
+  const ivHex = UTF8.parse(iv);
+  const decrypted = CryptoJS.DES.decrypt({
+    ciphertext: CryptoJS.enc.Hex.parse(ciphertext)
+  }, keyHex, {
+    mode: CryptoJS.mode.CBC,
+    padding: CryptoJS.pad.Pkcs7,
+    iv: ivHex
+  });
+  return decrypted.toString(UTF8);
 }
