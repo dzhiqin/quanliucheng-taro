@@ -1,5 +1,6 @@
 /* eslint-disable no-undef */
-import { healthCardLogin } from '../../service/api/wx-api'
+import { healthCardLogin } from '@/service/api'
+import * as Taro from '@tarojs/taro'
 
 Page({
   data: {
@@ -15,17 +16,17 @@ Page({
   selectCallback(result){
     let data = result.detail || {}
     if(data.healthCode){
-      wx.setStorageSync('healthCode', data.healthCode)
+      Taro.setStorageSync('healthCode', data.healthCode)
     }
     if (this.data.fromPage) {
       healthCardLogin().then(res => {
-        wx.navigateTo({
-          url: '../bindCard/bindCard?fromPage=2&wechatCode=' + res.result.wechatCode,
+        Taro.navigateTo({
+          url: '/pages/bind-pack/bind-card/bind-card?fromPage=2&wechatCode=' + res.result.wechatCode,
         })
       })
     }else{
       if (!this.data.toPage) {
-        wx.navigateBack({
+        Taro.navigateBack({
           delta: 1,
         })
         return
@@ -37,8 +38,9 @@ Page({
   },
   addCard(){
     healthCardLogin().then(res => {
-      wx.navigateTo({
-        url: '../bindCard/bindCard?wechatCode=' + res.result.wechatCode,
+      console.log('health card login',res);
+      Taro.navigateTo({
+        url: '/pages/bind-pack/bind-card/bind-card?wechatCode=' + res.result.wechatCode,
       })
     })
   }
@@ -53,11 +55,11 @@ Page({
   //     if (loginRouteIndex >= 0) {
   //       let cardsRoute = routeArr.indexOf('pages/cardsPackage/healthCard/healthCard')
   //       cardsRoute = cardsRoute < 0 ? routeArr.indexOf('pages/cardsPackage/bindCard/bindCard') : cardsRoute
-  //       wx.navigateTo({
+  //       Taro.navigateTo({
   //         url: '../bindCard/bindCard?fromPage=' +(routeArr.length-cardsRoute)+ '&wechatCode=' + wechatCode,
   //       })
   //     } else {
-  //       wx.navigateTo({
+  //       Taro.navigateTo({
   //         url: '../bindCard/bindCard?fromPage=3&wechatCode=' + wechatCode,
   //       })
   //     }

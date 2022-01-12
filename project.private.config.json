@@ -14,7 +14,7 @@
       "list": [
         {
           "name": "elec-healthcard-auth",
-          "pathName": "pages/elec-healthcard-auth/elec-healthcard-auth",
+          "pathName": "pages/bind-pack/elec-healthcard-auth/elec-healthcard-auth",
           "query": "",
           "scene": null
         },
@@ -26,7 +26,7 @@
         },
         {
           "name": "bind-card",
-          "pathName": "pages/bind-card/bind-card",
+          "pathName": "pages/bind-pack/bind-card/bind-card",
           "query": "",
           "scene": null
         },
@@ -50,7 +50,7 @@
         },
         {
           "name": "健康卡列表",
-          "pathName": "pages/cards-list/cards-list",
+          "pathName": "pages/bind-pack/cards-list/cards-list",
           "query": "",
           "scene": null
         },

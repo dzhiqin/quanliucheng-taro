@@ -6,6 +6,12 @@ export const idCardValidator = (value: string) => {
   return reg.test(value)
 }
 export const validateMessages = {
+  patientName: '请填写姓名',
+  idenNo: '请填写证件号码',
+  idenType: '请选择证件类型',
+  phone: '请填写手机号',
+  maritalStatus: '请填写婚姻状况',
+
   name: '请填写姓名',
   cardType: '请选择证件类型',
   idCardNo: '请填写证件号码',

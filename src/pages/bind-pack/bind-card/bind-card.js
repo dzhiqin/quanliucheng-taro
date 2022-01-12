@@ -42,7 +42,8 @@ export default class BindCard extends React.Component {
         maritalStatus: '未婚',
         nationality: '中国',
         parentName: '',
-        parentId: ''
+        parentId: '',
+        wechatCode: Taro.getCurrentInstance().router.params.wechatCode || ''
       }
     }
     
@@ -62,6 +63,7 @@ export default class BindCard extends React.Component {
   }
 
   onSubmit() {
+    // console.log(this.state.card);
     const {result,msg}= this.formValidator()
     if(result){
       taroSubscribeMessage(
@@ -119,7 +121,7 @@ export default class BindCard extends React.Component {
       const value = card[keys[i]]
       if(typeof value === 'boolean' || value === 0) continue
       if(!value){
-        // console.log('key=',keys[i],'value=',card[keys[i]])
+        console.log('key=',keys[i],'value=',card[keys[i]])
         if(this.state.currentIdenTypeValue === '儿童(无证件)' && key === 'idenNo') continue
         if(!this.state.bindCardConfig.nationality && key === 'nationality') continue
         if(!card.hasHospitalCard && key === 'hospitalCardNo') continue
@@ -141,6 +143,7 @@ export default class BindCard extends React.Component {
         msg = '请输入正确的出生日期'
       }
     }
+    console.log('result validator',{result,msg});
     return {result, msg}
   }
   handleCardChange (stateName,value) {

@@ -43,7 +43,7 @@ export default function Card(props: {
       })
     }else{
       Taro.setStorageSync('card',props.card)
-      Taro.navigateTo({url: `/pages/card-detail/card-detail`})
+      Taro.navigateTo({url: `/pages/bind-pack/card-detail/card-detail`})
     }
   }
   return (

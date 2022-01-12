@@ -41,18 +41,18 @@ export default function Login() {
           if(result.resultCode === 0){
             cardsHealper.saveCards(result.data)
             if(result.data.length === 0){
-              Taro.redirectTo({url: '/pages/bind-card/bind-card'})
+              Taro.redirectTo({url: '/pages/bind-pack/bind-card/bind-card'})
             }else{
               Taro.navigateBack()
             }
           }else{
             if(custom.feat.bindCard.electronicHealthCard){
               Taro.navigateTo({
-                url: '/pages/elec-healthcard-auth/elec-healthcard-auth'
+                url: '/pages/bind-pack/elec-healthcard-auth/elec-healthcard-auth'
               })
             }else{
               Taro.navigateTo({
-                url: '/pages/bind-card/bind-card'
+                url: '/pages/bind-pack/bind-card/bind-card'
               })
             }
           }

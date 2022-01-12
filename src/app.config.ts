@@ -2,15 +2,22 @@ export default {
   pages: [
     'pages/index/index',
     'pages/login/login',
-    'pages/bind-card/bind-card',
-    'pages/elec-healthcard-auth/elec-healthcard-auth',
     'pages/official/official',
     'pages/personal/personal',
-    'pages/cards-list/cards-list',
-    'pages/card-detail/card-detail',
     'pages/web-view-page/web-view-page'
   ],
   subpackages: [
+    {
+      root: 'pages/bind-pack',
+      name: 'bind',
+      pages: [
+        'bind-card/bind-card',
+        'cards-list/cards-list',
+        'card-detail/card-detail',
+        'elec-healthcard-auth/elec-healthcard-auth',
+        'elec-healthcard-users/elec-healthcard-users'
+      ]
+    },
     {
       root: 'pages/register-pack',
       name: 'register',

@@ -94,6 +94,6 @@ export default {
     //   }
     //   return item
     // })
-    // wx.setStorageSync('cards', app.globalData.userCards)
+    // Taro.setStorageSync('cards', app.globalData.userCards)
   }
 }

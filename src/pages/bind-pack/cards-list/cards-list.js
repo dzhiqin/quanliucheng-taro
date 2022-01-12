@@ -36,9 +36,18 @@ export default class CardList2 extends React.Component {
   
   onLoginResult(e){
     console.log(e.detail.result);
+    console.log('login result',e);
+    const result = e.detail.result
+    if(result.type === 3) {
+      // 用户还未授权
+      Taro.navigateTo({url: '/pages/bind-pack/elec-healthcard-auth/elec-healthcard-auth'})
+    }else{
+      // 用户已经授权过
+      Taro.navigateTo({url: '/pages/bind-pack/elec-healthcard-users/elec-healthcard-users'})
+    }
   }
   navToBindCard() {
-    Taro.navigateTo({url: '/pages/bind-card/bind-card'})
+    Taro.navigateTo({url: '/pages/bind-pack/bind-card/bind-card'})
   }
   navToYiBao() {
     Taro.navigateBackMiniProgram({
@@ -53,8 +62,10 @@ export default class CardList2 extends React.Component {
     return(
       <View className='cards-list'>
         {
-          this.state.cards && this.state.cards.length > 0 ?
-          this.state.cards.map(item => <Card card={item} key={item.id} style='margin-bottom: 40rpx' action={this.state.params.action} />) : 
+          this.state.cards && this.state.cards.length > 0 
+          ?
+          this.state.cards.map(item => <Card card={item} key={item.id} style='margin-bottom: 40rpx' action={this.state.params.action} />) 
+          : 
           <View className='empty'>
             <Image src={noCardPng} className='empty-icon'></Image>
             <View className='empty-txt'>暂无健康卡</View>
@@ -64,10 +75,12 @@ export default class CardList2 extends React.Component {
         <View className='btns-wrap'>
           {
             custom.feat.bindCard.oneClickAuth &&
-            <View className='btn'>
-              <View className='btn-title'>一键授权</View>
-              <View className='btn-subtitle'>已有健康卡用户直接绑定</View>
-            </View>
+            <health-card-btn onlogin={this.onLoginResult.bind(this)}>
+              <View className='btn'>
+                <View className='btn-title'>一键授权</View>
+                <View className='btn-subtitle'>已有健康卡用户直接绑定</View>
+              </View>
+            </health-card-btn>
           }
           {
             custom.feat.bindCard.electronicHealthCard 

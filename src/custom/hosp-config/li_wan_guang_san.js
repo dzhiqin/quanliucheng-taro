@@ -123,13 +123,13 @@ export default {
   },
   feat:{
     bindCard: {
-      electronicHealthCard: false, // 电子健康卡
+      electronicHealthCard: true, // 电子健康卡
       parentInfo: false,     // 监护人信息(儿童无证件)
       nationality: true,    // 国籍
       hospitalCard: true,   // 就诊卡
       maritalStatus: true, // 婚姻状况
-      oneClickAuth: false,    // 一键授权，直接绑定健康卡
-      bindYiBaoCard: false, // 绑定医保卡
+      oneClickAuth: true,    // 一键授权，直接绑定健康卡
+      bindYiBaoCard: true, // 绑定医保卡
     },
     register: {
       bookingAndIntraday:true,

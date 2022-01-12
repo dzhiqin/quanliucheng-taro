@@ -47,7 +47,7 @@ export default function HealthCards(props: any) {
     }
   }
   const handleAddCard = () => {
-    Taro.navigateTo({url: '/pages/bind-card/bind-card'})
+    Taro.navigateTo({url: '/pages/bind-pack/bind-card/bind-card'})
   }
   const onCardChange = (e) => {
     const index = e.detail.current
@@ -61,7 +61,7 @@ export default function HealthCards(props: any) {
   }
   const onSwitch = () => {
     Taro.navigateTo({
-      url: '/pages/cards-list/cards-list?action=switchCard'
+      url: '/pages/bind-pack/cards-list/cards-list?action=switchCard'
     })
   }
   if(!isLogin){

@@ -67,7 +67,7 @@ export default function Personal() {
             <View className='panel-name'>检查检验单</View>
           </View>
         </BkPanel>
-        <BkPanel arrow onClick={onClickPanel.bind(this,'/pages/cards-list/cards-list')} style='margin-top: 20rpx'>
+        <BkPanel arrow onClick={onClickPanel.bind(this,'/pages/bind-pack/cards-list/cards-list')} style='margin-top: 20rpx'>
           <View className='panel'>
             <Image src={healthCardPng} className='panel-icon'></Image>
             <View className='panel-name'>电子健康卡</View>
