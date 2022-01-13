@@ -35,8 +35,6 @@ export default class CardList2 extends React.Component {
   }
   
   onLoginResult(e){
-    console.log(e.detail.result);
-    console.log('login result',e);
     const result = e.detail.result
     if(result.type === 3) {
       // 用户还未授权

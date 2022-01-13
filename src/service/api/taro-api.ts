@@ -1,4 +1,6 @@
+import { longtermTemplates } from '@/utils/templateId'
 import * as Taro from '@tarojs/taro'
+import { toastService } from '../toast-service'
 
 export const taroSubscribeMessage = (tempIds, successCallback, failCallback) => {
   if(!tempIds || tempIds.length === 0) {
@@ -72,12 +74,17 @@ export const TaroRequestPayment = (params: paymentParams) => {
 }
 export const TaroGetLocation = () => {
   return new Promise((resolve,reject) => {
-    Taro.getLocation({
-      type: 'gcj02',
-      isHighAccuracy: true,
-      success: (res) => {resolve(res)},
-      fail: (res) => {reject(res)}
-    })
+    try{
+      Taro.getLocation({
+        type: 'gcj02',
+        isHighAccuracy: true,
+        success: (res) => {resolve(res)},
+        fail: (res) => {reject(res)}
+      })
+    }catch(e){
+      reject(e)
+    }
+    
   })
 }
 export const TaroNavToZhongXun = (execRoom) => {
@@ -101,5 +108,61 @@ export const TaroNavToMiniProgram = (data:{appId: string, path: string}) => {
       fail: (err) => {reject(err)},
       complete: () => {}
     })
+  })
+}
+export const TaroRequestAuth = (authScope: string) => {
+  Taro.getSetting({
+    success: res => {
+      console.log('get setting',res);
+      if(Object.keys(res.authSetting).includes(authScope) && !res.authSetting[authScope]){
+        // 第一次请求授权是首次进入页面时自动发起
+        // 如果用户有拒绝过授权才进行第二次请求
+        Taro.authorize({
+          scope: authScope,
+          success: authRes => {
+            console.log('授权成功',authRes);
+          },
+          fail: () => {
+            Taro.showModal({
+              content: '检测到您没有打开小程序的相关授权，是否手动打开？',
+              confirmText: '确认',
+              cancelText: '取消',
+              success: result => {
+                if(result.confirm){
+                  Taro.openSetting({
+                    success: openRes => {}
+                  })
+                }else{
+                  Taro.navigateBack()
+                }
+              }
+            })
+          }
+        })
+      }
+    }
+  })
+}
+const handleConfirm = async () => {
+  const tempIds = longtermTemplates.treatmentAndPayment()
+  const subsRes = await subscribeService(tempIds)
+  if(subsRes.result){
+    Taro.navigateTo({url: '/pages/login/login'})
+  }else{
+    toastService({title: '由于您没有选择接受订阅消息，导致无法正常使用本小程序，请重新登录'})
+  }
+}
+export const TaroRemindLoginModal = () => {
+  Taro.showModal({
+    content: '请先进行登录',
+    confirmText: '确认',
+    showCancel:false,
+    success: result => {
+      if(result.confirm){
+        handleConfirm()
+      }else{
+        Taro.switchTab({url: '/pages/index/index'})
+      }
+    }
   })
 }

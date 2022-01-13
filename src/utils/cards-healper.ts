@@ -68,8 +68,17 @@ export default {
   getDefault: () => {
     let cards = Taro.getStorageSync('cards')
     let card:Card = null
-    if(cards){
+    if(cards && cards.length > 0){
       card = cards.find(i => i.isDefault) || cards[0]
+    }else{
+      Taro.showModal({
+        content: '请先绑卡',
+        success: res => {
+          if(res.confirm){
+            Taro.navigateTo({url: '/pages/bind-pack/bind-card/bind-card'})
+          }
+        }
+      })
     }
     return card
    
@@ -83,8 +92,10 @@ export default {
     })
   },
   saveCards (value: any) {
-    if(!value || value.length === 0) return
-    Taro.setStorageSync('cards',value)
+    return new Promise((resolve,reject)=>{
+      Taro.setStorageSync('cards',value)
+        resolve({success: true})
+    })
   },
   // 替换卡信息
   update (cardInfo) {

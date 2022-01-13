@@ -21,18 +21,15 @@ export default function DoctorDetail() {
     specialty: '',
     title: ''
   })
-  console.log('params',params);
   Taro.useDidShow(() => {
     loadingService(true)
     fetchDoctorDetail({deptId: params.deptId, doctorId: params.doctorId}).then(res => {
-      console.log(res);
+      loadingService(false)
       if(res.resultCode === 0){
         setDoctorInfo(res.data)
       }else{
         toastService({title: '' + res.message})
       }
-    }).finally(() => {
-      loadingService(false)
     })
   })
   return(

@@ -37,12 +37,13 @@ export default function Login() {
 
         fetchHealthCards().then(result=>{
           if(result.resultCode === 0){
-            cardsHealper.saveCards(result.data)
-            if(result.data.length === 0){
-              Taro.redirectTo({url: '/pages/bind-pack/bind-card/bind-card'})
-            }else{
-              Taro.navigateBack()
-            }
+            cardsHealper.saveCards(result.data).then(() => {
+              if(result.data.length === 0){
+                Taro.redirectTo({url: '/pages/bind-pack/bind-card/bind-card'})
+              }else{
+                Taro.navigateBack()
+              }
+            })
           }else{
             if(custom.feat.bindCard.electronicHealthCard){
               Taro.navigateTo({

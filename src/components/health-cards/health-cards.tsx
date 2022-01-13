@@ -64,6 +64,10 @@ export default function HealthCards(props: any) {
       url: '/pages/bind-pack/cards-list/cards-list?action=switchCard'
     })
   }
+  const navToCardDetail = (card) => {
+    Taro.setStorageSync('card',props.card)
+    Taro.navigateTo({url: `/pages/bind-pack/card-detail/card-detail`})
+  }
   if(!isLogin){
     return (
       <View style='padding:40rpx 40rpx 0'>
@@ -105,7 +109,7 @@ export default function HealthCards(props: any) {
                   </View>
                 : <Image className='single-card-icon' src={qrcodeImg}></Image>
               } */}
-              <Image className='single-card-icon' src={qrcodeImg} onClick={() => Taro.navigateTo({url: '/pages/bind-pack/card-detail/card-detail'})}></Image>
+              <Image className='single-card-icon' src={qrcodeImg} onClick={navToCardDetail.bind(null,cards[0])}></Image>
             </View>
         </View>
       </View>
@@ -148,7 +152,7 @@ export default function HealthCards(props: any) {
                       <View className='swiper-item-name'>您好，{item.name}</View>
                       <View className='swiper-item-card'>诊疗卡号{item.cardNo}</View>
                     </View>
-                    <Image className='swiper-item-icon' src={qrcodeImg}></Image>
+                    <Image className='swiper-item-icon' src={qrcodeImg} onClick={navToCardDetail.bind(null,item)}></Image>
                   </View>
                 </SwiperItem>  
               )

@@ -63,7 +63,6 @@ export default class BindCard extends React.Component {
   }
 
   onSubmit() {
-    // console.log(this.state.card);
     const {result,msg}= this.formValidator()
     if(result){
       taroSubscribeMessage(
@@ -92,7 +91,7 @@ export default class BindCard extends React.Component {
         if (/成功创建患者档案信息/.test(res.message)) {
           msg = '健康卡创建失败，但诊疗卡创建成功且支持挂号'
           cardsHealper.updateAllCards()
-          toastService({title: msg,onClose:()=> Taro.navigateBack()})
+          toastService({title: msg,onClose:()=> Taro.navigateTo({url: '/pages/bind-pack/cards-list/cards-list'})})
         }else{
           msg = res.message
           toastService({title: msg})
@@ -120,11 +119,12 @@ export default class BindCard extends React.Component {
       const value = card[keys[i]]
       if(typeof value === 'boolean' || value === 0) continue
       if(!value){
-        console.log('key=',keys[i],'value=',card[keys[i]])
+        // console.log('key=',keys[i],'value=',card[keys[i]])
         if(this.state.currentIdenTypeValue === '儿童(无证件)' && key === 'idenNo') continue
         if(!this.state.bindCardConfig.nationality && key === 'nationality') continue
         if(!card.hasHospitalCard && key === 'hospitalCardNo') continue
         if(this.state.currentIdenTypeValue !== '儿童(无证件)' && (key === 'parentName' || key === 'parentId')) continue
+        if(key ==='wechatCode') continue
         msg = validateMessages[keys[i]]
         result = false
         break

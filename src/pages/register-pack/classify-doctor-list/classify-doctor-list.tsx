@@ -31,7 +31,6 @@ export default function ClassifyDoctorList(props) {
   
   useEffect(() => {
     if(!specializedSubject) return
-    // Taro.showLoading({title: '加载中……'})
     loadingService(true)
     fetchDoctorsBySubject({deptId,specializedSubject}).then(res => {
       if(res.resultCode === 0){
@@ -44,7 +43,6 @@ export default function ClassifyDoctorList(props) {
   },[deptId,specializedSubject])
   useEffect(() => {
     if(!regDate) return
-    // Taro.showLoading({title: '加载中……'})
     loadingService(true)
     fetchDoctorsByDate({deptId,regDate}).then(res => {
       if(res.resultCode === 0){
@@ -81,8 +79,8 @@ export default function ClassifyDoctorList(props) {
                   note={item.address} 
                   thumb={item.faceUrl} 
                   onClick={onClick.bind(null,item)} 
-                  extraText={item.isHalt ? '停诊': item.leaveTotalCount >0 ? '有号' : '无号'} 
-                  className={item.isHalt ? 'ticket-btn-unactive' : item.leaveTotalCount > 0 ? 'ticket-btn-active' : 'ticket-btn-unactive'}
+                  extraText={item.isHalt ? '停诊': !item.isTimePoint ? '无号' : item.leaveTotalCount >0 ? '有号' : '无号'} 
+                  className={item.isHalt || !item.isTimePoint ? 'ticket-btn-unactive' : item.leaveTotalCount > 0 ? 'ticket-btn-active' : 'ticket-btn-unactive'}
                 />
               )
             }

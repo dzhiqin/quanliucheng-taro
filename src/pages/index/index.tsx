@@ -17,7 +17,6 @@ export default function Index() {
     Taro.setNavigationBarTitle({title: custom.hospitalName})
     Taro.removeStorageSync('isReg')
   }, [])
-
   return (
     <View className='index'>
       <MyContext.Provider value={indexPage}>

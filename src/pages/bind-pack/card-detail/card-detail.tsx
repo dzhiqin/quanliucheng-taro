@@ -26,7 +26,10 @@ export default function CardDetail(props: any) {
     type: ''
   })
   useReady(() => {
-    const currentCard = Taro.getStorageSync('card')
+    let currentCard = Taro.getStorageSync('card')
+    if(!currentCard){
+      currentCard = cardsHealper.getDefault()
+    }
     setIsDefault(currentCard.isDefault)
     setCard(currentCard)
     

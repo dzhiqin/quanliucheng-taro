@@ -40,6 +40,7 @@ export default function DoctorDefault(props) {
     const hospitalInfo = Taro.getStorageSync('hospitalInfo')
     const userInfo = Taro.getStorageSync('userInfo')
     const card = cardsHealper.getDefault()
+    if(!card) return
     if(item.leaveCount > 0){
       const orderParams = {
         cardNo: card.cardNo,

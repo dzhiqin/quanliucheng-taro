@@ -5,7 +5,7 @@ import './arrival.less'
 import HealthCards from '@/components/health-cards/health-cards'
 import { AtButton } from 'taro-ui'
 import { useState } from 'react'
-import { fetchCheckInInfo, fetchOfficialContent, TaroGetLocation,handleCheckIn } from '@/service/api'
+import { fetchCheckInInfo, fetchOfficialContent, TaroGetLocation,handleCheckIn, TaroRequestAuth } from '@/service/api'
 import BkNone from '@/components/bk-none/bk-none'
 import BkTitle from '@/components/bk-title/bk-title'
 import BkPanel from '@/components/bk-panel/bk-panel'
@@ -43,7 +43,25 @@ export default function BindingCard() {
       const {latitude,longitude} = res
       computeDistance(latitude,longitude,hospLatLong.latitude,hospLatLong.longitude)
     }).catch(err => {
-      toastService({title: '获取位置失败：' + err})
+      if(err.errMsg==='getLocation:fail auth deny'){
+        Taro.showModal({
+          content: '检测到您没有打开小程序的定位授权，是否手动打开？',
+          confirmText: '确认',
+          cancelText: '取消',
+          success: result => {
+            if(result.confirm){
+              Taro.openSetting({
+                success: openRes => {}
+              })
+            }else{
+              Taro.navigateBack()
+            }
+          }
+        })
+      }else{
+        toastService({title: '获取位置失败：' + err})
+        console.log(err)
+      }
     }).finally(() => {
       setTimeout(() => {
         setLoading(false)
