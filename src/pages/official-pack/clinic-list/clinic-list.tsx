@@ -14,13 +14,12 @@ export default function ClinicList() {
     fetchClinicList().then(res => {
       console.log(res);
       if(res.resultCode === 0){
+        loadingService(false)
         // 目前默认只有一个院区，取第一个，如果需要多个院区切换，再说
         setList(res.data[0].deptList)
       }else{
         toastService({title: '' + res.message})
       }
-    }).finally(() => {
-      loadingService(false)
     })
   },[])
   const onClickItem = (item) => {

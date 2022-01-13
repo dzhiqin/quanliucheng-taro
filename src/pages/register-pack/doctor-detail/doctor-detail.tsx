@@ -4,7 +4,7 @@ import { View, Image } from '@tarojs/components'
 import { fetchDoctorSchedules, fetchTimeListByDate } from '@/service/api'
 import { useEffect, useState } from 'react'
 import { useRouter } from '@tarojs/taro'
-import { toastService } from '@/service/toast-service'
+import { loadingService, toastService } from '@/service/toast-service'
 import ScheduleDays from '@/components/schedule-days/schedule-days'
 import { AtList, AtListItem } from "taro-ui"
 import BkNone from '@/components/bk-none/bk-none'
@@ -87,7 +87,7 @@ export default function DoctorDefault(props) {
     })
   }
   useEffect(() => {
-    Taro.showLoading({title: '加载中……'})
+    loadingService(true)
     fetchDoctorSchedules({
       doctorId: params.doctorId, 
       deptId: deptInfo.deptId, 
@@ -95,19 +95,22 @@ export default function DoctorDefault(props) {
     }).then((res:any) => {
       if(res.resultCode === 0){
         if(res.data.defaultSelectedDay === '无剩余号源'){
-          toastService({title: '无剩余号源',onClose: () => {Taro.navigateBack()}})
-          return
+          let msg = '无剩余号源，页面将返回'
+          if(Taro.getStorageSync('isReg') === '1'){
+            msg = '当天没号了，请选择其他日期'
+          }
+          toastService({title: msg,onClose: () => {Taro.navigateBack()}})
+        }else{
+          loadingService(false)
+          setDoctorDetail(res.data.doctorDetail)
+          setDoctorInfo(res.data.timeSliceDoctorInfo)
+          setSelectedDate(res.data.defaultSelectedDay)
+          setList(res.data.timePoints)
+          setRegDays(res.data.regDays)
         }
-        setDoctorDetail(res.data.doctorDetail)
-        setDoctorInfo(res.data.timeSliceDoctorInfo)
-        setSelectedDate(res.data.defaultSelectedDay)
-        setList(res.data.timePoints)
-        setRegDays(res.data.regDays)
       }else{
         toastService({title: '获取数据失败：'+res.message})
       }
-    }).finally(() => {
-      Taro.hideLoading()
     })
   }, [deptInfo.deptId,params.doctorId,params.regDate])
   return(

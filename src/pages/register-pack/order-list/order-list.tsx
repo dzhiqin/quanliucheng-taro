@@ -7,7 +7,7 @@ import { cancelAppointment, fetchRegInvoiceInfo, fetchRegOrderList } from '@/ser
 import HealthCards from '@/components/health-cards/health-cards'
 import BkTabs from '@/components/bk-tabs/bk-tabs'
 import { useState, useEffect, useCallback } from 'react'
-import { toastService } from '@/service/toast-service'
+import { loadingService, toastService } from '@/service/toast-service'
 import BkNone from '@/components/bk-none/bk-none'
 import BkButton from '@/components/bk-button/bk-button'
 import { checkOverDate } from '@/utils/tools'
@@ -26,7 +26,7 @@ export default function OrderList() {
   const [show,setShow] = useState(false)
   const onConfirm = () => {
     setShow(false)
-    Taro.showLoading({title: '正在取消……'})
+    loadingService(true,'正在取消……')
     cancelAppointment({orderId: order.orderId}).then(res => {
       if(res.resultCode === 0){
         toastService({title: '取消成功！'})
@@ -34,8 +34,6 @@ export default function OrderList() {
       }else{
         toastService({title: res.message})
       }
-    }).finally(() => {
-      Taro.hideLoading()
     })
   }
   const onCancel = () => {
@@ -64,15 +62,14 @@ export default function OrderList() {
   }
   const getList = useCallback(() => {
     setList([])
-    Taro.showLoading({title: '加载中……'})
+    loadingService(true)
     fetchRegOrderList({type: tabs[currentTab].value}).then(res => {
       if(res.resultCode === 0){
+        loadingService(false)
         setList(res.data)
       }else{
         toastService({title: res.message})
       }
-    }).finally(() => {
-      Taro.hideLoading()
     })
   },[currentTab])
   useEffect(() => {

@@ -5,7 +5,7 @@ import HealthCards from '@/components/health-cards/health-cards'
 import { useEffect, useState } from 'react'
 import { useDidShow } from '@tarojs/taro'
 import { createPaymentOrder, fetchPaymentOrderList , subscribeService , PayOrderParams, handlePayment, cancelPayment, fetchPaymentOrderStatus } from '@/service/api'
-import { toastService } from '@/service/toast-service'
+import { loadingService, toastService } from '@/service/toast-service'
 import BkNone from '@/components/bk-none/bk-none'
 import BkTabs from '@/components/bk-tabs/bk-tabs'
 import { orderPayType_CN, orderSearchType_EN , orderStatus_CN, orderStatus_EN } from '@/enums/index'
@@ -63,9 +63,10 @@ export default function OrderList(){
     })
   }
   const payOrderById = (id: string,payType: string) => {
-    Taro.showLoading({title: '支付中……',mask:true})
+    loadingService(true,'支付中……')
     handlePayment({orderId: id, payType: payType}).then(res => {
       if(res.popUpCode === 3){
+        loadingService(false)
         // do nothing
       }else if(res.resultCode === 0 && !res.data){
         toastService({title: '提交订单成功，还未支付', onClose: () => {getList(searchType); setBusy(false)}})
@@ -79,6 +80,7 @@ export default function OrderList(){
             path: pay_url,
             success: () => Taro.hideLoading()
           })
+          loadingService(false)
         }else{
           Taro.requestPayment({
             nonceStr,
@@ -101,8 +103,6 @@ export default function OrderList(){
           })
         }
       }
-    }).finally(() => {
-      Taro.hideLoading()
     })
   }
   const checkOrderStatus = (id: string) => {

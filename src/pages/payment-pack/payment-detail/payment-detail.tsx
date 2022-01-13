@@ -24,7 +24,7 @@ import sighPng from '@/images/icons/sigh.png'
 import { onetimeTemplates } from '@/utils/templateId'
 import SubscribeNotice from '@/components/subscribe-notice/subscribe-notice'
 import { orderPayType_CN, orderStatus_EN, pactCode_EN, payStatus_EN } from '@/enums/index'
-import { toastService } from '@/service/toast-service'
+import { loadingService, toastService } from '@/service/toast-service'
 import { requestTry } from '@/utils/retry'
 import ResultPage from '@/components/result-page/result-page'
 import custom from '@/custom/index'
@@ -204,13 +204,14 @@ export default function PaymentDetail() {
     Taro.showLoading({title: '加载中……',mask:true})
     fetchPaymentOrderInvoice({serialNo: item.serialNo}).then(res => {
       if(res.resultCode === 0){
+        loadingService(false)
         const invoiceUrl = res.data.invoiceUrl
         Taro.setStorageSync('webViewSrc',invoiceUrl)
         Taro.navigateTo({url: '/pages/web-view-page/web-view-page'})
       }else{
         toastService({title: '获取电子发票失败：' + res.message})
       }
-    }).finally(() => {
+    }).catch(() => {
       Taro.hideLoading()
     })
   }
@@ -247,11 +248,12 @@ export default function PaymentDetail() {
     }
   })
   useReady(() => {
-    Taro.showLoading({title: '加载中……'})
     if(scanParams){
+      loadingService(true)
       fetchPaymentOrderDetailByQRCode(scanParams).then(res => {
         // 扫码进入的因接口返回字段不同╮(╯▽╰)╭，需要重新对齐数据
         if(res.resultCode === 0){
+          loadingService(false)
           const data = res.data
           orderInfo = {
             orderId: data.orderId,
@@ -269,20 +271,20 @@ export default function PaymentDetail() {
         }
       })
     }else{
+      loadingService(true)
       fetchPaymentDetail({
         clinicNo: orderInfo.clinicNo,
         cardNo: card.cardNo,
         recipeSeq: orderInfo.recipeSeq,
         patientId: card.patientId
       }).then(res => {
+        loadingService(false)
         // console.log('fetch detail',res);
         if(res.resultCode === 0){
           setList(res.data.billDetails)
         }else{
           toastService({title: '获取数据失败:' + res.message})
         }
-      }).finally(() => {
-        Taro.hideLoading()
       })
     }
     

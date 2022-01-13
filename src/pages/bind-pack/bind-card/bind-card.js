@@ -11,7 +11,7 @@ import { taroSubscribeMessage } from '@/service/api/taro-api'
 import SubscribeNotice from '@/components/subscribe-notice/subscribe-notice'
 import { createCard } from '@/service/api'
 import cardsHealper from '@/utils/cards-healper'
-import { toastService } from '@/service/toast-service'
+import { loadingService, toastService } from '@/service/toast-service'
 import './bind-card.less'
 
 export default class BindCard extends React.Component {
@@ -81,9 +81,10 @@ export default class BindCard extends React.Component {
     }
   }
   handleCreateCard() {
-    Taro.showLoading({title: '创建中……'})
+    loadingService(true)
     createCard(this.buildCardParams()).then(res => {
       if(res.resultCode === 0){
+        loadingService(false)
         const card = res.data
         cardsHealper.add(card)
       }else{
@@ -98,8 +99,6 @@ export default class BindCard extends React.Component {
         }
       }
       console.log('create card', res);
-    }).finally(() => {
-      Taro.hideLoading()
     })
   }
   buildCardParams() {

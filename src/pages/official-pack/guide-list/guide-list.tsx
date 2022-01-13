@@ -13,12 +13,11 @@ export default function GuideList() {
     loadingService(true)
     fetchGuideList().then(res => {
       if(res.resultCode === 0){
+        loadingService(false)
         setList(res.data)
       }else{
         toastService({title: '' + res.message})
       }
-    }).finally(() =>{
-      loadingService(false)
     })
   }, [])
   const onClickItem = (item) => {

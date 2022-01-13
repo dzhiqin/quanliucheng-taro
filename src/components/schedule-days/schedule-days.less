@@ -4,12 +4,14 @@
     justify-content: space-between;
     align-items: center;
     margin-top: 10rpx;
+
     &-item{
       display: flex;
       flex-direction: column;
       align-items: center;
       font-weight: 300;
       color: #333;
+      position: relative;
       &-week{
         font-size: 24rpx;
         color: inherit;
@@ -26,9 +28,10 @@
         
       }
       &-icon{
-        width: 76rpx;
-        height: 76rpx;
+        width: 60rpx;
+        height: 60rpx;
         position: absolute;
+        top: 20rpx
       }
       .day-selected{
         background-color: #FF7C25;
@@ -47,5 +50,9 @@
   .disable{
     pointer-events: none;
     color: #aaa;
+  }
+  .introday{
+    color: #333 !important;
+    font-weight: 500 !important;
   }
 }

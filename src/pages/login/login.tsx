@@ -7,16 +7,14 @@ import { updateUserInfo, fetchHealthCards } from '@/service/api/'
 import custom from '@/custom/index'
 import cardsHealper from '@/utils/cards-healper'
 import './login.less'
+import { loadingService } from '@/service/toast-service'
 
 export default function Login() {
   useEffect(() => {
     Taro.canIUse('hideHomeButton') && Taro.hideHomeButton()
   })
   const onClick = () => {
-    Taro.showLoading({
-      title: '加载中……',
-      mask: true
-    })
+    loadingService(true)
     Taro.getUserProfile({
       desc: '用于完善用户资料',
       success: (res) => {

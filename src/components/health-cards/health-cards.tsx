@@ -105,7 +105,7 @@ export default function HealthCards(props: any) {
                   </View>
                 : <Image className='single-card-icon' src={qrcodeImg}></Image>
               } */}
-              <Image className='single-card-icon' src={qrcodeImg}></Image>
+              <Image className='single-card-icon' src={qrcodeImg} onClick={() => Taro.navigateTo({url: '/pages/bind-pack/card-detail/card-detail'})}></Image>
             </View>
         </View>
       </View>

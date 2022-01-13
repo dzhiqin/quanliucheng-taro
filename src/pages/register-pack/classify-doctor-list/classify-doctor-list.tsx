@@ -5,7 +5,7 @@ import { fetchDoctorsBySubject, fetchDoctorsByDate } from '@/service/api'
 import { useEffect, useState } from 'react'
 import { useRouter } from '@tarojs/taro'
 import BkNone from '@/components/bk-none/bk-none'
-import { toastService } from '@/service/toast-service'
+import { loadingService, toastService } from '@/service/toast-service'
 import { AtList, AtListItem } from "taro-ui"
 import './classify-doctor-list.less'
 import crossFlagPng from '@/images/icons/cross_flag.png'
@@ -18,6 +18,10 @@ export default function ClassifyDoctorList(props) {
   const regDate = router.params.date || ''
   const [list,setList] = useState([])
   const onClick = (doctor) => {
+    if(doctor.isHalt){
+      toastService({title: '已停诊'})
+      return
+    }
     if(doctor.leaveTotalCount === 0){
       toastService({title: '没号了~请重新选择'})
       return
@@ -27,28 +31,28 @@ export default function ClassifyDoctorList(props) {
   
   useEffect(() => {
     if(!specializedSubject) return
-    Taro.showLoading({title: '加载中……'})
+    // Taro.showLoading({title: '加载中……'})
+    loadingService(true)
     fetchDoctorsBySubject({deptId,specializedSubject}).then(res => {
       if(res.resultCode === 0){
+        loadingService(false)
         setList(res.data)
       }else{
         toastService({title: '获取数据失败'})
       }
-    }).finally(() => {
-      Taro.hideLoading()
     })
   },[deptId,specializedSubject])
   useEffect(() => {
     if(!regDate) return
-    Taro.showLoading({title: '加载中……'})
+    // Taro.showLoading({title: '加载中……'})
+    loadingService(true)
     fetchDoctorsByDate({deptId,regDate}).then(res => {
       if(res.resultCode === 0){
+        loadingService(false)
         setList(res.data)
       }else{
         toastService({title: '获取数据失败'})
       }
-    }).finally(() => {
-      Taro.hideLoading()
     })
   },[deptId,regDate])
   return(
@@ -77,14 +81,14 @@ export default function ClassifyDoctorList(props) {
                   note={item.address} 
                   thumb={item.faceUrl} 
                   onClick={onClick.bind(null,item)} 
-                  extraText={item.leaveTotalCount >0 ? '有号' : '无号'} 
-                  className={item.leaveTotalCount > 0 ? 'ticket-btn-active' : 'ticket-btn-unactive'}
+                  extraText={item.isHalt ? '停诊': item.leaveTotalCount >0 ? '有号' : '无号'} 
+                  className={item.isHalt ? 'ticket-btn-unactive' : item.leaveTotalCount > 0 ? 'ticket-btn-active' : 'ticket-btn-unactive'}
                 />
               )
             }
           </AtList>
         </View>
-        : <BkNone  />
+        : <BkNone msg='没号了~' />
       }
     </View>
   )

@@ -9,7 +9,7 @@ import custom from '@/custom/index'
 import RegisterNoticeModal from '../register-notice-modal/register-notice-modal'
 import BoxItem from './box-item'
 import './function-boxes.less'
-import { toastService } from '@/service/toast-service'
+import { loadingService, toastService } from '@/service/toast-service'
 
 export default function FunctionBoxes(props) {
    const {functionBox} = useContext(MyContext)
@@ -31,9 +31,10 @@ export default function FunctionBoxes(props) {
       navToPage()
     }
     const navToPage = () => {
-      Taro.showLoading({title: '加载中 ……',mask: true})
+      loadingService(true)
       fetchBranchHospital().then(res => {
         if(res.resultCode === 0){
+          loadingService(false)
           const hospitalCount = res.data.length
           if(hospitalCount === 1){
             let url = ''
@@ -51,8 +52,6 @@ export default function FunctionBoxes(props) {
         }else{
           toastService({title: '获取分院出错：' + res.message})
         }
-      }).finally(() => {
-        Taro.hideLoading()
       })
     } 
     return (

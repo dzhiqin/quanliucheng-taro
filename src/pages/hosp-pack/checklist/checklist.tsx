@@ -4,7 +4,7 @@ import { View, Image } from '@tarojs/components'
 import SimpleModal from '@/components/simple-modal/simple-modal'
 import { useState } from 'react'
 import { fetchInHospBillList, fetchInHospCards } from '@/service/api'
-import { toastService } from '@/service/toast-service'
+import { loadingService, toastService } from '@/service/toast-service'
 import BkPanel from '@/components/bk-panel/bk-panel'
 import calanderPng from '@/images/icons/calendar.png'
 import MoneyPng from '@/images/icons/money_circle.png'
@@ -28,15 +28,14 @@ export default function BindingCard() {
     })
   })
   const getList = (cardNo: string) => {
-    Taro.showLoading({title: '加载中……'})
+    loadingService(true)
     fetchInHospBillList({inCardNo: cardNo}).then(res => {
       if(res.resultCode === 0){
+        loadingService(true)
         setList(res.data.billInfoList)
       }else{
         toastService({title: '' + res.message})
       }
-    }).finally(() => {
-      Taro.hideLoading()
     })
   }
   const handleClickItem = (item) => {

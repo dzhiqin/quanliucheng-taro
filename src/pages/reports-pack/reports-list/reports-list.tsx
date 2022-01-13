@@ -11,7 +11,7 @@ import BkPanel from '@/components/bk-panel/bk-panel'
 import BkNone from '@/components/bk-none/bk-none'
 import './reports-list.less'
 import { humanDateAndTime } from '@/utils/format'
-import { toastService } from '@/service/toast-service'
+import { loadingService, toastService } from '@/service/toast-service'
 import cardsHealper from '@/utils/cards-healper'
 
 export default function ReportList() {
@@ -39,16 +39,15 @@ export default function ReportList() {
     }
   }
   const getList = (_itemType: reportItemType_CN) => {
-    Taro.showLoading({title: '加载中……'})
+    loadingService(true)
     fetchReportsList({itemType: _itemType, reportType: reportType }).then(res => {
       if(res.resultCode === 0){
+        loadingService(false)
         setList(res.data.checks)
       }else{
         toastService({title: res.message})
         setList([])
       }
-    }).finally(() => {
-      Taro.hideLoading()
     })
   }
 

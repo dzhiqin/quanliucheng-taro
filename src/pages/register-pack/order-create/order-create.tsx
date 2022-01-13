@@ -10,7 +10,7 @@ import BkButton from '@/components/bk-button/bk-button'
 import { AtIcon } from 'taro-ui'
 import { cancelRegOrder, createRegOrder, fetchOrderFee, fetchRegFeeType, fetchRegOrderStatus, subscribeService, TaroRequestPayment } from '@/service/api'
 import cardsHealper from '@/utils/cards-healper'
-import { toastService } from '@/service/toast-service'
+import { loadingService, toastService } from '@/service/toast-service'
 import { requestTry } from '@/utils/retry'
 import ResultPage from '@/components/result-page/result-page'
 import { onetimeTemplates } from '@/utils/templateId'
@@ -41,6 +41,7 @@ export default function OrderCreate() {
     success = 'success',
     fail = 'fail'
   }
+  const [busy,setBusy] = useState(false)
   // 后端字段没统一，导致有2个金额字段 ╮(╯▽╰)╭
   const [regFee,setRegFee] = useState(null)
   const [treatFee,setTreatFee] = useState(null)
@@ -49,15 +50,15 @@ export default function OrderCreate() {
   const [result,setResult] = useState(resultEnum.default)
   const [feeOptions,setFeeOptions] = useState([])
   const [showNotice,setShowNotice] = useState(false)
-  const buildOrderParams = () => {
+  const buildOrderParams = (_regFee?,_treatFee?) => {
     const orderParams = Taro.getStorageSync('orderParams')
     const card = cardsHealper.getDefault()
     const params = {
       ...orderParams,
       cardNo: card.cardNo,
       patientId: card.patientId,
-      regFee,
-      treatFee
+      regFee: _regFee? _regFee : regFee,
+      treatFee: _treatFee ? _treatFee : treatFee
     }
     return params
   }
@@ -104,6 +105,8 @@ export default function OrderCreate() {
         setResult(resultEnum.success)
       }).catch(checkErr=>{
         setResult(resultEnum.fail)
+      }).finally(() => {
+        loadingService(false)
       })
     }).catch(taroErr => {
       if(taroErr.data.errMsg === 'requestPayment:fail cancel'){
@@ -112,19 +115,36 @@ export default function OrderCreate() {
       }else{
         console.log('支付失败:',taroErr.data);
       }
+      loadingService(false)
+      setBusy(false)
     })
   }
   const handleSubmit = async() => {
+    setBusy(true)
     const subsRes = await subscribeService(onetimeTemplates.registration())
     if(!subsRes.result){
       setShowNotice(true)
       return
     }
-    if( (!regFee && !treatFee && regFee !== 0 && treatFee !== 0) || feeTypes.length === 0 ) {
-      toastService({title: '正在获取费用信息，请稍后……'})
-      return
+    loadingService(true,'挂号中……')
+
+    let orderParams 
+    if( (!regFee && !treatFee && regFee !== 0 && treatFee !== 0) ) {
+      // toastService({title: '正在获取费用信息，请稍后……'})
+      // return
+      const feeRes:any = await fetchFee()
+      if(feeRes.success){
+        orderParams = buildOrderParams(feeRes.result.regFee, feeRes.result.treatFee)
+      }else{
+        loadingService(false)
+        toastService({title: feeRes.result})
+        setResult(resultEnum.fail)
+        return
+      }
+    }else{
+      orderParams = buildOrderParams()
     }
-    createRegOrder(buildOrderParams()).then(res => {
+    createRegOrder(orderParams).then(res => {
       if(res.resultCode === 0){
         const {nonceStr, orderId, paySign, signType, payString, timeStamp} = res.data
         if(payString){
@@ -142,6 +162,8 @@ export default function OrderCreate() {
             setResult(resultEnum.success)
           }).catch(checkErr=>{
             setResult(resultEnum.fail)
+          }).finally(() => {
+            loadingService(false)
           })
         }
       }else{
@@ -179,6 +201,23 @@ export default function OrderCreate() {
       }
     })
   })
+  const fetchFee = () => {
+    return new Promise((resolve,reject) => {
+      fetchOrderFee(buildFeeParams()).then(res => {
+        if(res.resultCode === 0){
+          const _regFee = res.data.regFee
+          const _treatFee = res.data.treatFee
+          setRegFee(_regFee)
+          setTreatFee(_treatFee)
+          resolve({success: true, result: {regFee: _regFee,treatFee: _treatFee}})
+        }else{
+          reject({success: false, result: '获取金额失败'})
+        }
+      }).catch(err => {
+        reject({success: false, result: '获取金额失败' + err})
+      })
+    })
+  }
   if(result === ''){
     return(
       <View className='order-create'>
@@ -243,7 +282,7 @@ export default function OrderCreate() {
           </View>
         </View>
         <View style='padding: 40rpx'>
-          <BkButton title='确认挂号' onClick={handleSubmit} />
+          <BkButton title='确认挂号' disabled={busy} onClick={handleSubmit} />
         </View>
       </View>
     )

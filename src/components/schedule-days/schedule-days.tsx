@@ -80,7 +80,7 @@ export default function WeekSchedule(props) {
       <View className='days'>
         {
           schedules.map((schedule,index) => 
-            <View key={index} className={`days-item ${schedule.disable? 'disable' : ''}`} onClick={onClickItem.bind(null,schedule)} >
+            <View key={index} className={`days-item ${schedule.disable? 'disable' : ''} ${schedule.week === '今天' ? 'introday' : ''}`} onClick={onClickItem.bind(null,schedule)} >
               <View className='days-item-week'>{schedule.week}</View>
               <View className={`days-item-day ${schedule.selected ? 'day-selected' : 'day-unselect'}`}>{schedule.day}</View>
               {

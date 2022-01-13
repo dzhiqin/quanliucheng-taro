@@ -4,19 +4,18 @@ export const toastService = (props: {title: string,duration?: number,onClose?: F
   Taro.showToast({
     icon: 'none',
     title: props.title,
-    duration: props.duration || 1500,
+    duration: props.duration || 3000,
     complete: () => {
       if(typeof props.onClose === 'function'){
         setTimeout(() => {
           props.onClose()
-        },props.duration || 1500)
+        },props.duration || 3000)
       }
     }
   })
 }
 export const loadingService = (show: boolean, msg?: string) => {
   if(show){
-
     Taro.showLoading({
       title: msg || '加载中……',
       mask:true
