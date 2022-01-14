@@ -62,3 +62,21 @@ export enum orderSearchType_EN {
   current = 'current',
   history = 'history'
 }
+export enum healthCardResultCode {
+  authorized = 2,
+  no_auth_before = 3,
+  auth_success = 4
+}
+export enum healthCardType_EN {
+  IdCard = 0, // 身份证
+  ResidentAccountNo = 1,  // 居民户口编号
+  PassPort = 2,   // 护照
+  OfficersNo = 3, // 军官证
+  MenZhen = 4,    // 门诊卡
+  HongKongAndMaCaoPass = 5,// 港澳居民往来内地通行证
+  TaiWanPass = 6, // 台湾居民往来内地通行证
+  BirthCertificate = 7, // 出生证
+  HongKongAndMacao = 8, // 港澳居民身份证
+  Others = 9,     // 其他
+  Children = 20   // 儿童
+}

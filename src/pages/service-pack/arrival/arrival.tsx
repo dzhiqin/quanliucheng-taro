@@ -39,7 +39,7 @@ export default function BindingCard() {
   }
   const refreshDistance = () => {
     setLoading(true)
-    TaroGetLocation().then((res:any) => {
+    TaroGetLocation({type: 'gcj02'}).then((res:any) => {
       const {latitude,longitude} = res
       computeDistance(latitude,longitude,hospLatLong.latitude,hospLatLong.longitude)
     }).catch(err => {

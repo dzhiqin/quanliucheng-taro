@@ -13,7 +13,8 @@ import {
   fetchPaymentOrderDetailByQRCode,
   fetchPaymentOrderInvoice,
   TaroNavToZhongXun,
-  handleHeSuanRefund
+  handleHeSuanRefund,
+  TaroNavToYiBao
 } from '@/service/api'
 import cardsHealper from '@/utils/cards-healper'
 import './payment-detail.less'
@@ -176,13 +177,7 @@ export default function PaymentDetail() {
       content:content,
       showCancel: false,
       success: () => {
-        Taro.navigateToMiniProgram({
-          appId: 'wxe1022cca111d18be',
-          path: 'pages/cert/bind/bind?from=AAHTx-oeOuLWz2nBYKez06kN&cityid=440100',
-          success() {
-            console.log('open success');
-          }
-        })
+        TaroNavToYiBao(() =>{})
       }
     })
   }

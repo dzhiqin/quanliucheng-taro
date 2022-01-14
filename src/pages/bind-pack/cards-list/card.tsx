@@ -5,17 +5,21 @@ import crossPng from '@/images/icons/cross.png'
 import cardsHealper from '@/utils/cards-healper'
 import './cards-list.less'
 import { encryptByDES, getBranchId } from '@/utils/tools'
-import { toastService } from '@/service/toast-service'
-import { TaroNavToMiniProgram } from '@/service/api'
+import { loadingService, toastService } from '@/service/toast-service'
+import { TaroNavToMiniProgram, bindHealthCard } from '@/service/api'
+import nrhcPng from '@/images/icons/nrhc.png'
+import cardUpgradePng from '@/images/icons/card_upgrade.png'
+import { healthCardResultCode, healthCardType_EN } from '@/enums/index'
+import { useState } from 'react'
 
 export default function Card(props: {
   action?: string,
   card:any,
   style?: string
 }) {
-  
+  const [upgrading,setUpgrading] = useState(false)
   const onClickIcon = (e) => {
-    console.log('click icon',e);
+    // console.log('click icon',e);
     e.stopPropagation()
   }
   const onClickCard = async (e) => {
@@ -34,6 +38,7 @@ export default function Card(props: {
       const path = 'https://ivf.gy3y.com/patients/#/SubscribeListNum'
       const branchId = getBranchId()
       TaroNavToMiniProgram({
+        // 跳转柔济孕宝小程序
         appId: 'wx2958acfb26e6b4cd',
         path: `pages/toLogin/tologin?url=${encodeURIComponent(path)}&type=wxChat&unitId=${branchId}&alySign=${alySign}`
       }).then(res => {
@@ -46,6 +51,70 @@ export default function Card(props: {
       Taro.navigateTo({url: `/pages/bind-pack/card-detail/card-detail`})
     }
   }
+  const handleBindHealthCard = (cardParams) => {
+    bindHealthCard(cardParams).then(res => {
+      // console.log('res:',res)
+      loadingService(false)
+      if(res.resultCode === 0){
+        toastService({title: '升级成功', onClose: () => {
+          cardsHealper.updateAllCards().then(() => {
+            Taro.redirectTo({url: '/pages/bind-pack/cards-list/cards-list'})
+          })
+        }})
+      }else{
+        toastService({title: '升级失败'+res.message})
+        setUpgrading(false)
+      }
+    }).catch(err => {
+      toastService({title: 'err'+err})
+      setUpgrading(false)
+    })
+  }
+  const buildCardParams = (addProps?:any) => {
+    const params = {
+      ...props.card,
+      ...addProps,
+      openId: '',
+      cardId: props.card.id,
+      patientName: props.card.name,
+      idenType: healthCardType_EN.IdCard, // 目前只支持身份证
+      phone: props.card.cellphone,
+      birthday: props.card.birthdate,
+      nation: '',
+      qrCodeText: '',
+      healthCardId: '',
+      isGetCode: true,
+      cardType: 0
+    }
+    // console.log('build card params',params);
+    return params
+  }
+  const handleUpgrade = (event) => {
+    if(upgrading)return
+    setUpgrading(true)
+    loadingService(true,'升级中……')
+    // console.log('upgrade',event.detail.result);
+    const {result} = event.detail
+    if(result.type === healthCardResultCode.no_auth_before){
+      setUpgrading(false)
+      loadingService(false)
+      Taro.navigateTo({url: `/pages/bind-pack/elec-healthcard-auth/elec-healthcard-auth?nextPage=cardList&cardId=${props.card.id}`})
+    }else{
+      handleBindHealthCard(buildCardParams({wechatCode: result.wechatCode}))
+    }
+  }
+  
+  Taro.useDidShow(() => {
+    const upgradeCardId = Taro.getStorageSync('upgradeCardId')
+    if(upgradeCardId && Number(upgradeCardId) === props.card.id){
+      Taro.removeStorageSync('upgradeCardId')
+      const wechatCode = Taro.getStorageSync('wechatCode')
+      loadingService(true,'升级中……')
+      handleBindHealthCard(buildCardParams({wechatCode}))
+    }
+  })
+  
+
   return (
     <View className='card' style={props.style? props.style : ''} onClick={onClickCard} >
       <View className='card-header'>
@@ -61,8 +130,20 @@ export default function Card(props: {
           <View className='card-content-name'>{props.card.name}</View>
           <View className='card-content-id'>{props.card.idNOHide}</View>
         </View>
-        <View>
-          {/* <Image src={crossPng} style='width: 100rpx;height:100rpx' onClick={onClickIcon} /> */}
+        <View className='card-content-image'>
+          {
+            props.card.qrCodeText && 
+            <View className='card-content-image-wrap'>
+              <Image src={`data:image/jpg;base64,${props.card.qrCode}`} className='card-content-image-qrcode' />
+              <Image src={nrhcPng} className='card-content-image-icon' />
+            </View>
+          }
+          {
+            !props.card.qrCodeText &&
+            <health-card-btn onlogin={handleUpgrade}>
+              <Image src={cardUpgradePng} style='width: 100rpx;height:100rpx' onClick={onClickIcon} />
+            </health-card-btn>
+          }
         </View>
       </View>
       <View className='card-footer'>中华人民共和国国家卫生健康委员会监制</View>

@@ -18,12 +18,15 @@ export const setDefaultCard = (data: any) => {
 export const fetchHealthCardInfo = (data: {cardId: string}) => {
   return Post(fullUrl('api/applet/patient/UserCard/GetHealthCardInfo'),data)
 }
-export const bindHealthCard = () => {
-  return Post(fullUrl('api/applet/patient/UserCard/BindHealthCard'))
+export const bindHealthCard = (data) => {
+  return Post(fullUrl('api/applet/patient/UserCard/BindHealthCard'),data)
 }
 export const fetchCardInfoByHealthCode = (data: {healthCode: string}) => {
   return Post(fullUrl('api/applet/patient/UserCard/BindHealthCodeInfo'),data)
 }
 export const fetchNationalities = () => {
   return Post(fullUrl('api/applet/patient/UserCard/GetNationalitieList'))
+}
+export const fetchUserInfoByHealthCode = (data: {healthCode: string}) => {
+  return Post(fullUrl('api/applet/patient/UserCard/BindHealthCodeInfo?healthCode=' + data.healthCode),data) 
 }

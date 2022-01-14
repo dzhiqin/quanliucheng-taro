@@ -3,13 +3,15 @@ import * as Taro from '@tarojs/taro'
 
 Page({
   onLoad(options) {
-    this.setData({toPage: options.page || ''})
+    this.setData({
+      nextPage: options.nextPage || '',
+      cardId: options.cardId
+    })
   },
   onCancel() {
     Taro.navigateBack()
   },
   authFail() {
-    console.log('auth faile');
     Taro.showToast({
       title: '授权失败！',
     })
@@ -20,18 +22,13 @@ Page({
     })
   },
   authSuccess(data) {
-    console.log('authsuccess',data);
     let res = data.detail
     Taro.setStorageSync('wechatCode', res.result.wechatCode)
-    // if(this.data.toPage === 'cards'){
-    //   Taro.navigateTo({
-    //     url: '/pages/bind-pack/elec-healthcard-users/elec-healthcard-users?back=2',
-    //   })
-    // }else{
-    //   Taro.navigateTo({
-    //     url: '/pages/bind-pack/bind-card/bind-card?wechatCode=' + res.result.wechatCode,
-    //   })
-    // }
-    Taro.navigateTo({url: '/pages/bind-pack/elec-healthcard-users/elec-healthcard-users'})
+    if(this.data.nextPage){
+      Taro.setStorageSync('upgradeCardId',this.data.cardId)
+      Taro.navigateBack()
+    }else{
+      Taro.redirectTo({url: '/pages/bind-pack/elec-healthcard-users/elec-healthcard-users'})
+    }
   }
 })

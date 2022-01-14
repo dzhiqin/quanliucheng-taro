@@ -5,7 +5,6 @@ import {Card} from '../interfaces/card'
 
 export default {
   add: (card: Card)=> {
-    console.log('add');
     let cards = Taro.getStorageSync('cards')
     const item = cards.find((i) => i.id === card.id)
     if(item){
@@ -41,6 +40,8 @@ export default {
           }
           cards.splice(index,1)
           Taro.setStorageSync('cards',cards)
+        }else{
+          reject(res.message)
         }
       }).catch(err => {
         reject(err)
@@ -84,12 +85,18 @@ export default {
    
   },
   updateAllCards: () => {
-    fetchHealthCards().then(res => {
-      if(res.resultCode === 0){
-        const cards = res.data
-        Taro.setStorageSync('cards',cards)
-      }
+    return new Promise((resolve,reject) => {
+      fetchHealthCards().then(res => {
+        if(res.resultCode === 0){
+          const cards = res.data
+          Taro.setStorageSync('cards',cards)
+          resolve('ok')
+        }else{
+          reject(res.message)
+        }
+      })
     })
+    
   },
   saveCards (value: any) {
     return new Promise((resolve,reject)=>{

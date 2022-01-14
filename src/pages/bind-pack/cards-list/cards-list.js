@@ -6,7 +6,8 @@ import noCardPng from '@/images/no_card.png'
 import custom from '@/custom/'
 import Card from './card'
 import './cards-list.less'
-import { toastService } from '@/service/toast-service'
+import { loadingService, toastService } from '@/service/toast-service'
+import { TaroNavToYiBao } from '@/service/api'
 
 export default class CardList2 extends React.Component {
   constructor(props){
@@ -48,12 +49,9 @@ export default class CardList2 extends React.Component {
     Taro.navigateTo({url: '/pages/bind-pack/bind-card/bind-card'})
   }
   navToYiBao() {
-    Taro.navigateBackMiniProgram({
-      appId: 'wxe1022cca111d18be',
-      path: 'pages/cert/bind/bind?from=AAHTx-oeOuLWz2nBYKez06kN&cityid=440100',
-      success() {
-        console.log('打开医保小程序成功');
-      }
+    loadingService(true,'即将跳转……')
+    TaroNavToYiBao(() => {
+      loadingService(false)
     })
   }
   render(){
@@ -80,7 +78,7 @@ export default class CardList2 extends React.Component {
               </View>
             </health-card-btn>
           }
-          {
+          {/* {
             custom.feat.bindCard.electronicHealthCard 
               ?
             <health-card-btn onlogin={this.onLoginResult.bind(this)}>
@@ -88,10 +86,11 @@ export default class CardList2 extends React.Component {
             </health-card-btn> 
               : 
             <BkButton title='添加健康卡' theme='info' onClick={this.navToBindCard} style='width: 480rpx; margin-bottom: 20rpx' />
-          }
+          } */}
+          <BkButton title='添加健康卡' theme='info' onClick={this.navToBindCard} style='width: 480rpx; margin-bottom: 20rpx' />
           {
             custom.feat.bindCard.bindYiBaoCard && 
-            <BkButton title='绑定医保卡' onClick={this.navToYiBao} style='width: 480rpx;margin-bottom: 20rpx' />
+            <BkButton title='医保卡绑定' onClick={this.navToYiBao} style='width: 480rpx;margin-bottom: 20rpx' />
           }
 
         </View>

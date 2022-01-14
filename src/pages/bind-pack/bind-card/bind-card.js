@@ -9,7 +9,7 @@ import {
 } from '@/utils'
 import { taroSubscribeMessage } from '@/service/api/taro-api'
 import SubscribeNotice from '@/components/subscribe-notice/subscribe-notice'
-import { createCard } from '@/service/api'
+import { createCard, fetchNationalities, fetchUserInfoByHealthCode, TaroGetLocation } from '@/service/api'
 import cardsHealper from '@/utils/cards-healper'
 import { loadingService, toastService } from '@/service/toast-service'
 import './bind-card.less'
@@ -48,20 +48,51 @@ export default class BindCard extends React.Component {
     }
     
   }
-
+  
   componentDidMount() {
     idenTypeOptions.forEach(item => this.state.idenTypeNames.push(item.name))
-    // const currentDate = humanDate(new Date())
-    // this.setState({currentDate})
     this.setState({
       bindCardConfig: custom.feat.bindCard,
-      card: {
-        ...this.state.card,
-        idenType: idenTypeOptions[0].id
-      }
     })
+    const healthCode = Taro.getStorageSync('healthCode')
+    if(healthCode){
+      loadingService(true)
+      fetchUserInfoByHealthCode({healthCode}).then(res => {
+        if(res.resultCode === 0){
+          loadingService(false)
+          Taro.removeStorageSync('healthCode')
+          const data = res.data
+          this.setState({
+            card: {
+              ...this.state.card,
+              patientName: data.name,
+              idenType: 0,  // 健康卡平台返回的身份证类型idType=‘01’，和代码里的设置不匹配，这里默认给0
+              idenNo: data.idCard,
+              gender: data.gender,
+              birthday: data.birthday,
+              phone: data.phone1 || data.phone2,
+              address: data.address,
+              qrCodeText: data.qrCodeText,
+              // nationality: data.nation, // nation对应的是民族，不是国籍
+              idenType: idenTypeOptions[0].id
+            },
+            selectedDate: data.birthday,
+            currentGenderValue: data.gender
+          })
+        }else{
+          toastService({title: ''+res.message})
+        }
+      })
+    }else{
+      this.setState({
+        card: {
+          ...this.state.card,
+          idenType: idenTypeOptions[0].id
+        }
+      })
+    }
   }
-
+ 
   onSubmit() {
     const {result,msg}= this.formValidator()
     if(result){
@@ -81,23 +112,29 @@ export default class BindCard extends React.Component {
   }
   handleCreateCard() {
     loadingService(true)
-    createCard(this.buildCardParams()).then(res => {
+    createCard(this.buildCardParams())
+    .then(res => {
       if(res.resultCode === 0){
-        loadingService(false)
-        const card = res.data
-        cardsHealper.add(card)
+        cardsHealper.updateAllCards().then(() => {
+          toastService({title: '创建成功', icon: 'success', onClose: () => Taro.navigateBack()})
+        })
       }else{
         let msg = ''
         if (/成功创建患者档案信息/.test(res.message)) {
           msg = '健康卡创建失败，但诊疗卡创建成功且支持挂号'
-          cardsHealper.updateAllCards()
-          toastService({title: msg,onClose:()=> Taro.navigateTo({url: '/pages/bind-pack/cards-list/cards-list'})})
+          cardsHealper.updateAllCards().then(() => {
+            toastService({title: msg,onClose:()=> Taro.navigateBack()})
+          })
         }else{
           msg = res.message
           toastService({title: msg})
         }
       }
-      console.log('create card', res);
+    })
+    .catch(err => {
+      loadingService(false)
+      // console.log('绑卡失败',err);
+      toastService({title: ''+err})
     })
   }
   buildCardParams() {
@@ -106,7 +143,6 @@ export default class BindCard extends React.Component {
       ...card,
       isHaveCard: card.hasHospitalCard,
     }
-
     return params
   }
   formValidator() {
@@ -125,7 +161,7 @@ export default class BindCard extends React.Component {
         if(!card.hasHospitalCard && key === 'hospitalCardNo') continue
         if(this.state.currentIdenTypeValue !== '儿童(无证件)' && (key === 'parentName' || key === 'parentId')) continue
         if(key ==='wechatCode') continue
-        msg = validateMessages[keys[i]]
+        msg = validateMessages[keys[i]] || key + '的值不能为空'
         result = false
         break
       }
@@ -142,7 +178,6 @@ export default class BindCard extends React.Component {
         msg = '请输入正确的出生日期'
       }
     }
-    console.log('result validator',{result,msg});
     return {result, msg}
   }
   handleCardChange (stateName,value) {
@@ -211,6 +246,42 @@ export default class BindCard extends React.Component {
   }
   onScanResult(e) {
     console.log('scanresult',e.mpEvent.detail)
+    const data = e.mpEvent.detail
+    this.setState({
+      card: {
+        ...this.state.card,
+        patientName: data.name.text,
+        idenNo: data.id.text,
+        address: data.address.text,
+        gender: data.gender.text,
+        birthday: data.birth.text
+      },
+      selectedDate: data.birth.text,
+      currentGenderValue: data.gender.text
+    })
+  }
+  getAddressFromMap() {
+    loadingService(true)
+    TaroGetLocation({type: 'wgs84'}).then(res => {
+      loadingService(false)
+      Taro.chooseLocation({
+        latitude: res.latitude,
+        longitude: res.longitude,
+        success: (data) => {
+          this.setState({
+            card:{
+              ...this.state.card,
+              address: data.address + data.name
+            }
+          })
+        },
+        fial: (err) => {
+          toastService({title: ''+err})
+        }
+      })
+    }).catch(err => {
+      toastService({title: ''+err})
+    })
   }
   render() {
     return (
@@ -244,7 +315,7 @@ export default class BindCard extends React.Component {
             <AtInput 
               name='idenNo' 
               title='证件号码' 
-              type='text' 
+              type='number' 
               placeholder='请输入证件号码' 
               value={this.state.card.idenNo} 
               onChange={this.handleCardChange.bind(this,'idenNo')} 
@@ -296,7 +367,7 @@ export default class BindCard extends React.Component {
             value={this.state.card.address} 
             onChange={this.handleCardChange.bind(this,'address')}
           >
-            <AtIcon value='map-pin' size='20' color='#56A1F4'></AtIcon>
+            <AtIcon value='map-pin' size='20' color='#56A1F4' onClick={this.getAddressFromMap.bind(this)}></AtIcon>
           </AtInput>
 
           {

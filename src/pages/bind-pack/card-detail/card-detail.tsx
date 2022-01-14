@@ -47,8 +47,18 @@ export default function CardDetail(props: any) {
   const handleUnBind = () => {
     setBusy(true)
     cardsHealper.delete(Number(card.id)).then(res => {
-      toastService({title: '解绑成功', onClose: () =>{Taro.navigateBack()} })
+      Taro.showToast({
+        title: '解绑成功',
+        icon: 'success',
+        complete: () => {
+          setTimeout(() => {
+            Taro.navigateBack()
+          }, 2000)
+        }
+      })
       setBusy(false)
+    }).catch(err => {
+      toastService({title: err+''})
     })
   }
   

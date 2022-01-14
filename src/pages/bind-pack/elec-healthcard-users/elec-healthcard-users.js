@@ -17,29 +17,14 @@ Page({
     let data = result.detail || {}
     if(data.healthCode){
       Taro.setStorageSync('healthCode', data.healthCode)
-    }
-    if (this.data.fromPage) {
       healthCardLogin().then(res => {
-        Taro.navigateTo({
-          url: '/pages/bind-pack/bind-card/bind-card?fromPage=2&wechatCode=' + res.result.wechatCode,
-        })
-      })
-    }else{
-      if (!this.data.toPage) {
-        Taro.navigateBack({
-          delta: 1,
-        })
-        return
-      }
-      healthCardLogin().then(res => {
-        // this.pageChange(res.result.wechatCode)
+        Taro.redirectTo({url: '/pages/bind-pack/bind-card/bind-card?wechatCode='+res.result.wechatCode})
       })
     }
   },
   addCard(){
     healthCardLogin().then(res => {
-      console.log('health card login',res);
-      Taro.navigateTo({
+      Taro.redirectTo({
         url: '/pages/bind-pack/bind-card/bind-card?wechatCode=' + res.result.wechatCode,
       })
     })

@@ -72,11 +72,11 @@ export const TaroRequestPayment = (params: paymentParams) => {
     })
   })
 }
-export const TaroGetLocation = () => {
+export const TaroGetLocation = (option:{type: 'gcj02' | 'wgs84'}) => {
   return new Promise((resolve,reject) => {
     try{
       Taro.getLocation({
-        type: 'gcj02',
+        type: option.type,
         isHighAccuracy: true,
         success: (res) => {resolve(res)},
         fail: (res) => {reject(res)}
@@ -98,7 +98,17 @@ export const TaroNavToZhongXun = (execRoom) => {
     }
   })
 }
-
+export const TaroNavToYiBao = (callback) => {
+  // 跳转到医保小程序
+  Taro.navigateToMiniProgram({
+    appId: 'wxe1022cca111d18be',
+    path: 'pages/cert/bind/bind?from=AAHTx-oeOuLWz2nBYKez06kN&cityid=440100',
+    success(res){
+      console.log(res)
+      callback()
+    }
+  })
+}
 export const TaroNavToMiniProgram = (data:{appId: string, path: string}) => {
   return new Promise((resolve,reject)=>{
     Taro.navigateToMiniProgram({
@@ -150,6 +160,7 @@ const handleConfirm = async () => {
     Taro.navigateTo({url: '/pages/login/login'})
   }else{
     toastService({title: '由于您没有选择接受订阅消息，导致无法正常使用本小程序，请重新登录'})
+    TaroRemindLoginModal()
   }
 }
 export const TaroRemindLoginModal = () => {
