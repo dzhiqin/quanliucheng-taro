@@ -70,7 +70,11 @@ export default {
     let cards = Taro.getStorageSync('cards')
     let card:Card = null
     if(cards && cards.length > 0){
-      card = cards.find(i => i.isDefault) || cards[0]
+      card = cards.find(i => i.isDefault)
+      if(!card){
+        card = cards[0]
+        setDefaultCard({id: card.id}) // 如果没有默认卡，自动设置第一张卡片为默认
+      }
     }else{
       Taro.showModal({
         content: '请先绑卡',

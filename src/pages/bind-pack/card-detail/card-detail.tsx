@@ -1,6 +1,6 @@
 import * as Taro from '@tarojs/taro'
 import * as React from 'react'
-import { View } from '@tarojs/components'
+import { View, Image } from '@tarojs/components'
 import BkPanel from '@/components/bk-panel/bk-panel'
 import BkButton from '@/components/bk-button/bk-button'
 import {  useReady } from '@tarojs/taro'
@@ -9,6 +9,7 @@ import { AtSwitch } from 'taro-ui'
 import cardsHealper from '@/utils/cards-healper'
 import './card-detail.less'
 import { toastService } from '@/service/toast-service'
+import nrhcPng from '@/images/icons/nrhc.png'
 
 export default function CardDetail(props: any) {
   const [busy,setBusy] = useState(false)
@@ -64,6 +65,16 @@ export default function CardDetail(props: any) {
   
   return(
     <View className='card-detail'>
+      {
+        card.qrCode && 
+        <BkPanel style='margin-bottom: 40rpx'>
+          <View className='card-wrap'>
+            <Image src={`data:image/jpg;base64,${card.qrCode}`} className='card-image' />
+            <Image src={nrhcPng} className='card-icon' />
+          </View>
+          <View className='card-tips'>出诊时出示此二维码</View>
+        </BkPanel>
+      }
       <BkPanel>
         <View className='card-item'>
           <View>姓名</View>
