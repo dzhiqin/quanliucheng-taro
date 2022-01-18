@@ -23,6 +23,15 @@ export default function Clinics() {
   const [currentDept,setCurrentDept] = useState(0)
   const hospitalInfo = Taro.getStorageSync('hospitalInfo')
   
+  Taro.useReady(() => {
+    const isReg = Taro.getStorageSync('isReg')
+    if(isReg === '0'){
+      Taro.setNavigationBarTitle({title: '预约挂号'})
+    }
+    if(isReg === '1'){
+      Taro.setNavigationBarTitle({title: '当天挂号'})
+    }
+  })
   useEffect(() => {
     fetchPreviousVisits().then(result => {
       if(result.resultCode === 0){

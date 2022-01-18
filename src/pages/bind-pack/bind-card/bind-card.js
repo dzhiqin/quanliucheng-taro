@@ -18,6 +18,7 @@ export default class BindCard extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
+      busy: false,
       showNotice: false,
       currentIdenTypeIndex: 0,
       currentIdenTypeValue: '身份证',
@@ -94,6 +95,7 @@ export default class BindCard extends React.Component {
   }
  
   onSubmit() {
+    this.setState({busy: true})
     const {result,msg}= this.formValidator()
     if(result){
       taroSubscribeMessage(
@@ -104,6 +106,7 @@ export default class BindCard extends React.Component {
         () => {this.setState({showNotice: true})
       })
     }else{
+      this.setState({busy: false})
       Taro.showToast({
         title: msg,
         icon: 'none'
@@ -128,12 +131,13 @@ export default class BindCard extends React.Component {
         }else{
           msg = res.message
           toastService({title: msg})
+          this.setState({busy: false})
         }
       }
     })
     .catch(err => {
+      this.setState({busy: false})
       loadingService(false)
-      // console.log('绑卡失败',err);
       toastService({title: ''+err})
     })
   }
@@ -143,6 +147,7 @@ export default class BindCard extends React.Component {
       ...card,
       isHaveCard: card.hasHospitalCard,
     }
+    // console.log('buildparams', params);
     return params
   }
   formValidator() {
@@ -245,7 +250,6 @@ export default class BindCard extends React.Component {
     this.handleCardChange('maritalStatus',value)
   }
   onScanResult(e) {
-    console.log('scanresult',e.mpEvent.detail)
     const data = e.mpEvent.detail
     this.setState({
       card: {
@@ -457,7 +461,7 @@ export default class BindCard extends React.Component {
           }
           
           <View style='padding: 60rpx;'>
-            <AtButton type='primary' circle onClick={this.onSubmit.bind(this)}>立即绑定</AtButton>
+            <AtButton type='primary' loading={this.state.busy} circle onClick={this.onSubmit.bind(this)}>立即绑定</AtButton>
           </View>
         </AtForm>
       </View>

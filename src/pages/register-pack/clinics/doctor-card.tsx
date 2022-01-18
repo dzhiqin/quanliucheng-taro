@@ -6,7 +6,8 @@ import './clinics.less'
 
 export default function DoctorCard(props) {
   const onClick = () => {
-    Taro.navigateTo({url: '/pages/register-pack/doctor-detail/doctor-detail?doctorId=' + props.doctor.doctorId})
+    Taro.setStorageSync('deptInfo',{deptId: props.doctor.deptId, deptName: props.doctor.deptName})
+    Taro.navigateTo({url: `/pages/register-pack/doctor-detail/doctor-detail?doctorId=${props.doctor.doctorId}`})
   }
   return(
     <View className='doctor-card' onClick={onClick}>

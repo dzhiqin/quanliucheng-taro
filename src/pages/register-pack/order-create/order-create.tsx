@@ -3,7 +3,6 @@ import * as React from 'react'
 import { View, Picker } from '@tarojs/components'
 import { useDidShow } from '@tarojs/taro'
 import HealthCards from '@/components/health-cards/health-cards'
-import './order-create.less'
 import { useState,useEffect } from 'react'
 import BkPanel from '@/components/bk-panel/bk-panel'
 import BkButton from '@/components/bk-button/bk-button'
@@ -15,6 +14,7 @@ import { requestTry } from '@/utils/retry'
 import ResultPage from '@/components/result-page/result-page'
 import { onetimeTemplates } from '@/utils/templateId'
 import SubscribeNotice from '@/components/subscribe-notice/subscribe-notice'
+import './order-create.less'
 
 export default function OrderCreate() {
   const [order,setOrder] = useState({

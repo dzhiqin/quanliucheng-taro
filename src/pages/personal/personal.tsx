@@ -9,8 +9,8 @@ import orderBluePng from '@/images/icons/order_blue.png'
 import orderYellowPng from '@/images/icons/order_yellow.png'
 import orderGreenPng from '@/images/icons/order_green.png'
 import healthCardPng from '@/images/icons/health_card.png'
-import './personal.less'
 import { TaroRemindLoginModal } from '@/service/api'
+import './personal.less'
 
 export default function Personal() {
   const [cards,setCards] = useState()

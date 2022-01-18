@@ -18,8 +18,8 @@ import {
 } from '@/service/api'
 import cardsHealper from '@/utils/cards-healper'
 import './payment-detail.less'
-import BkPanel from '@/components/bk-panel/bk-panel'
 import { useState } from 'react'
+import BkPanel from '@/components/bk-panel/bk-panel'
 import BkButton from '@/components/bk-button/bk-button'
 import sighPng from '@/images/icons/sigh.png'
 import { onetimeTemplates } from '@/utils/templateId'
@@ -102,6 +102,7 @@ export default function PaymentDetail() {
           payOrderById(res.data.orderId,type)
         }else{
           toastService({title: '创建订单失败' + res.message})
+          setBusy(false)
         }
       })
     }
@@ -216,30 +217,36 @@ export default function PaymentDetail() {
   const handleCancel = () => {
     Taro.showLoading({title: '取消中……',mask:true})
     setBusy(true)
-    handleHeSuanRefund({orderId: orderInfo.orderId}).then(res => {
+    handleHeSuanRefund({orderId: orderInfo.orderId})
+    .then(res => {
       if(res.resultCode === 0){
         toastService({title: '取消成功', onClose: () => {Taro.navigateBack()}})
       }else{
         toastService({title: '取消失败：' + res.message})
       }
-    }).finally(() => {
+    })
+    .finally(() => {
       setBusy(false)
-      Taro.hideLoading()
     })
   }
   useDidShow(() => {
     if(_orderId){
       setBusy(true)
-      Taro.showLoading({title: '正在查询订单状态'})
-      requestTry(checkOrderStatus.bind(null,_orderId)).then(checkRes => {
+      loadingService(true,'正在查询……')
+      requestTry(checkOrderStatus.bind(null,_orderId))
+      .then(checkRes => {
         setPayResult(resultEnum.success)
         setPayResultMsg('缴费成功')
-      }).catch(()=>{
+      })
+      .catch(()=>{
         setPayResult(resultEnum.fail)
         setPayResultMsg('缴费失败，所缴金额将原路退回')
         setBusy(false)
-      setOrderId('')
-      }).finally(() => { setOrderId('');Taro.hideLoading() })
+      })
+      .finally(() => { 
+        setOrderId('');
+        loadingService(false)
+      })
     }
   })
   useReady(() => {

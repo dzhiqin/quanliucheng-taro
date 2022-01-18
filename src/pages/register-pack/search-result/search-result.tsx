@@ -4,11 +4,11 @@ import { View } from '@tarojs/components'
 import { useDidShow, useRouter } from '@tarojs/taro';
 import { useState } from 'react';
 import { fetchDeptsOrDoctors } from '@/service/api';
-import './search-result.less'
 import { AtSearchBar } from 'taro-ui';
 import { toastService } from '@/service/toast-service';
 import BkTitle from '@/components/bk-title/bk-title';
 import BkPanel from '@/components/bk-panel/bk-panel';
+import './search-result.less'
 
 export default function SearchResult() {
   const router = useRouter()

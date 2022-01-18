@@ -26,6 +26,7 @@ export default function HealthCards(props: any) {
       setLoginStatus(true)
     }
     const cardsList = Taro.getStorageSync('cards')
+    // console.log('cardslist',cardsList);
     setCards(cardsList)
     for(let i =0;i< cardsList.length;i++){
       if(cardsList[i].isDefault){

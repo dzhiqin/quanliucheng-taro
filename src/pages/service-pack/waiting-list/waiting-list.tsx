@@ -2,14 +2,14 @@ import * as React from 'react'
 import * as Taro from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import HealthCards from '@/components/health-cards/health-cards'
+import BkNone from '@/components/bk-none/bk-none'
 import BkPanel from '@/components/bk-panel/bk-panel'
 import { AtButton } from 'taro-ui'
-import './waiting-list.less'
 import { useState } from 'react'
 import { getWaitingList } from '@/service/api'
 import { humanDate } from '@/utils/format'
 import { toastService } from '@/service/toast-service'
-import BkNone from '@/components/bk-none/bk-none'
+import './waiting-list.less'
 
 export default function BindingCard() {
   const [loading,setLoading] = useState(false)

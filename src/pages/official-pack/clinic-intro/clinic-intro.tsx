@@ -4,11 +4,10 @@ import { View, Image } from '@tarojs/components'
 import { useEffect,useState } from 'react'
 import { fetchClinicDoctors, fetchClinicIntro } from '@/service/api'
 import { toastService } from '@/service/toast-service'
-import { AtTabs , AtList, AtListItem } from 'taro-ui'
+import { AtTabs } from 'taro-ui'
 import './clinic-intro.less'
 import BkNone from '@/components/bk-none/bk-none'
 import BkPanel from '@/components/bk-panel/bk-panel'
-import defaultAvatar from '@/images/default_doctor.png'
 
 export default function ClinicIntro() {
   const router = Taro.useRouter()

@@ -9,10 +9,10 @@ import HealthCards from '@/components/health-cards/health-cards'
 import BkTabs from '@/components/bk-tabs/bk-tabs'
 import BkPanel from '@/components/bk-panel/bk-panel'
 import BkNone from '@/components/bk-none/bk-none'
-import './reports-list.less'
 import { humanDateAndTime } from '@/utils/format'
 import { loadingService, toastService } from '@/service/toast-service'
 import cardsHealper from '@/utils/cards-healper'
+import './reports-list.less'
 
 export default function ReportList() {
   const router = useRouter()

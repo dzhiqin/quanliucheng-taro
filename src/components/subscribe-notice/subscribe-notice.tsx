@@ -14,7 +14,7 @@ export default function SubscribeNotice(props: {show: boolean}) {
   if(show) {
     return (
       <View className='subscribe-notice'>
-        <Image src={subscribeNoticeImg}></Image>
+        <Image src={subscribeNoticeImg} className='subscribe-notice-image'></Image>
       </View>
     )
   }else{

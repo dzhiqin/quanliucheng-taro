@@ -10,14 +10,14 @@ import BkNone from '@/components/bk-none/bk-none'
 import BkTabs from '@/components/bk-tabs/bk-tabs'
 import { orderPayType_CN, orderSearchType_EN , orderStatus_CN, orderStatus_EN } from '@/enums/index'
 import BkPanel from '@/components/bk-panel/bk-panel'
-import './order-list.less'
-import BkPrice from '@/components/bk-price/bk-price'
 import BkButton from '@/components/bk-button/bk-button'
+import BkPrice from '@/components/bk-price/bk-price'
 import { onetimeTemplates } from '@/utils/templateId'
 import SubscribeNotice from '@/components/subscribe-notice/subscribe-notice'
 import cardsHealper from '@/utils/cards-healper'
 import { Card } from 'src/interfaces/card'
 import { requestTry } from '@/utils/retry'
+import './order-list.less'
 
 const tabs = [{title: '15日内订单',value: 'current'},{title: '历史订单',value: 'history'}]
 export default function OrderList(){

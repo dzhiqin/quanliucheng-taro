@@ -1,7 +1,6 @@
 import * as React from 'react'
 import * as Taro from '@tarojs/taro'
 import { View } from '@tarojs/components'
-import './arrival.less'
 import HealthCards from '@/components/health-cards/health-cards'
 import { AtButton } from 'taro-ui'
 import { useState } from 'react'
@@ -9,10 +8,11 @@ import { fetchCheckInInfo, fetchOfficialContent, TaroGetLocation,handleCheckIn, 
 import BkNone from '@/components/bk-none/bk-none'
 import BkTitle from '@/components/bk-title/bk-title'
 import BkPanel from '@/components/bk-panel/bk-panel'
+import BkButton from '@/components/bk-button/bk-button'
 import { computeDistanceFromLatLong } from '@/utils/tools'
 import { loadingService, toastService } from '@/service/toast-service'
-import BkButton from '@/components/bk-button/bk-button'
 import custom from '@/custom/index'
+import './arrival.less'
 
 export default function BindingCard() {
   const [loading,setLoading] = useState(false)
