@@ -8,7 +8,7 @@ import { createPaymentOrder, fetchPaymentOrderList , subscribeService , PayOrder
 import { loadingService, toastService } from '@/service/toast-service'
 import BkNone from '@/components/bk-none/bk-none'
 import BkTabs from '@/components/bk-tabs/bk-tabs'
-import { orderPayType_CN, orderSearchType_EN , orderStatus_CN, orderStatus_EN } from '@/enums/index'
+import { payType_CN, orderSearchType_EN , orderStatus_CN, orderStatus_EN } from '@/enums/index'
 import BkPanel from '@/components/bk-panel/bk-panel'
 import BkButton from '@/components/bk-button/bk-button'
 import BkPrice from '@/components/bk-price/bk-price'
@@ -73,7 +73,7 @@ export default function OrderList(){
       }else{
         console.log('data',res.data)
         const {nonceStr, paySign, signType, timeStamp, pay_appid, pay_url} = res.data
-        if(payType === orderPayType_CN.医保){
+        if(payType === payType_CN.医保){
           Taro.showLoading({title: '正在打开医保小程序'})
           Taro.navigateToMiniProgram({
             appId: pay_appid,
@@ -118,7 +118,7 @@ export default function OrderList(){
       })
     })
   }
-  const buildPaymentParams = (type: orderPayType_CN, orderInfo: any) => {
+  const buildPaymentParams = (type: payType_CN, orderInfo: any) => {
     const paymentParams: PayOrderParams ={
       patientId: card.patientId,
       clinicNo: orderInfo.clinicNo,
@@ -189,10 +189,13 @@ export default function OrderList(){
                   <View className='order-list-item-title flat-title'>就诊科室:</View>
                   <View className='order-list-item-text'>{item.orderDept}</View>
                 </View>
-                <View className='order-list-item'>
-                  <View className='order-list-item-title flat-title'>就诊医生:</View>
-                  <View className='order-list-item-text'>{item.orderDoctor}</View>
-                </View>
+                {
+                  item.orderDoctor && 
+                  <View className='order-list-item'>
+                    <View className='order-list-item-title flat-title'>就诊医生:</View>
+                    <View className='order-list-item-text'>{item.orderDoctor}</View>
+                  </View>
+                }
                 <View className='order-list-item'>
                   <View className='order-list-item-title flat-title'>总金额:</View>
                   <BkPrice value={item.prescMoney} symbol style='margin-left: 40rpx' />
@@ -200,11 +203,11 @@ export default function OrderList(){
                 <View className='flex-around'>
                   {
                     item.orderState === orderStatus_EN.unpay &&
-                    <BkButton theme='info' icon='icons/wechat.png' title='微信支付' disabled={busy} onClick={dealWithPay.bind(null,orderPayType_CN.自费,item)} />
+                    <BkButton theme='info' icon='icons/wechat.png' title='微信支付' disabled={busy} onClick={dealWithPay.bind(null,payType_CN.微信,item)} />
                   }
                   {
-                    item.orderState === orderStatus_EN.unpay && item.orderType === orderPayType_CN.医保 &&
-                    <BkButton theme='primary' icon='icons/wechat.png' title='医保支付' disabled={busy} onClick={dealWithPay.bind(null,orderPayType_CN.医保,item)} />
+                    item.orderState === orderStatus_EN.unpay && item.orderType === payType_CN.医保 &&
+                    <BkButton theme='primary' icon='icons/wechat.png' title='医保支付' disabled={busy} onClick={dealWithPay.bind(null,payType_CN.医保,item)} />
                   }
                 </View>
               </BkPanel>  

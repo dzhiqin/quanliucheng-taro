@@ -29,9 +29,15 @@ export enum pactCode_EN {
   'selfPay' = '1',
   'YiBao' = '3'
 }
-export enum orderPayType_CN {
-  '自费' = '0',
-  '医保' = '1'
+export enum orderType_CN {
+  '自费单' = '0',
+  '医保单' = '1',
+  '自助单' = '3'
+}
+export enum payType_CN {
+  '微信' = '0',
+  '医保' = '1',
+  '支付宝' = '2'
 }
 export enum orderStatus_EN {
   unpay = 0,

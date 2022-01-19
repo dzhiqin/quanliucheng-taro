@@ -1,5 +1,5 @@
 
-const hospName = 'li_wan_guang_san'
+const hospName = 'guang_san_li_wan'
 const hospConfig = require(`./hosp-config/${hospName}`)
 const config = hospConfig.default
 

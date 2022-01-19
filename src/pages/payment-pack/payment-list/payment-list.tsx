@@ -10,6 +10,7 @@ import { useState } from 'react'
 import BkNone from '@/components/bk-none/bk-none'
 import './payment-list.less'
 import BkPrice from '@/components/bk-price/bk-price'
+import { payStatus_EN } from '@/enums/index'
 
 export default function PaymentList() {
   const [list, setList] = useState([])
@@ -31,6 +32,7 @@ export default function PaymentList() {
   const handleClick = (item) => {
     // console.log(item);
     // 缴费单的信息要从列表带过去
+    item.payState = payStatus_EN.unpay  // 默认未支付状态
     Taro.navigateTo({url: `/pages/payment-pack/payment-detail/payment-detail?orderInfo=${JSON.stringify(item)}`})
   }
   return(

@@ -24,7 +24,7 @@ import BkButton from '@/components/bk-button/bk-button'
 import sighPng from '@/images/icons/sigh.png'
 import { onetimeTemplates } from '@/utils/templateId'
 import SubscribeNotice from '@/components/subscribe-notice/subscribe-notice'
-import { orderPayType_CN, orderStatus_EN, pactCode_EN, payStatus_EN } from '@/enums/index'
+import { payType_CN, orderStatus_EN, pactCode_EN, payStatus_EN, orderType_CN } from '@/enums/index'
 import { loadingService, toastService } from '@/service/toast-service'
 import { requestTry } from '@/utils/retry'
 import ResultPage from '@/components/result-page/result-page'
@@ -43,7 +43,7 @@ interface OrderInfoParams {
   recipeSeq: string,
   orderDept: string,
   orderDoctor: string,
-  orderType: orderPayType_CN | string,
+  orderType: orderType_CN | string,
   prescMoney: string,
   serialNo: string,
   payState?: payStatus_EN
@@ -63,7 +63,7 @@ export default function PaymentDetail() {
     recipeSeq: '',
     orderDept: '',
     orderDoctor: '',
-    orderType: orderPayType_CN.自费,
+    orderType: orderType_CN.自费单,
     prescMoney: '',
     serialNo: '',
     payState: payStatus_EN.unpay
@@ -96,7 +96,7 @@ export default function PaymentDetail() {
       payOrderById(orderInfo.orderId,type)
     }else{
       createPaymentOrder(buildPaymentParams(type)).then(res => {
-        console.log('create order',res);
+        // console.log('create order',res);
         if(res.resultCode === 0){
           setOrderId(res.data.orderId)
           payOrderById(res.data.orderId,type)
@@ -126,21 +126,23 @@ export default function PaymentDetail() {
     Taro.showLoading({title: '支付中……'})
     handlePayment({orderId: id, payType: payType}).then(res => {
       if(res.popUpCode === 3){
+        loadingService(false)
         navToOtherWeapp(res.message)
       }else if(res.resultCode === 0 && !res.data){
         setPayResult(resultEnum.success)
         setPayResultMsg('提交订单成功，还未支付')
+        loadingService(false)
       }else{
-        console.log('提交订单：',res.data)
         const {nonceStr, paySign, signType, timeStamp, pay_appid, pay_url} = res.data
-        if(payType === orderPayType_CN.医保){
-          Taro.showLoading({title: '正在打开医保小程序'})
+        if(payType === payType_CN.医保){
+          loadingService(true,'正在跳转')
           Taro.navigateToMiniProgram({
             appId: pay_appid,
             path: pay_url,
             success: () => Taro.hideLoading()
           })
         }else{
+
           Taro.requestPayment({
             nonceStr,
             paySign,
@@ -154,23 +156,32 @@ export default function PaymentDetail() {
               // 取消缴费
               cancelPayment({orderId:id})
               setBusy(false)
+              loadingService(false)
             },
             success: (result) => {
-              requestTry(checkOrderStatus.bind(null,id)).then(checkRes => {
+              loadingService(false)
+              loadingService(true,'正在查询')
+              requestTry(checkOrderStatus.bind(null,id))
+              .then(checkRes => {
                 setPayResult(resultEnum.success)
                 setPayResultMsg('缴费成功')
-              }).catch(()=>{
+              })
+              .catch(()=>{
                 setPayResult(resultEnum.fail)
                 setPayResultMsg('缴费失败，所缴金额将原路退回')
                 setBusy(false)
+              })
+              .finally(() => {
+                loadingService(false)
               })
             }
           })
         }
         
       }
-    }).finally(() => {
+    }).catch((err) => {
       Taro.hideLoading()
+      toastService({title: '支付失败'+err})
     })
   }
   const navToOtherWeapp = (content:string) => {
@@ -182,7 +193,7 @@ export default function PaymentDetail() {
       }
     })
   }
-  const buildPaymentParams = (type: orderPayType_CN) => {
+  const buildPaymentParams = (type: payType_CN) => {
     const paymentParams: PayOrderParams ={
       patientId: card.patientId,
       clinicNo: orderInfo.clinicNo,
@@ -264,7 +275,7 @@ export default function PaymentDetail() {
             recipeSeq: data.recipeSeq,
             orderDept: data.orderDept,
             orderDoctor: data.orderDoctor,
-            orderType: data.pactCode === pactCode_EN.selfPay ? orderPayType_CN.自费 : orderPayType_CN.医保 ,
+            orderType: data.pactCode === pactCode_EN.selfPay ? orderType_CN.自费单 : orderType_CN.医保单 ,
             prescMoney: data.sumMoney,
             serialNo: data.serialNo
           }
@@ -383,10 +394,13 @@ export default function PaymentDetail() {
           </BkPanel>
         }
         <View className='flex-around' style='padding: 40rpx'>
-          <BkButton title='微信支付' icon='icons/wechat.png' theme='info' disabled={busy} onClick={dealWithPay.bind(null,orderPayType_CN.自费)} />
           {
-            orderInfo.orderType === 'YiBao' &&
-            <BkButton title='医保支付' icon='icons/card.png' theme='primary' disabled={busy} onClick={dealWithPay.bind(null,orderPayType_CN.医保)} />
+            orderInfo.payState === payStatus_EN.unpay &&
+            <BkButton title='微信支付' icon='icons/wechat.png' theme='info' disabled={busy} onClick={dealWithPay.bind(null,payType_CN.微信)} />
+          }
+          {
+            orderInfo.payState === payStatus_EN.unpay && orderInfo.orderType === 'YiBao' &&
+            <BkButton title='医保支付' icon='icons/card.png' theme='primary' disabled={busy} onClick={dealWithPay.bind(null,payType_CN.医保)} />
           }
         </View>
         <View className='payment-detail-tips'>
@@ -420,7 +434,7 @@ export default function PaymentDetail() {
           {
             payResult === resultEnum.success &&
             <View>
-              <BkButton theme='primary' title='返回首页' onClick={() => Taro.navigateTo({url: '/pages/index/index'})} />
+              <BkButton theme='primary' title='返回首页' onClick={() => Taro.navigateTo({url: '/pages/index/index'})} style='margin-bottom: 40rpx' />
               <BkButton theme='info' title='查看订单' onClick={() => Taro.navigateTo({url: '/pages/payment-pack/order-list/order-list'})} />
             </View>
           }

@@ -52,13 +52,16 @@ const Request = (
   header?: { 'Content-Type': 'application/x-www-form-urlencoded' }
 ): Promise<HttpResponse> => {
   return new Promise((resolve, reject) => {
+    // const startTime = new Date().valueOf()
     Taro.request({
       method,
       url,
       data,
       header: Object.assign({},header,getHeaderAuth()),
       success: (res: Taro.request.SuccessCallbackResult) => {
+        // const endTime = new Date().valueOf()
         resolve(res.data as HttpResponse)
+        // console.log('request spent: ',endTime - startTime);
       },
       fail: (err: Taro.General.CallbackResult) => {
         toastService({title: '请求失败：' + err})
