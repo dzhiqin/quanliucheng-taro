@@ -3,6 +3,19 @@ import { setDefaultCard, deleteCard, fetchHealthCards } from '@/service/api'
 
 import {Card} from '../interfaces/card'
 
+const updateAllCards = () => {
+  return new Promise((resolve,reject) => {
+    fetchHealthCards().then(res => {
+      if(res.resultCode === 0){
+        const cards = res.data
+        Taro.setStorageSync('cards',cards)
+        resolve('ok')
+      }else{
+        reject(res.message)
+      }
+    })
+  })
+}
 export default {
   add: (card: Card)=> {
     let cards = Taro.getStorageSync('cards')
@@ -74,6 +87,9 @@ export default {
       if(!card){
         card = cards[0]
         setDefaultCard({id: card.id}) // 如果没有默认卡，自动设置第一张卡片为默认
+        .then(() => {
+          updateAllCards()
+        })
       }
     }else{
       Taro.showModal({
@@ -88,20 +104,7 @@ export default {
     return card
    
   },
-  updateAllCards: () => {
-    return new Promise((resolve,reject) => {
-      fetchHealthCards().then(res => {
-        if(res.resultCode === 0){
-          const cards = res.data
-          Taro.setStorageSync('cards',cards)
-          resolve('ok')
-        }else{
-          reject(res.message)
-        }
-      })
-    })
-    
-  },
+  updateAllCards,
   saveCards (value: any) {
     return new Promise((resolve,reject)=>{
       Taro.setStorageSync('cards',value)

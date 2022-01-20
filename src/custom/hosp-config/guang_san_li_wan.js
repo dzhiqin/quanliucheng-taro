@@ -126,20 +126,21 @@ export default {
       electronicHealthCard: true, // 电子健康卡
       parentInfo: false,     // 监护人信息(儿童无证件)
       nationality: true,    // 国籍
-      hospitalCard: true,   // 就诊卡
+      hospitalCard: true,  // 是否有院内就诊卡
       maritalStatus: true, // 婚姻状况
       oneClickAuth: true,    // 一键授权，直接绑定健康卡
       bindYiBaoCard: true, // 绑定医保卡
     },
     register: {
-      bookingAndIntraday:true,
-      popupNotice: false,
-      guangSanMode: true,
-      type: 'embed'
+      bookingAndIntraday:true,// 是否区分当天挂号和预约挂号
+      popupNotice: false,// 挂号提示弹窗
+      guangSanMode: true,// 广三挂号模式：区分当天挂号和预约挂号
+      type: 'embed',// 科室内容排版方式
     },
-    hospitalNavigation: true  // 院内导航
+    hospitalNavigation: true,  // 院内导航
+    ZhuYuanCardName: false, // 住院绑卡是否需要姓名
   },
   reportsPage:{
-    urlDetail: true
+    urlDetail: true // 报告详情页用图片展示
   }
 }

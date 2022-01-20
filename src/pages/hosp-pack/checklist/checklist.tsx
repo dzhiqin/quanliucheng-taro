@@ -3,7 +3,7 @@ import * as Taro from '@tarojs/taro'
 import { View, Image } from '@tarojs/components'
 import SimpleModal from '@/components/simple-modal/simple-modal'
 import { useState } from 'react'
-import { fetchInHospBillList, fetchInHospCards } from '@/service/api'
+import { getInHospBillList, fetchInHospCards, getInHospInfo } from '@/service/api'
 import { loadingService, toastService } from '@/service/toast-service'
 import BkPanel from '@/components/bk-panel/bk-panel'
 import calanderPng from '@/images/icons/calendar.png'
@@ -14,37 +14,69 @@ import BkNone from '@/components/bk-none/bk-none'
 export default function BindingCard() {
   const [showModal,setShowModal] = useState(false)
   const [list,setList] = useState([])
-  Taro.useDidShow(() => {
+  const [cardNo, setCardNo] = useState('')
+  const [registerId, setRegisterId]= useState('')
+  Taro.useReady(() => {
     fetchInHospCards().then(res => {
-      console.log(res);
       if(res.resultCode === 0){
         if(res.data && res.data.length > 0){
+          setShowModal(false)
           const hospCard = res.data.find(i => i.isDefault)
+          setCardNo(hospCard.cardNo)
           getList(hospCard.cardNo)
+          handleGetInHospInfo(hospCard.cardNo)
         }else{
           setShowModal(true)
         }
       }
     })
   })
-  const getList = (cardNo: string) => {
+  const handleGetInHospInfo = (_cardNo: string) => {
+    return new Promise((resolve,reject) => {
+      getInHospInfo({inCardNo: _cardNo})
+      .then(res => {
+        if(res.resultCode === 0){
+          const _registerId = res.data.registerId
+          setRegisterId(_registerId)
+          resolve({result: true, data: _registerId})
+        }else{
+          reject({result: false, data: ''})
+        }
+      })
+      .catch(err => {
+        reject({result: false, data: err})
+      })
+    })
+  }
+  const getList = (_cardNo: string) => {
     loadingService(true)
-    fetchInHospBillList({inCardNo: cardNo}).then(res => {
+    getInHospBillList({inCardNo: _cardNo}).then(res => {
       if(res.resultCode === 0){
-        loadingService(true)
+        loadingService(false)
         setList(res.data.billInfoList)
       }else{
         toastService({title: '' + res.message})
       }
     })
   }
-  const handleClickItem = (item) => {
-    console.log('item',item) 
+  const handleClickItem = async (item) => {
+    let _registerId =''
+    if(!registerId){
+      loadingService(true)
+      const res:any = await handleGetInHospInfo(cardNo)
+      loadingService(false)
+      if(res.result){
+        _registerId = res.data
+      }else{
+        toastService({title: '获取registerId失败'})
+        return
+      }
+    }
+    Taro.navigateTo({url: `/pages/hosp-pack/checklist-detail/checklist-detail?billDate=${item.billDate}&registerId=${registerId? registerId : _registerId}`})
   }
   const handleConfirm = () => {
-    // Taro.navigateTo({url: '/pages/hosp-pack/binding-card/binding-card'})
-    // 广三线下绑卡
-    Taro.navigateBack()
+    Taro.redirectTo({url: '/pages/hosp-pack/binding-card/binding-card'})
+    // Taro.navigateBack()
   }
   return(
     <View className='checklist'>
