@@ -16,109 +16,90 @@ const updateAllCards = () => {
     })
   })
 }
-export default {
-  add: (card: Card)=> {
-    let cards = Taro.getStorageSync('cards')
-    const item = cards.find((i) => i.id === card.id)
-    if(item){
-      cards = cards.map(obj => {
-        if(obj.id === card.id){
-          return Object.assign({},obj,item)
-        }else{
-          return obj
-        }
-      })
-    }else{
-      cards.push(card)
+const saveCards = (value: any) => {
+  return new Promise((resolve,reject)=>{
+    Taro.setStorageSync('cards',value)
+      resolve({success: true})
+  })
+}
+const remove = (_card)=> {
+  let cards = Taro.getStorageSync('cards')
+  const card = cards.find(item => item.id === _card.id)
+  return new Promise((resolve,reject) => {
+    if(!card) {
+      reject('没有找到对应的卡')
     }
-    Taro.setStorageSync('cards',cards)
-  },
-  delete: (cardId:number)=> {
-    let cards = Taro.getStorageSync('cards')
-    const card = cards.find(item => item.id === cardId)
-    return new Promise((resolve,reject) => {
-      if(!card) {
-        reject('没有找到对应的卡')
-      }
 
-      deleteCard({id:cardId}).then(res => {
-        if(res.resultCode === 0){
-          resolve(res.message)
-          let index =0
-          for(let i=0;i<cards.length;i++){
-            if(cards[i].id === cardId){
-              index = i
-              break
-            }
-          }
-          cards.splice(index,1)
-          Taro.setStorageSync('cards',cards)
-        }else{
-          reject(res.message)
-        }
-      }).catch(err => {
-        reject(err)
-      })
-    })
-  },
-  setDefault: async (cardId:string) => {
-    let cards = Taro.getStorageSync('cards')
-    const newCards = cards.map(item => {
-      return{
-        ...item,
-        isDefault: item.id === cardId
-      }
-    })
-    return new Promise((resolve,reject) => {
-      setDefaultCard({id: cardId}).then(res => {
-        Taro.setStorageSync('cards',newCards)
-        resolve(res)
-      }).catch(err => {
-        reject(err)
-      })
-    })
-    
-  },
-  getDefault: () => {
-    let cards = Taro.getStorageSync('cards')
-    let card:Card = null
-    if(cards && cards.length > 0){
-      card = cards.find(i => i.isDefault)
-      if(!card){
-        card = cards[0]
-        setDefaultCard({id: card.id}) // 如果没有默认卡，自动设置第一张卡片为默认
-        .then(() => {
-          updateAllCards()
-        })
-      }
-    }else{
-      Taro.showModal({
-        content: '请先绑卡',
-        success: res => {
-          if(res.confirm){
-            Taro.navigateTo({url: '/pages/bind-pack/bind-card/bind-card'})
+    deleteCard({id:_card.id}).then(res => {
+      if(res.resultCode === 0){
+        resolve(res.message)
+        let index =0
+        for(let i=0;i<cards.length;i++){
+          if(cards[i].id === _card.id){
+            index = i
+            break
           }
         }
+        cards.splice(index,1)
+        Taro.setStorageSync('cards',cards)
+        if(_card.isDefault && cards[0] && cards[0].id){
+          setDefault(cards[0].id)
+        }
+      }else{
+        reject(res.message)
+      }
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}
+const setDefault = async (cardId:string) => {
+  let cards = Taro.getStorageSync('cards')
+  const newCards = cards.map(item => {
+    return{
+      ...item,
+      isDefault: item.id === cardId
+    }
+  })
+  return new Promise((resolve,reject) => {
+    setDefaultCard({id: cardId}).then(res => {
+      Taro.setStorageSync('cards',newCards)
+      resolve(res)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+  
+}
+const getDefault = () => {
+  let cards = Taro.getStorageSync('cards')
+  let card:Card = null
+  if(cards && cards.length > 0){
+    card = cards.find(i => i.isDefault)
+    if(!card){
+      card = cards[0]
+      setDefaultCard({id: card.id}) // 如果没有默认卡，自动设置第一张卡片为默认
+      .then(() => {
+        updateAllCards()
       })
     }
-    return card
-   
-  },
-  updateAllCards,
-  saveCards (value: any) {
-    return new Promise((resolve,reject)=>{
-      Taro.setStorageSync('cards',value)
-        resolve({success: true})
+  }else{
+    Taro.showModal({
+      content: '请先绑卡',
+      success: res => {
+        if(res.confirm){
+          Taro.navigateTo({url: '/pages/bind-pack/bind-card/bind-card'})
+        }
+      }
     })
-  },
-  // 替换卡信息
-  update (cardInfo) {
-    // app.globalData.userCards.map(item => {
-    //   if (item.id == cardInfo.id) {
-    //     item = cardInfo
-    //   }
-    //   return item
-    // })
-    // Taro.setStorageSync('cards', app.globalData.userCards)
   }
+  return card
+ 
+}
+export default {
+  updateAllCards,
+  saveCards,
+  remove,
+  setDefault,
+  getDefault
 }

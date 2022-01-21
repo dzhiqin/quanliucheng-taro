@@ -22,14 +22,12 @@ export default function BindingCard() {
       return
     }
     loadingService(true)
-    console.log('submit',card);
     if(featConfig.ZhuYuanCardName){
       bindCardByCardNameAndNo({inCardName: card.cardName, inCardNo: card.cardNo})
       .then(res => {
-        console.log(res);
         loadingService(false)
-        if(res.resultCode === 0){
-          Taro.redirectTo({url: '/pages/hosp-pack/checklist/checklist'})
+        if(res.resultCode === 0 && res.message === 'SUCCESS'){
+          Taro.navigateBack()
         }else{
           toastService({title: '绑卡失败'+res.message})
           setBusy(false)
@@ -44,7 +42,7 @@ export default function BindingCard() {
       .then(res => {
         loadingService(false)
         if(res.resultCode === 0){
-          Taro.redirectTo({url: '/pages/hosp-pack/checklist/checklist'})
+          Taro.navigateBack()
         }else{
           toastService({title: '绑卡失败'+res.message})
           setBusy(false)
@@ -66,7 +64,6 @@ export default function BindingCard() {
     return {valide: true, msg: 'ok'}
   }
   const handleChange = (key,value) => {
-    console.log(value,key);
     card[key] = value
   }
   return(

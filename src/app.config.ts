@@ -69,7 +69,8 @@ export default {
         'checkin/checkin',
         'binding-card/binding-card',
         'deposit/deposit',
-        'checklist-detail/checklist-detail'
+        'checklist-detail/checklist-detail',
+        'card-list/card-list'
       ]
     },
     {

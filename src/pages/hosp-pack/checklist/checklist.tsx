@@ -10,26 +10,43 @@ import calanderPng from '@/images/icons/calendar.png'
 import MoneyPng from '@/images/icons/money_circle.png'
 import './checklist.less'
 import BkNone from '@/components/bk-none/bk-none'
+import { AtList,AtListItem } from 'taro-ui'
 
 export default function BindingCard() {
   const [showModal,setShowModal] = useState(false)
   const [list,setList] = useState([])
-  const [cardNo, setCardNo] = useState('')
+  const [card,setCard] = useState(null)
   const [registerId, setRegisterId]= useState('')
   Taro.useReady(() => {
-    fetchInHospCards().then(res => {
-      if(res.resultCode === 0){
-        if(res.data && res.data.length > 0){
-          setShowModal(false)
-          const hospCard = res.data.find(i => i.isDefault)
-          setCardNo(hospCard.cardNo)
-          getList(hospCard.cardNo)
-          handleGetInHospInfo(hospCard.cardNo)
-        }else{
-          setShowModal(true)
+    let _card = Taro.getStorageSync('inCard')
+    if(_card){
+      setCard(_card)
+      getList(_card.cardNo)
+      handleGetInHospInfo(_card.cardNo)
+    }else{
+      fetchInHospCards().then(res => {
+        if(res.resultCode === 0){
+          if(res.data && res.data.length > 0){
+            setShowModal(false)
+            const hospCard = res.data.find(i => i.isDefault)
+            Taro.setStorageSync('inCard',hospCard)
+            setCard(hospCard)
+            getList(hospCard.cardNo)
+            handleGetInHospInfo(hospCard.cardNo)
+          }else{
+            setShowModal(true)
+          }
         }
-      }
-    })
+      })
+    }
+  })
+  Taro.useDidShow(() => {
+    const currentCard = Taro.getStorageSync('inCard')
+    if(card && currentCard.id !== card.id) {
+      setCard(currentCard)
+      getList(currentCard.cardNo)
+      handleGetInHospInfo(currentCard.cardNo)
+    }
   })
   const handleGetInHospInfo = (_cardNo: string) => {
     return new Promise((resolve,reject) => {
@@ -63,7 +80,7 @@ export default function BindingCard() {
     let _registerId =''
     if(!registerId){
       loadingService(true)
-      const res:any = await handleGetInHospInfo(cardNo)
+      const res:any = await handleGetInHospInfo(card.cardNo)
       loadingService(false)
       if(res.result){
         _registerId = res.data
@@ -75,12 +92,25 @@ export default function BindingCard() {
     Taro.navigateTo({url: `/pages/hosp-pack/checklist-detail/checklist-detail?billDate=${item.billDate}&registerId=${registerId? registerId : _registerId}`})
   }
   const handleConfirm = () => {
-    Taro.redirectTo({url: '/pages/hosp-pack/binding-card/binding-card'})
+    Taro.navigateTo({url: '/pages/hosp-pack/binding-card/binding-card'})
     // Taro.navigateBack()
   }
   return(
     <View className='checklist'>
       <SimpleModal msg='请先绑卡' show={showModal} onCancel={() => setShowModal(false)} onConfirm={handleConfirm} />
+      {
+        card &&
+        <AtList>
+          <AtListItem
+            arrow='right'
+            note={card.cardNo}
+            title={card.name}
+            iconInfo={{ size: 25, color: '#FF4949', value: 'credit-card', }}
+            onClick={() => Taro.navigateTo({url: '/pages/hosp-pack/card-list/card-list'})}
+          />
+        </AtList>
+      }
+      
       <View className='checklist-content'>
         {
           list.length > 0 

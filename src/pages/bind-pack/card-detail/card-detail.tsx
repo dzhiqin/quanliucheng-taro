@@ -47,7 +47,7 @@ export default function CardDetail(props: any) {
   }
   const handleUnBind = () => {
     setBusy(true)
-    cardsHealper.delete(Number(card.id)).then(res => {
+    cardsHealper.remove(card).then(res => {
       Taro.showToast({
         title: '解绑成功',
         icon: 'success',
@@ -66,7 +66,7 @@ export default function CardDetail(props: any) {
   return(
     <View className='card-detail'>
       {
-        card.qrCode && 
+        card && card.qrCode && 
         <BkPanel style='margin-bottom: 40rpx'>
           <View className='card-wrap'>
             <Image src={`data:image/jpg;base64,${card.qrCode}`} className='card-image' />

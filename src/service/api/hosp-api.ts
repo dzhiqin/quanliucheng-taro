@@ -18,3 +18,6 @@ export const getInHospInfo = (data: {inCardNo: string}) => {
 export const fetchInHospBillDetail = (data: {registerId: string, billDate: string}) => {
   return Post(fullUrl('api/applet/inpatient/InHospital/GetAllCategoryBillDetail'),data)
 }
+export const setDefaultInHospCard = (data: {id: number}) => {
+  return Get(fullUrl('api/applet/inpatient/InHospital/SetDefault'),data)
+}
