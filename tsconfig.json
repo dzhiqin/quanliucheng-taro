@@ -3,6 +3,7 @@
     "baseUrl": ".",
     "jsx": "react",
     "allowJs": true,
+    "esModuleInterop": true,  
     "paths": {
       "@/components/*": ["./src/components/*"],
       "@/pages/*": ["./src/pages/*"],

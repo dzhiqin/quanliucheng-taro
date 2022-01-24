@@ -30,9 +30,8 @@ const remove = (_card)=> {
       reject('没有找到对应的卡')
     }
 
-    deleteCard({id:_card.id}).then(res => {
+    deleteCard({id:_card.id}).then(async(res) => {
       if(res.resultCode === 0){
-        resolve(res.message)
         let index =0
         for(let i=0;i<cards.length;i++){
           if(cards[i].id === _card.id){
@@ -43,8 +42,10 @@ const remove = (_card)=> {
         cards.splice(index,1)
         Taro.setStorageSync('cards',cards)
         if(_card.isDefault && cards[0] && cards[0].id){
-          setDefault(cards[0].id)
+          await setDefault(cards[0].id)
         }
+        resolve(res.message)
+
       }else{
         reject(res.message)
       }

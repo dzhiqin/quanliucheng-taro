@@ -319,7 +319,7 @@ export default class BindCard extends React.Component {
             <AtInput 
               name='idenNo' 
               title='证件号码' 
-              type='number' 
+              type='text' 
               placeholder='请输入证件号码' 
               value={this.state.card.idenNo} 
               onChange={this.handleCardChange.bind(this,'idenNo')} 

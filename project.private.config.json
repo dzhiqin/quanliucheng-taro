@@ -125,6 +125,12 @@
           "pathName": "pages/official-pack/clinic-list/clinic-list",
           "query": "",
           "scene": null
+        },
+        {
+          "name": "每日清单",
+          "pathName": "pages/hosp-pack/checklist/checklist",
+          "query": "",
+          "scene": null
         }
       ]
     }
