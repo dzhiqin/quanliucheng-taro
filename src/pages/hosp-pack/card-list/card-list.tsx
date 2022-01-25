@@ -10,9 +10,9 @@ import { loadingService, toastService } from '@/service/toast-service'
 
 export default function CardList(){
   const [list,setList] = useState([])
-  React.useEffect(() => {
+  Taro.useDidShow(() => {
     getList()
-  },[])
+  })
   const getList = () => {
     loadingService(true)
     fetchInHospCards().then(res => {
