@@ -8,7 +8,7 @@ import { createPaymentOrder, fetchPaymentOrderList , subscribeService , PayOrder
 import { loadingService, toastService } from '@/service/toast-service'
 import BkNone from '@/components/bk-none/bk-none'
 import BkTabs from '@/components/bk-tabs/bk-tabs'
-import { payType_CN, orderSearchType_EN , orderStatus_CN, orderStatus_EN } from '@/enums/index'
+import { PAY_TYPE_CN, ORDER_SEARCH_TYPE_EN , ORDER_STATUS_CN, ORDER_STATUS_EN } from '@/enums/index'
 import BkPanel from '@/components/bk-panel/bk-panel'
 import BkButton from '@/components/bk-button/bk-button'
 import BkPrice from '@/components/bk-price/bk-price'
@@ -24,7 +24,7 @@ export default function OrderList(){
   const [list,setList] = useState([])
   const [busy,setBusy] = useState(false)
   const [showNotice,setShowNotice] = useState(false)
-  const [searchType, setSearchType] = useState(orderSearchType_EN.current)
+  const [searchType, setSearchType] = useState(ORDER_SEARCH_TYPE_EN.current)
   const [card,setCard] = useState({} as Card)
   useDidShow(() => {
     setCard(cardsHealper.getDefault())
@@ -73,7 +73,7 @@ export default function OrderList(){
       }else{
         console.log('data',res.data)
         const {nonceStr, paySign, signType, timeStamp, pay_appid, pay_url} = res.data
-        if(payType === payType_CN.医保){
+        if(payType === PAY_TYPE_CN.医保){
           Taro.showLoading({title: '正在打开医保小程序'})
           Taro.navigateToMiniProgram({
             appId: pay_appid,
@@ -108,7 +108,7 @@ export default function OrderList(){
   const checkOrderStatus = (id: string) => {
     return new Promise((resolve,reject) => {
       fetchPaymentOrderStatus({orderId:id}).then(res => {
-        if(res.resultCode === 0 && res.data === orderStatus_EN.paySuccess_and_His_success){
+        if(res.resultCode === 0 && res.data === ORDER_STATUS_EN.paySuccess_and_His_success){
           resolve(res.message)
         }else{
           reject(res)
@@ -118,7 +118,7 @@ export default function OrderList(){
       })
     })
   }
-  const buildPaymentParams = (type: payType_CN, orderInfo: any) => {
+  const buildPaymentParams = (type: PAY_TYPE_CN, orderInfo: any) => {
     const paymentParams: PayOrderParams ={
       patientId: card.patientId,
       clinicNo: orderInfo.clinicNo,
@@ -179,7 +179,7 @@ export default function OrderList(){
                 </View>
                 <View className='order-list-item'>
                   <View className='order-list-item-title flat-title'>订单状态:</View>
-                  <View className='order-list-item-text'>{orderStatus_CN[item.orderState]}</View>
+                  <View className='order-list-item-text'>{ORDER_STATUS_CN[item.orderState]}</View>
                 </View>
                 <View className='order-list-item'>
                   <View className='order-list-item-title flat-title'>就诊日期:</View>
@@ -202,12 +202,12 @@ export default function OrderList(){
                 </View>
                 <View className='flex-around'>
                   {
-                    item.orderState === orderStatus_EN.unpay &&
-                    <BkButton theme='info' icon='icons/wechat.png' title='微信支付' disabled={busy} onClick={dealWithPay.bind(null,payType_CN.微信,item)} />
+                    item.orderState === ORDER_STATUS_EN.unpay &&
+                    <BkButton theme='info' icon='icons/wechat.png' title='微信支付' disabled={busy} onClick={dealWithPay.bind(null,PAY_TYPE_CN.微信,item)} />
                   }
                   {
-                    item.orderState === orderStatus_EN.unpay && item.orderType === payType_CN.医保 &&
-                    <BkButton theme='primary' icon='icons/wechat.png' title='医保支付' disabled={busy} onClick={dealWithPay.bind(null,payType_CN.医保,item)} />
+                    item.orderState === ORDER_STATUS_EN.unpay && item.orderType === PAY_TYPE_CN.医保 &&
+                    <BkButton theme='primary' icon='icons/wechat.png' title='医保支付' disabled={busy} onClick={dealWithPay.bind(null,PAY_TYPE_CN.医保,item)} />
                   }
                 </View>
               </BkPanel>  

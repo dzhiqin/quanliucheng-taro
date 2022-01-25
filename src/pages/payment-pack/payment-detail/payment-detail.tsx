@@ -24,7 +24,7 @@ import BkButton from '@/components/bk-button/bk-button'
 import sighPng from '@/images/icons/sigh.png'
 import { onetimeTemplates } from '@/utils/templateId'
 import SubscribeNotice from '@/components/subscribe-notice/subscribe-notice'
-import { payType_CN, orderStatus_EN, pactCode_EN, payStatus_EN, orderType_CN } from '@/enums/index'
+import { PAY_TYPE_CN, ORDER_STATUS_EN, PACT_CODE_EN, PAY_STATUS_EN, ORDER_TYPE_CN } from '@/enums/index'
 import { loadingService, toastService } from '@/service/toast-service'
 import { requestTry } from '@/utils/retry'
 import ResultPage from '@/components/result-page/result-page'
@@ -43,10 +43,10 @@ interface OrderInfoParams {
   recipeSeq: string,
   orderDept: string,
   orderDoctor: string,
-  orderType: orderType_CN | string,
+  orderType: ORDER_TYPE_CN | string,
   prescMoney: string,
   serialNo: string,
-  payState?: payStatus_EN
+  payState?: PAY_STATUS_EN
 }
 // 注意进入页面场景有3：
 // 1-从缴费列表进入；2-从订单列表进入；3-扫码进入
@@ -63,10 +63,10 @@ export default function PaymentDetail() {
     recipeSeq: '',
     orderDept: '',
     orderDoctor: '',
-    orderType: orderType_CN.自费单,
+    orderType: ORDER_TYPE_CN.自费单,
     prescMoney: '',
     serialNo: '',
-    payState: payStatus_EN.unpay
+    payState: PAY_STATUS_EN.unpay
   }
   let fromList = null
   let scanParams = null
@@ -111,7 +111,7 @@ export default function PaymentDetail() {
   const checkOrderStatus = (id: string) => {
     return new Promise((resolve,reject) => {
       fetchPaymentOrderStatus({orderId:id}).then(res => {
-        if(res.resultCode === 0 && res.data === orderStatus_EN.paySuccess_and_His_success){
+        if(res.resultCode === 0 && res.data === ORDER_STATUS_EN.paySuccess_and_His_success){
           resolve(res.message)
         }else{
           reject(res)
@@ -134,7 +134,7 @@ export default function PaymentDetail() {
         loadingService(false)
       }else{
         const {nonceStr, paySign, signType, timeStamp, pay_appid, pay_url} = res.data
-        if(payType === payType_CN.医保){
+        if(payType === PAY_TYPE_CN.医保){
           loadingService(true,'正在跳转')
           Taro.navigateToMiniProgram({
             appId: pay_appid,
@@ -193,7 +193,7 @@ export default function PaymentDetail() {
       }
     })
   }
-  const buildPaymentParams = (type: payType_CN) => {
+  const buildPaymentParams = (type: PAY_TYPE_CN) => {
     const paymentParams: PayOrderParams ={
       patientId: card.patientId,
       clinicNo: orderInfo.clinicNo,
@@ -275,7 +275,7 @@ export default function PaymentDetail() {
             recipeSeq: data.recipeSeq,
             orderDept: data.orderDept,
             orderDoctor: data.orderDoctor,
-            orderType: data.pactCode === pactCode_EN.selfPay ? orderType_CN.自费单 : orderType_CN.医保单 ,
+            orderType: data.pactCode === PACT_CODE_EN.selfPay ? ORDER_TYPE_CN.自费单 : ORDER_TYPE_CN.医保单 ,
             prescMoney: data.sumMoney,
             serialNo: data.serialNo
           }
@@ -343,7 +343,7 @@ export default function PaymentDetail() {
             </View>
           }
           {
-            orderInfo.orderDept === '新冠疫苗/核酸' && orderInfo.payState === payStatus_EN.paid && 
+            orderInfo.orderDept === '新冠疫苗/核酸' && orderInfo.payState === PAY_STATUS_EN.paid && 
             <View className='flex'>
               <BkButton title='取消预约' theme='danger' disabled={busy} onClick={handleCancel} />
             </View>
@@ -395,12 +395,12 @@ export default function PaymentDetail() {
         }
         <View className='flex-around' style='padding: 40rpx'>
           {
-            orderInfo.payState === payStatus_EN.unpay &&
-            <BkButton title='微信支付' icon='icons/wechat.png' theme='info' disabled={busy} onClick={dealWithPay.bind(null,payType_CN.微信)} />
+            orderInfo.payState === PAY_STATUS_EN.unpay &&
+            <BkButton title='微信支付' icon='icons/wechat.png' theme='info' disabled={busy} onClick={dealWithPay.bind(null,PAY_TYPE_CN.微信)} />
           }
           {
-            orderInfo.payState === payStatus_EN.unpay && orderInfo.orderType === 'YiBao' &&
-            <BkButton title='医保支付' icon='icons/card.png' theme='primary' disabled={busy} onClick={dealWithPay.bind(null,payType_CN.医保)} />
+            orderInfo.payState === PAY_STATUS_EN.unpay && orderInfo.orderType === 'YiBao' &&
+            <BkButton title='医保支付' icon='icons/card.png' theme='primary' disabled={busy} onClick={dealWithPay.bind(null,PAY_TYPE_CN.医保)} />
           }
         </View>
         <View className='payment-detail-tips'>

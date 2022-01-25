@@ -1,22 +1,13 @@
-export enum regType {
+export enum REG_TYPE {
   appointment = '0',  // 预约挂号
   introday = '1'      // 当天挂号
 }
 
-export enum reportType_EN {
+export enum REPORT_TYPE_EN {
   clinic = '0',   // 门诊报告
   hospitalization = '1'// 住院报告
 }
-export enum reportItemType {
-  jianYan = 'C',  // 检验 、 化验
-  jianCha = 'D',  // 检查
-  bingLi = 'E',   // 病理
-  chanQianChaoSheng = 'P',// 产前超声
-  neiJing = 'N',  // 内镜
-  chaoSheng = 'U',// 超声
-  fangShe = 'R'   // 放射
-}
-export enum reportItemType_CN {
+export enum REPORT_ITEM_TYPE_CN {
   '化验' = 'C',  // 检验 、 化验
   '检查' = 'D',  // 检查
   '病理' = 'E',   // 病理
@@ -25,21 +16,21 @@ export enum reportItemType_CN {
   '超声' = 'U',// 超声
   '放射' = 'R'   // 放射
 }
-export enum pactCode_EN {
+export enum PACT_CODE_EN {
   'selfPay' = '1',
   'YiBao' = '3'
 }
-export enum orderType_CN {
+export enum ORDER_TYPE_CN {
   '自费单' = '0',
   '医保单' = '1',
   '自助单' = '3'
 }
-export enum payType_CN {
+export enum PAY_TYPE_CN {
   '微信' = '0',
   '医保' = '1',
   '支付宝' = '2'
 }
-export enum orderStatus_EN {
+export enum ORDER_STATUS_EN {
   unpay = 0,
   paying = 1,
   paySuccess = 2,
@@ -48,7 +39,7 @@ export enum orderStatus_EN {
   paySuccess_and_His_fail = 5,      // 支付成功，但通知His失败
   cancelPay = 6
 }
-export enum orderStatus_CN {
+export enum ORDER_STATUS_CN {
   '未缴费' = 0,
   '缴费中' = 1,
   '支付成功' = 2,
@@ -57,23 +48,23 @@ export enum orderStatus_CN {
   '缴费失败' = 5,      // 支付成功，但通知His失败
   '取消支付' = 6
 }
-export enum payStatus_EN {
+export enum PAY_STATUS_EN {
   unpay = 0, 
   paid = 1,
   refunded = 2,
   refundFailed = 3,
   refunding = 4
 }
-export enum orderSearchType_EN {
+export enum ORDER_SEARCH_TYPE_EN {
   current = 'current',
   history = 'history'
 }
-export enum healthCardResultCode {
+export enum HEALTH_CARD_RES_CODE {
   authorized = 2,
   no_auth_before = 3,
   auth_success = 4
 }
-export enum healthCardType_EN {
+export enum HEALTH_CARD_TYPE_EN {
   IdCard = 0, // 身份证
   ResidentAccountNo = 1,  // 居民户口编号
   PassPort = 2,   // 护照

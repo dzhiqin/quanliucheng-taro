@@ -4,7 +4,7 @@ import { View, Image } from '@tarojs/components'
 import { useRouter } from '@tarojs/taro'
 import { useEffect,useState } from 'react'
 import { fetchReportsDetail } from '@/service/api/reports-api'
-import { reportItemType_CN,reportType_EN } from '@/enums/*'
+import { REPORT_ITEM_TYPE_CN,REPORT_TYPE_EN } from '@/enums/*'
 import custom from '@/custom/index'
 import './reports-detail.less'
 import BkButton from '@/components/bk-button/bk-button'
@@ -13,7 +13,7 @@ export default function ReportsDetail() {
   const router = useRouter()
   const [checkItems,setCheckItems] = useState([])
   const reportsPage = custom.reportsPage
-  const params = router.params as {examId: string,examDate: string, itemType: reportItemType_CN, reportType: reportType_EN}
+  const params = router.params as {examId: string,examDate: string, itemType: REPORT_ITEM_TYPE_CN, reportType: REPORT_TYPE_EN}
   const {examId, examDate, itemType, reportType} = params
   useEffect(() => {
     Taro.showLoading({title: '加载中……'})

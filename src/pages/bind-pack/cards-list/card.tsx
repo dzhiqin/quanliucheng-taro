@@ -9,7 +9,7 @@ import { loadingService, toastService } from '@/service/toast-service'
 import { TaroNavToMiniProgram, bindHealthCard } from '@/service/api'
 import nrhcPng from '@/images/icons/nrhc.png'
 import cardUpgradePng from '@/images/icons/card_upgrade.png'
-import { healthCardResultCode, healthCardType_EN } from '@/enums/index'
+import { HEALTH_CARD_RES_CODE, HEALTH_CARD_TYPE_EN } from '@/enums/index'
 import { useState } from 'react'
 
 export default function Card(props: {
@@ -77,7 +77,7 @@ export default function Card(props: {
       openId: '',
       cardId: props.card.id,
       patientName: props.card.name,
-      idenType: healthCardType_EN.IdCard, // 目前只支持身份证
+      idenType: HEALTH_CARD_TYPE_EN.IdCard, // 目前只支持身份证
       phone: props.card.cellphone,
       birthday: props.card.birthdate,
       nation: '',
@@ -95,7 +95,7 @@ export default function Card(props: {
     loadingService(true,'升级中……')
     // console.log('upgrade',event.detail.result);
     const {result} = event.detail
-    if(result.type === healthCardResultCode.no_auth_before){
+    if(result.type === HEALTH_CARD_RES_CODE.no_auth_before){
       setUpgrading(false)
       loadingService(false)
       Taro.navigateTo({url: `/pages/bind-pack/elec-healthcard-auth/elec-healthcard-auth?nextPage=cardList&cardId=${props.card.id}`})

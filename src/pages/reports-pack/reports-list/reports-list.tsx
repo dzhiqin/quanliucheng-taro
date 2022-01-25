@@ -4,7 +4,7 @@ import { View } from '@tarojs/components'
 import { useDidShow, useRouter } from '@tarojs/taro'
 import { fetchReportsList } from '@/service/api/reports-api'
 import { useState } from 'react'
-import { reportType_EN, reportItemType_CN } from '@/enums/index'
+import { REPORT_TYPE_EN, REPORT_ITEM_TYPE_CN } from '@/enums/index'
 import HealthCards from '@/components/health-cards/health-cards'
 import BkTabs from '@/components/bk-tabs/bk-tabs'
 import BkPanel from '@/components/bk-panel/bk-panel'
@@ -17,20 +17,20 @@ import './reports-list.less'
 export default function ReportList() {
   const router = useRouter()
   const params = router.params
-  const reportType = params.reportType as reportType_EN
-  const [itemType,setItemType] = useState(reportItemType_CN.化验)
+  const reportType = params.reportType as REPORT_TYPE_EN
+  const [itemType,setItemType] = useState(REPORT_ITEM_TYPE_CN.化验)
   const [list,setList] = useState([])
   const clinicTabs = [
-    {title: '化验', value: reportItemType_CN.化验},
-    {title: '放射', value: reportItemType_CN.放射},
-    {title: '超声', value: reportItemType_CN.超声},
-    {title: '病理', value: reportItemType_CN.病理},
-    {title: '内镜', value: reportItemType_CN.内镜},
+    {title: '化验', value: REPORT_ITEM_TYPE_CN.化验},
+    {title: '放射', value: REPORT_ITEM_TYPE_CN.放射},
+    {title: '超声', value: REPORT_ITEM_TYPE_CN.超声},
+    {title: '病理', value: REPORT_ITEM_TYPE_CN.病理},
+    {title: '内镜', value: REPORT_ITEM_TYPE_CN.内镜},
   ]
   const hospitalizationTabs = [
-    {title: '化验', value: reportItemType_CN.化验},
-    {title: '放射', value: reportItemType_CN.放射},
-    {title: '超声', value: reportItemType_CN.超声},
+    {title: '化验', value: REPORT_ITEM_TYPE_CN.化验},
+    {title: '放射', value: REPORT_ITEM_TYPE_CN.放射},
+    {title: '超声', value: REPORT_ITEM_TYPE_CN.超声},
   ]
   const onTabChange = (index,value) => {
     if(value !== itemType){
@@ -38,7 +38,7 @@ export default function ReportList() {
       getList(value)
     }
   }
-  const getList = (_itemType: reportItemType_CN) => {
+  const getList = (_itemType: REPORT_ITEM_TYPE_CN) => {
     loadingService(true)
     fetchReportsList({itemType: _itemType, reportType: reportType }).then(res => {
       if(res.resultCode === 0){
@@ -65,7 +65,7 @@ export default function ReportList() {
   return(
     <View className='reports-list'>
       <HealthCards switch />
-      <BkTabs tabs={reportType === reportType_EN.clinic? clinicTabs : hospitalizationTabs} onTabChange={onTabChange} />
+      <BkTabs tabs={reportType === REPORT_TYPE_EN.clinic? clinicTabs : hospitalizationTabs} onTabChange={onTabChange} />
       {
         list.length > 0
         ?
