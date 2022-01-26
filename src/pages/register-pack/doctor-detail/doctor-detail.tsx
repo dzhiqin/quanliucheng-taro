@@ -135,7 +135,7 @@ export default function DoctorDefault(props) {
       </View>
       <View className='doctor-detail-date'>已选：<text className='price-color'>{selectedDate}</text></View>
       <View className='doctor-detail-days'>
-        <ScheduleDays days={regDays} defaultDay={selectedDate} onChange={onDateChange} />
+        <ScheduleDays days={regDays} defaultDay={selectedDate} onChange={onDateChange} showMonth />
       </View>
       <View className='doctor-detail-list'>
         {

@@ -10,7 +10,12 @@ import './schedule-days.less'
 
 const weeks = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"]
 const today = humanDate(new Date())
-export default function WeekSchedule(props) {
+export default function WeekSchedule(props:{
+  onChange?: Function,
+  days: any,
+  defaultDay: string,
+  showMonth?: boolean
+}) {
   const {onChange} = props
   const [monthSpan,setMonthSpan] = useState('')
   const [schedules,setSchedules] = useState([])
