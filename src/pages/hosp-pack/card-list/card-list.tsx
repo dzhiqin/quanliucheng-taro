@@ -19,6 +19,11 @@ export default function CardList(){
       loadingService(false)
       if(res.resultCode === 0){
         setList(res.data)
+        // if(!res.data){
+        //   // 测试时用，非必要勿用
+        //   const inCard = Taro.getStorageSync('inCard')
+        //   setList([inCard])
+        // }
       }else{
         toastService({title: ''+res.message})
       }
@@ -52,7 +57,7 @@ export default function CardList(){
   return(
     <View>
       {
-        list.length > 0
+        list && list.length > 0
         ?
         <AtList>
           {

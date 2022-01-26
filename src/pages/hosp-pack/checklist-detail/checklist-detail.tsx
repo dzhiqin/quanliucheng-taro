@@ -2,13 +2,14 @@ import * as Taro from '@tarojs/taro'
 import * as React from 'react'
 import { View } from '@tarojs/components'
 import { useRouter } from '@tarojs/taro'
-import { fetchInHospBillDetail } from '@/service/api'
+import { fetchInHospBillDetail, fetchInHospBillCategories } from '@/service/api'
 import { loadingService, toastService } from '@/service/toast-service'
 import { useState } from 'react'
 import BkNone from '@/components/bk-none/bk-none'
 import BkPanel from '@/components/bk-panel/bk-panel'
 import VirtualList from '@tarojs/components/virtual-list'
 import './checklist-detail.less'
+import BkTabs from '@/components/bk-tabs/bk-tabs'
 
 export default function ChecklistDetail() {
   const router = useRouter()
@@ -17,6 +18,9 @@ export default function ChecklistDetail() {
   const [list,setList] = useState([])
   const sysInfo = Taro.getSystemInfoSync()
   const screenHeight = sysInfo.screenHeight
+  const [tabList,setTabList] = useState([])
+  const [currentTab,setCurrentTab] = useState(0)
+  const [categories,setCategories] = useState([])
   const Row = React.memo(({id,index,style,data}) => {
     return (
       <BkPanel style='margin: 20rpx'>
@@ -45,19 +49,38 @@ export default function ChecklistDetail() {
         <View className='checklist-detail-item flex-between'>
           <View style='flex: 1'>
             <text>单价：</text>
-            <text className='checklist-detail-item-value'>{data[index].itemPrice}</text>
+            <text className='checklist-detail-item-value'>{data[index].itemPrice} 元</text>
           </View>
           <View style='flex: 1'>
             <text>金额：</text>
-            <text className='checklist-detail-item-value'>{data[index].costs}</text>
+            <text className='checklist-detail-item-value'>{data[index].costs} 元</text>
           </View>
         </View>
       </BkPanel>
     )
   })
+  const getBillCategories = () => {
+    fetchInHospBillCategories({registerId,billDate}).then(res => {
+      if(res.resultCode === 0 && res.data.categoryBillList.length > 0){
+        const _categories = res.data.categoryBillList
+        setCategories(res.data.categoryBillList)
+        let arr = [{title: '全部'}]
+        _categories.forEach(i => {
+          arr.push({title: i.categoryName})
+        })
+        setTabList(arr)
+      }
+    })
+  }
+  Taro.useReady(() => {
+    getBillCategories()
+  })
   Taro.useDidShow(() => {
+    getInHospBillDetail()
+  })
+  const getInHospBillDetail = (categoryId = '') => {
     loadingService(true)
-    fetchInHospBillDetail({registerId,billDate})
+    fetchInHospBillDetail({registerId,billDate,categoryId})
     .then(res => {
       loadingService(false)
       if(res.resultCode === 0){
@@ -69,9 +92,16 @@ export default function ChecklistDetail() {
     .catch(err => {
       toastService({title: '获取数据失败'+err})
     })
-  })
+  }
+  const onTabChange = (e) => {
+    setCurrentTab(e)
+    const index = e - 1
+    const categoryId = index >= 0 ? categories[index].categoryId : ''
+    getInHospBillDetail(categoryId)
+  }
   return(
     <View className='checklist-detail'>
+      <BkTabs tabs={tabList} current={currentTab} block onTabChange={onTabChange.bind(this)} />
       {
         list.length > 0
         ?

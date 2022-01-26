@@ -15,9 +15,12 @@ export const bindCardByCardNo = (data: {inCardNo: string}) => {
 export const getInHospInfo = (data: {inCardNo: string}) => {
   return Get(fullUrl('api/applet/inpatient/InHospital/GetInpatientInfo'),data)
 }
-export const fetchInHospBillDetail = (data: {registerId: string, billDate: string}) => {
+export const fetchInHospBillDetail = (data: {registerId: string, billDate: string, categoryId: string}) => {
   return Post(fullUrl('api/applet/inpatient/InHospital/GetAllCategoryBillDetail'),data)
 }
 export const setDefaultInHospCard = (data: {id: number}) => {
   return Get(fullUrl('api/applet/inpatient/InHospital/SetDefault'),data)
+}
+export const fetchInHospBillCategories = (data: {registerId: string, billDate: string}) => {
+  return Post(fullUrl('api/applet/inpatient/InHospital/GetCategoryBillList'),data)
 }

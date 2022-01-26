@@ -68,12 +68,17 @@ export default config
 
 **关于分包：** 小程序目前的规则是总代码体积不大于20M,单个分包和主包的体积不大于2M，属于一个模块的都放在一个分包里面，可以复用的组件放在主包里，不会复用的组件可以放在分包里。
 
-**关于接口书写：** 与后端约定如果是post请求，那传参就放在body里，如果是get请求，传参就放在url里，本项目支持typescript，接口入参最好定义成类型，方便调用。例如
+**关于接口书写：** 
+* 与后端约定如果是post请求，那传参就放在body里，如果是get请求，传参就放在url里；
+* 本项目支持typescript，接口入参最好定义成类型，方便调用；
+* 接口命名尽量体现接口用途和方法；查询类的接口，如果是post请求就用fetch开头，如果是get请求就用get开头
+例如：
 ```
 export const fetchMedicineInfo = (data: {orderId: string}) => {
   return Post(fullUrl('api/applet/paybill/Bill/GetDrugStateInfo'),data)
 }
 ```
+
 **关于命名规则：** 
 * 文件名用英文小写横线链接命名；
 * 变量名用首字母小写的驼峰命名法；

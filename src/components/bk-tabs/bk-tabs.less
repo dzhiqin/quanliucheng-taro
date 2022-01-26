@@ -3,6 +3,10 @@
 .bk-tabs{
   display: flex;
   padding: 0 20rpx;
+  &-block{
+    padding: 0 !important;
+    overflow-x: scroll;
+  }
   .bk-tab {
     display: flex;
     flex-direction: column;
@@ -26,5 +30,19 @@
   }
   .inactive{
     color: #666666;
+  }
+  .block-active{
+    background-color: @primary-color;
+    color: white;
+  }
+  .block-unactive{
+    background-color: white;
+    color: @primary-color;
+    border: 1rpx solid @cancel-color
+  }
+  .block-tab{
+    word-break: keep-all;
+    padding: 10rpx 16rpx;
+    font-size: 36rpx;
   }
 }
