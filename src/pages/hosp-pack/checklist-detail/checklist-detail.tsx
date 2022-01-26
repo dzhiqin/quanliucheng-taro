@@ -102,6 +102,7 @@ export default function ChecklistDetail() {
   return(
     <View className='checklist-detail'>
       <BkTabs tabs={tabList} current={currentTab} block onTabChange={onTabChange.bind(this)} />
+      <View>{billDate}住院费用清单</View>
       {
         list.length > 0
         ?

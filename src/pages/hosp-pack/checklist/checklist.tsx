@@ -127,7 +127,7 @@ export default function BindingCard() {
                   <View className='checklist-item'>
                     <Image src={MoneyPng} className='checklist-item-icon' />
                     <View className='checklist-item-title flat-title'>费用:</View>
-                    <View className='checklist-item-text price-color'>{item.costed}</View>
+                    <View className='checklist-item-text price-color'>{item.costed}元</View>
                   </View>
                 </BkPanel>
               )
