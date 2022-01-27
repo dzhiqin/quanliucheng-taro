@@ -28,7 +28,6 @@ export default class BindCard extends React.Component {
       currentGenderValue: '请选择性别',
       selectedDate: '请选择出生日期',
       bindCardConfig: '',
-      // currentDate: '',
       card: {
         patientName: '',
         idenType: '',
