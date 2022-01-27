@@ -2,7 +2,7 @@ import * as React from 'react'
 import * as Taro from '@tarojs/taro'
 import { View, Image } from '@tarojs/components'
 import crossPng from '@/images/icons/cross.png'
-import cardsHealper from '@/utils/cards-healper'
+import { CardsHealper } from '@/utils/cards-healper'
 import './cards-list.less'
 import { encryptByDES, getBranchId } from '@/utils/tools'
 import { loadingService, toastService } from '@/service/toast-service'
@@ -24,7 +24,7 @@ export default function Card(props: {
   }
   const onClickCard = async (e) => {
     if(props.action === 'switchCard'){
-      await cardsHealper.setDefault(props.card.id)
+      await CardsHealper.setDefault(props.card.id)
       Taro.navigateBack()
     }else if(props.action === 'jumpOut'){
       const params = {
@@ -57,7 +57,7 @@ export default function Card(props: {
       loadingService(false)
       if(res.resultCode === 0){
         toastService({title: '升级成功', onClose: () => {
-          cardsHealper.updateAllCards().then(() => {
+          CardsHealper.updateAllCards().then(() => {
             Taro.redirectTo({url: '/pages/bind-pack/cards-list/cards-list'})
           })
         }})

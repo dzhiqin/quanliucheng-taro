@@ -6,8 +6,8 @@ import { fetchClinicDoctors, fetchClinicIntro } from '@/service/api'
 import { toastService } from '@/service/toast-service'
 import { AtTabs } from 'taro-ui'
 import './clinic-intro.less'
-import BkNone from '@/components/bk-none/bk-none'
 import BkPanel from '@/components/bk-panel/bk-panel'
+import BkNone from '@/components/bk-none/bk-none'
 
 export default function ClinicIntro() {
   const router = Taro.useRouter()

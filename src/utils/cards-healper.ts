@@ -97,7 +97,7 @@ const getDefault = () => {
   return card
  
 }
-export default {
+export const CardsHealper = {
   updateAllCards,
   saveCards,
   remove,

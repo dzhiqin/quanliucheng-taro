@@ -5,13 +5,16 @@ import { useState } from 'react'
 import * as React from 'react'
 import { subscribeService } from '@/service/api/taro-api'
 import { longtermTemplates } from '@/utils/index'
-import cardsHealper from '@/utils/cards-healper'
+import { CardsHealper } from '@/utils/cards-healper'
 import { useDidShow } from '@tarojs/taro'
 import qrcodeImg from '../../images/icons/qrcode.png'
 import './health-cards.less'
 import SubscribeNotice from '../subscribe-notice/subscribe-notice'
 
-export default function HealthCards(props: any) {
+export default function HealthCards(props: {
+  cards?: any,
+  switch?: boolean
+}) {
   const [isLogin, setLoginStatus] = useState(false)
   const [showNotice,setShowNotice] = useState(false)
   const [cards,setCards] = useState(props.cards || [])
@@ -54,7 +57,7 @@ export default function HealthCards(props: any) {
     const index = e.detail.current
     const cardId = cards[index].id
     setCurrentCard(index)
-    cardsHealper.setDefault(cardId)
+    CardsHealper.setDefault(cardId)
     Taro.showToast({
       title: '您已切换默认卡',
       icon: 'none'
@@ -66,7 +69,7 @@ export default function HealthCards(props: any) {
     })
   }
   const navToCardDetail = (card) => {
-    Taro.setStorageSync('card',props.card)
+    Taro.setStorageSync('card',card)
     Taro.navigateTo({url: `/pages/bind-pack/card-detail/card-detail`})
   }
   if(!isLogin){

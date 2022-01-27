@@ -6,8 +6,8 @@ import { useState } from 'react';
 import { fetchDeptsOrDoctors } from '@/service/api';
 import { AtSearchBar } from 'taro-ui';
 import { toastService } from '@/service/toast-service';
-import BkTitle from '@/components/bk-title/bk-title';
 import BkPanel from '@/components/bk-panel/bk-panel';
+import BkTitle from '@/components/bk-title/bk-title';
 import './search-result.less'
 
 export default function SearchResult() {

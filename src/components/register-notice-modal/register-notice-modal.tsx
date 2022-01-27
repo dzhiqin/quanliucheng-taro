@@ -6,7 +6,13 @@ import { View, RichText } from '@tarojs/components'
 
 import './register-notice-modal.less'
 
-export default function RegisterNoticeModal(props: {show: boolean,onConfirm?:Function,onCancel?: Function,children?: any}) {
+export default function RegisterNoticeModal(props: 
+  {
+    show: boolean,
+    onConfirm?:Function,
+    onCancel?: Function,
+    children?: any
+  }) {
   const [opened,setOpened] = useState(props.show)
   const [noticeContent,setNoticeContent] = useState()
   const [enable,setEnable] = useState(false)
@@ -23,7 +29,6 @@ export default function RegisterNoticeModal(props: {show: boolean,onConfirm?:Fun
     setOpened(false)
     setEnable(false)
     setCount(3)
-    
     onConfirm()
   }
   const countdown = (value:number) => {

@@ -6,7 +6,7 @@ import BkButton from '@/components/bk-button/bk-button'
 import {  useReady } from '@tarojs/taro'
 import { useState } from 'react'
 import { AtSwitch } from 'taro-ui'
-import cardsHealper from '@/utils/cards-healper'
+import { CardsHealper } from '@/utils/cards-healper'
 import './card-detail.less'
 import { toastService } from '@/service/toast-service'
 import nrhcPng from '@/images/icons/nrhc.png'
@@ -29,7 +29,7 @@ export default function CardDetail(props: any) {
   useReady(() => {
     let currentCard = Taro.getStorageSync('card')
     if(!currentCard){
-      currentCard = cardsHealper.getDefault()
+      currentCard = CardsHealper.getDefault()
     }
     setIsDefault(currentCard.isDefault)
     setCard(currentCard)
@@ -38,7 +38,7 @@ export default function CardDetail(props: any) {
   const handleChange = (e) => {
     setIsDefault(true)
     if(e){
-      cardsHealper.setDefault(card.id)
+      CardsHealper.setDefault(card.id)
       Taro.showToast({
         title: '已设置为默认卡',
         icon: 'none'
@@ -47,7 +47,7 @@ export default function CardDetail(props: any) {
   }
   const handleUnBind = () => {
     setBusy(true)
-    cardsHealper.remove(card).then(res => {
+    CardsHealper.remove(card).then(res => {
       Taro.showToast({
         title: '解绑成功',
         icon: 'success',

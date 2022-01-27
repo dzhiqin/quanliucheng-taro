@@ -5,7 +5,7 @@ import * as Taro from '@tarojs/taro'
 import { useEffect } from 'react'
 import { updateUserInfo, fetchHealthCards } from '@/service/api/'
 import custom from '@/custom/index'
-import cardsHealper from '@/utils/cards-healper'
+import { CardsHealper } from '@/utils/cards-healper'
 import './login.less'
 import { loadingService } from '@/service/toast-service'
 
@@ -37,7 +37,7 @@ export default function Login() {
 
         fetchHealthCards().then(result=>{
           if(result.resultCode === 0){
-            cardsHealper.saveCards(result.data).then(() => {
+            CardsHealper.saveCards(result.data).then(() => {
               if(result.data.length === 0){
                 Taro.redirectTo({url: '/pages/bind-pack/bind-card/bind-card'})
               }else{

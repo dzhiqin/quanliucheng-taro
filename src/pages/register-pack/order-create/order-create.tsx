@@ -8,7 +8,7 @@ import BkPanel from '@/components/bk-panel/bk-panel'
 import BkButton from '@/components/bk-button/bk-button'
 import { AtIcon } from 'taro-ui'
 import { cancelRegOrder, createRegOrder, fetchOrderFee, fetchRegFeeType, fetchRegOrderStatus, subscribeService, TaroRequestPayment } from '@/service/api'
-import cardsHealper from '@/utils/cards-healper'
+import { CardsHealper } from '@/utils/cards-healper'
 import { loadingService, toastService } from '@/service/toast-service'
 import { requestTry } from '@/utils/retry'
 import ResultPage from '@/components/result-page/result-page'
@@ -52,7 +52,7 @@ export default function OrderCreate() {
   const [showNotice,setShowNotice] = useState(false)
   const buildOrderParams = (_regFee?,_treatFee?) => {
     const orderParams = Taro.getStorageSync('orderParams')
-    const card = cardsHealper.getDefault()
+    const card = CardsHealper.getDefault()
     const params = {
       ...orderParams,
       cardNo: card.cardNo,
@@ -63,7 +63,7 @@ export default function OrderCreate() {
     return params
   }
   const buildFeeParams = () => {
-    const card = cardsHealper.getDefault()
+    const card = CardsHealper.getDefault()
     const orderParams = Taro.getStorageSync('orderParams')
     const { sourceType, regDate, deptId, sliceId, doctorId, scheduleId, regTypeId} = orderParams
     // 接口字段不一致，导致字段要变
@@ -186,7 +186,7 @@ export default function OrderCreate() {
   },[])
   useDidShow(() => {
     const params = Taro.getStorageSync('orderParams')
-    const card = cardsHealper.getDefault()
+    const card = CardsHealper.getDefault()
     const orderParams = {
       ...params,
       cardNo: card.cardNo,

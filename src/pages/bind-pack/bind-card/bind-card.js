@@ -10,7 +10,7 @@ import {
 import { taroSubscribeMessage } from '@/service/api/taro-api'
 import SubscribeNotice from '@/components/subscribe-notice/subscribe-notice'
 import { createCard, fetchNationalities, fetchUserInfoByHealthCode, TaroGetLocation } from '@/service/api'
-import cardsHealper from '@/utils/cards-healper'
+import { CardsHealper } from '@/utils/cards-healper'
 import { loadingService, toastService } from '@/service/toast-service'
 import './bind-card.less'
 
@@ -93,7 +93,11 @@ export default class BindCard extends React.Component {
       })
     }
   }
- 
+  getAllCountries() {
+    fetchNationalities().then(res => {
+      console.log(res);
+    })
+  }
   onSubmit() {
     this.setState({busy: true})
     const {result,msg}= this.formValidator()
@@ -118,14 +122,14 @@ export default class BindCard extends React.Component {
     createCard(this.buildCardParams())
     .then(res => {
       if(res.resultCode === 0){
-        cardsHealper.updateAllCards().then(() => {
+        CardsHealper.updateAllCards().then(() => {
           toastService({title: '创建成功', icon: 'success', onClose: () => Taro.navigateBack()})
         })
       }else{
         let msg = ''
         if (/成功创建患者档案信息/.test(res.message)) {
           msg = '健康卡创建失败，但诊疗卡创建成功且支持挂号'
-          cardsHealper.updateAllCards().then(() => {
+          CardsHealper.updateAllCards().then(() => {
             toastService({title: msg,onClose:()=> Taro.navigateBack()})
           })
         }else{

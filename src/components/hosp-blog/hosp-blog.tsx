@@ -9,7 +9,7 @@ export default function HospBlog(props: any) {
   const [list] = useState(props.list || [1,2])
   return (
     <View className='hosp-blog' style='padding: 40rpx;'>
-      <BkTitle title='医院' more onClick={() => console.log('click more')}></BkTitle>
+      <BkTitle title='医院' more onClickMore={() => console.log('click more')}></BkTitle>
       {list.map((item,index) => <Blog>123</Blog>)}
     </View>
   )

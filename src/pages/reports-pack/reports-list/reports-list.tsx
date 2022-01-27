@@ -6,12 +6,12 @@ import { fetchReportsList } from '@/service/api/reports-api'
 import { useState } from 'react'
 import { REPORT_TYPE_EN, REPORT_ITEM_TYPE_CN } from '@/enums/index'
 import HealthCards from '@/components/health-cards/health-cards'
-import BkTabs from '@/components/bk-tabs/bk-tabs'
 import BkPanel from '@/components/bk-panel/bk-panel'
+import BkTabs from '@/components/bk-tabs/bk-tabs'
 import BkNone from '@/components/bk-none/bk-none'
 import { humanDateAndTime } from '@/utils/format'
 import { loadingService, toastService } from '@/service/toast-service'
-import cardsHealper from '@/utils/cards-healper'
+import { CardsHealper } from '@/utils/cards-healper'
 import './reports-list.less'
 
 export default function ReportList() {
@@ -52,7 +52,7 @@ export default function ReportList() {
   }
 
   useDidShow(() => {
-    const card = cardsHealper.getDefault()
+    const card = CardsHealper.getDefault()
     if(!card){
       toastService({title: '请先绑卡'})
       return

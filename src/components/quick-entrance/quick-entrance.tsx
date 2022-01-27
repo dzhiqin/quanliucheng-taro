@@ -5,7 +5,9 @@ import * as Taro from '@tarojs/taro'
 import BkTabs from '../bk-tabs/bk-tabs'
 import './quick-entrance.less'
 
-export default function QuickEntrance(props: any) {
+export default function QuickEntrance(props: {
+  quickEntrance?:any
+}) {
   const [quickEntrance] = useState(props.quickEntrance || {})
   const [tabs,setTabs] = useState([]) 
   const [entrances,setEntrances] = useState(quickEntrance.tabList[0].entrances || [])

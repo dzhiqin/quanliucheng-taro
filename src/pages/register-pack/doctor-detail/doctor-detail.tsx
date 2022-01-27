@@ -9,7 +9,7 @@ import ScheduleDays from '@/components/schedule-days/schedule-days'
 import { AtList, AtListItem } from "taro-ui"
 import BkNone from '@/components/bk-none/bk-none'
 import './doctor-detail.less'
-import cardsHealper from '@/utils/cards-healper'
+import { CardsHealper } from '@/utils/cards-healper'
 
 export default function DoctorDefault(props) {
   const router = useRouter()
@@ -39,7 +39,7 @@ export default function DoctorDefault(props) {
   const onClickItem = (item) => {
     const hospitalInfo = Taro.getStorageSync('hospitalInfo')
     const userInfo = Taro.getStorageSync('userInfo')
-    const card = cardsHealper.getDefault()
+    const card = CardsHealper.getDefault()
     if(!card) return
     if(item.leaveCount > 0){
       const orderParams = {

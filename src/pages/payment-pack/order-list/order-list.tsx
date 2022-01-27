@@ -6,15 +6,15 @@ import { useEffect, useState } from 'react'
 import { useDidShow } from '@tarojs/taro'
 import { createPaymentOrder, fetchPaymentOrderList , subscribeService , PayOrderParams, handlePayment, cancelPayment, fetchPaymentOrderStatus } from '@/service/api'
 import { loadingService, toastService } from '@/service/toast-service'
-import BkNone from '@/components/bk-none/bk-none'
-import BkTabs from '@/components/bk-tabs/bk-tabs'
 import { PAY_TYPE_CN, ORDER_SEARCH_TYPE_EN , ORDER_STATUS_CN, ORDER_STATUS_EN } from '@/enums/index'
 import BkPanel from '@/components/bk-panel/bk-panel'
 import BkButton from '@/components/bk-button/bk-button'
+import BkTabs from '@/components/bk-tabs/bk-tabs'
+import BkNone from '@/components/bk-none/bk-none'
 import BkPrice from '@/components/bk-price/bk-price'
 import { onetimeTemplates } from '@/utils/templateId'
 import SubscribeNotice from '@/components/subscribe-notice/subscribe-notice'
-import cardsHealper from '@/utils/cards-healper'
+import { CardsHealper } from '@/utils/cards-healper'
 import { Card } from 'src/interfaces/card'
 import { requestTry } from '@/utils/retry'
 import './order-list.less'
@@ -27,7 +27,7 @@ export default function OrderList(){
   const [searchType, setSearchType] = useState(ORDER_SEARCH_TYPE_EN.current)
   const [card,setCard] = useState({} as Card)
   useDidShow(() => {
-    setCard(cardsHealper.getDefault())
+    setCard(CardsHealper.getDefault())
     getList(searchType)
   })
   const getList = (type: string) => {

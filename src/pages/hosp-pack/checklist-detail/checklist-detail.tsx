@@ -5,11 +5,11 @@ import { useRouter } from '@tarojs/taro'
 import { fetchInHospBillDetail, fetchInHospBillCategories } from '@/service/api'
 import { loadingService, toastService } from '@/service/toast-service'
 import { useState } from 'react'
-import BkNone from '@/components/bk-none/bk-none'
-import BkPanel from '@/components/bk-panel/bk-panel'
 import VirtualList from '@tarojs/components/virtual-list'
-import './checklist-detail.less'
+import BkPanel from '@/components/bk-panel/bk-panel'
 import BkTabs from '@/components/bk-tabs/bk-tabs'
+import BkNone from '@/components/bk-none/bk-none'
+import './checklist-detail.less'
 
 export default function ChecklistDetail() {
   const router = useRouter()

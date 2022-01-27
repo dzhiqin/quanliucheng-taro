@@ -3,7 +3,7 @@ import * as React from 'react'
 import { View } from '@tarojs/components'
 import HealthCards from '@/components/health-cards/health-cards'
 import { useDidShow } from '@tarojs/taro'
-import cardsHealper from '@/utils/cards-healper'
+import { CardsHealper } from '@/utils/cards-healper'
 import { toastService } from '@/service/toast-service'
 import { fetchPaymentList } from '@/service/api'
 import { useState } from 'react'
@@ -15,7 +15,7 @@ import { PAY_STATUS_EN } from '@/enums/index'
 export default function PaymentList() {
   const [list, setList] = useState([])
   useDidShow(() => {
-    const card = cardsHealper.getDefault()
+    const card = CardsHealper.getDefault()
     if(!card){
       toastService({title: '请先绑卡'})
       return

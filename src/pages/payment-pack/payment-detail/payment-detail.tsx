@@ -16,7 +16,7 @@ import {
   handleHeSuanRefund,
   TaroNavToYiBao
 } from '@/service/api'
-import cardsHealper from '@/utils/cards-healper'
+import { CardsHealper } from '@/utils/cards-healper'
 import './payment-detail.less'
 import { useState } from 'react'
 import BkPanel from '@/components/bk-panel/bk-panel'
@@ -54,7 +54,7 @@ export default function PaymentDetail() {
   const featConfig = custom.feat
   const router = useRouter()
   const params = router.params
-  const card = cardsHealper.getDefault()
+  const card = CardsHealper.getDefault()
   const [busy,setBusy] = useState(false)
   let orderInfo: OrderInfoParams = {
     orderId: '',
