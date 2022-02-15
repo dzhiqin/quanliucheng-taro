@@ -34,9 +34,48 @@
     display: flex;
     align-items: center;
     border-bottom: 1rpx solid @cancel-color;
+    padding: 10rpx;
     &-title{
       // font-size: 26rpx;
       min-width: 170rpx;
     }
+  }
+  .result-header-item{
+    padding: 20rpx;
+    color: white;
+    border-bottom: 1rpx solid white;
+  }
+  .result-header-image{
+    display: flex;
+    justify-content: center;
+  }
+  .result-header-qrcode{
+    width: 400rpx;
+    height: 400rpx;
+  }
+  
+  .green-bg{
+    background-color: green;
+  }
+  .danger-bg{
+    background-color: @danger-color;
+  }
+  &-symptoms{
+    padding: 20rpx;
+  }
+  &-symptom{
+    background-color: @primary-color;
+    color: white;
+    width: 100rpx;
+    height: 100rpx;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 100rpx;
+    margin-left: 20rpx;
+  }
+  .divider{
+    background-color: @cancel-color;
+    width: 100%;
+    height: 20rpx;
   }
 }
