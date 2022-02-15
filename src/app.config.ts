@@ -79,7 +79,10 @@ export default {
       pages: [
         'arrival/arrival',
         'waiting-list/waiting-list',
-        'arrival-service/arrival-service'
+        'arrival-service/arrival-service',
+        'investigation/investigation',
+        'epidemiological-survey/epidemiological-survey',
+        'epidemiological-survey/result'
       ]
     }
   ],

@@ -1,0 +1,42 @@
+@import '../../../color.less';
+.check-button {
+  background-color: #ccc;
+  border-radius: 10rpx;
+  display: inline-block;
+  padding: 10rpx 12rpx;
+  color: white;
+  &-active{
+    background-color: @primary-color
+  }
+  &-unactive{
+    background-color: #ccc;
+  }
+}
+.survey{
+  &-title {
+    color: @danger-color;
+    font-size: 46rpx;
+    text-align: center;
+    margin-bottom: 20rpx;
+    line-height: 70rpx;
+  }
+}
+.single-ck-btn{
+  .text-input-long-header{
+    .at-input__title{
+      width: 250rpx;
+    }
+  }
+}
+
+.survey-result{
+  .basic-info-item{
+    display: flex;
+    align-items: center;
+    border-bottom: 1rpx solid @cancel-color;
+    &-title{
+      // font-size: 26rpx;
+      min-width: 170rpx;
+    }
+  }
+}

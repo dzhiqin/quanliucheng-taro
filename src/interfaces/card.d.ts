@@ -5,6 +5,8 @@ export interface Card {
   idenNo?: string;       // 证件号码
   idenType: number;    // 证件类型
   phone: string;        // 手机号
+  cellphone?: string;
+  age?: string;
   address: string;
   isDefault: true;
   gender: string;

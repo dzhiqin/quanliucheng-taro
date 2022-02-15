@@ -11,12 +11,15 @@ class App extends Component {
   componentDidMount () {}
 
   onLaunch () {
+    // 单页调试时方便使用
     // const token = Taro.getStorageSync('token')
     // if(token) return
     this.checkUpdate()
     Taro.login({
       success: res => {
         let { code } = res
+        // console.log('code',code);
+        // return
         login({code}).then((result:any) => {
           // console.log('login res',result)
           if(result.statusCode === 200) {

@@ -131,6 +131,18 @@
           "pathName": "pages/hosp-pack/checklist/checklist",
           "query": "",
           "scene": null
+        },
+        {
+          "name": "流调表",
+          "pathName": "pages/service-pack/epidemiological-survey/epidemiological-survey",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "流调表详情",
+          "pathName": "pages/service-pack/epidemiological-survey/result",
+          "query": "id=4",
+          "scene": null
         }
       ]
     }
