@@ -7,7 +7,7 @@ import {
  } from '@/service/api';
 import { View, RichText } from '@tarojs/components'
 import { useState } from 'react';
-import { toastService } from '@/service/toast-service';
+import { loadingService, toastService } from '@/service/toast-service';
 import { AtInput,AtCheckbox } from 'taro-ui';
 import BkTitle from '@/components/bk-title/bk-title';
 import QuestionItem from './question-item';
@@ -17,13 +17,10 @@ import { CardsHealper } from '@/utils/cards-healper';
 import { QUES_TYPE } from './enums';
 
 export default function EpidemiologicalSurvey(){
-  // const router = Taro.useRouter()
-  // const params = router.params
-  // console.log('params',params);
   const [surveyInfo,setSurveyInfo] = useState(null)
   const [basicInfo,setBasicInfo] = useState(null)
   const [questions,setQuestions] = useState([])
-  const [answers,setAnswers] = useState([])
+  const [busy,setBusy] = useState(false)
   const [quesId,setQuesId] = useState(null)
   const [selectedList,setSelectedList] = useState(['true'])
   Taro.useReady(() => {
@@ -119,20 +116,21 @@ export default function EpidemiologicalSurvey(){
       return
     }
     const buildAnswers = initAnswers(questions)
-    console.log('build answers',buildAnswers);
-    
+    // console.log('build answers',buildAnswers);
     let result = formValidator(buildAnswers)
     if(/其他症状/.test(result.message))
       // 特殊判断条件
       result.valid = true
     if(result.valid){
+      loadingService(true)
+      setBusy(true)
       handleSubmitEpidemiologicalSurvey({
         questionnaireId: quesId,
         answers: buildAnswers,
         orderNo: ''
       }).then(res => {
         if(res.resultCode === 0){
-          toastService({title: '提交成功', onClose: () => {Taro.navigateBack()}})
+          toastService({title: '提交成功', onClose: () => {Taro.navigateBack();Taro.setStorageSync('checkEpiLogicalSurvey',true)}})
         }else{
           toastService({title: '提交失败' + res.message})
         }
@@ -312,7 +310,7 @@ export default function EpidemiologicalSurvey(){
         onChange={onCkBoxChange.bind(this)}
       />
       <View style='padding: 40rpx'>
-        <BkButton title='确认' onClick={handleSubmit} />
+        <BkButton title='确认' onClick={handleSubmit} disabled={busy} />
       </View>
     </View>
   )

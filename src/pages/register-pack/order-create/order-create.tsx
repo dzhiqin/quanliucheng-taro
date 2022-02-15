@@ -7,7 +7,15 @@ import { useState,useEffect } from 'react'
 import BkPanel from '@/components/bk-panel/bk-panel'
 import BkButton from '@/components/bk-button/bk-button'
 import { AtIcon } from 'taro-ui'
-import { cancelRegOrder, createRegOrder, fetchOrderFee, fetchRegFeeType, fetchRegOrderStatus, subscribeService, TaroRequestPayment } from '@/service/api'
+import { 
+  cancelRegOrder, 
+  createRegOrder, 
+  fetchOrderFee, 
+  fetchRegFeeType, 
+  fetchRegOrderStatus, 
+  getEpidemiologicalSurveyState, 
+  subscribeService, 
+  TaroRequestPayment } from '@/service/api'
 import { CardsHealper } from '@/utils/cards-healper'
 import { loadingService, toastService } from '@/service/toast-service'
 import { requestTry } from '@/utils/retry'
@@ -15,6 +23,7 @@ import ResultPage from '@/components/result-page/result-page'
 import { onetimeTemplates } from '@/utils/templateId'
 import SubscribeNotice from '@/components/subscribe-notice/subscribe-notice'
 import './order-create.less'
+import custom from '@/custom/index'
 
 export default function OrderCreate() {
   const [order,setOrder] = useState({
@@ -119,6 +128,23 @@ export default function OrderCreate() {
       setBusy(false)
     })
   }
+  const checkEpiLogicalSurvey = () => {
+    return new Promise((resolve,reject) => {
+      getEpidemiologicalSurveyState()
+      .then(res => {
+        console.log('checkEpiLogicalSurvey',res);
+        if(res.resultCode === 0){
+          resolve({result: true, message:'success'})
+        }else{
+          resolve({result: false,message: res.message})
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        reject({result: false, message:'fail'+err})
+      })
+    })
+  }
   const handleSubmit = async() => {
     setBusy(true)
     const subsRes = await subscribeService(onetimeTemplates.registration())
@@ -126,8 +152,24 @@ export default function OrderCreate() {
       setShowNotice(true)
       return
     }
+    if(custom.feat.register.checkEpiLogicalSurvey){
+      try {
+        const checkSurveyRes:any = await checkEpiLogicalSurvey()
+        const checkTempRes = Taro.getStorageSync('checkEpiLogicalSurvey')
+        if(!checkTempRes && !checkSurveyRes.result){
+          toastService({title: checkSurveyRes.message, onClose: () => {Taro.navigateTo({url: '/pages/service-pack/epidemiological-survey/epidemiological-survey'})}})
+          setBusy(false)
+          return
+        }
+        if(checkTempRes){
+          Taro.removeStorageSync('checkEpiLogicalSurvey')
+        }
+      } catch (error) {
+        toastService({title: '获取流调表失败'})
+        return
+      }
+    }
     loadingService(true,'挂号中……')
-
     let orderParams 
     if( (!regFee && !treatFee && regFee !== 0 && treatFee !== 0) ) {
       // toastService({title: '正在获取费用信息，请稍后……'})

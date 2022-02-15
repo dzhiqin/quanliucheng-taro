@@ -135,7 +135,8 @@ export default {
       bookingAndIntraday:true,// 是否区分当天挂号和预约挂号
       popupNotice: false,// 挂号提示弹窗
       guangSanMode: true,// 广三挂号模式：区分当天挂号和预约挂号
-      type: 'embed',// 科室内容排版方式
+      type: 'embed',// 科室内容排版方式,
+      checkEpiLogicalSurvey: true, // 是否要先填流调表才可以挂号
     },
     hospitalNavigation: true,  // 院内导航
     ZhuYuanCardName: false, // 住院绑卡是否需要姓名
