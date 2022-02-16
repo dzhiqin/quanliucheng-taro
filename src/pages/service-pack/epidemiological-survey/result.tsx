@@ -21,11 +21,10 @@ export default function Result() {
   const [questions,setQuestions] = useState([])
   const [surveyState,setSurveyState] = useState(null)
   const [symptoms,setSymptoms] = useState([])
-  const [hideInfo,setHideInfo] = useState(true)
+  const [hideInfo,setHideInfo] = useState(false)
   
   Taro.useDidShow(() => {
     getEpidemiologicalSurveyAnswers({questionnaireReportId: Number(id)}).then(res => {
-      console.log(res);
       if(res.resultCode === 0){
         setBasicInfo(res.data.basic)
         setCreatedAt(res.data.createdTime)
@@ -44,11 +43,25 @@ export default function Result() {
   },[createdAt])
   const getSurveyStateByList = (list) => {
     if(!list || list.length === 0) return
-    setSymptoms(['发热','干咳'])
-    setSurveyState('green')
+    console.log('list',list);
+    const isSick = list[0].answer === '1'
+    let _symptoms = []
+    if(isSick){
+      const symptomlist = list[0].subOptions[1].subs[0].subOptions
+      const symptomValueArray = list[0].subOptions[1].subs[0].answer.split(',')
+      symptomlist.forEach(item => {
+        if(symptomValueArray.includes(item.key)){
+          _symptoms.push(item.value)
+        }
+      })
+      setSymptoms(_symptoms)
+    }else{
+      setSymptoms(['无'])
+    }
+
+    setSurveyState(isSick ? 'danger' : 'green')
   }
   const handleSwitchChange = (e) => {
-    // console.log(e.detail.value);
     setHideInfo(e.detail.value)
   }
   return(
@@ -91,7 +104,7 @@ export default function Result() {
       <View className='divider'></View>
       <AtList>
         <AtListItem
-          title={hideInfo ? '收起明细' : '查看明细'}
+          title={hideInfo ? '查看明细' : '收起明细'}
           isSwitch
           onSwitchChange={handleSwitchChange}
         />
@@ -101,7 +114,7 @@ export default function Result() {
       <View style='padding: 0 40rpx 40rpx'>
         <BkTitle title='基本信息' />
         {
-          basicInfo && hideInfo &&
+          basicInfo && !hideInfo &&
           <View className='basic-info'>
             <View className='basic-info-item'>
               <View className='basic-info-item-title'>姓名</View>
@@ -132,11 +145,11 @@ export default function Result() {
         
         <BkTitle title='病情概况(请根据您的情况如实填写)' />
         {
-          hideInfo && questions && questions.length > 0 &&
+          !hideInfo && questions && questions.length > 0 &&
           <View>
             {
               questions.map((ques,index) => 
-                <View key={ques.id}>
+                <View key={ques.id} className='result-ques-item' style='padding: 20rpx 0 ; border-bottom: 1rpx solid #dbdbdb'>
                   
                   {
                     ques.subjectTypeName === QUES_TYPE.FILL_BLANK &&
@@ -153,7 +166,66 @@ export default function Result() {
                         ques.subOptions.map((subOption,subIndex) => 
                           <View key={subIndex}>
                             
-                            <View className={`check-button ${ques.answer === subOption.key ? 'check-button-active' : 'check-button-unactive'}`}>{subOption.value}</View>
+                            <View className={`check-button ${ques.answer === subOption.key ? 'check-button-active' : 'check-button-unactive'}`} style='margin: 10rpx'>
+                              {subOption.value}
+                            </View>
+                            {
+                                ques.answer === subOption.key && subOption.subs && subOption.subs.length > 0 && 
+                                <View>
+                                  {
+                                    subOption.subs.map((subOptionSub) => 
+                                      <View key={subOptionSub.id}>
+                                        {
+                                          subOptionSub.subjectTypeName === QUES_TYPE.FILL_BLANK &&
+                                          <View>
+                                            <text>{subOptionSub.title}</text>
+                                            <text>{subOptionSub.answer}</text>
+                                          </View>
+                                        }
+                                        {
+                                          subOptionSub.subjectTypeName === QUES_TYPE.SINGLE_CHOICE &&
+                                          <View>
+                                            {
+                                              subOptionSub.subOptions.map((grandSubOption) => {
+                                                if(grandSubOption.key === subOptionSub.answer){
+                                                  return (
+                                                    <View>
+                                                      <View className='check-button check-button-active' style='margin-left: 20rpx'>{grandSubOption.value}</View>
+                                                      {
+                                                        grandSubOption.subs && 
+                                                        grandSubOption.subs.map(grandSubOptionSub => {
+                                                          if(grandSubOptionSub.subjectTypeName === QUES_TYPE.FILL_BLANK){
+                                                            return(
+                                                              <View>
+                                                                <text>{grandSubOptionSub.title}</text>
+                                                                <text>{grandSubOptionSub.answer}</text>
+                                                              </View>
+                                                            )
+                                                          }
+                                                        })
+                                                      }
+                                                    </View>
+                                                  )
+                                                }
+                                              })
+                                            }
+                                          </View>
+                                        }
+                                        {
+                                          subOptionSub.subjectTypeName === QUES_TYPE.MULTI_CHOICE &&
+                                          <View>
+                                            {
+                                              symptoms.map((symptom,symptomindex) => 
+                                                <View className='check-button check-button-active' key={symptomindex} style='margin-left: 20rpx'>{symptom}</View>
+                                              )
+                                            }
+                                          </View>
+                                        }
+                                      </View>
+                                    )
+                                  }
+                                </View>
+                              }
                           </View>
                         )
                       }
