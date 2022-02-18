@@ -17,8 +17,8 @@ export enum REPORT_ITEM_TYPE_CN {
   '放射' = 'R'   // 放射
 }
 export enum PACT_CODE_EN {
-  'selfPay' = '1',
-  'YiBao' = '3'
+  'ZiFei' = '0',
+  'YiBao' = '1'
 }
 export enum ORDER_TYPE_CN {
   '自费单' = '0',

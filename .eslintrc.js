@@ -3,7 +3,7 @@ module.exports = {
   "rules": {
     "react/jsx-uses-react": "off",
     "react/react-in-jsx-scope": "off",
-    "no-shadow":["error", { "allow": ["resolve", "reject", "checkRes","resultEnum"]}],
+    "no-shadow":["off", { "allow": ["resolve", "reject", "checkRes","resultEnum", "res"]}],
     "import/first": "off"
   }
 }

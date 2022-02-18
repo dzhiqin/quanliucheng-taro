@@ -24,7 +24,7 @@ export interface PayOrderParams {
 export const createPaymentOrder = (data: PayOrderParams) => {
   return Post(fullUrl('api/applet/paybill/Bill/CreateBillOrder'),data)
 }
-export const handlePayment = (data: {orderId: string, payType: string}) => {
+export const handlePayment = (data: {orderId: string, payType: string | number}) => {
   return Post(fullUrl(`api/applet/paybill/Bill/PayBill?orderId=${data.orderId}&payType=${data.payType}`),data)
 }
 export const cancelPayment = (data: {orderId: string}) => {
@@ -54,6 +54,9 @@ export const fetchPaymentInvoice = (data: {serialNo: string}) => {
 export const fetchPaymentOrderDetailByQRCode = (data: {preQRCodePayId: number}) => {
   return Post(fullUrl('subApi/api/customize/applet/Bill/GetPrescriptionQRCodeInfo'),data)
 }
+export const createPaymentOrderByQRCode = (data) => {
+  return Post(fullUrl('subApi/api/customize/applet/Bill/SavePrescriptionQRCodeBill'),data)
+}
 // export const fetchPaymentOrderDetailByQRCode = (data: {clinicNo:string,cardNo:string,patientId: string}) => {
 //   return Post(fullUrl('api/applet/paybill/Bill/GetPrescriptionQRCodeInfo'),data)
 // }
@@ -61,5 +64,5 @@ export const fetchPaymentOrderInvoice = (data: {serialNo: string}) => {
   return Post(fullUrl('api/applet/paybill/Bill/GetBillInvoiceInfo'))
 }
 export const handleHeSuanRefund = (data:{orderId: string}) => {
-  return Post(fullUrl('subApi/api/customize/applet/HeSuan/HeSuanRefund'),data)
+  return Post(fullUrl('api/customize/applet/HeSuan/HeSuanRefund'),data)
 }

@@ -21,10 +21,11 @@ class App extends Component {
         // console.log('code',code);
         // return
         login({code}).then((result:any) => {
-          // console.log('login res',result)
+          // console.log('login res',result.data.data.openId)
           if(result.statusCode === 200) {
             const {data: {data}} = result
             Taro.setStorageSync('token', data.token)
+            Taro.setStorageSync('openId', data.openId)
             fetchBranchHospital().then(resData => {
               if(resData.data.length === 1){
                 Taro.setStorageSync('hospitalInfo',resData.data[0])

@@ -5,7 +5,7 @@ const subUrl = config.subUrl
 const fullUrl = (url: string, params?: { [key: string]: any }) => {
   let a
   if(/^subApi\//.test(url)){
-    // 核算退费的接口要使用另外一个域名
+    // ‘subApi’开头的url，使用的是附加功能的测试环境
     url = url.replace(/^subApi\//,'')
     a = `${subUrl}/${url}`
   }else{

@@ -26,6 +26,7 @@ export default function ReportList() {
     {title: '超声', value: REPORT_ITEM_TYPE_CN.超声},
     {title: '病理', value: REPORT_ITEM_TYPE_CN.病理},
     {title: '内镜', value: REPORT_ITEM_TYPE_CN.内镜},
+    {title: '产前', value: REPORT_ITEM_TYPE_CN.产前超声},
   ]
   const hospitalizationTabs = [
     {title: '化验', value: REPORT_ITEM_TYPE_CN.化验},

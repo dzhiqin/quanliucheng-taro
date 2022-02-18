@@ -5,8 +5,8 @@ export default {
   longitude: 113.240994,
   hospName: "gysylw",
   hospitalName: "广州医科大学附属第三医院",
-  baseUrl: "https://applets.gdbkyz.com", // 倍康测试
-  // baseUrl: "https://gysy.wedoublecare.com",  // 正式环境
+  // baseUrl: "https://applets.gdbkyz.com", // 倍康测试
+  baseUrl: "https://gysy.wedoublecare.com",  // 正式环境
   subUrl: 'https://gysycustomize.wedoublecare.com', // 附加功能使用
   indexPage: {
     banner: {
@@ -136,7 +136,7 @@ export default {
       popupNotice: false,// 挂号提示弹窗
       guangSanMode: true,// 广三挂号模式：区分当天挂号和预约挂号
       type: 'embed',// 科室内容排版方式,
-      checkEpiLogicalSurvey: true, // 是否要先填流调表才可以挂号
+      checkEpiLogicalSurvey: false, // 是否要先填流调表才可以挂号
     },
     hospitalNavigation: true,  // 院内导航
     ZhuYuanCardName: false, // 住院绑卡是否需要姓名

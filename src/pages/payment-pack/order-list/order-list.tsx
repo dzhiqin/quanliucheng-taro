@@ -147,7 +147,7 @@ export default function OrderList(){
   },[searchType])
   const onClickItem = (item) => {
     console.log(item);
-    const { clinicCode, createdTime, orderDate, recipeSeq, prescMoney, orderDept, orderDoctor, orderId, orderType } = item
+    const { clinicCode, createdTime, orderDate, recipeSeq, prescMoney, orderDept, orderDoctor, orderId, orderType, payState } = item
     const params = {
       clinicNo: clinicCode,
       createdTime,
@@ -157,6 +157,7 @@ export default function OrderList(){
       orderDept,
       orderDoctor,
       orderId,
+      payState,
       orderType: orderType === '0' ? 'ZiFei' : 'YiBao'  // 订单列表接口后端返回的ordertype为'0'/'1',但缴费列表接口返回的ordertype字段为‘ZiFei’/'YiBao',就╮(╯▽╰)╭……
     }
     Taro.navigateTo({url: '/pages/payment-pack/payment-detail/payment-detail?orderInfo=' + JSON.stringify(params)})
