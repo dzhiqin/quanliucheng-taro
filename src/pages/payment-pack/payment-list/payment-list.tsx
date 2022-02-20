@@ -5,12 +5,12 @@ import HealthCards from '@/components/health-cards/health-cards'
 import { useDidShow } from '@tarojs/taro'
 import { CardsHealper } from '@/utils/cards-healper'
 import { toastService } from '@/service/toast-service'
-import { fetchPaymentList } from '@/service/api'
+import { fetchPaymentListFromHis } from '@/service/api'
 import { useState } from 'react'
 import BkNone from '@/components/bk-none/bk-none'
 import './payment-list.less'
 import BkPrice from '@/components/bk-price/bk-price'
-import { PAY_STATUS_EN } from '@/enums/index'
+import { ORDER_STATUS_EN, PAYMENT_FROM, PAY_STATUS_EN } from '@/enums/index'
 
 export default function PaymentList() {
   const [list, setList] = useState([])
@@ -21,7 +21,7 @@ export default function PaymentList() {
       return
     }
     Taro.showLoading({title: '加载中……'})
-    fetchPaymentList({cardId: card.id}).then(res => {
+    fetchPaymentListFromHis({cardId: card.id}).then(res => {
       if(res.resultCode === 0){
         setList(res.data.bills)
       }
@@ -30,10 +30,11 @@ export default function PaymentList() {
     })
   })
   const handleClick = (item) => {
-    // console.log(item);
+    // console.log('click item',item);
     // 缴费单的信息要从列表带过去
     item.payState = PAY_STATUS_EN.unpay  // 默认未支付状态
-    Taro.navigateTo({url: `/pages/payment-pack/payment-detail/payment-detail?orderInfo=${JSON.stringify(item)}`})
+    item.orderState = ORDER_STATUS_EN.unpay // 默认未支付状态
+    Taro.navigateTo({url: `/pages/payment-pack/payment-detail/payment-detail?orderInfo=${JSON.stringify(item)}&from=${PAYMENT_FROM.paymentList}`})
   }
   return(
     <View className='payment-list'>

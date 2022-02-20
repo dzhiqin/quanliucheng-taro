@@ -77,3 +77,8 @@ export enum HEALTH_CARD_TYPE_EN {
   Others = 9,     // 其他
   Children = 20   // 儿童
 }
+export enum PAYMENT_FROM {
+  orderList = 'orderList',
+  paymentList = 'paymentList',
+  scanQRCode = 'scanQRCode'
+}

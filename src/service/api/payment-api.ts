@@ -1,13 +1,13 @@
 // import { getBranchId, getRegType } from "@/utils/tools";
 import { fullUrl, Post } from "../http";
 
-export const fetchPaymentList = (data:{cardId: string | number, listDays?: 30}) => {
+export const fetchPaymentListFromHis = (data:{cardId: string | number, listDays?: 30}) => {
   return Post(fullUrl('api/applet/paybill/Bill/GetHisOrderList'),data)
 }
 export const fetchPaymentFee = (data:{cardNo: string, clinicNo: string, recipeSeq: string, pactCode: string, patientId: string, payType: string}) => {
   return Post(fullUrl('api/applet/paybill/Bill/GetBillMoney',data))
 }
-export const fetchPaymentDetail = (data:{cardNo: string, clinicNo: string, recipeSeq: string, patientId: string}) => {
+export const fetchPaymentDetailFromHis = (data:{cardNo: string, clinicNo: string, recipeSeq: string, patientId: string}) => {
   return Post(fullUrl('api/applet/paybill/Bill/GetOrderDetail'),data)
 }
 export interface PayOrderParams {
@@ -37,7 +37,7 @@ export const fetchPaymentOrderList = (data) => {
   return Post(fullUrl('api/applet/paybill/Bill/GetBillOrderRecord?type=' + data.type),data)
 }
 export const fetchPaymentOrderDetail = (data: {billOrderId: string}) => {
-  return Post(fullUrl('api/applet/paybill/Bill/GetBillOrderItem'),data)
+  return Post(fullUrl('api/applet/paybill/Bill/GetBillOrderItem?billOrderId=' + data.billOrderId),data)
 }
 export const fetchPaymentOrderStatus = (data: {orderId: string}) => {
   return Post(fullUrl('api/applet/paybill/Bill/GetBillStatus?orderId=' + data.orderId),data)
@@ -52,7 +52,7 @@ export const fetchPaymentInvoice = (data: {serialNo: string}) => {
   return Post(fullUrl('api/applet/paybill/Bill/GetBillInvoiceInfo'),data)
 }
 export const fetchPaymentOrderDetailByQRCode = (data: {preQRCodePayId: number}) => {
-  return Post(fullUrl('subApi/api/customize/applet/Bill/GetPrescriptionQRCodeInfo'),data)
+  return Post(fullUrl('api/customize/applet/Bill/GetPrescriptionQRCodeInfo'),data)
 }
 export const createPaymentOrderByQRCode = (data) => {
   return Post(fullUrl('subApi/api/customize/applet/Bill/SavePrescriptionQRCodeBill'),data)

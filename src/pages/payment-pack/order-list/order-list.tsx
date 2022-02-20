@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react'
 import { useDidShow } from '@tarojs/taro'
 import { createPaymentOrder, fetchPaymentOrderList , subscribeService , PayOrderParams, handlePayment, cancelPayment, fetchPaymentOrderStatus } from '@/service/api'
 import { loadingService, toastService } from '@/service/toast-service'
-import { PAY_TYPE_CN, ORDER_SEARCH_TYPE_EN , ORDER_STATUS_CN, ORDER_STATUS_EN } from '@/enums/index'
+import { PAY_TYPE_CN, ORDER_SEARCH_TYPE_EN , ORDER_STATUS_CN, ORDER_STATUS_EN, PAYMENT_FROM } from '@/enums/index'
 import BkPanel from '@/components/bk-panel/bk-panel'
 import BkButton from '@/components/bk-button/bk-button'
 import BkTabs from '@/components/bk-tabs/bk-tabs'
@@ -33,7 +33,6 @@ export default function OrderList(){
   const getList = (type: string) => {
     Taro.showLoading({title: '加载中……'})
     fetchPaymentOrderList({type}).then(res => {
-      console.log(res);
       if(res.resultCode === 0){
         setList(res.data)
       }else{
@@ -71,7 +70,6 @@ export default function OrderList(){
       }else if(res.resultCode === 0 && !res.data){
         toastService({title: '提交订单成功，还未支付', onClose: () => {getList(searchType); setBusy(false)}})
       }else{
-        console.log('data',res.data)
         const {nonceStr, paySign, signType, timeStamp, pay_appid, pay_url} = res.data
         if(payType === PAY_TYPE_CN.医保){
           Taro.showLoading({title: '正在打开医保小程序'})
@@ -135,7 +133,6 @@ export default function OrderList(){
   useEffect(() => {
     Taro.showLoading({title: '加载中……'})
     fetchPaymentOrderList({type: searchType}).then(res => {
-      console.log(res);
       if(res.resultCode === 0){
         setList(res.data)
       }else{
@@ -146,7 +143,7 @@ export default function OrderList(){
     })
   },[searchType])
   const onClickItem = (item) => {
-    console.log(item);
+    // console.log(item);
     const { clinicCode, createdTime, orderDate, recipeSeq, prescMoney, orderDept, orderDoctor, orderId, orderType, payState } = item
     const params = {
       clinicNo: clinicCode,
@@ -160,7 +157,7 @@ export default function OrderList(){
       payState,
       orderType: orderType === '0' ? 'ZiFei' : 'YiBao'  // 订单列表接口后端返回的ordertype为'0'/'1',但缴费列表接口返回的ordertype字段为‘ZiFei’/'YiBao',就╮(╯▽╰)╭……
     }
-    Taro.navigateTo({url: '/pages/payment-pack/payment-detail/payment-detail?orderInfo=' + JSON.stringify(params)})
+    Taro.navigateTo({url: `/pages/payment-pack/payment-detail/payment-detail?orderInfo=${JSON.stringify(params)}&from=${PAYMENT_FROM.orderList}`})
   }
   return (
     <View className='payment-order-list'>

@@ -13,7 +13,7 @@
       "@/custom/*": ["src/custom/*"],
       "@/service/*": ["./src/service/*"],
       "@/images/*": ["./src/images"],
-      "@/enums/*": ["./src/enums"],
+      "@/enums/index": ["./src/enums"],
       "@/interfaces/*": ["./src/interfaces"]
     }
   }

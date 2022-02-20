@@ -21,10 +21,10 @@ export default function Index() {
     <View className='index'>
       <MyContext.Provider value={indexPage}>
         {indexPage.banner.enable && <Image src={indexPage.banner.url} className='banner'></Image>}
-        {indexPage.healthCard.enable && <HealthCards>healthCard</HealthCards>}
+        {indexPage.healthCard.enable && <HealthCards />}
         {indexPage.navCard.enable && <NavCard>navCard</NavCard>}
         {indexPage.functionBox.enable && <FunctionBoxes >funbox</FunctionBoxes>}
-        {indexPage.quickEntrance.enable && <QuickEntrance quickEntrance={indexPage.quickEntrance}>quickEntrance</QuickEntrance>}
+        {indexPage.quickEntrance.enable && <QuickEntrance quickEntrance={indexPage.quickEntrance}></QuickEntrance>}
         {indexPage.hospBlog.enable && <HospBlog>hospBlog</HospBlog>}
       </MyContext.Provider>
     </View>

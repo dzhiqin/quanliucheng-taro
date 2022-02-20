@@ -4,7 +4,7 @@ import { View,Image } from '@tarojs/components'
 import { useRouter , useDidShow, useReady } from '@tarojs/taro'
 import { 
   createPaymentOrder, 
-  fetchPaymentDetail, 
+  fetchPaymentDetailFromHis, 
   subscribeService, 
   PayOrderParams, 
   handlePayment, 
@@ -12,6 +12,7 @@ import {
   cancelPayment, 
   fetchPaymentOrderDetailByQRCode,
   fetchPaymentOrderInvoice,
+  fetchPaymentOrderDetail,
   TaroNavToZhongXun,
   handleHeSuanRefund,
   TaroNavToYiBao,
@@ -26,7 +27,7 @@ import BkButton from '@/components/bk-button/bk-button'
 import sighPng from '@/images/icons/sigh.png'
 import { onetimeTemplates } from '@/utils/templateId'
 import SubscribeNotice from '@/components/subscribe-notice/subscribe-notice'
-import { PAY_TYPE_CN, ORDER_STATUS_EN, PAY_STATUS_EN, ORDER_TYPE_CN } from '@/enums/index'
+import { PAY_TYPE_CN, ORDER_STATUS_EN, PAY_STATUS_EN, ORDER_TYPE_CN, PAYMENT_FROM } from '@/enums/index'
 import { loadingService, toastService } from '@/service/toast-service'
 import { requestTry } from '@/utils/retry'
 import ResultPage from '@/components/result-page/result-page'
@@ -72,15 +73,14 @@ export default function PaymentDetail() {
   const [busy,setBusy] = useState(false)
   const [orderInfo,setOrderInfo] = useState({} as OrderInfoParams)
   let orderInfoFromList = null
-  let fromList = null
   let scanParams = null
-  if(params.orderInfo){
+  let from: PAYMENT_FROM = null
+  if(params.prepayId){
+    from = PAYMENT_FROM.scanQRCode
+    scanParams = { preQRCodePayId: params.prepayId}
+  }else{
+    from = params.from as PAYMENT_FROM
     orderInfoFromList = JSON.parse(params.orderInfo)
-    fromList = orderInfoFromList.orderId ? true : false
-  }else if(params.prepayId){
-    scanParams = {
-      preQRCodePayId: params.prepayId
-    }
   }
   
   const [_orderId,setOrderId] = useState('')
@@ -96,10 +96,10 @@ export default function PaymentDetail() {
       return
     }
     setBusy(true)
-    if(fromList){
+    if(from === PAYMENT_FROM.orderList){
       // 从订单列表进入的，直接用orderId支付，不需再创建订单
       payOrderById(orderInfoFromList.orderId,type)
-    }else if(scanParams){
+    }else if(from === PAYMENT_FROM.scanQRCode){
       createPaymentOrderByQRCode(buildPaymentParamsQRCode(type)).then(res => {
         if(res.resultCode === 0){
           setOrderId(res.data.orderId)
@@ -109,9 +109,8 @@ export default function PaymentDetail() {
           setBusy(false)
         }
       })
-    }else{
+    }else if(from === PAYMENT_FROM.paymentList) {
       createPaymentOrder(buildPaymentParams(type)).then(res => {
-        // console.log('create order',res);
         if(res.resultCode === 0){
           setOrderId(res.data.orderId)
           payOrderById(res.data.orderId,type)
@@ -121,7 +120,6 @@ export default function PaymentDetail() {
         }
       })
     }
-    
   } 
   const checkOrderStatus = (id: string) => {
     return new Promise((resolve,reject) => {
@@ -315,8 +313,60 @@ export default function PaymentDetail() {
       })
     }
   })
+  const getOrderInfoByQRCode = () => {
+    fetchPaymentOrderDetailByQRCode(scanParams).then(res => {
+      // 扫码进入的因接口返回字段不同╮(╯▽╰)╭，需要重新对齐数据
+      if(res.resultCode === 0){
+        loadingService(false)
+        const data = res.data
+        setOrderInfo({
+          ...data,
+          orderId: data.orderId ? data.orderId : '',
+          orderType: data.pactCode,
+          prescMoney: data.sumMoney,
+          payState: PAY_STATUS_EN.unpay,
+        })
+        const param = {
+          cardNo: data.cardNo,
+          clinicNo: data.clinicNo,
+          recipeSeq: data.recipeSeq,
+          patientId: data.patientId
+        }
+        getOrderDetailFromHis(param)
+      }else{
+        toastService({title: '获取数据失败:' + res.message})
+      }
+    })
+  }
+  const getOrderDetailFromHis = (param: {
+    cardNo: string,
+    clinicNo: string,
+    recipeSeq: string,
+    patientId: string
+  }) => {
+    fetchPaymentDetailFromHis(param).then(res => {
+      if(res.resultCode === 0){
+        setList(res.data.billDetails)
+      }else{
+        toastService({title: '获取数据失败:' + res.message})
+      }
+    })
+  }
+  const getOrderDetailFromData = (param:{
+    billOrderId: string
+  }) => {
+    fetchPaymentOrderDetail(param).then(res => {
+      if(res.resultCode === 0){
+        loadingService(false)
+        setList(res.data)
+      }else{
+        toastService({title: '获取详情失败'})
+      }
+    })
+    
+  }
   useReady(async () => {
-    if(scanParams){
+    if(from === PAYMENT_FROM.scanQRCode){
       loadingService(true)
       const openId = Taro.getStorageSync('openId')
       if(!openId){
@@ -327,40 +377,21 @@ export default function PaymentDetail() {
           return
         }
       }
-      fetchPaymentOrderDetailByQRCode(scanParams).then(res => {
-        // 扫码进入的因接口返回字段不同╮(╯▽╰)╭，需要重新对齐数据
-        if(res.resultCode === 0){
-          loadingService(false)
-          const data = res.data
-          setOrderInfo({
-            ...data,
-            orderId: data.orderId ? data.orderId : '',
-            orderType: data.pactCode,
-            prescMoney: data.sumMoney,
-            payState: PAY_STATUS_EN.unpay,
-          })
-        }else{
-          toastService({title: '获取数据失败:' + res.message})
-        }
-      })
-    }else{
-      if(orderInfoFromList.orderDept === '新冠疫苗/核酸') return
-      loadingService(true)
-      fetchPaymentDetail({
+      getOrderInfoByQRCode()
+    }else if(from === PAYMENT_FROM.paymentList){
+      const param = {
+        cardNo: orderInfoFromList.cardNo,
         clinicNo: orderInfoFromList.clinicNo,
-        cardNo: card.cardNo,
         recipeSeq: orderInfoFromList.recipeSeq,
         patientId: card.patientId
-      }).then(res => {
-        loadingService(false)
-        if(res.resultCode === 0){
-          setList(res.data.billDetails)
-        }else{
-          toastService({title: '获取数据失败:' + res.message})
-        }
-      })
+      }
+      getOrderDetailFromHis(param)
+    }else if(from === PAYMENT_FROM.orderList){
+      const param = {
+        billOrderId: orderInfoFromList.orderId
+      }
+      getOrderDetailFromData(param)
     }
-    
   })
   if(payResult === resultEnum.default){
     return(
