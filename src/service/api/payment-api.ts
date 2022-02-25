@@ -55,7 +55,7 @@ export const fetchPaymentOrderDetailByQRCode = (data: {preQRCodePayId: number}) 
   return Post(fullUrl('api/customize/applet/Bill/GetPrescriptionQRCodeInfo'),data)
 }
 export const createPaymentOrderByQRCode = (data) => {
-  return Post(fullUrl('subApi/api/customize/applet/Bill/SavePrescriptionQRCodeBill'),data)
+  return Post(fullUrl('api/customize/applet/Bill/SavePrescriptionQRCodeBill'),data)
 }
 // export const fetchPaymentOrderDetailByQRCode = (data: {clinicNo:string,cardNo:string,patientId: string}) => {
 //   return Post(fullUrl('api/applet/paybill/Bill/GetPrescriptionQRCodeInfo'),data)

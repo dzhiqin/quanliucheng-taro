@@ -149,6 +149,7 @@ export default class BindCard extends React.Component {
     let params = {
       ...card,
       isHaveCard: card.hasHospitalCard,
+      openId: Taro.getStorageSync('openId')
     }
     // console.log('buildparams', params);
     return params
@@ -169,7 +170,7 @@ export default class BindCard extends React.Component {
         if(!card.hasHospitalCard && key === 'hospitalCardNo') continue
         if(this.state.currentIdenTypeValue !== '儿童(无证件)' && (key === 'parentName' || key === 'parentId')) continue
         if(key ==='wechatCode') continue
-        msg = validateMessages[keys[i]] || key + '的值不能为空'
+        msg = (validateMessages[keys[i]] || key) + '的值不能为空'
         result = false
         break
       }

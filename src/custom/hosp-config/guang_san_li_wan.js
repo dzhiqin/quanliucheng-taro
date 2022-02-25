@@ -7,7 +7,7 @@ export default {
   hospitalName: "广州医科大学附属第三医院",
   // baseUrl: "https://applets.gdbkyz.com", // 倍康测试
   baseUrl: "https://gysy.wedoublecare.com",  // 正式环境
-  subUrl: 'https://gysycustomize.wedoublecare.com', // 附加功能使用
+  // subUrl: 'https://gysycustomize.wedoublecare.com', // 测试环境
   indexPage: {
     banner: {
       enable: true,
@@ -130,6 +130,7 @@ export default {
       maritalStatus: true, // 婚姻状况
       oneClickAuth: true,    // 一键授权，直接绑定健康卡
       bindYiBaoCard: true, // 绑定医保卡
+      updateNotice: true, // 绑卡和解绑发送消息通知
     },
     register: {
       bookingAndIntraday:true,// 是否区分当天挂号和预约挂号
