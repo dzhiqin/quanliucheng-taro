@@ -9,7 +9,9 @@ import orderBluePng from '@/images/icons/order_blue.png'
 import orderYellowPng from '@/images/icons/order_yellow.png'
 import orderGreenPng from '@/images/icons/order_green.png'
 import healthCardPng from '@/images/icons/health_card.png'
-import { TaroRemindLoginModal } from '@/service/api'
+import { TaroRemindLoginModal , TaroNavToYiBao } from '@/service/api'
+import custom from '@/custom/index'
+import { loadingService } from '@/service/toast-service'
 import './personal.less'
 
 export default function Personal() {
@@ -33,6 +35,12 @@ export default function Personal() {
       TaroRemindLoginModal()
     }
   })
+  const navToYiBao = () => {
+    loadingService(true,'即将跳转……')
+    TaroNavToYiBao(() => {
+      loadingService(false)
+    })
+  }
   return (
     <View className='personal'>
       <View className='header'>
@@ -71,6 +79,15 @@ export default function Personal() {
             <View className='panel-name'>电子健康卡</View>
           </View>
         </BkPanel>
+        {
+          custom.feat.bindCard.bindYiBaoCard && 
+          <BkPanel arrow onClick={navToYiBao} style='margin-top: 20rpx'>
+            <View className='panel'>
+              <Image src={healthCardPng} className='panel-icon'></Image>
+              <View className='panel-name'>医保卡</View>
+            </View>
+          </BkPanel>
+        }
       </View>
     </View>
   )

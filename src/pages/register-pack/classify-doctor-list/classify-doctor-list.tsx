@@ -37,7 +37,7 @@ export default function ClassifyDoctorList(props) {
         loadingService(false)
         setList(res.data)
       }else{
-        toastService({title: '获取数据失败'})
+        toastService({title: ''+res.message})
       }
     })
   },[deptId,specializedSubject])
@@ -49,7 +49,7 @@ export default function ClassifyDoctorList(props) {
         loadingService(false)
         setList(res.data)
       }else{
-        toastService({title: '获取数据失败'})
+        toastService({title: ''+res.message})
       }
     })
   },[deptId,regDate])

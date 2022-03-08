@@ -78,20 +78,13 @@ export default class CardList2 extends React.Component {
               </View>
             </health-card-btn>
           }
-          {/* {
-            custom.feat.bindCard.electronicHealthCard 
-              ?
-            <health-card-btn onlogin={this.onLoginResult.bind(this)}>
-              <BkButton title='添加健康卡' theme='info' onClick={() => console.log('click')} style='width: 480rpx; margin-bottom: 20rpx' />
-            </health-card-btn> 
-              : 
-            <BkButton title='添加健康卡' theme='info' onClick={this.navToBindCard} style='width: 480rpx; margin-bottom: 20rpx' />
-          } */}
+          
           <BkButton title='添加健康卡' theme='info' onClick={this.navToBindCard} style='width: 480rpx; margin-bottom: 20rpx' />
-          {
+          {/* 医保小程序入口改放到个人页面 */}
+          {/* {
             custom.feat.bindCard.bindYiBaoCard && 
             <BkButton title='医保卡绑定' onClick={this.navToYiBao} style='width: 480rpx;margin-bottom: 20rpx' />
-          }
+          } */}
 
         </View>
       </View>

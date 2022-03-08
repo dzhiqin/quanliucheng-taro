@@ -146,6 +146,7 @@ export default function OrderCreate() {
     })
   }
   const handleSubmit = async() => {
+    if(busy) return
     setBusy(true)
     const subsRes = await subscribeService(onetimeTemplates.registration())
     if(!subsRes.result){
@@ -157,8 +158,8 @@ export default function OrderCreate() {
         const checkSurveyRes:any = await checkEpiLogicalSurvey()
         const checkTempRes = Taro.getStorageSync('checkEpiLogicalSurvey')
         if(!checkTempRes && !checkSurveyRes.result){
-          toastService({title: checkSurveyRes.message, onClose: () => {Taro.navigateTo({url: '/pages/service-pack/epidemiological-survey/epidemiological-survey'})}})
-          setBusy(false)
+          toastService({title: checkSurveyRes.message, onClose: () => {Taro.navigateTo({url: '/pages/service-pack/epidemiological-survey/epidemiological-survey'});setBusy(false)}})
+          
           return
         }
         if(checkTempRes){
