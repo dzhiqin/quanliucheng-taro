@@ -4,6 +4,7 @@ export default {
   latitude: 23.122721,
   longitude: 113.240994,
   hospName: "gysylw",
+  logo: "https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/lwgk/20220309-basic/gysy.png",
   hospitalName: "广州医科大学附属第三医院",
   // baseUrl: "https://applets.gdbkyz.com", // 倍康测试
   baseUrl: "https://gysy.wedoublecare.com",  // 正式环境

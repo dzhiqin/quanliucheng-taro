@@ -75,7 +75,7 @@ export default function Result() {
         }
         {
           createdAt &&
-          <View className='result-header-item'>填表时间{humanDateAndTime(new Date(createdAt)) }</View>
+          <View className='result-header-item'>填表时间{humanDate(new Date(createdAt)) }</View>
         }
         {
           invalidAt &&

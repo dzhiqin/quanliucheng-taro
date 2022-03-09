@@ -4,10 +4,10 @@ import { useEffect,useState } from 'react'
 import { View, Image, RichText } from '@tarojs/components'
 import BkTitle from '@/components/bk-title/bk-title'
 import { fetchOfficialContent } from '@/service/api/official-api'
-import crossPng from '@/images/icons/cross.png'
 import phonePng from '@/images/icons/phone.png'
 import globalPng from '@/images/icons/global.png'
 import locationPng from '@/images/icons/location.png'
+import custom from '@/custom/index'
 import './official.less'
 
 export default function Official() {
@@ -53,7 +53,7 @@ export default function Official() {
         <Image src={banner} />
       </View>
       <View className='official-header'>
-        <Image src={crossPng} />
+        <Image src={custom.logo} className='official-header-logo' />
         <View className='official-header-wrap'>
           <View className='official-header-title'>{hospInfo.hospitalName}</View>
           <View className='official-header-tabs'>

@@ -5,6 +5,7 @@ export default {
   longitude: 113.240994,
   hospName: "gysylw",
   hospitalName: "广州医科大学附属第三医院",
+  logo: "https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/lwgk/20220308-basic/epfy.png",
   // baseUrl: "https://applets.gdbkyz.com/api/applet", // 倍康测试
   baseUrl: "https://gysy.wedoublecare.com",  // 正式环境
   subUrl: 'https://gysycustomize.wedoublecare.com', // 核酸退费

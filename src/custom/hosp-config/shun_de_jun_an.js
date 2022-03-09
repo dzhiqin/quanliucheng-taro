@@ -3,6 +3,7 @@ import imgUrl from '@/utils/imgs'
 export default {
   hospName: "jayy",
   hospitalName: "佛山市顺德区均安医院",
+  logo: "https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/lwgk/20220308-basic/jayy.png",
   baseUrl: "https://jweb.wedoublecare.com/api/",
   indexPage: {
     banner: {

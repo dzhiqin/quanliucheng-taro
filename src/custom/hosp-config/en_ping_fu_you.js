@@ -4,6 +4,7 @@ export default {
   hospName: "epfy",
   hospitalName: "恩平市妇幼保健院",
   baseUrl: "https://epsfy.joyfulboo.com/api",
+  logo: "https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/lwgk/20220308-basic/epfy.png",
   // baseUrl: "https://applets.gdbkyz.com/api/applet",
   indexPage: {
     banner: {

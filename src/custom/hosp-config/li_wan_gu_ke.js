@@ -4,6 +4,7 @@ export default {
   hospName: "lwgk",
   hospitalName: "广州市荔湾区骨伤科医院",
   baseUrl: "https://lwgk.joyfulboo.com/api",
+  logo: "https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/lwgk/20220308-basic/lwgk.png",
   indexPage: {
     banner: {
       enable: true,
