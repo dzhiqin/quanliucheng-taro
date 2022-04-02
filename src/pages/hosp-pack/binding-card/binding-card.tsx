@@ -1,7 +1,7 @@
 import * as React from 'react'
 import * as Taro from '@tarojs/taro'
 import { View } from '@tarojs/components'
-import custom from '@/custom/index'
+import {custom} from '@/custom/index'
 import { AtButton, AtForm, AtInput } from 'taro-ui'
 import { useState } from 'react'
 import { loadingService, toastService } from '@/service/toast-service'

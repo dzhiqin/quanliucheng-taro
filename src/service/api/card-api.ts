@@ -1,5 +1,5 @@
 import { fullUrl, Post } from "../http";
-import custom from '@/custom/index'
+import {custom} from '@/custom/index'
 
 export const fetchRegisterNotice = () => {
   return Post(fullUrl('api/applet/content/SysNotice/GetRegistrationNotice'))

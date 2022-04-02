@@ -14,7 +14,9 @@ import { ORDER_STATUS_EN, PAYMENT_FROM, PAY_STATUS_EN } from '@/enums/index'
 
 export default function PaymentList() {
   const [list, setList] = useState([])
+  const [loading,setLoading] = useState(false)
   useDidShow(() => {
+    setLoading(true)
     const card = CardsHealper.getDefault()
     if(!card){
       toastService({title: '请先绑卡'})
@@ -26,6 +28,7 @@ export default function PaymentList() {
         setList(res.data.bills)
       }
     }).finally(() => {
+      setLoading(false)
       Taro.hideLoading()
     })
   })
@@ -59,7 +62,7 @@ export default function PaymentList() {
               }
             </View>
           :
-            <BkNone msg='暂无缴费单' />
+            <BkNone msg='暂无缴费单' loading={loading} />
         }
       </View>
     </View>

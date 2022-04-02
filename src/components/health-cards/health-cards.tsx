@@ -21,7 +21,8 @@ export default function HealthCards(props: {
   const [currentCard,setCurrentCard] = useState(0)
   const [selectedCard, setSelected] = useState({
     name: '',
-    cardNo: ''
+    cardNo: '',
+    isDefault: false
   })
   useDidShow(() => {
     const res = Taro.getStorageSync('userInfo')
@@ -55,14 +56,14 @@ export default function HealthCards(props: {
     Taro.navigateTo({url: '/pages/bind-pack/cards-list/cards-list'})
   }
   const onCardChange = (e) => {
-    const index = e.detail.current
-    const cardId = cards[index].id
-    setCurrentCard(index)
-    CardsHealper.setDefault(cardId)
-    Taro.showToast({
-      title: '您已切换默认卡',
-      icon: 'none'
-    })
+    // const index = e.detail.current
+    // const cardId = cards[index].id
+    // setCurrentCard(index)
+    // CardsHealper.setDefault(cardId)
+    // Taro.showToast({
+    //   title: '您已切换默认卡',
+    //   icon: 'none'
+    // })
   }
   const onSwitch = () => {
     Taro.navigateTo({
@@ -106,14 +107,6 @@ export default function HealthCards(props: {
                 <View style='color: white'>您好，{cards[0].name}</View>
                 <View className='single-card-txt'>诊疗卡号{cards[0].cardNo}</View>
               </View>
-              {/* {
-                !props.switch
-                ? <View className='single-card-switch' onClick={onSwitch}>
-                    切换就诊人
-                    <AtIcon value='chevron-right' size='20' color='#0A3A6E'></AtIcon>
-                  </View>
-                : <Image className='single-card-icon' src={qrcodeImg}></Image>
-              } */}
               <Image className='single-card-icon' src={qrcodeImg} onClick={navToCardDetail.bind(null,cards[0])}></Image>
             </View>
         </View>
@@ -129,6 +122,10 @@ export default function HealthCards(props: {
                   <View style='color: white'>您好，{selectedCard.name}</View>
                   <View className='single-card-txt'>诊疗卡号{selectedCard.cardNo}</View>
                 </View>
+                {
+                  selectedCard.isDefault &&
+                  <view className='card-tab'>默认</view>
+                }
                 <View className='single-card-switch' onClick={onSwitch}>
                   切换就诊人
                   <AtIcon value='chevron-right' size='20' color='#0A3A6E'></AtIcon>
@@ -157,6 +154,10 @@ export default function HealthCards(props: {
                       <View className='swiper-item-name'>您好，{item.name}</View>
                       <View className='swiper-item-card'>诊疗卡号{item.cardNo}</View>
                     </View>
+                    {
+                      item.isDefault &&
+                      <view className='card-tab'>默认</view>
+                    }
                     <Image className='swiper-item-icon' src={qrcodeImg} onClick={navToCardDetail.bind(null,item)}></Image>
                   </View>
                 </SwiperItem>  

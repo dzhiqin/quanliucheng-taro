@@ -14,6 +14,8 @@
     display: flex;
     padding: 40rpx;
     justify-content: space-between;
+    position: relative;
+
     &-icon {
       width: 48rpx;
       height: 48rpx;
@@ -31,14 +33,24 @@
   }
   
 }
+.card-tab{
+  position: absolute;
+  top: 0;
+  right: 0;
+  border-radius: 13rpx 0 0 13rpx;
+  background: gold;
+  color: white;
+  font-size: 26rpx;
+  padding: 5rpx;
+}
 .single-card{
-
   &-content{
     display: flex;
     justify-content: space-between;
     padding: 40rpx;
     width: 100%;
     align-items: center;
+    position: relative;
   }
   &-txt {
     margin-top: 10rpx;

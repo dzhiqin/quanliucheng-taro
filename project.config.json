@@ -1,6 +1,6 @@
 {
   "miniprogramRoot": "dist/",
-  "projectname": "quanliucheng-react",
+  "projectname": "quanliucheng-weapp-taro",
   "description": "全流程小程序端",
   "appid": "wx4d35223b6ad22fb1",
   "setting": {

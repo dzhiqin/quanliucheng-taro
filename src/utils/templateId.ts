@@ -1,4 +1,4 @@
-import custom from '@/custom/index'
+import {custom} from '@/custom/index'
 
 const hospName = custom.hospName
 export const longtermTemplates = {

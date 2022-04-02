@@ -1,7 +1,7 @@
-import config from '@/custom/index'
+import {custom} from '@/custom/index'
 
-const baseUrl = config.baseUrl
-const subUrl = config.subUrl
+const baseUrl = custom.baseUrl
+const subUrl = custom.subUrl
 const fullUrl = (url: string, params?: { [key: string]: any }) => {
   let a
   if(/^subApi\//.test(url)){

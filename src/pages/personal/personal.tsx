@@ -10,7 +10,7 @@ import orderYellowPng from '@/images/icons/order_yellow.png'
 import orderGreenPng from '@/images/icons/order_green.png'
 import healthCardPng from '@/images/icons/health_card.png'
 import { TaroRemindLoginModal , TaroNavToYiBao } from '@/service/api'
-import custom from '@/custom/index'
+import {custom} from '@/custom/index'
 import { loadingService } from '@/service/toast-service'
 import './personal.less'
 

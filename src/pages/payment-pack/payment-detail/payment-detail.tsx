@@ -31,7 +31,7 @@ import { PAY_TYPE_CN, ORDER_STATUS_EN, PAY_STATUS_EN, ORDER_TYPE_CN, PAYMENT_FRO
 import { loadingService, toastService } from '@/service/toast-service'
 import { requestTry } from '@/utils/retry'
 import ResultPage from '@/components/result-page/result-page'
-import custom from '@/custom/index'
+import {custom} from '@/custom/index'
 
 enum resultEnum {
   default = '',

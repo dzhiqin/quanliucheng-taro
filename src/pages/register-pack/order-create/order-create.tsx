@@ -23,7 +23,7 @@ import ResultPage from '@/components/result-page/result-page'
 import { onetimeTemplates } from '@/utils/templateId'
 import SubscribeNotice from '@/components/subscribe-notice/subscribe-notice'
 import './order-create.less'
-import custom from '@/custom/index'
+import {custom} from '@/custom/index'
 
 export default function OrderCreate() {
   const [order,setOrder] = useState({

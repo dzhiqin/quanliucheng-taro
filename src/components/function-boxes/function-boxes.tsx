@@ -4,7 +4,7 @@ import * as Taro from '@tarojs/taro'
 import { MyContext } from '@/utils/my-context'
 import { View } from '@tarojs/components'
 import { fetchBranchHospital } from '@/service/api/register-api'
-import custom from '@/custom/index'
+import {custom} from '@/custom/index'
 
 import RegisterNoticeModal from '../register-notice-modal/register-notice-modal'
 import BoxItem from './box-item'

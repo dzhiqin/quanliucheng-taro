@@ -1,5 +1,5 @@
 import * as Taro from '@tarojs/taro'
-import custom from '@/custom/index'
+import {custom} from '@/custom/index'
 import { fullUrl, Post } from "../http";
 
 const baseUrl = custom.baseUrl

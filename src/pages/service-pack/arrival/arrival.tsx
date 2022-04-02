@@ -11,7 +11,7 @@ import BkTitle from '@/components/bk-title/bk-title'
 import BkNone from '@/components/bk-none/bk-none'
 import { computeDistanceFromLatLong } from '@/utils/tools'
 import { loadingService, toastService } from '@/service/toast-service'
-import custom from '@/custom/index'
+import {custom} from '@/custom/index'
 import './arrival.less'
 
 export default function BindingCard() {

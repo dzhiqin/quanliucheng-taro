@@ -7,7 +7,7 @@ import { fetchOfficialContent } from '@/service/api/official-api'
 import phonePng from '@/images/icons/phone.png'
 import globalPng from '@/images/icons/global.png'
 import locationPng from '@/images/icons/location.png'
-import custom from '@/custom/index'
+import {custom} from '@/custom/index'
 import './official.less'
 
 export default function Official() {
