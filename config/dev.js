@@ -1,10 +1,11 @@
-module.exports = {
+exports = { 
   env: {
     NODE_ENV: '"development"'
   },
   defineConstants: {
   },
   mini: {
+    // eslint-disable-next-line no-unused-vars
     webpackChain: (chain, webpack) => {
       chain.merge({
         plugin: {

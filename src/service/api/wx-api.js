@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-undef
 const plugin = requirePlugin('healthCardPlugins')
 
 export const healthCardLogin = () => {
