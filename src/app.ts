@@ -27,7 +27,7 @@ class App extends Component {
             Taro.setStorageSync('token', data.token)
             Taro.setStorageSync('openId', data.openId)
             fetchBranchHospital().then(resData => {
-              if(resData.data.length === 1){
+              if(resData.data && resData.data.length === 1){
                 Taro.setStorageSync('hospitalInfo',resData.data[0])
               }
             })

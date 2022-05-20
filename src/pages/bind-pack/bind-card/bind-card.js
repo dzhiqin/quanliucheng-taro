@@ -7,7 +7,7 @@ import {
   idCardValidator, getBirthdayByIdCard, getGenderByIdCard, validateMessages, phoneValidator, birthdayValidator,
   idenTypeOptions, onetimeTemplates 
 } from '@/utils'
-import { taroSubscribeMessage } from '@/service/api/taro-api'
+import { subscribeService } from '@/service/api/taro-api'
 import SubscribeNotice from '@/components/subscribe-notice/subscribe-notice'
 import { createCard, fetchNationalities, fetchUserInfoByHealthCode, TaroGetLocation } from '@/service/api'
 import { CardsHealper } from '@/utils/cards-healper'
@@ -97,17 +97,17 @@ export default class BindCard extends React.Component {
       console.log(res);
     })
   }
-  onSubmit() {
+  async onSubmit() {
     this.setState({busy: true})
     const {result,msg}= this.formValidator()
     if(result){
-      taroSubscribeMessage(
-        onetimeTemplates.bindCard(), 
-        () => {
-          this.handleCreateCard()
-        }, 
-        () => {this.setState({showNotice: true})
-      })
+      
+      const subRes = await subscribeService(onetimeTemplates.bindCard())
+      if(subRes.result){
+        this.handleCreateCard()
+      }else{
+        this.setState({showNotice: true})
+      }
     }else{
       this.setState({busy: false})
       Taro.showToast({
