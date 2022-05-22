@@ -65,8 +65,14 @@ const config = hospConfig.default
 export default config
 ```
 
+**微信小程序开发预览：**
+* 需要设置关闭 ES6 转 ES5 功能，开启可能报错
+* 需要设置关闭上传代码时样式自动补全，开启可能报错
+* 需要设置关闭代码压缩上传，开启可能报错
 
-**关于分包：** 小程序目前的规则是总代码体积不大于20M,单个分包和主包的体积不大于2M，属于一个模块的都放在一个分包里面，可以复用的组件放在主包里，不会复用的组件可以放在分包里。
+
+**关于分包：** 
+小程序目前的规则是总代码体积不大于20M,单个分包和主包的体积不大于2M，属于一个模块的都放在一个分包里面，可以复用的组件放在主包里，不会复用的组件可以放在分包里。
 
 **关于接口书写：** 
 * 与后端约定如果是post请求，那传参就放在body里，如果是get请求，传参就放在url里；
@@ -90,3 +96,25 @@ export const fetchMedicineInfo = (data: {orderId: string}) => {
 * 保持eslint启用，尽量把不规范的警告处理掉；
 * 优先使用react hooks风格代码，目前只有在需要用到第三方插件的时候，不得不使用react类组件或者小程序原生写法
 
+**代码提交规范：**  
+```
+/^(revert: )?(feat|fix|docs|dx|style|refactor|perf|test|workflow|build|ci|chore|types|wip|release)(\(.+\))?: .{1,50}/
+```
+
+```
+feat: 新功能
+fix: 修改 bug
+docs: 文档
+perf: 性能相关
+refactor: 代码重构（就是不影响使用，内部结构的调整）
+test: 测试用例
+style: 样式修改
+workflow: 工作流
+build: 项目打包构建相关的配置修改
+ci: 持续集成相关
+revert: 恢复上一次提交（回滚）
+wip: work in progress 工作中 还没完成
+chore: 其他修改（不在上述类型中的修改）
+release: 发版
+deps: 依赖相关的修改
+```
