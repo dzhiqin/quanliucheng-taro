@@ -1,4 +1,5 @@
 import imgUrl from '@/utils/imgs'
+import { REPORT_ITEM_TYPE_CN } from '@/enums/index'
 
 export default {
   latitude: 23.122721,
@@ -144,6 +145,22 @@ export default {
     ZhuYuanCardName: false, // 住院绑卡是否需要姓名
   },
   reportsPage:{
-    urlDetail: true // 报告详情页用图片展示
+    urlDetail: true, // 报告详情页用图片展示
+    reportItemType: [
+      {title: '化验', value: REPORT_ITEM_TYPE_CN.化验},
+      {title: '放射', value: REPORT_ITEM_TYPE_CN.放射},
+      {title: '超声', value: REPORT_ITEM_TYPE_CN.超声},
+      {title: '病理', value: REPORT_ITEM_TYPE_CN.病理},
+      {title: '内镜', value: REPORT_ITEM_TYPE_CN.内镜},
+      {title: '产前', value: REPORT_ITEM_TYPE_CN.产前超声},
+    ],
+    hospitalizationTabs: [
+      {title: '化验', value: REPORT_ITEM_TYPE_CN.化验},
+      {title: '放射', value: REPORT_ITEM_TYPE_CN.放射},
+      {title: '超声', value: REPORT_ITEM_TYPE_CN.超声},
+      {title: '病理', value: REPORT_ITEM_TYPE_CN.病理},
+      {title: '内镜', value: REPORT_ITEM_TYPE_CN.内镜},
+      {title: '产前', value: REPORT_ITEM_TYPE_CN.产前超声},
+    ]
   }
 }

@@ -1,26 +1,27 @@
 import imgUrl from '@/utils/imgs'
+import { REPORT_ITEM_TYPE_CN } from '@/enums/index'
 
 export default {
-  latitude: 23.122721,
-  longitude: 113.240994,
+  latitude: 23.122721,    // 院区维度
+  longitude: 113.240994,  // 院区经度
   hospName: "gysylw",
   hospitalName: "广州医科大学附属第三医院",
   logo: "https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/lwgk/20220308-basic/epfy.png",
   // baseUrl: "https://applets.gdbkyz.com/api/applet", // 倍康测试
   baseUrl: "https://gysy.wedoublecare.com",  // 正式环境
   subUrl: 'https://gysycustomize.wedoublecare.com', // 核酸退费
-  indexPage: {
-    banner: {
+  indexPage: { // 首页配置
+    banner: { // 轮播图组件
       enable: true,
       url: imgUrl.banner
     },
-    healthCard: {
+    healthCard: { // 健康卡组件
       enable: true
     },
-    navCard:{
+    navCard:{ // 导航卡组件
       enable: false
     },
-    functionBox:{
+    functionBox:{ // 功能模块组件
       enable: true,
       list: [
         {
@@ -46,7 +47,7 @@ export default {
       ]
     },
     
-    quickEntrance: {
+    quickEntrance: {  // 快捷入口组件
       enable: true,
       tabList: [
         {
@@ -123,14 +124,14 @@ export default {
     }
   },
   feat:{
-    bindCard: {
-      electronicHealthCard: true, // 电子健康卡
-      parentInfo: false,     // 监护人信息(儿童无证件)
-      nationality: true,    // 国籍
+    bindCard: { // 绑卡/建卡相关配置
+      electronicHealthCard: true, // 是否电子健康卡
+      parentInfo: false,     // 是否需要监护人信息(儿童无证件)
+      nationality: true,    // 是否需要国籍
       hospitalCard: true,  // 是否有院内就诊卡
-      maritalStatus: true, // 婚姻状况
-      oneClickAuth: true,    // 一键授权，直接绑定健康卡
-      bindYiBaoCard: true, // 绑定医保卡
+      maritalStatus: true, // 是否需要填写婚姻状况
+      oneClickAuth: true,    // 是否可以一键授权，直接绑定健康卡
+      bindYiBaoCard: true, // 是否可以绑定医保卡
     },
     register: {
       bookingAndIntraday:true,// 是否区分当天挂号和预约挂号
@@ -142,6 +143,22 @@ export default {
     ZhuYuanCardName: false, // 住院绑卡是否需要姓名
   },
   reportsPage:{
-    urlDetail: true // 报告详情页用图片展示
+    urlDetail: true, // 报告详情页用图片展示
+    reportItemType: [  // 门诊报告分类
+      {title: '化验', value: REPORT_ITEM_TYPE_CN.化验},
+      {title: '放射', value: REPORT_ITEM_TYPE_CN.放射},
+      {title: '超声', value: REPORT_ITEM_TYPE_CN.超声},
+      {title: '病理', value: REPORT_ITEM_TYPE_CN.病理},
+      {title: '内镜', value: REPORT_ITEM_TYPE_CN.内镜},
+      {title: '产前', value: REPORT_ITEM_TYPE_CN.产前超声},
+    ],
+    hospitalizationTabs: [  // 住院报告分类
+      {title: '化验', value: REPORT_ITEM_TYPE_CN.化验},
+      {title: '放射', value: REPORT_ITEM_TYPE_CN.放射},
+      {title: '超声', value: REPORT_ITEM_TYPE_CN.超声},
+      {title: '病理', value: REPORT_ITEM_TYPE_CN.病理},
+      {title: '内镜', value: REPORT_ITEM_TYPE_CN.内镜},
+      {title: '产前', value: REPORT_ITEM_TYPE_CN.产前超声},
+    ]
   }
 }

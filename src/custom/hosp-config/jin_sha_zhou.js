@@ -1,8 +1,9 @@
 import imgUrl from '@/utils/imgs'
+import { REPORT_ITEM_TYPE_CN } from '@/enums/index'
 
 export default {
-  latitude: 23.122721,
-  longitude: 113.240994,
+  latitude: 23.096397,
+  longitude: 113.367814,
   hospName: "jszyy",
   isPrivate: true,
   logo: "http://www.jsz120.com/uploads/allimg/200512/2-200512092512328.jpg",
@@ -10,6 +11,7 @@ export default {
   // baseUrl: "https://applets.gdbkyz.com", // 倍康测试
   baseUrl: "https://jszyy-applets.wedoublecare.com",  // 正式环境
   // subUrl: 'https://gysycustomize.wedoublecare.com', // 测试环境
+  
   indexPage: {
     banner: {
       enable: true,
@@ -145,6 +147,14 @@ export default {
     ZhuYuanCardName: false, // 住院绑卡是否需要姓名
   },
   reportsPage:{
-    urlDetail: true // 报告详情页用图片展示
+    urlDetail: false, // 报告详情页用图片展示
+    reportItemTabs: [
+      {title: '检验', value: REPORT_ITEM_TYPE_CN.化验},
+      {title: '检查', value: REPORT_ITEM_TYPE_CN.检查},
+    ],
+    hospitalizationTabs: [
+      {title: '检验', value: REPORT_ITEM_TYPE_CN.化验},
+      {title: '检查', value: REPORT_ITEM_TYPE_CN.检查},
+    ],
   }
 }

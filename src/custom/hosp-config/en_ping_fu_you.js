@@ -1,4 +1,5 @@
 import imgUrl from '@/utils/imgs'
+import { REPORT_ITEM_TYPE_CN } from '@/enums/index'
 
 export default {
   hospName: "epfy",
@@ -6,6 +7,7 @@ export default {
   baseUrl: "https://epsfy.joyfulboo.com/api",
   logo: "https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/lwgk/20220308-basic/epfy.png",
   // baseUrl: "https://applets.gdbkyz.com/api/applet",
+
   indexPage: {
     banner: {
       enable: true,
@@ -79,6 +81,14 @@ export default {
     hospitalNavigation: false  // 院内导航
   },
   reportsPage:{
-    urlDetail: false // 报告详情页用图片展示
+    urlDetail: false, // 报告详情页用图片展示
+    reportItemTabs: [
+      {title: '检验', value: REPORT_ITEM_TYPE_CN.化验},
+      {title: '检查', value: REPORT_ITEM_TYPE_CN.检查},
+    ],
+    hospitalizationTabs: [
+      {title: '检验', value: REPORT_ITEM_TYPE_CN.化验},
+      {title: '检查', value: REPORT_ITEM_TYPE_CN.检查},
+    ],
   }
 }

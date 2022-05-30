@@ -12,6 +12,7 @@ import BkNone from '@/components/bk-none/bk-none'
 import { humanDateAndTime } from '@/utils/format'
 import { loadingService, toastService } from '@/service/toast-service'
 import { CardsHealper } from '@/utils/cards-healper'
+import { custom } from '@/custom/index'
 import './reports-list.less'
 
 export default function ReportList() {
@@ -20,19 +21,8 @@ export default function ReportList() {
   const reportType = params.reportType as REPORT_TYPE_EN
   const [itemType,setItemType] = useState(REPORT_ITEM_TYPE_CN.化验)
   const [list,setList] = useState([])
-  const clinicTabs = [
-    {title: '化验', value: REPORT_ITEM_TYPE_CN.化验},
-    {title: '放射', value: REPORT_ITEM_TYPE_CN.放射},
-    {title: '超声', value: REPORT_ITEM_TYPE_CN.超声},
-    {title: '病理', value: REPORT_ITEM_TYPE_CN.病理},
-    {title: '内镜', value: REPORT_ITEM_TYPE_CN.内镜},
-    {title: '产前', value: REPORT_ITEM_TYPE_CN.产前超声},
-  ]
-  const hospitalizationTabs = [
-    {title: '化验', value: REPORT_ITEM_TYPE_CN.化验},
-    {title: '放射', value: REPORT_ITEM_TYPE_CN.放射},
-    {title: '超声', value: REPORT_ITEM_TYPE_CN.超声},
-  ]
+  const clinicTabs = custom.reportsPage.reportItemTabs
+  const hospitalizationTabs = custom.reportsPage.hospitalizationTabs
   const onTabChange = (index,value) => {
     if(value !== itemType){
       setItemType(value)
@@ -51,7 +41,14 @@ export default function ReportList() {
       }
     })
   }
-
+  // Taro.useReady(() => {
+  //   const card = CardsHealper.getDefault()
+  //   if(!card){
+  //     toastService({title: '请先绑卡'})
+  //     return
+  //   }
+  //   getList(itemType)
+  // })
   useDidShow(() => {
     const card = CardsHealper.getDefault()
     if(!card){
@@ -65,7 +62,7 @@ export default function ReportList() {
   }
   return(
     <View className='reports-list'>
-      <HealthCards switch />
+      <HealthCards />
       <BkTabs tabs={reportType === REPORT_TYPE_EN.clinic? clinicTabs : hospitalizationTabs} onTabChange={onTabChange} />
       {
         list.length > 0
@@ -80,7 +77,7 @@ export default function ReportList() {
                   </View>
                   <View className='flex'>
                     <View className='reports-list-item-name'>开单编号</View>
-                    <View className='reports-list-item-text'>{item.cardNo}</View>
+                    <View className='reports-list-item-text'>{item.id}</View>
                   </View>
                   <View className='flex'>
                     <View className='reports-list-item-name'>检查名称</View>

@@ -1,4 +1,5 @@
 import imgUrl from '@/utils/imgs'
+import { REPORT_ITEM_TYPE_CN } from '@/enums/index'
 
 export default {
   hospName: "jayy",
@@ -78,6 +79,14 @@ export default {
     hospitalNavigation: false  // 院内导航
   },
   reportsPage:{
-    urlDetail: false // 报告详情页用图片展示
+    urlDetail: false, // 报告详情页用图片展示
+    reportItemTabs: [
+      {title: '检验', value: REPORT_ITEM_TYPE_CN.化验},
+      {title: '检查', value: REPORT_ITEM_TYPE_CN.检查},
+    ],
+    hospitalizationTabs: [
+      {title: '检验', value: REPORT_ITEM_TYPE_CN.化验},
+      {title: '检查', value: REPORT_ITEM_TYPE_CN.检查},
+    ],
   }
 }

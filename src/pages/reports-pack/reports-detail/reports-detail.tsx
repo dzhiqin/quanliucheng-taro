@@ -9,6 +9,7 @@ import {custom} from '@/custom/index'
 import './reports-detail.less'
 import BkButton from '@/components/bk-button/bk-button'
 import { loadingService, toastService } from '@/service/toast-service'
+import BkPanel from '@/components/bk-panel/bk-panel'
 
 export default function ReportsDetail() {
   const router = useRouter()
@@ -62,6 +63,15 @@ export default function ReportsDetail() {
         })
       }
     })
+  
+  }
+  const getReferResult = (key) => {
+    switch(key){
+      case 'H': return '偏高';
+      case 'L': return '偏低';
+      case 'N': return '正常';
+      default: return key;
+    }
   }
   return(
     <View className='reports-detail'>
@@ -82,13 +92,76 @@ export default function ReportsDetail() {
         </View>
       }
       {
-        !reportsPage.urlDetail &&
-        <View>
+        !reportsPage.urlDetail && itemType !== REPORT_ITEM_TYPE_CN.化验 &&
+        <View style='padding: 40rpx;'>
           {
             checkItems.map((item,index) => 
-              <View key={index}>
-                <View>编号:</View>
-                <View>{item.itemNo}</View>
+              <BkPanel key={index}>
+                <View className='card-item'>
+                  <View>检查编号:</View>
+                  <View>{item.itemNo}</View>
+                </View>
+                <View className='card-item'>
+                  <View>检查名称:</View>
+                  <View>{item.examItemName}</View>
+                </View>
+                <View className='card-item'>
+                  <View>检查结果:</View>
+                  <View>{item.content}</View>
+                </View>
+                <View className='card-item'>
+                  <View>结果描述:</View>
+                  <View>{item.prompt}</View>
+                </View>
+              </BkPanel>
+            )
+          }
+        </View>
+      }
+      {
+        !reportsPage.urlDetail && itemType === REPORT_ITEM_TYPE_CN.化验 &&
+        <View className='table'>
+          <View className='at-row table-header'>
+            <View className='at-col table-header-item'>项目名称</View>
+            <View className='at-col table-header-item'>结果</View>
+            <View className='at-col table-header-item'>单位</View>
+            <View className='at-col table-header-item'>参考值</View>
+            <View className='at-col table-header-item'>参考结果</View>
+          </View>
+          {
+            checkItems.map((item,index) => 
+              <View className='at-row' key={index}>
+                <View className='at-col table-body-item table-body-scroll'>{item.labRepItemName}{item.prompt ? '/'+item.prompt : ''}</View>
+                <View className='at-col table-body-item'>{item.labRepResult}</View>
+                <View className='at-col table-body-item' style='font-size: 26rpx'>{item.labRepUnits}</View>
+                <View className='at-col table-body-item table-body-scroll'>{item.labContext}</View>
+                <View className='at-col table-body-item'>
+                  {getReferResult(item.labInd)}
+                </View>
+                {/* <View className='card-item'>
+                  <View>姓名:</View>
+                  <View>{item.patientName}</View>
+                </View>
+                <View className='card-item'>
+                  <View>性别:</View>
+                  <View>{item.gender}</View>
+                </View>
+                <View className='card-item'>
+                  <View>年龄:</View>
+                  <View>{item.age}</View>
+                </View>
+                <View className='card-item'>
+                  <View>报告医生:</View>
+                  <View>{item.reportDoctorName}</View>
+                </View>
+                <View className='card-item'>
+                  <View>报告时间:</View>
+                  <View>{item.itemDate}</View>
+                </View>
+                <View className='card-item'>
+                  <View>性别:</View>
+                  <View>{item.gender}</View>
+                </View> */}
               </View>
             )
           }
