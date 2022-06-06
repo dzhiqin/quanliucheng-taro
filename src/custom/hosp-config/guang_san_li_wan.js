@@ -128,7 +128,7 @@ export default {
       electronicHealthCard: true, // 电子健康卡
       parentInfo: false,     // 监护人信息(儿童无证件)
       nationality: true,    // 国籍
-      hospitalCard: true,  // 是否有院内就诊卡
+      hasCard: true,  // 是否有院内就诊卡
       maritalStatus: true, // 婚姻状况
       oneClickAuth: true,    // 一键授权，直接绑定健康卡
       bindYiBaoCard: true, // 绑定医保卡

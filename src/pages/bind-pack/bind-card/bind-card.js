@@ -37,8 +37,8 @@ export default class BindCard extends React.Component {
         phone: '',
         address: '',
         isDefault: true,
-        hasHospitalCard: false,
-        hospitalCardNo: '',
+        isHaveCard: false,
+        cardNo: '',
         maritalStatus: '未婚',
         nationality: '中国',
         parentName: '',
@@ -148,10 +148,10 @@ export default class BindCard extends React.Component {
     const card = this.state.card
     let params = {
       ...card,
-      isHaveCard: card.hasHospitalCard,
+      isHaveCard: card.isHaveCard,
       openId: Taro.getStorageSync('openId')
     }
-    // console.log('buildparams', params);
+    console.log('buildparams', params);
     return params
   }
   formValidator() {
@@ -167,7 +167,7 @@ export default class BindCard extends React.Component {
         // console.log('key=',keys[i],'value=',card[keys[i]])
         if(this.state.currentIdenTypeValue === '儿童(无证件)' && key === 'idenNo') continue
         if(!this.state.bindCardConfig.nationality && key === 'nationality') continue
-        if(!card.hasHospitalCard && key === 'hospitalCardNo') continue
+        if(!card.isHaveCard && key === 'cardNo') continue
         if(this.state.currentIdenTypeValue !== '儿童(无证件)' && (key === 'parentName' || key === 'parentId')) continue
         if(key ==='wechatCode') continue
         msg = (validateMessages[keys[i]] || key) + '的值不能为空'
@@ -247,8 +247,8 @@ export default class BindCard extends React.Component {
   onDefaultChange(value){
     this.handleCardChange('isDefault',value)
   }
-  onHashospitalCardChange(value){
-    this.handleCardChange('hasHospitalCard',value)
+  onIsHaveCardChange(value){
+    this.handleCardChange('isHaveCard',value)
   }
   onMaritalStatusChange(value){
     this.handleCardChange('maritalStatus',value)
@@ -379,27 +379,27 @@ export default class BindCard extends React.Component {
           </AtInput>
 
           {
-            this.state.bindCardConfig.hospitalCard &&
+            this.state.bindCardConfig.hasCard &&
             <AtInput 
-              name='hasHospitalCard' 
+              name='isHaveCard' 
               title='院内就诊卡' 
               type='number' 
               placeholder='' 
             >
-              <View className={`btn ${this.state.card.hasHospitalCard ? 'primary' : 'cancel'}`} onClick={this.onHashospitalCardChange.bind(this, true)}>有</View>
-              <View className={`btn ${this.state.card.hasHospitalCard ? 'cancel' : 'primary'}`} onClick={this.onHashospitalCardChange.bind(this,false)}>无</View>
+              <View className={`btn ${this.state.card.isHaveCard ? 'primary' : 'cancel'}`} onClick={this.onIsHaveCardChange.bind(this, true)}>有</View>
+              <View className={`btn ${this.state.card.isHaveCard ? 'cancel' : 'primary'}`} onClick={this.onIsHaveCardChange.bind(this,false)}>无</View>
             </AtInput> 
           }
           
           {
-            this.state.bindCardConfig.hospitalCard && this.state.card.hasHospitalCard &&
+            this.state.bindCardConfig.hasCard && this.state.card.isHaveCard &&
             <AtInput 
-              name='hospitalCardNo' 
+              name='cardNo' 
               title='就诊卡号' 
               type='text' 
               placeholder='请输入就诊卡号' 
-              value={this.state.card.hospitalCardNo} 
-              onChange={this.handleCardChange.bind(this,'hospitalCardNo')} 
+              value={this.state.card.cardNo} 
+              onChange={this.handleCardChange.bind(this,'cardNo')} 
             /> 
           }
           
