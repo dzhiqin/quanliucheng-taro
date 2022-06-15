@@ -2,8 +2,8 @@ import imgUrl from '@/utils/imgs'
 import { REPORT_ITEM_TYPE_CN } from '@/enums/index'
 
 export default {
-  latitude: 23.096397,
-  longitude: 113.367814,
+  latitude: 23.16121,
+  longitude: 113.206085,
   hospName: "jszyy",
   isPrivate: true,
   logo: "http://www.jsz120.com/uploads/allimg/200512/2-200512092512328.jpg",

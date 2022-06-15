@@ -18,6 +18,7 @@ export default function DoctorDefault(props) {
   const deptInfo = Taro.getStorageSync('deptInfo')
   const [selectedDate,setSelectedDate] = useState(params.regDate || '')
   const [list,setList] = useState([])
+  const [busy,setBusy] = useState(true)
   const [doctorDetail,setDoctorDetail] = useState({
     deptId: '',
     deptName: '',
@@ -89,6 +90,7 @@ export default function DoctorDefault(props) {
   }
   useEffect(() => {
     loadingService(true)
+    setBusy(true)
     fetchDoctorSchedules({
       doctorId: params.doctorId, 
       deptId: deptInfo.deptId, 
@@ -102,12 +104,15 @@ export default function DoctorDefault(props) {
           }
           toastService({title: msg,onClose: () => {Taro.navigateBack()}})
         }else{
-          loadingService(false)
           setDoctorDetail(res.data.doctorDetail)
           setDoctorInfo(res.data.timeSliceDoctorInfo)
           setSelectedDate(res.data.defaultSelectedDay)
           setList(res.data.timePoints)
           setRegDays(res.data.regDays)
+          setTimeout(() => {
+            loadingService(false)
+            setBusy(false)
+          }, 1000);
         }
       }else{
         toastService({title: '获取数据失败：'+res.message})
@@ -154,7 +159,7 @@ export default function DoctorDefault(props) {
                 )
               }
             </AtList>
-          : <BkNone />
+          : <BkNone loading={busy} />
         }
       </View>
     </View>
