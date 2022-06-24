@@ -86,11 +86,12 @@ export default {
             //   name: '住院绑卡',
             //   event: 'navigate',
             // }, 
-            // {
-            //   icon: imgUrl.new_home_icon10,
-            //   name: '住院押金',
-            //   event: 'navigate',
-            // }, 
+            {
+              icon: imgUrl.new_home_icon10,
+              name: '住院押金',
+              event: 'navigate',
+              url: '/pages/hosp-pack/deposit/deposit'
+            }, 
             {
               icon: imgUrl.new_home_icon11,
               name: '每日清单',
