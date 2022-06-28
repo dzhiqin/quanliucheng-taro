@@ -21,6 +21,7 @@ export default function ChecklistDetail() {
   const [tabList,setTabList] = useState([])
   const [currentTab,setCurrentTab] = useState(0)
   const [categories,setCategories] = useState([])
+  const card = Taro.getStorageSync('inCard')
   const Row = React.memo(({id,index,style,data}) => {
     return (
       <BkPanel style='margin: 20rpx'>
@@ -34,7 +35,7 @@ export default function ChecklistDetail() {
         </View>
         <View className='checklist-detail-item'>
           <text>规格：</text>
-          <text className='checklist-detail-item-value'>{data[index].itemSpec}</text>
+          <text className='checklist-detail-item-value'>{data[index].itemSpec || '-'}</text>
         </View>
         <View className='checklist-detail-item flex-between'>
           <View style='flex: 1'>
@@ -60,7 +61,7 @@ export default function ChecklistDetail() {
     )
   })
   const getBillCategories = () => {
-    fetchInHospBillCategories({registerId,billDate}).then(res => {
+    fetchInHospBillCategories({registerId,billDate,inCardNo:card.cardNo}).then(res => {      
       if(res.resultCode === 0 && res.data.categoryBillList.length > 0){
         const _categories = res.data.categoryBillList
         setCategories(res.data.categoryBillList)
@@ -80,11 +81,11 @@ export default function ChecklistDetail() {
   })
   const getInHospBillDetail = (categoryId = '') => {
     loadingService(true)
-    fetchInHospBillDetail({registerId,billDate,categoryId})
+    fetchInHospBillDetail({registerId,billDate,categoryId,inCardNo: card.cardNo})
     .then(res => {
       loadingService(false)
       if(res.resultCode === 0){
-        setList(res.data)
+        setList(res.data.itemList)
       }else{
         toastService({title: res.message})
       }

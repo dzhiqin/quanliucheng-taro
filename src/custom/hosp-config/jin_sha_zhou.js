@@ -6,6 +6,7 @@ export default {
   longitude: 113.206085,
   hospName: "jszyy",
   isPrivate: true,
+  banner: 'http://www.jsz120.com/uploads/allimg/200814/2-200Q41K419319.png',
   logo: "http://www.jsz120.com/uploads/allimg/200512/2-200512092512328.jpg",
   hospitalName: "广州中医药大学金沙洲医院",
   // baseUrl: "https://applets.gdbkyz.com", // 倍康测试

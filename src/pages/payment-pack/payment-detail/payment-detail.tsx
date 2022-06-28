@@ -431,6 +431,13 @@ export default function PaymentDetail() {
             <View className='payment-detail-item-text price-color'>{orderInfoFromList ? orderInfoFromList.prescMoney : orderInfo.prescMoney} 元</View>
           </View>
           {
+            orderInfoFromList && orderInfoFromList.oweMoney &&
+            <View className='flex'>
+              <View className='flat-title'>欠费金额</View>
+              <View className='payment-detail-item-text price-color'>{orderInfoFromList.oweMoney}</View>
+            </View>
+          }
+          {
             orderInfoFromList && orderInfoFromList.serialNo && 
             <View className='flex'>
               <View className='flat-title'>电子发票</View>

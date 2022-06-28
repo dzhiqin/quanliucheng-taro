@@ -47,10 +47,21 @@ export default function Official() {
       Taro.hideLoading()
     })
   }, [])
+  const handleOpenLocation = () => {
+    Taro.openLocation({
+      latitude: custom.latitude,
+      longitude: custom.longitude,
+      name: hospInfo.addr
+    })
+  }
+  const handleOpenPhone = () => {
+    Taro.makePhoneCall({phoneNumber: hospInfo.phone})
+  }
   return (
     <View className='official'>
       <View className='official-banner'>
-        <Image src={banner} />
+        <Image src={custom.banner} />
+        {/* <Image src={banner} /> */}
       </View>
       <View className='official-header'>
         <Image src={custom.logo} className='official-header-logo' />
@@ -73,7 +84,7 @@ export default function Official() {
         <View className='official-contact'>
           {
             hospInfo.phone &&
-            <View className='official-contact-item'>
+            <View className='official-contact-item' onClick={handleOpenPhone}>
               <Image className='official-contact-icon' src={phonePng}></Image>
               <View className='official-contact-text'>{hospInfo.phone}</View>
             </View>
@@ -87,7 +98,7 @@ export default function Official() {
           }
           {
             hospInfo.addr &&
-            <View className='official-contact-item'>
+            <View className='official-contact-item' onClick={handleOpenLocation}>
               <Image className='official-contact-icon' src={locationPng}></Image>
               <View className='official-contact-text'>{hospInfo.addr}</View>
             </View>

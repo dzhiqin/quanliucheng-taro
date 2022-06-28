@@ -139,6 +139,10 @@ export default function BindingCard() {
     setMoney(e.detail.value)
   }
   const handlePay = async() => {
+    if(info.inHospStatus === '不在院'){
+      toastService({title: '已出院，无法充值'})
+      return
+    }
     if(!money){
       toastService({title: '请输入金额'})
       return

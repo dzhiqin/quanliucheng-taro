@@ -11,6 +11,7 @@ import MoneyPng from '@/images/icons/money_circle.png'
 import './checklist.less'
 import BkNone from '@/components/bk-none/bk-none'
 import { AtList,AtListItem } from 'taro-ui'
+import { custom } from '@/custom/index'
 
 export default function BindingCard() {
   const [showModal,setShowModal] = useState(false)
@@ -99,7 +100,8 @@ export default function BindingCard() {
     <View className='checklist'>
       <SimpleModal msg='请先绑卡' show={showModal} onCancel={() => setShowModal(false)} onConfirm={handleConfirm} />
       {
-        card &&
+        // 金沙洲医院门诊卡和住院卡默认已关联，所以没有住院卡管理
+        card && custom.hospName !== 'jszyy' &&
         <AtList>
           <AtListItem
             arrow='right'

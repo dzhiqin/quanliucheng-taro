@@ -27,15 +27,13 @@ export default function BkVerticalTab(props:{
     })
   }
   useEffect(() => {
-    if(props.current && props.current !== current){
-      setCurrent(props.current)
-    }
+    setCurrent(props.current)
   }, [props,current])
   return(
     <View className='bk-vertical-tab' style={props.style ? props.style : ''}>
       {
         props.list && props.list.map((item,index) => 
-          <View className={`tab-item ${current === index ? 'tab-item-active' : ''}`} onClick={onClick.bind(null,index,item)} key={key ? item[key]: index}>{item[name]}</View>
+          <View className={`tab-item ${current == index ? 'tab-item-active' : ''}`} onClick={onClick.bind(null,index,item)} key={key ? item[key]: index}>{item[name]}</View>
         )
       }
     </View>
