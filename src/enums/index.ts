@@ -82,3 +82,8 @@ export enum PAYMENT_FROM {
   paymentList = 'paymentList',
   scanQRCode = 'scanQRCode'
 }
+export enum PAY_RESULT {
+  INIT = '',
+  SUCCESS = 'success',
+  FAIL = 'fail'
+}

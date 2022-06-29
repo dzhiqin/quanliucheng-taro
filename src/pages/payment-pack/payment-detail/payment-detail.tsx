@@ -549,7 +549,7 @@ export default function PaymentDetail() {
     )
   }else{
     return (
-      <ResultPage type={payResult} remark={payResultMsg}>
+      <ResultPage type={payResult} remark={payResultMsg} visible={!!payResult}>
         <View style='padding: 60rpx'>
           {
             payResult === resultEnum.fail &&

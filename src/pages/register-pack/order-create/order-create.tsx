@@ -210,6 +210,7 @@ export default function OrderCreate() {
           })
         }
       }else{
+        setBusy(false)
         toastService({title: res.message})
       }
     })
@@ -331,7 +332,7 @@ export default function OrderCreate() {
     )
   }else{
     return(
-      <ResultPage type={result} >
+      <ResultPage type={result} visible={!!result}>
         <View className='order-result'>
           <BkPanel>
             <View className='order-result-item'>

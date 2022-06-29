@@ -15,16 +15,20 @@ import BkButton from '@/components/bk-button/bk-button'
 import { loadingService, toastService } from '@/service/toast-service'
 import BkNone from '@/components/bk-none/bk-none'
 import './deposit.less'
-import { ORDER_STATUS_EN } from '@/enums/index'
+import { ORDER_STATUS_EN, PAY_RESULT } from '@/enums/index'
 import { requestTry } from '@/utils/retry'
 import DepositListItem from './deposit-list-item'
 import BaseModal from '@/components/base-modal/base-modal'
+import ResultPage from '@/components/result-page/result-page'
 
 const inHospStatusObj = {
   1: '在院',
   0: '不在院'
 }
+
 export default function BindingCard() {
+  const [resultVisible,setResultVisible] = useState(false)
+  const [payResult,setPayResult] = useState(PAY_RESULT.SUCCESS)
   const [inCard,setInCard] = useState(null)
   const [tabValue,setTabValue] = useState('deposit')
   const [showModal,setShowModal] = useState(false)
@@ -160,23 +164,27 @@ export default function BindingCard() {
       setBusy(false)
       return
     }
-    // setOrderNo(response.data.orderNo)
     TaroRequestPayment(response.data.unifiedOrderResponse).then(res => {
-      // console.log('payment res:',res);
       requestTry(checkOrderStatus.bind(null,response.data.orderNo)).then(checkRes => {
-        toastService({title: '充值成功', onClose: () => {getData(card); setBusy(false)}})
+        getData(card)
+        handlePaySuccess()
       }).catch(() => {
-        toastService({title: '充值失败，所缴金额将原路退回', onClose: () => {setBusy(false)}})
+        setBusy(false);setResultVisible(true);setPayResult(PAY_RESULT.FAIL)
+
+      }).finally(() => {
+        loadingService(false)
       })
     }).catch(err => {
       toastService({title: '您已取消支付'})
       setBusy(false)
     })
   }
+  const handlePaySuccess = () => {
+    setBusy(false); setResultVisible(true);setPayResult(PAY_RESULT.SUCCESS);setMoney(null)
+  }
   const checkOrderStatus = (id: string) => {
     return new Promise((resolve,reject) => {
       getDepositOrderStatus({orderNo:id}).then(res => {
-        // console.log('getorderstatus',res);
         if(res.resultCode ===0 && res.data === ORDER_STATUS_EN.paySuccess_and_His_success){
           resolve(res.message)
         }else{
@@ -219,6 +227,9 @@ export default function BindingCard() {
   }
   return(
     <View>
+      <ResultPage type={payResult} visible={resultVisible}>
+        <BkButton title='返回' style='margin: 40rpx;' onClick={() => {setResultVisible(false)}} />
+      </ResultPage>
       <SimpleModal msg='请先绑卡' show={showModal} onCancel={() => setShowModal(false)} onConfirm={handleConfirm} />
       <BaseModal show={showDetail} confirm={onConfirm} cancel={() => setShowDetail(false)} title='订单详情'>
         <View className='flex-between'>
