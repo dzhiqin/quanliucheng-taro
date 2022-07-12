@@ -144,8 +144,9 @@ export default function OrderList(){
   },[searchType])
   const onClickItem = (item) => {
     // console.log(item);
-    const { clinicCode, createdTime, orderDate, recipeSeq, prescMoney, orderDept, orderDoctor, orderId, orderType, payState } = item
+    const { serialNo, clinicCode, createdTime, orderDate, recipeSeq, prescMoney, orderDept, orderDoctor, orderId, orderType, payState } = item
     const params = {
+      serialNo,
       clinicNo: clinicCode,
       createdTime,
       orderDate,

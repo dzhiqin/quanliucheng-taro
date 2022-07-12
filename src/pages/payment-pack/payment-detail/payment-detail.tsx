@@ -441,7 +441,7 @@ export default function PaymentDetail() {
             orderInfoFromList && orderInfoFromList.serialNo && 
             <View className='flex'>
               <View className='flat-title'>电子发票</View>
-              <View className='payment-detail-item-text clickable' onClick={showInvoice.bind(null,orderInfo)}>点击查看</View>
+              <View className='payment-detail-item-text clickable' onClick={showInvoice.bind(null,orderInfoFromList)}>点击查看</View>
             </View>
           }
           {

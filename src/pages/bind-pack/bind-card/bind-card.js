@@ -127,7 +127,8 @@ export default class BindCard extends React.Component {
       }else{
         let msg = ''
         if (/成功创建患者档案信息/.test(res.message)) {
-          msg = '健康卡创建失败，但诊疗卡创建成功且支持挂号'
+          msg = '诊疗卡创建成功'
+          // msg = '健康卡创建失败，但诊疗卡创建成功且支持挂号'
           CardsHealper.updateAllCards().then(() => {
             toastService({title: msg,onClose:()=> Taro.navigateBack()})
           })
@@ -380,15 +381,13 @@ export default class BindCard extends React.Component {
 
           {
             this.state.bindCardConfig.hasCard &&
-            <AtInput 
-              name='isHaveCard' 
-              title='院内就诊卡' 
-              type='number' 
-              placeholder='' 
-            >
-              <View className={`btn ${this.state.card.isHaveCard ? 'primary' : 'cancel'}`} onClick={this.onIsHaveCardChange.bind(this, true)}>有</View>
-              <View className={`btn ${this.state.card.isHaveCard ? 'cancel' : 'primary'}`} onClick={this.onIsHaveCardChange.bind(this,false)}>无</View>
-            </AtInput> 
+            <View className='bind-card-item'>
+              <View>院内就诊卡</View>
+              <View style='display: flex;'>
+                <View className={`btn ${this.state.card.isHaveCard ? 'primary' : 'cancel'}`} onClick={this.onIsHaveCardChange.bind(this, true)}>有</View>
+                <View className={`btn ${this.state.card.isHaveCard ? 'cancel' : 'primary'}`} onClick={this.onIsHaveCardChange.bind(this,false)}>无</View>
+              </View>
+            </View>
           }
           
           {
@@ -405,17 +404,15 @@ export default class BindCard extends React.Component {
           
           {
             this.state.bindCardConfig.maritalStatus &&
-            <AtInput 
-              name='maritalStatus' 
-              title='婚姻状况' 
-              type='number' 
-              placeholder='' 
-            >
+            <View className='bind-card-item'>
+              <View>婚姻状况</View>
+              <View style='display: flex;'>
               <View className={`btn ${this.state.card.maritalStatus === '未婚' ? 'info' : 'cancel'}`} onClick={this.onMaritalStatusChange.bind(this, '未婚')}>未婚</View>
               <View className={`btn ${this.state.card.maritalStatus === '已婚' ? 'info' : 'cancel'}`} onClick={this.onMaritalStatusChange.bind(this, '已婚')}>已婚</View>
               <View className={`btn ${this.state.card.maritalStatus === '离婚' ? 'info' : 'cancel'}`} onClick={this.onMaritalStatusChange.bind(this, '离婚')}>离婚</View>
               <View className={`btn ${this.state.card.maritalStatus === '丧偶' ? 'info' : 'cancel'}`} onClick={this.onMaritalStatusChange.bind(this, '丧偶')}>丧偶</View>
-            </AtInput> 
+              </View>
+            </View>
           }
 
           {
@@ -429,17 +426,13 @@ export default class BindCard extends React.Component {
               onChange={this.handleCardChange.bind(this,'nationality')} 
             /> 
           }
-
-          <AtInput 
-            name='isDefault' 
-            title='是否设置为默认健康卡' 
-            type='number' 
-            placeholder='' 
-          >
-            <View className={`btn ${this.state.card.isDefault ? 'info' : 'cancel'}`} onClick={this.onDefaultChange.bind(this, true)}>是</View>
-            <View className={`btn ${this.state.card.isDefault ? 'cancel' : 'info'}`} onClick={this.onDefaultChange.bind(this,false)}>否</View>
-          </AtInput>
-
+          <View className='bind-card-item'>
+            <View>是否设置为默认健康卡</View>
+            <View style='display: flex;'>
+              <View className={`btn ${this.state.card.isDefault ? 'info' : 'cancel'}`} onClick={this.onDefaultChange.bind(this, true)}>是</View>
+              <View className={`btn ${this.state.card.isDefault ? 'cancel' : 'info'}`} onClick={this.onDefaultChange.bind(this,false)}>否</View>
+            </View>
+          </View>
           {
             this.state.currentIdenTypeValue === '儿童(无证件)' &&
             <AtInput 
