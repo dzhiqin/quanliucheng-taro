@@ -1,8 +1,8 @@
 import * as React from 'react'
-import * as Taro from '@tarojs/taro'
+// import * as Taro from '@tarojs/taro'
 import { useEffect, useState } from 'react'
 import { View, Image } from '@tarojs/components'
-import subscribeNoticeImg from '@/images/subscribe_notice.png'
+// import subscribeNoticeImg from '@/images/subscribe_notice.png'
 
 import './subscribe-notice.less'
 
@@ -14,7 +14,7 @@ export default function SubscribeNotice(props: {show: boolean}) {
   if(show) {
     return (
       <View className='subscribe-notice'>
-        <Image src={subscribeNoticeImg} className='subscribe-notice-image'></Image>
+        <Image src='https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/common/subscribe_notice.png' className='subscribe-notice-image'></Image>
       </View>
     )
   }else{

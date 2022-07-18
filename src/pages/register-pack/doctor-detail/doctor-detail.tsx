@@ -10,6 +10,8 @@ import { AtList, AtListItem } from "taro-ui"
 import BkNone from '@/components/bk-none/bk-none'
 import './doctor-detail.less'
 import { CardsHealper } from '@/utils/cards-healper'
+import BaseModal from '@/components/base-modal/base-modal'
+import defaultDoctorAvatar from '@/images/default_doctor.png'
 
 export default function DoctorDefault(props) {
   const router = useRouter()
@@ -19,6 +21,7 @@ export default function DoctorDefault(props) {
   const [selectedDate,setSelectedDate] = useState(params.regDate || '')
   const [list,setList] = useState([])
   const [busy,setBusy] = useState(true)
+  const [show,setShow] = useState(false)
   const [doctorDetail,setDoctorDetail] = useState({
     deptId: '',
     deptName: '',
@@ -27,7 +30,8 @@ export default function DoctorDefault(props) {
     title: '',
     specialty:'',
     doctorId: '',
-    doctorName: ''
+    doctorName: '',
+    desc: ''
   })
   const [doctorInfo,setDoctorInfo] = useState({
     sourceType: '',
@@ -121,7 +125,33 @@ export default function DoctorDefault(props) {
   }, [deptInfo.deptId,params.doctorId,params.regDate])
   return(
     <View className='doctor-detail'>
-      <View className='doctor-detail-info'>
+      <BaseModal show={show} cancel={() => setShow(false)} confirm={() => setShow(false)}>
+        <View className='flex'>
+          <Image src={doctorDetail.faceUrl || defaultDoctorAvatar} className='doctor-modal-image' />
+          <View style='margin-left: 10rpx;'>
+            <View>{doctorDetail.name}</View>
+            <View>{doctorDetail.deptName}</View>
+            <View>{doctorDetail.title}</View>
+          </View>
+        </View>
+        <View>
+          {
+            doctorDetail.desc && 
+            <View className='doctor-modal-info'>
+              <text className='doctor-modal-info-title'>简介：</text>
+              {doctorDetail.desc}
+            </View>
+          }
+          {
+            doctorDetail.specialty && 
+            <View className='doctor-modal-info'>
+              <text className='doctor-modal-info-title'>擅长领域：</text>
+              {doctorDetail.specialty}
+            </View>
+          }
+        </View>
+      </BaseModal>
+      <View className='doctor-detail-info' onClick={() => setShow(true)}>
           <Image src={doctorDetail.faceUrl} className='avatar' />
         <View style='margin-left: 20rpx;'>
           <View>
@@ -130,9 +160,15 @@ export default function DoctorDefault(props) {
             <text className='doctor-detail-title'>{doctorDetail.title}</text>
           </View>
           {
+            doctorDetail.desc && 
+            <View className='doctor-detail-skilled'>
+              简介：{doctorDetail.desc}
+            </View>
+          }
+          {
             doctorDetail.specialty && 
             <View className='doctor-detail-skilled'>
-              擅长领域：{doctorInfo.specializedSubject}
+              擅长领域：{doctorDetail.specialty}
             </View>
           }
           

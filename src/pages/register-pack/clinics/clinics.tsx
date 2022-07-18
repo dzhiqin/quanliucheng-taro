@@ -121,6 +121,14 @@ export default function Clinics() {
           registerConfig.type === 'tabs' && <ClinicList />
         }
       </View>
+      {/* <View className='clinics-content'>
+        {
+          registerConfig.type === 'common' && 
+          <View>
+
+          </View>
+        }
+      </View> */}
     </View>
   )
 }

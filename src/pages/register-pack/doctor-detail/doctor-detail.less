@@ -1,6 +1,21 @@
 @import '../../../color.less';
 
 .doctor-detail{
+  .doctor-modal {
+
+    &-image{
+      width: 200rpx;
+      height: 250rpx;
+    }
+    &-info{
+      margin: 16rpx 0;
+      &-title{
+        word-break: keep-all;
+        font-size: 26rpx;
+        font-weight: 500;
+      }
+    }
+  }
   &-info{
     padding: 40rpx;
     display: flex;
@@ -28,10 +43,10 @@
     text-overflow: ellipsis;
     width: 520rpx;
     display: -webkit-box;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     display: -moz-box;
-    -moz-line-clamp: 2;
+    -moz-line-clamp: 3;
     -moz-box-orient: vertical;
     word-wrap: break-word;
     word-break: break-all;
