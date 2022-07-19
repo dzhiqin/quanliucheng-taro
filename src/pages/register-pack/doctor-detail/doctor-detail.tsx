@@ -101,15 +101,18 @@ export default function DoctorDefault(props) {
       regDate: params.regDate || '' 
     }).then((res:any) => {
       if(res.resultCode === 0){
+        setDoctorDetail(res.data.doctorDetail)
+        setDoctorInfo(res.data.timeSliceDoctorInfo)
         if(res.data.defaultSelectedDay === '无剩余号源'){
-          let msg = '无剩余号源，页面将返回'
+          let msg = '无剩余号源，请返回页面重新选择'
           if(Taro.getStorageSync('isReg') === '1'){
             msg = '当天没号了，请选择其他日期'
           }
-          toastService({title: msg,onClose: () => {Taro.navigateBack()}})
+          // toastService({title: msg,onClose: () => {Taro.navigateBack()}})
+          toastService({title: msg})
         }else{
-          setDoctorDetail(res.data.doctorDetail)
-          setDoctorInfo(res.data.timeSliceDoctorInfo)
+          // setDoctorDetail(res.data.doctorDetail)
+          // setDoctorInfo(res.data.timeSliceDoctorInfo)
           setSelectedDate(res.data.defaultSelectedDay)
           setList(res.data.timePoints)
           setRegDays(res.data.regDays)
@@ -120,12 +123,13 @@ export default function DoctorDefault(props) {
         }
       }else{
         toastService({title: '获取数据失败：'+res.message})
+        setBusy(false)
       }
     })
   }, [deptInfo.deptId,params.doctorId,params.regDate])
   return(
     <View className='doctor-detail'>
-      <BaseModal show={show} cancel={() => setShow(false)} confirm={() => setShow(false)}>
+      <BaseModal show={show} cancel={() => setShow(false)} confirm={() => setShow(false)} title='医生详情'>
         <View className='flex'>
           <Image src={doctorDetail.faceUrl || defaultDoctorAvatar} className='doctor-modal-image' />
           <View style='margin-left: 10rpx;'>
@@ -195,7 +199,7 @@ export default function DoctorDefault(props) {
                 )
               }
             </AtList>
-          : <BkNone loading={busy} />
+          : <BkNone loading={busy} msg='暂无排班信息' />
         }
       </View>
     </View>

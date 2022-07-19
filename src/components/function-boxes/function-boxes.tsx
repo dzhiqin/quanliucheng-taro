@@ -43,7 +43,7 @@ export default function FunctionBoxes(props) {
           const hospitalCount = res.data.length
           if(hospitalCount === 1){
             let url = ''
-            if(custom.feat.register.guangSanMode){
+            if(custom.feat.register.intradayAndAppointment){
               url = `/pages/register-pack/notice/notice`
             }else{
               url = `/pages/register-pack/clinics/clinics`

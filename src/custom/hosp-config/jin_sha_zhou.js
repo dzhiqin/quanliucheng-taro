@@ -139,10 +139,10 @@ export default {
       updateNotice: false, // 绑卡和解绑发送消息通知
     },
     register: {
-      bookingAndIntraday:true,// 是否区分当天挂号和预约挂号
       popupNotice: false,// 挂号提示弹窗
-      guangSanMode: true,// 广三挂号模式：区分当天挂号和预约挂号
-      type: 'embed',// 科室内容排版方式,
+      intradayAndAppointment: false,// 是否区分当天挂号和预约挂号
+      type: 'byDept',// byDept按科室挂号；byDeptAndTime按科室和时间挂号；byCategoryAndDoctorAndTime按分类、医生、日期挂号
+      departmentLevel: '2', // 2级科室
       checkEpiLogicalSurvey: false, // 是否要先填流调表才可以挂号
     },
     hospitalNavigation: true,  // 院内导航

@@ -73,7 +73,7 @@ export default function Clinics() {
       setCurrentDept(index)
       setDeptId(item.deptId)
       Taro.setStorageSync('deptInfo',item)
-      toastService({title: `已选择${item.deptName}`,duration: 800})
+      // toastService({title: `已选择${item.deptName}`,duration: 800})
     }
   }
 
@@ -87,9 +87,21 @@ export default function Clinics() {
       url: `/pages/register-pack/classify-doctor-list/classify-doctor-list?deptId=${deptId}&date=${date}`
     })
   }
+  // Taro.useReady(() => {
+  //   const query = Taro.createSelectorQuery()
+  //   query.select('#header').boundingClientRect()
+  //   query.selectViewport().scrollOffset()
+  //   query.exec(function(res){
+  //     const top = res[0].top       // #the-id节点的上边界坐标
+  //     const bottom = res[1].scrollTop // 显示区域的竖直滚动位置
+  //     console.log(`top=${top}`);
+  //     console.log(`bottom=${bottom}`);
+      
+  //   })
+  // })
   return(
     <View className='clinics'>
-      <View className='header'>
+      <View className='header' id='header'>
         <Image src={locationPng} className='header-icon' />
         <View className='header-title'>{hospitalInfo.hospitalName}</View>
       </View>
@@ -104,31 +116,35 @@ export default function Clinics() {
       </View>
       {
         doctors.length > 0 && 
-        <View className='previous'>
+        <View className='previous' id='previous'>
           {
             doctors.map((item,index) => <DoctorCard key={index} doctor={item} />)
           }
         </View>
       }
-      <View className='clinics-content'>
-        {
-          deptList.length > 0 && <BkVerticalTab list={deptList} name='deptName' current={currentDept} key='deptId' style='flex: 2' onChange={onTabChange} />
-        }
-        {
-          registerConfig.type === 'embed' && <EmbedContent deptId={deptId} style='flex: 3' onClickItem={onClickClinicItem} onClickDate={onClickDate} />
-        }
-        {
-          registerConfig.type === 'tabs' && <ClinicList />
-        }
-      </View>
-      {/* <View className='clinics-content'>
-        {
-          registerConfig.type === 'common' && 
-          <View>
-
-          </View>
-        }
-      </View> */}
+      {
+        registerConfig.type === 'byCategoryAndDoctorAndTime' && 
+        <View className='clinics-content'>
+          <BkVerticalTab list={deptList} name='deptName' current={currentDept} key='deptId' style='flex: 2' onChange={onTabChange} />
+          <EmbedContent deptId={deptId} style='flex: 3' onClickItem={onClickClinicItem} onClickDate={onClickDate} />
+        </View>
+      }
+      {
+        registerConfig.type === 'byDept' &&
+        <View className='clinics-content'>
+          <BkVerticalTab list={deptList} name='deptName' current={currentDept} key='deptId' style='flex: 2' onChange={onTabChange} />
+          {
+            registerConfig.departmentLevel === '2' &&
+            <View className='clinics-list' style='flex: 2'>
+              <ClinicList  clinics={deptList} />
+            </View>
+          }
+        </View>
+      }
+      {
+        registerConfig.type === 'byDeptAndTime' &&
+        <View>developing</View>
+      }
     </View>
   )
 }

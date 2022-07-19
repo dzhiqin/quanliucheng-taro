@@ -1,11 +1,13 @@
-@import '../../color.less';
+@import '../../style.less';
 .bk-vertical-tab{
-  display: flex;
-  flex-direction: column;
+  // display: flex;
+  // flex-direction: column;
+  overflow-y: scroll;
+  height: calc(100vh - 350rpx);
   .tab-item{
-    padding: 10rpx;
+    padding: 15rpx 0;
     color: #333;
-    font-size: 40rpx;
+    font-size: @medium-font;
     background-color: #F5F5F5;
     text-align: center;
   }
