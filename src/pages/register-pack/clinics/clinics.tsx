@@ -73,7 +73,7 @@ export default function Clinics() {
       setCurrentDept(index)
       setDeptId(item.deptId)
       Taro.setStorageSync('deptInfo',item)
-      // toastService({title: `已选择${item.deptName}`,duration: 800})
+      setClinicList(item.secondDeptInfos)
     }
   }
 
@@ -96,7 +96,6 @@ export default function Clinics() {
   //     const bottom = res[1].scrollTop // 显示区域的竖直滚动位置
   //     console.log(`top=${top}`);
   //     console.log(`bottom=${bottom}`);
-      
   //   })
   // })
   return(
@@ -136,7 +135,7 @@ export default function Clinics() {
           {
             registerConfig.departmentLevel === '2' &&
             <View className='clinics-list' style='flex: 2'>
-              <ClinicList  clinics={deptList} />
+              <ClinicList  clinics={clinicList} />
             </View>
           }
         </View>

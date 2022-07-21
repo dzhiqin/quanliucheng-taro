@@ -1,7 +1,7 @@
 import * as React from 'react'
 import * as Taro from '@tarojs/taro'
 import { View, Image } from '@tarojs/components'
-import defaultAvatar from '@/images/default_doctor.png'
+import defaultAvatar from '@/images/default-avatar.png'
 import './clinics.less'
 
 export default function DoctorCard(props) {

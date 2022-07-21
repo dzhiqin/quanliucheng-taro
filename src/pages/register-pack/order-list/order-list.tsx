@@ -123,7 +123,7 @@ export default function OrderList() {
                   <View className='order-list-card-text'>{item.deptName}</View>
                 </View>
                 <View className='order-list-card-item'>
-                  <View className='order-list-card-title'>订单编号：</View>
+                  <View className='order-list-card-title'>就诊医生：</View>
                   <View className='order-list-card-text'>{item.doctorName}</View>
                 </View>
                 {

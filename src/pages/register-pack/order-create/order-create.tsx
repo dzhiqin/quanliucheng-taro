@@ -54,7 +54,7 @@ export default function OrderCreate() {
   // 后端字段没统一，导致有2个金额字段 ╮(╯▽╰)╭
   const [regFee,setRegFee] = useState(null)
   const [treatFee,setTreatFee] = useState(null)
-  const [feeTypes,setFeeTypes] = useState([])
+  // const [feeTypes,setFeeTypes] = useState([])
   const [feeType,setCurrentFeeType] = useState('')
   const [result,setResult] = useState(resultEnum.default)
   const [feeOptions,setFeeOptions] = useState([])
@@ -123,8 +123,8 @@ export default function OrderCreate() {
         cancelRegOrder({orderId: orderId})
       }else{
         console.log('支付失败:',taroErr.data);
+        loadingService(false)
       }
-      loadingService(false)
       setBusy(false)
     })
   }
@@ -159,7 +159,6 @@ export default function OrderCreate() {
         const checkTempRes = Taro.getStorageSync('checkEpiLogicalSurvey')
         if(!checkTempRes && !checkSurveyRes.result){
           toastService({title: checkSurveyRes.message, onClose: () => {Taro.navigateTo({url: '/pages/service-pack/epidemiological-survey/epidemiological-survey'});setBusy(false)}})
-          
           return
         }
         if(checkTempRes){
@@ -200,7 +199,6 @@ export default function OrderCreate() {
           }
           handleTaroPayment(payParams,orderId)
         }else{
-          // some order no need to pay
           requestTry(checkOrderStatus.bind(null,orderId)).then(checkRes => {
             setResult(resultEnum.success)
           }).catch(checkErr=>{
@@ -218,7 +216,7 @@ export default function OrderCreate() {
   useEffect(() => {
     fetchRegFeeType().then(res => {
       if(res.resultCode == 0){
-        setFeeTypes(res.data)
+        // setFeeTypes(res.data)
         let arr = []
         res.data.forEach(i => {
           arr.push(i.feeName)
@@ -306,6 +304,9 @@ export default function OrderCreate() {
   
           </View>
         </BkPanel>
+        <View style='padding: 0 40rpx'>
+          <BkButton title='确认挂号' disabled={busy} onClick={handleSubmit} />
+        </View>
         <View className='order-create-title'>挂号须知</View>
         <View className='order-create-notice'>
           <View className='flex-center'>
@@ -325,9 +326,7 @@ export default function OrderCreate() {
             <text className='price-color'>4、需要打印发票和费用清单的请到一楼大厅自助机自行打印</text>
           </View>
         </View>
-        <View style='padding: 40rpx'>
-          <BkButton title='确认挂号' disabled={busy} onClick={handleSubmit} />
-        </View>
+        
       </View>
     )
   }else{

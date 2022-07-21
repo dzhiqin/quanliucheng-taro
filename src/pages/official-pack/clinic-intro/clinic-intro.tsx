@@ -1,10 +1,11 @@
 import * as React from 'react'
 import * as Taro from '@tarojs/taro'
-import { View, Image } from '@tarojs/components'
+import { View } from '@tarojs/components'
 import { useEffect,useState } from 'react'
 import { fetchClinicDoctors, fetchClinicIntro } from '@/service/api'
 import { toastService } from '@/service/toast-service'
-import { AtTabs } from 'taro-ui'
+import { AtTabs, AtAvatar } from 'taro-ui'
+import defaultAvatar from '@/images/default-avatar.png'
 import './clinic-intro.less'
 import BkPanel from '@/components/bk-panel/bk-panel'
 import BkNone from '@/components/bk-none/bk-none'
@@ -38,36 +39,26 @@ export default function ClinicIntro() {
   }
   return (
     <View className='clinic-intro'>
-      <AtTabs current={current} tabList={[{title: '科室介绍'},{title: '专家列表'}]} onClick={onTabChange}></AtTabs>
+      <AtTabs current={current} tabList={[{title: '专家列表'},{title: '科室介绍'}]} onClick={onTabChange}></AtTabs>
       {
-        current === 0 &&
+        current === 1 &&
         <View className='clinic-intro-content'>
           {clinicInfo.desc ? clinicInfo.desc : '暂无科室介绍，完善中……'}
         </View>
       }
       {
-        current === 1 &&
+        current === 0 &&
         <View>
           {
             doctorList.length > 0
             ?
-            // <AtList>
-            //   {
-            //     doctorList.map((item,index) => 
-            //       <AtListItem key={index} title={item.name} arrow='right' extraText={item.title} onClick={onClickItem.bind(null,item)}  />
-            //     )
-            //   }
-            // </AtList>
             <View className='clinic-intro-doctors'>
               {
                 doctorList.map((item,index) => 
                   <BkPanel arrow key={index} style='margin-top: 20rpx;border-radius: unset;' onClick={onClickItem.bind(null, item)} >
                     <View style='display:flex'>
-                      {
-                        item.faceUrl &&
-                        <Image src={item.faceUrl} className='clinic-intro-doctors-avatar'></Image>
-                      }
-                      <View style='margin-left: 20rpx'>
+                      <AtAvatar image={item.faceUrl || defaultAvatar} size='large' circle customStyle='flex-shrink: 0;'></AtAvatar>
+                      <View style='margin-left: 20rpx;'>
                         <View className='clinic-intro-doctors-name'>{item.name}</View>
                         <View className='clinic-intro-doctors-title'>{item.title}</View>
                         <View className='clinic-intro-doctors-specialty'>{item.specialty}</View>

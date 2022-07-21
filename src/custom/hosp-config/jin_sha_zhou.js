@@ -6,7 +6,7 @@ export default {
   longitude: 113.206085,
   hospName: "jszyy",
   isPrivate: true,
-  banner: 'http://www.jsz120.com/uploads/allimg/200814/2-200Q41K419319.png',
+  banner: 'https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/common/jinshazhou-banner.png',
   logo: "http://www.jsz120.com/uploads/allimg/200512/2-200512092512328.jpg",
   hospitalName: "广州中医药大学金沙洲医院",
   // baseUrl: "https://applets.gdbkyz.com", // 倍康测试
@@ -141,7 +141,7 @@ export default {
     register: {
       popupNotice: false,// 挂号提示弹窗
       intradayAndAppointment: false,// 是否区分当天挂号和预约挂号
-      type: 'byDept',// byDept按科室挂号；byDeptAndTime按科室和时间挂号；byCategoryAndDoctorAndTime按分类、医生、日期挂号
+      type: 'byDept',// byDept-按科室挂号；byDeptAndTime-按科室和时间挂号；byCategoryAndDoctorAndTime-按分类、医生、日期挂号
       departmentLevel: '2', // 2级科室
       checkEpiLogicalSurvey: false, // 是否要先填流调表才可以挂号
     },

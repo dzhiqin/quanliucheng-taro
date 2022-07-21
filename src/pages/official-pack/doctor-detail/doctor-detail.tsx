@@ -1,13 +1,12 @@
 import * as React from 'react'
 import * as Taro from '@tarojs/taro'
-import { View } from '@tarojs/components'
+import { View, Image } from '@tarojs/components'
 import { fetchDoctorDetail } from '@/service/api'
 import { loadingService, toastService } from '@/service/toast-service'
 import { useState } from 'react'
-import { AtAvatar } from 'taro-ui'
 import BkTitle from '@/components/bk-title/bk-title'
 import './doctor-detail.less'
-import defaultAvatar from '@/images/default_doctor.png'
+import defaultAvatar from '@/images/default-avatar.png'
 
 export default function DoctorDetail() {
   const router = Taro.useRouter()
@@ -35,13 +34,14 @@ export default function DoctorDetail() {
   return(
     <View className='doctor-detail'>
       <View className='doctor-detail-header'>
-        <AtAvatar image={doctorInfo.faceUrl || defaultAvatar} size='large' circle></AtAvatar>
+        <Image src={doctorInfo.faceUrl || defaultAvatar} className='doctor-detail-avatar'></Image>
         <View className='doctor-detail-name'>{doctorInfo.name}</View>
+        <View className='doctor-detail-title'>{doctorInfo.title}</View>
       </View>
       <BkTitle title='擅长领域' />
-      <View>{doctorInfo.specialty || '完善中……'}</View>
+      <View className='doctor-detail-text'>{doctorInfo.specialty || '未填写'}</View>
       <BkTitle title='详细介绍' />
-      <View>{doctorInfo.desc || '完善中……'}</View>
+      <View className='doctor-detail-text'>{doctorInfo.desc || '未填写'}</View>
     </View>
   )
 }

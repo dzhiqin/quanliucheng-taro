@@ -1,7 +1,7 @@
 import * as Taro from '@tarojs/taro'
 import * as React from 'react'
 import { View, Image } from '@tarojs/components'
-import { fetchDoctorSchedules, fetchTimeListByDate } from '@/service/api'
+import { fetchDoctorSchedules, fetchTimeListByDate, fetchDoctorDetail } from '@/service/api'
 import { useEffect, useState } from 'react'
 import { useRouter } from '@tarojs/taro'
 import { loadingService, toastService } from '@/service/toast-service'
@@ -11,7 +11,7 @@ import BkNone from '@/components/bk-none/bk-none'
 import './doctor-detail.less'
 import { CardsHealper } from '@/utils/cards-healper'
 import BaseModal from '@/components/base-modal/base-modal'
-import defaultDoctorAvatar from '@/images/default_doctor.png'
+import defaultDoctorAvatar from '@/images/default-avatar.png'
 
 export default function DoctorDefault(props) {
   const router = useRouter()
@@ -23,7 +23,6 @@ export default function DoctorDefault(props) {
   const [busy,setBusy] = useState(true)
   const [show,setShow] = useState(false)
   const [doctorDetail,setDoctorDetail] = useState({
-    deptId: '',
     deptName: '',
     faceUrl: '',
     name: '',
@@ -45,7 +44,10 @@ export default function DoctorDefault(props) {
     const hospitalInfo = Taro.getStorageSync('hospitalInfo')
     const userInfo = Taro.getStorageSync('userInfo')
     const card = CardsHealper.getDefault()
-    if(!card) return
+    if(!card) {
+      toastService({title: '找不到就诊卡'})
+      return
+    }
     if(item.leaveCount > 0){
       const orderParams = {
         cardNo: card.cardNo,
@@ -101,8 +103,13 @@ export default function DoctorDefault(props) {
       regDate: params.regDate || '' 
     }).then((res:any) => {
       if(res.resultCode === 0){
-        setDoctorDetail(res.data.doctorDetail)
+        if(res.data.doctorDetail){
+          setDoctorDetail(res.data.doctorDetail)
+        }
         setDoctorInfo(res.data.timeSliceDoctorInfo)
+        setRegDays(res.data.regDays)
+        setSelectedDate(res.data.defaultSelectedDay)
+
         if(res.data.defaultSelectedDay === '无剩余号源'){
           let msg = '无剩余号源，请返回页面重新选择'
           if(Taro.getStorageSync('isReg') === '1'){
@@ -110,12 +117,9 @@ export default function DoctorDefault(props) {
           }
           // toastService({title: msg,onClose: () => {Taro.navigateBack()}})
           toastService({title: msg})
+          setBusy(false)
         }else{
-          // setDoctorDetail(res.data.doctorDetail)
-          // setDoctorInfo(res.data.timeSliceDoctorInfo)
-          setSelectedDate(res.data.defaultSelectedDay)
           setList(res.data.timePoints)
-          setRegDays(res.data.regDays)
           setTimeout(() => {
             loadingService(false)
             setBusy(false)
@@ -127,6 +131,13 @@ export default function DoctorDefault(props) {
       }
     })
   }, [deptInfo.deptId,params.doctorId,params.regDate])
+  useEffect(() => {
+    fetchDoctorDetail({deptId: deptInfo.deptId, doctorId: params.doctorId}).then(res => {
+      if(res.resultCode === 0 && res.data){
+        setDoctorDetail(res.data)
+      }
+    })
+  },[deptInfo.deptId,params.doctorId])
   return(
     <View className='doctor-detail'>
       <BaseModal show={show} cancel={() => setShow(false)} confirm={() => setShow(false)} title='医生详情'>
@@ -156,7 +167,7 @@ export default function DoctorDefault(props) {
         </View>
       </BaseModal>
       <View className='doctor-detail-info' onClick={() => setShow(true)}>
-          <Image src={doctorDetail.faceUrl} className='avatar' />
+          <Image src={doctorDetail.faceUrl || defaultDoctorAvatar} className='doctor-detail-info-avatar' />
         <View style='margin-left: 20rpx;'>
           <View>
             <text className='doctor-detail-name'>{doctorDetail.name}</text>
@@ -180,7 +191,7 @@ export default function DoctorDefault(props) {
       </View>
       <View className='doctor-detail-date'>已选：<text className='price-color'>{selectedDate}</text></View>
       <View className='doctor-detail-days'>
-        <ScheduleDays days={regDays} defaultDay={selectedDate} onChange={onDateChange} showMonth />
+        <ScheduleDays days={regDays} defaultDay={selectedDate} onChange={onDateChange} />
       </View>
       <View className='doctor-detail-list'>
         {

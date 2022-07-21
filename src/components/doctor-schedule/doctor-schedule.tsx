@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { View, Image } from '@tarojs/components'
-import defaltAvatar from '@/images/default_doctor.png'
+import defaltAvatar from '@/images/default-avatar.png'
 import './doctor-schedule.less'
 
 export default function DoctorSchedule(props) {

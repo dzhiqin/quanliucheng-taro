@@ -9,7 +9,7 @@ import {
 } from '@/utils'
 import { subscribeService } from '@/service/api/taro-api'
 import SubscribeNotice from '@/components/subscribe-notice/subscribe-notice'
-import { createCard, fetchNationalities, fetchUserInfoByHealthCode, TaroGetLocation } from '@/service/api'
+import { createCard, fetchUserInfoByHealthCode, TaroGetLocation } from '@/service/api'
 import { CardsHealper } from '@/utils/cards-healper'
 import { loadingService, toastService } from '@/service/toast-service'
 import './bind-card.less'
@@ -92,11 +92,6 @@ export default class BindCard extends React.Component {
       })
     }
   }
-  getAllCountries() {
-    fetchNationalities().then(res => {
-      console.log(res);
-    })
-  }
   async onSubmit() {
     this.setState({busy: true})
     const {result,msg}= this.formValidator()
@@ -152,7 +147,7 @@ export default class BindCard extends React.Component {
       isHaveCard: card.isHaveCard,
       openId: Taro.getStorageSync('openId')
     }
-    console.log('buildparams', params);
+    // console.log('buildparams', params);
     return params
   }
   formValidator() {
@@ -284,12 +279,31 @@ export default class BindCard extends React.Component {
             }
           })
         },
-        fial: (err) => {
-          toastService({title: ''+err})
+        fail: () => {
+          toastService({title: '未选择地址'})
         }
       })
     }).catch(err => {
-      toastService({title: ''+err})
+      if(err.errMsg==='getLocation:fail auth deny'){
+        loadingService(false)
+        Taro.showModal({
+          content: '检测到您没有打开小程序的定位授权，是否手动打开？',
+          confirmText: '确认',
+          cancelText: '取消',
+          success: result => {
+            if(result.confirm){
+              Taro.openSetting({
+                success: () => {}
+              })
+            }else{
+              Taro.navigateBack()
+            }
+          }
+        })
+      }else{
+        toastService({title: '获取位置失败'})
+        console.error(err)
+      }
     })
   }
   render() {

@@ -5,23 +5,37 @@ import { useEffect,useState } from 'react'
 import { fetchClinicList } from '@/service/api'
 import { loadingService, toastService } from '@/service/toast-service'
 import BkNone from '@/components/bk-none/bk-none'
-import { AtList, AtListItem } from 'taro-ui'
+import { AtListItem } from 'taro-ui'
+import VirtualList from '@tarojs/components/virtual-list'
 
 export default function ClinicList() {
   const [list,setList] = useState([])
+  const [msg,setMsg] = useState('请稍后~')
+  const sysInfo = Taro.getSystemInfoSync()
+  const screenHeight = sysInfo.screenHeight
+  const Row = React.memo(({id,index,style,data}) => {
+    return (
+      <AtListItem key={index} title={data[index].deptName} arrow='right' onClick={onClickItem.bind(null,data[index])} thumb='https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/applets-imgs/intro_icon8.png' />
+    )
+  })
   useEffect(() => {
     loadingService(true)
     fetchClinicList().then(res => {
-      console.log(res);
       if(res.resultCode === 0){
-        loadingService(false)
         // 目前默认只有一个院区，取第一个，如果需要多个院区切换，再说
-        setList(res.data[0].deptList)
+        const deptList = res.data[0].deptList
+        setList(deptList)
+        if(!deptList || deptList.length === 0){
+          setMsg('暂无数据')
+        }
       }else{
         toastService({title: '' + res.message})
       }
     })
   },[])
+  useEffect(() => {
+    loadingService(false)
+  },[list])
   const onClickItem = (item) => {
     Taro.navigateTo({url: '/pages/official-pack/clinic-intro/clinic-intro?deptId=' + item.deptId})
   }
@@ -30,15 +44,17 @@ export default function ClinicList() {
       {
         list.length > 0
         ?
-        <AtList>
-          {
-            list.map((item,index) => 
-              <AtListItem key={index} title={item.deptName} arrow='right' onClick={onClickItem.bind(null,item)} thumb='https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/applets-imgs/intro_icon8.png' />
-            )
-          }
-        </AtList>
+        <VirtualList
+          height={screenHeight}
+          width='100%'
+          itemData={list}
+          itemCount={list.length}
+          itemSize={50}
+        >
+          {Row}
+        </VirtualList>
         :
-        <BkNone msg='暂未完善相关信息' />
+        <BkNone msg={msg} />
       }
     </View>
   )
