@@ -45,7 +45,7 @@ export default function Login() {
               }
             })
           }else{
-            if(custom.feat.bindCard.electronicHealthCard){
+            if(custom.feat.bindCard.elecHealthCard){
               Taro.navigateTo({
                 url: '/pages/bind-pack/elec-healthcard-auth/elec-healthcard-auth'
               })

@@ -125,7 +125,7 @@ export default {
   },
   feat:{
     bindCard: { // 绑卡/建卡相关配置
-      electronicHealthCard: true, // 是否电子健康卡
+      elecHealthCard: true, // 是否电子健康卡
       parentInfo: false,     // 是否需要监护人信息(儿童无证件)
       nationality: true,    // 是否需要国籍
       hasCard: true,  // 是否需要判定有院内就诊卡的情况

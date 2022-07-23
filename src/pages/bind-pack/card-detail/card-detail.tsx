@@ -1,6 +1,6 @@
 import * as Taro from '@tarojs/taro'
 import * as React from 'react'
-import { View, Image } from '@tarojs/components'
+import { View, Image, Canvas } from '@tarojs/components'
 import BkPanel from '@/components/bk-panel/bk-panel'
 import BkButton from '@/components/bk-button/bk-button'
 import {  useReady } from '@tarojs/taro'
@@ -10,8 +10,11 @@ import { CardsHealper } from '@/utils/cards-healper'
 import './card-detail.less'
 import { toastService } from '@/service/toast-service'
 import nrhcPng from '@/images/icons/nrhc.png'
+import { custom } from '@/custom/index'
+import drawQrcode from '@/utils/weapp.qrcode.esm'
 
 export default function CardDetail(props: any) {
+  const bindCardConfig = custom.feat.bindCard
   const [busy,setBusy] = useState(false)
   const [isDefault,setIsDefault] = useState(false)
   const [card,setCard] = useState({
@@ -33,7 +36,12 @@ export default function CardDetail(props: any) {
     }
     setIsDefault(currentCard.isDefault)
     setCard(currentCard)
-    
+    drawQrcode({
+      width: 150,
+      height: 150,
+      canvasId: 'myQrcode',
+      text: currentCard.cardNo,
+    })
   })
   const handleChange = (e) => {
     setIsDefault(true)
@@ -68,10 +76,19 @@ export default function CardDetail(props: any) {
       {
         card && card.qrCode && 
         <BkPanel style='margin-bottom: 40rpx'>
-          <View className='card-wrap'>
-            <Image src={`data:image/jpg;base64,${card.qrCode}`} className='card-image' />
-            <Image src={nrhcPng} className='card-icon' />
-          </View>
+          {
+            bindCardConfig.elecHealthCard && 
+            <View className='card-wrap'>
+              <Image src={`data:image/jpg;base64,${card.qrCode}`} className='card-image' />
+              <Image src={nrhcPng} className='card-icon' />
+            </View>
+          }
+          {
+            !bindCardConfig.elecHealthCard &&
+            <View className='flex-justify-center'>
+              <Canvas className='canvas' style='width: 150px; height: 150px;' canvasId='myQrcode'></Canvas>
+            </View>
+          }
           <View className='card-tips'>出诊时出示此二维码</View>
         </BkPanel>
       }

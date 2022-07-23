@@ -62,7 +62,7 @@ export default {
   },
   feat:{
     bindCard: {
-      electronicHealthCard: false, // 电子健康卡
+      elecHealthCard: false, // 电子健康卡
       parentInfo: true,// 监护人信息(儿童无证件)
       nationality: false,// 国籍
       hasCard: false,// 是否有院内就诊卡
