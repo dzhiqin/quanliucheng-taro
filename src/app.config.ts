@@ -82,7 +82,8 @@ export default {
         'arrival-service/arrival-service',
         'investigation/investigation',
         'epidemiological-survey/epidemiological-survey',
-        'epidemiological-survey/result'
+        'epidemiological-survey/result',
+        'deposit/deposit'
       ]
     }
   ],

@@ -25,3 +25,18 @@ export const getEpidemiologicalSurveyAnswers = (data: {questionnaireReportId: nu
 export const handleSubmitEpidemiologicalSurvey = (data: {questionnaireId: number, answers: any, orderNo: ''}) => {
   return Post(fullUrl('api/customize/applet/Questionnaire/SaveQuestionnaireReport'),data)
 }
+export const getRegisterDepositOrderList = (data: {cardNo: string}) => {
+  return Get(fullUrl('api/customize/applet/Bill/GetBillPrePayOrderList'),data)
+}
+export const getRegisterDepositOrderDetail = (data: {orderNo: string}) => {
+  return Get(fullUrl('api/customize/applet/Bill/GetBillPrePayOrderDetail'),data)
+}
+export const fetchRegisterDepositPayParams = (data:{cardNo: string, money: string}) => {
+  return Post(fullUrl('api/customize/applet/Bill/Prepay'),data)
+}
+export const cancelRegisterDepositOrder = (data: {orderNo: string}) => {
+  return Post(fullUrl('api/customize/applet/Bill/CancelOrder'),data)
+}
+export const getRegisterDepositOrderStatus = (data: {orderNo: string}) => {
+  return Get(fullUrl('api/customize/applet/Bill/CheckOrderStatus'),data)
+}

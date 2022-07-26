@@ -72,6 +72,18 @@ export default {
             //   name: '满意度调查',
             //   event: 'navigate',
             // }
+            {
+              icon: imgUrl.new_home_icon10,
+              name: '门诊押金',
+              event: 'navigate',
+              url: '/pages/service-pack/deposit/deposit'
+            }, 
+            {
+              icon: imgUrl.new_home_icon11,
+              name: '健康申报',
+              event: 'jump',
+              target: 'yuejiantong'
+            },
           ]
         },
         {
@@ -139,7 +151,7 @@ export default {
       updateNotice: false, // 绑卡和解绑发送消息通知
     },
     register: {
-      popupNotice: false,// 挂号提示弹窗
+      popupNotice: true,// 挂号提示弹窗
       intradayAndAppointment: false,// 是否区分当天挂号和预约挂号
       type: 'byDept',// byDept-按科室挂号；byDeptAndTime-按科室和时间挂号；byCategoryAndDoctorAndTime-按分类、医生、日期挂号
       departmentLevel: '2', // 2级科室
