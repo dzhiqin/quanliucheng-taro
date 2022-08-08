@@ -123,7 +123,7 @@ export default function DoctorDefault(props) {
           setTimeout(() => {
             loadingService(false)
             setBusy(false)
-          }, 1000);
+          }, 500);
         }
       }else{
         toastService({title: '获取数据失败：'+res.message})
@@ -154,14 +154,14 @@ export default function DoctorDefault(props) {
             doctorDetail.desc && 
             <View className='doctor-modal-info'>
               <text className='doctor-modal-info-title'>简介：</text>
-              {doctorDetail.desc}
+              {doctorDetail.desc.replace(/<br>/g, ' ')}
             </View>
           }
           {
             doctorDetail.specialty && 
             <View className='doctor-modal-info'>
               <text className='doctor-modal-info-title'>擅长领域：</text>
-              {doctorDetail.specialty}
+              {doctorDetail.specialty.replace(/<br>/g, ' ')}
             </View>
           }
         </View>
@@ -177,13 +177,13 @@ export default function DoctorDefault(props) {
           {
             doctorDetail.desc && 
             <View className='doctor-detail-skilled'>
-              简介：{doctorDetail.desc}
+              简介：{doctorDetail.desc.replace(/<br>/g, ' ')}
             </View>
           }
           {
             doctorDetail.specialty && 
             <View className='doctor-detail-skilled'>
-              擅长领域：{doctorDetail.specialty}
+              擅长领域：{doctorDetail.specialty.replace(/<br>/g, ' ')}
             </View>
           }
           

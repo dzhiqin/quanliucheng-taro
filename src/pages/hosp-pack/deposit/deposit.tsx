@@ -119,13 +119,15 @@ export default function BindingCard() {
   }
   const getData = (card) => {
     getInHospInfo({inCardNo: card.cardNo}).then(res => {
-      if(res.resultCode ===  0){
+      if(res.resultCode === 0 && res.data){
         const {inDate, dateCount, inpStatus, inDept, payCount, inpBalance, registerId} = res.data
         setInfo({
           inDate,dateCount,
           inHospStatus: inHospStatusObj[inpStatus],
           inDept,payCount,inpBalance,registerId
         })
+      }else{
+        toastService({title: '没有住院信息'})
       }
     })
   }

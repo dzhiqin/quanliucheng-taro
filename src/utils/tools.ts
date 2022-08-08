@@ -41,13 +41,14 @@ export const getRegType = () => {
   const regType = Taro.getStorageSync('isReg')
   return regType ? regType : '0'
 }
-export const checkOverDate = (date: string) => {
+export const checkOverTime = (date: string,time = '18:00',reservedTime: number) => {
   if(!date) return false
-  if(date.length === 10){
-    date = date + ' ' + '20:00'
-  }
   const current = new Date().getTime()
-  const dateTime = new Date(date).getTime()
+  let dateTime = new Date(date + ' ' + time).getTime()
+  if(reservedTime){
+    // reservedTime 预留时间，有的医院要求提前2小时才可退号
+    dateTime = dateTime - reservedTime
+  }
   return current > dateTime
 }
 export const computeDistanceFromLatLong = (lat1,lon1,lat2,lon2) => {

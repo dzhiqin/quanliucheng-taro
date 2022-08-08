@@ -13,7 +13,16 @@ import BkPanel from '@/components/bk-panel/bk-panel'
 
 export default function ReportsDetail() {
   const router = useRouter()
-  const [checkItems,setCheckItems] = useState([])
+  const [checkItems,setCheckItems] = useState([
+    // {
+    //   labRepItemName: '高密度值蛋白当成（HDL-CH）',
+    //   prompt: '',
+    //   labRepResult: '1',
+    //   labRepUnits: 'MMOL/L',
+    //   labContext: '0.9-1.45',
+    //   labInd: 'H'
+    // }
+  ])
   const reportsPage = custom.reportsPage
   const params = router.params as {examId: string,examDate: string, itemType: REPORT_ITEM_TYPE_CN, reportType: REPORT_TYPE_EN}
   const {examId, examDate, itemType, reportType} = params
@@ -122,20 +131,20 @@ export default function ReportsDetail() {
         !reportsPage.urlDetail && itemType === REPORT_ITEM_TYPE_CN.化验 &&
         <View className='table'>
           <View className='at-row table-header'>
-            <View className='at-col table-header-item'>项目名称</View>
-            <View className='at-col table-header-item'>结果</View>
-            <View className='at-col table-header-item'>单位</View>
-            <View className='at-col table-header-item'>参考值</View>
-            <View className='at-col table-header-item'>参考结果</View>
+            <View className='at-col table-header-item at-col-4'>项目名称</View>
+            <View className='at-col table-header-item at-col-2'>结果</View>
+            <View className='at-col table-header-item at-col-2'>单位</View>
+            <View className='at-col table-header-item at-col-2'>参考值</View>
+            <View className='at-col table-header-item at-col-2'>参考结果</View>
           </View>
           {
             checkItems.map((item,index) => 
               <View className='at-row' key={index}>
-                <View className='at-col table-body-item table-body-scroll'>{item.labRepItemName}{item.prompt ? '/'+item.prompt : ''}</View>
-                <View className='at-col table-body-item'>{item.labRepResult}</View>
-                <View className='at-col table-body-item' style='font-size: 26rpx'>{item.labRepUnits}</View>
-                <View className='at-col table-body-item table-body-scroll'>{item.labContext}</View>
-                <View className='at-col table-body-item'>
+                <View className='at-col table-body-item table-body-scroll at-col-4'>{item.labRepItemName}{item.prompt ? '/'+item.prompt : ''}</View>
+                <View className='at-col table-body-item at-col-2'>{item.labRepResult}</View>
+                <View className='at-col table-body-item at-col-2'  style='font-size: 26rpx'>{item.labRepUnits}</View>
+                <View className='at-col table-body-item at-col-2 table-body-scroll'>{item.labContext}</View>
+                <View className='at-col table-body-item at-col-2'>
                   {getReferResult(item.labInd)}
                 </View>
                 {/* <View className='card-item'>

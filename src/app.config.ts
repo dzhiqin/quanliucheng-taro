@@ -30,7 +30,8 @@ export default {
         'search-result/search-result',
         'classify-doctor-list/classify-doctor-list',
         'order-create/order-create',
-        'order-list/order-list'
+        'order-list/order-list',
+        'doctors/doctors'
       ]
     },
     {

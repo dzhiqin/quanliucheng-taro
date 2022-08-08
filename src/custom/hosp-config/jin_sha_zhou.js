@@ -74,7 +74,7 @@ export default {
             // }
             {
               icon: imgUrl.new_home_icon10,
-              name: '门诊押金',
+              name: '挂号充值',
               event: 'navigate',
               url: '/pages/service-pack/deposit/deposit'
             }, 

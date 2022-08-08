@@ -9,6 +9,7 @@ import {
   cancelRegisterDepositOrder,
   getRegisterDepositOrderStatus,
   TaroRequestPayment,
+  fetchCardDetail
 } from '@/service/api'
 import SimpleModal from '@/components/simple-modal/simple-modal'
 import BkTabs from '@/components/bk-tabs/bk-tabs'
@@ -46,7 +47,7 @@ export default function BindingCard() {
   })
   const tabs = [
     {
-      title: '门诊押金充值',
+      title: '挂号费充值',
       value: 'deposit'
     },
     {
@@ -77,10 +78,18 @@ export default function BindingCard() {
     const defaultCard = CardsHealper.getDefault()
     setCard(defaultCard)
   })
-  
-  const getData = () => {
-    console.log('getData')
+  const getAccountBalance = () => {
+    const currentCard = CardsHealper.getDefault()
+    fetchCardDetail({cardNo: currentCard.cardNo}).then(res => {
+      if(res.resultCode === 0 && res.data){
+        const {accountBalance} = res.data
+        setBalance(accountBalance)
+      }
+    })
   }
+  Taro.useReady(() => {
+    getAccountBalance()
+  })
   const getList = () => {
     loadingService(true)
     getRegisterDepositOrderList({cardNo: card.cardNo}).then(res => {
@@ -101,9 +110,6 @@ export default function BindingCard() {
     setTabValue(value)
     if(value === 'record'){
       getList()
-    }
-    if(value === 'deposit'){
-      getData()
     }
   }
   const onMoneyChange = (e,value) => {
@@ -128,7 +134,7 @@ export default function BindingCard() {
     }
     TaroRequestPayment(response.data.unifiedOrderResponse).then(res => {
       requestTry(checkOrderStatus.bind(null,response.data.orderNo)).then(checkRes => {
-        getData()
+        getAccountBalance()
         handlePaySuccess()
       }).catch(() => {
         setBusy(false);setResultVisible(true);setPayResult(PAY_RESULT.FAIL)
@@ -232,7 +238,7 @@ export default function BindingCard() {
           {
             (balance || balance == 0) && 
             <BkPanel >
-              <View className='deposit-title'>预缴金余额：</View>
+              <View className='deposit-title'>挂号费余额：</View>
               <View className='deposit-price'>{balance}元</View>
             </BkPanel>
           }

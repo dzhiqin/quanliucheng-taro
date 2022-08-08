@@ -1,5 +1,5 @@
 import { getBranchId, getRegType } from "@/utils/tools";
-import { fullUrl, Post } from "../http";
+import { fullUrl, Get, Post } from "../http";
 
 export const fetchBranchHospital = () => {
   return Post(fullUrl('api/applet/appt/SignalSource/GetHospitalAll'),{branchId: getBranchId()})
@@ -77,4 +77,10 @@ export const fetchRegInvoiceInfo = (data: {serialNo: string}) => {
 }
 export const cancelRegOrder = (data: {orderId: string}) => {
   return Post(fullUrl('api/applet/appt/Reg/CancelAppt?orderId=' + data.orderId),data)
+}
+export const fetchCardDetail = (data: {cardNo: string}) => {
+  return Post(fullUrl('api/customize/applet/UserCard/PatientVerification',data),data)
+}
+export const getDoctorsByFirstDeptId = (data: {departId: string}) => {
+  return Get(fullUrl('api/customize/applet/Reg/GetLevelDoctor',data))
 }

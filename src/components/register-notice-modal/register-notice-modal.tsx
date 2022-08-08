@@ -2,7 +2,7 @@ import * as React from 'react'
 import { AtModal,AtModalContent } from 'taro-ui'
 import { useState,useEffect } from 'react'
 import { fetchRegisterNotice } from '@/service/api/card-api'
-import { View, RichText } from '@tarojs/components'
+import { View, RichText, ScrollView } from '@tarojs/components'
 
 import './register-notice-modal.less'
 
@@ -58,16 +58,6 @@ export default function RegisterNoticeModal(props:
       setEnable(true)
     }
   },[count])
- 
-  // useEffect(() => {
-  //   fetchRegisterNotice().then((res) => {
-  //     if(res.resultCode === 0){
-  //       const notices = res.data
-  //       const noticeItem = notices.find(item => item.typeStr === '预约挂号须知')
-  //       setNoticeContent(noticeItem.content)
-  //     }
-  //   })   
-  // },[])
   
   return (
     <AtModal
@@ -78,7 +68,7 @@ export default function RegisterNoticeModal(props:
       onConfirm={handleConfirm.bind(this)}
     >
       <AtModalContent>
-        <View className='register-notice'>
+        <ScrollView className='register-notice' scrollY>
           <View className='notice-modal-title'>挂号须知</View>
           { 
             noticeContent ? 
@@ -88,7 +78,7 @@ export default function RegisterNoticeModal(props:
           <View className={`notice-modal-footer ${enable ? 'enable' : 'disable'}`} onClick={handleConfirm.bind(this)}>
             {enable ? '已阅读并同意' : `阅读${count}秒后同意`}
           </View>
-        </View>
+        </ScrollView>
       </AtModalContent>
       
     </AtModal>

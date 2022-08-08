@@ -1,3 +1,3 @@
 export default {
-  navigationBarTitleText: '门诊押金缴纳'
+  navigationBarTitleText: '挂号费充值'
 }

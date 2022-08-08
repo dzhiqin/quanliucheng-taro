@@ -61,7 +61,7 @@ export default function ClinicIntro() {
                       <View style='margin-left: 20rpx;'>
                         <View className='clinic-intro-doctors-name'>{item.name}</View>
                         <View className='clinic-intro-doctors-title'>{item.title}</View>
-                        <View className='clinic-intro-doctors-specialty'>{item.specialty}</View>
+                        <View className='clinic-intro-doctors-specialty ellipsis-text'>{item.specialty}</View>
                       </View>
                     </View>
                   </BkPanel>

@@ -64,7 +64,7 @@ export default function EmbedContent(props) {
       </View>
       {
         current === 0 &&
-        <View>
+        <View className='embed-content-list'>
           {
             clinics.length > 0 
             ? <AtList>
@@ -80,7 +80,7 @@ export default function EmbedContent(props) {
       }
       {
         current === 1 &&
-        <View>
+        <View className='embed-content-list'>
           {
             doctors.length > 0
             ? <AtList>
@@ -96,7 +96,7 @@ export default function EmbedContent(props) {
       }
       {
         current === 2 &&
-        <View>
+        <View className='embed-content-list'>
           {
             days.length > 0
             ? <AtList>

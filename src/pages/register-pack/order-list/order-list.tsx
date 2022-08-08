@@ -10,7 +10,7 @@ import { loadingService, toastService } from '@/service/toast-service'
 import BkButton from '@/components/bk-button/bk-button'
 import BkTabs from '@/components/bk-tabs/bk-tabs'
 import BkNone from '@/components/bk-none/bk-none'
-import { checkOverDate } from '@/utils/tools'
+import { checkOverTime } from '@/utils/tools'
 import BaseModal from '@/components/base-modal/base-modal'
 
 const tabs = [{title: '15日内订单',value: 'current'},{title: '历史订单',value: 'history'}]
@@ -30,7 +30,8 @@ export default function OrderList() {
     cancelAppointment({orderId: order.orderId}).then(res => {
       if(res.resultCode === 0){
         toastService({title: '取消成功！'})
-        getList()
+        setList(list.filter(item => item.orderId !== order.orderId))
+        // getList()
       }else{
         toastService({title: res.message})
       }
@@ -148,7 +149,7 @@ export default function OrderList() {
                   </View>
                 }
                 {
-                  !checkOverDate(item.regDate) && item.orderStatus !== 24 &&
+                  !checkOverTime(item.regDate, item.startTime, 3600 * 2 * 1000) && item.orderStatus !== 24 &&
                   <View style='padding: 40rpx'>
                     <BkButton theme='danger' title='取消预约' onClick={showCancelModal.bind(this,item)} />
                   </View>
@@ -158,7 +159,7 @@ export default function OrderList() {
           }
         </view>
         :
-        <BkNone />
+        <BkNone msg='暂无订单' />
       }
       <BaseModal show={show} closeOutside={false} confirm={onConfirm} cancel={onCancel} title='是否取消预约?' >
         <View className='order-list-modal'>

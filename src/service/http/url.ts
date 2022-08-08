@@ -15,7 +15,11 @@ const fullUrl = (url: string, params?: { [key: string]: any }) => {
   if (!a.includes('?')) a += '?'
   if (params) {
     Object.keys(params).forEach((key, index) => {
-      a += `&${key}=${params[key]}`
+      if(index === 0){
+        a += `${key}=${params[key]}`
+      }else{
+        a += `&${key}=${params[key]}`
+      }
     })
   }
   // a += `&_=${new Date().valueOf()}`

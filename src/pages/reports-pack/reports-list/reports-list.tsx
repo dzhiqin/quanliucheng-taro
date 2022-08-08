@@ -80,7 +80,7 @@ export default function ReportList() {
                     <View className='reports-list-item-text'>{item.id}</View>
                   </View>
                   <View className='flex'>
-                    <View className='reports-list-item-name'>检查名称</View>
+                    <View className='reports-list-item-name'>{itemType === REPORT_ITEM_TYPE_CN.化验 ? '检验名称' : '检查名称'}</View>
                     <View className='reports-list-item-text'>{item.name}</View>
                   </View>
                 </BkPanel>
