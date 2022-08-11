@@ -84,6 +84,9 @@ export default function BindingCard() {
       if(res.resultCode === 0 && res.data){
         const {accountBalance} = res.data
         setBalance(accountBalance)
+      }else{
+        toastService({title: '获取余额失败'})
+        console.error(res.message)
       }
     })
   }

@@ -56,12 +56,12 @@ export default {
         {
           title: '门诊',
           entrances: [
-            {
-              icon: imgUrl.new_home_icon6,
-              name: '报到候诊',
-              event: 'navigate',
-              url: '/pages/service-pack/arrival-service/arrival-service'
-            }, 
+            // {
+            //   icon: imgUrl.new_home_icon6,
+            //   name: '报到候诊',
+            //   event: 'navigate',
+            //   url: '/pages/service-pack/arrival-service/arrival-service'
+            // }, 
             // {
             //   icon: imgUrl.new_home_icon7,
             //   name: '检查预约',
@@ -99,12 +99,12 @@ export default {
             //   name: '住院绑卡',
             //   event: 'navigate',
             // }, 
-            {
-              icon: imgUrl.new_home_icon10,
-              name: '住院押金',
-              event: 'navigate',
-              url: '/pages/hosp-pack/deposit/deposit'
-            }, 
+            // {
+            //   icon: imgUrl.new_home_icon10,
+            //   name: '住院押金',
+            //   event: 'navigate',
+            //   url: '/pages/hosp-pack/deposit/deposit'
+            // }, 
             {
               icon: imgUrl.new_home_icon11,
               name: '每日清单',
@@ -161,6 +161,7 @@ export default {
     ZhuYuanCardName: false, // 住院绑卡是否需要姓名
   },
   reportsPage:{
+    hideInHosp: true, // 隐藏住院报告入口
     urlDetail: false, // 报告详情页用图片展示
     reportItemTabs: [
       {title: '检验', value: REPORT_ITEM_TYPE_CN.化验},

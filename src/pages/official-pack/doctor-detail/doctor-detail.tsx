@@ -39,9 +39,9 @@ export default function DoctorDetail() {
         <View className='doctor-detail-title'>{doctorInfo.title}</View>
       </View>
       <BkTitle title='擅长领域' />
-      <View className='doctor-detail-text'>{doctorInfo.specialty.replace(/<br>/g, ' ') || '未填写'}</View>
+      <View className='doctor-detail-text'>{doctorInfo.specialty.replace(/<br>|<Br>/g, ' ') || '未填写'}</View>
       <BkTitle title='详细介绍' />
-      <View className='doctor-detail-text'>{doctorInfo.desc.replace(/<br>/g, ' ') || '未填写'}</View>
+      <View className='doctor-detail-text'>{doctorInfo.desc.replace(/<br>|<Br>/g, ' ') || '未填写'}</View>
     </View>
   )
 }

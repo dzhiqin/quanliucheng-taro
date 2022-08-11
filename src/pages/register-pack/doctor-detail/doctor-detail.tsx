@@ -144,7 +144,7 @@ export default function DoctorDefault(props) {
         <View className='flex'>
           <Image src={doctorDetail.faceUrl || defaultDoctorAvatar} className='doctor-modal-image' />
           <View style='margin-left: 10rpx;'>
-            <View>{doctorDetail.name}</View>
+            <View className='doctor-detail-name'>{doctorDetail.name}</View>
             <View>{doctorDetail.deptName}</View>
             <View>{doctorDetail.title}</View>
           </View>
@@ -154,14 +154,14 @@ export default function DoctorDefault(props) {
             doctorDetail.desc && 
             <View className='doctor-modal-info'>
               <text className='doctor-modal-info-title'>简介：</text>
-              {doctorDetail.desc.replace(/<br>/g, ' ')}
+              {doctorDetail.desc.replace(/<br>|<Br>/g, ' ')}
             </View>
           }
           {
             doctorDetail.specialty && 
             <View className='doctor-modal-info'>
               <text className='doctor-modal-info-title'>擅长领域：</text>
-              {doctorDetail.specialty.replace(/<br>/g, ' ')}
+              {doctorDetail.specialty.replace(/<br>|<Br>/g, ' ')}
             </View>
           }
         </View>
@@ -177,13 +177,13 @@ export default function DoctorDefault(props) {
           {
             doctorDetail.desc && 
             <View className='doctor-detail-skilled'>
-              简介：{doctorDetail.desc.replace(/<br>/g, ' ')}
+              简介：{doctorDetail.desc.replace(/<br>|<Br>/g, ' ')}
             </View>
           }
           {
             doctorDetail.specialty && 
             <View className='doctor-detail-skilled'>
-              擅长领域：{doctorDetail.specialty.replace(/<br>/g, ' ')}
+              擅长领域：{doctorDetail.specialty.replace(/<br>|<Br>/g, ' ')}
             </View>
           }
           

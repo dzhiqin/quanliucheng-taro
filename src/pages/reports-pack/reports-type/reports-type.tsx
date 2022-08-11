@@ -3,6 +3,7 @@ import * as React from 'react'
 import { View } from '@tarojs/components'
 import BkPanel from '@/components/bk-panel/bk-panel'
 import { REPORT_TYPE_EN } from '@/enums/index'
+import { custom } from '@/custom/index'
 
 export default function ReportsType() {
   const onClickClinic = () => {
@@ -17,9 +18,13 @@ export default function ReportsType() {
       <BkPanel arrow style='background: #3CC7B0; margin-bottom: 20rpx;color: white;' onClick={onClickClinic}>
         门诊报告
       </BkPanel>
-      <BkPanel arrow style='background: #3CC7B0;color: white' onClick={onClickHospitalization}>
-        住院报告
-      </BkPanel>
+      {
+        !custom.reportsPage.hideInHosp && 
+        <BkPanel arrow style='background: #3CC7B0;color: white' onClick={onClickHospitalization}>
+          住院报告
+        </BkPanel>
+      }
+      
     </View>
   )
 }
