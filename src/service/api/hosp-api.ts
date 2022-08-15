@@ -32,11 +32,15 @@ export const fetchDepositPayParams = (data: {inCardNo: string, money: number, re
 export const getDepositOrderStatus = (data: {orderNo: string}) => {
   if(custom.hospName === 'jszyy'){
     return Get(fullUrl('api/customize/applet/inpatient/InHospital/CheckOrderStatus',data))
+  }else{
+    return Get(fullUrl('api/applet/inpatient/InHospital/CheckOrderStatus',data))
   }
 }
 export const getDepositOrderDetail = (data: {orderNo: string}) => {
   if(custom.hospName === 'jszyy') {
     return Get(fullUrl('api/customize/applet/inpatient/InHospital/GetInHPPrePayOrderDetail',data))
+  }else{
+    return Get(fullUrl('api/applet/inpatient/InHospital/GetInHPPrePayOrderDetail',data))
   }
 }
 export const bindCardByCardNameAndNo = (data: {inCardNo: string, inCardName: string}) => {
@@ -53,12 +57,20 @@ export const getInHospInfo = (data: {inCardNo: string}) => {
     return Get(fullUrl('api/applet/inpatient/InHospital/GetInpatientInfo'),data)
   }
 }
-export const fetchInHospBillDetail = (data: {registerId: string, billDate: string, categoryId: string, inCardNo?: string}) => {
+export const fetchAllInHospBillDetail = (data: {registerId: string, billDate: string, inCardNo?: string}) => {
   // jszyy-接口多个inCardNo入参
   if(custom.hospName === 'jszyy'){
     return Post(fullUrl('api/customize/applet/inpatient/InHospital/GetAllCategoryBillDetail'),data)
   }else{
     return Post(fullUrl('api/applet/inpatient/InHospital/GetAllCategoryBillDetail'),data)
+  }
+}
+export const fetchInHospBillDetailByCategory = (data: {registerId: string, billDate: string, categoryId: string, inCardNo?: string}) => {
+  // jszyy-接口多个inCardNo入参
+  if(custom.hospName === 'jszyy'){
+    return Post(fullUrl('api/customize/applet/inpatient/InHospital/GetCategoryBillDetail'),data)
+  }else{
+    return Post(fullUrl('api/applet/inpatient/InHospital/GetCategoryBillDetail'),data)
   }
 }
 export const setDefaultInHospCard = (data: {id: number}) => {

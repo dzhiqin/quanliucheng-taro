@@ -2,7 +2,7 @@ import * as Taro from '@tarojs/taro'
 import * as React from 'react'
 import { View } from '@tarojs/components'
 import { useRouter } from '@tarojs/taro'
-import { fetchInHospBillDetail, fetchInHospBillCategories } from '@/service/api'
+import { fetchAllInHospBillDetail, fetchInHospBillCategories, fetchInHospBillDetailByCategory } from '@/service/api'
 import { loadingService, toastService } from '@/service/toast-service'
 import { useState } from 'react'
 import VirtualList from '@tarojs/components/virtual-list'
@@ -77,15 +77,15 @@ export default function ChecklistDetail() {
     getBillCategories()
   })
   Taro.useDidShow(() => {
-    getInHospBillDetail()
+    getAllInHospBills()
   })
-  const getInHospBillDetail = (categoryId = '') => {
+  const getAllInHospBills = () => {
     loadingService(true)
-    fetchInHospBillDetail({registerId,billDate,categoryId,inCardNo: card.cardNo})
+    fetchAllInHospBillDetail({registerId,billDate,inCardNo: card.cardNo})
     .then(res => {
       loadingService(false)
       if(res.resultCode === 0){
-        setList(res.data.itemList)
+        setList(res.data)
       }else{
         toastService({title: res.message})
       }
@@ -94,11 +94,28 @@ export default function ChecklistDetail() {
       toastService({title: '获取数据失败'+err})
     })
   }
+  const getInHospBillsByCategory = (_categoryId) => {
+    loadingService(true)
+    fetchInHospBillDetailByCategory({registerId,billDate,inCardNo: card.cardNo, categoryId:_categoryId}).then(res => {
+      loadingService(false)
+      if(res.resultCode === 0){
+        setList(res.data)
+      }else{
+        toastService({title: res.message})
+      }
+    }).catch(err => {
+      toastService({title: '获取数据失败'+err})
+    })
+  }
   const onTabChange = (e) => {
     setCurrentTab(e)
     const index = e - 1
     const categoryId = index >= 0 ? categories[index].categoryId : ''
-    getInHospBillDetail(categoryId)
+    if(categoryId){
+      getInHospBillsByCategory(categoryId)
+    }else{
+      getAllInHospBills()
+    }
   }
   return(
     <View className='checklist-detail'>

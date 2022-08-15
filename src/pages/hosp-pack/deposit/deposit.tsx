@@ -36,6 +36,7 @@ export default function BindingCard() {
   const [busy,setBusy] = useState(false)
   const [list,setList] = useState([])
   const [showDetail,setShowDetail] = useState(false)
+  const [errMsg,setErrMsg] = useState('')
   // const [orderNo,setOrderNo] = useState('')
   const [info,setInfo] = useState({
     inDate: '',
@@ -78,7 +79,7 @@ export default function BindingCard() {
       value: 1500
     }
   ]
-  Taro.useReady(() => {
+  Taro.useDidShow(() => {
     let card = Taro.getStorageSync('inCard')
     if(inCard){
       setInCard(card)
@@ -170,9 +171,12 @@ export default function BindingCard() {
       requestTry(checkOrderStatus.bind(null,response.data.orderNo)).then(checkRes => {
         getData(card)
         handlePaySuccess()
-      }).catch(() => {
+      }).catch((err) => {
+        console.error('retry err',err);
         setBusy(false);setResultVisible(true);setPayResult(PAY_RESULT.FAIL)
-
+        if(err.data === 5){
+          setErrMsg('缴费失败，所缴金额将自动退回')
+        }
       }).finally(() => {
         loadingService(false)
       })
@@ -230,6 +234,10 @@ export default function BindingCard() {
   return(
     <View>
       <ResultPage type={payResult} visible={resultVisible}>
+        {
+          errMsg && 
+          <View style='text-align:center; color: #bbb;'>{errMsg}</View>
+        }
         <BkButton title='返回' style='margin: 40rpx;' onClick={() => {setResultVisible(false)}} />
       </ResultPage>
       <SimpleModal msg='请先绑卡' show={showModal} onCancel={() => setShowModal(false)} onConfirm={handleConfirm} />

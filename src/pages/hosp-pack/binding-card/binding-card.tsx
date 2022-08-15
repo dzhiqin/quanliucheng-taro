@@ -29,7 +29,7 @@ export default function BindingCard() {
         if(res.resultCode === 0 && res.message === 'SUCCESS'){
           toastService({title: '绑卡成功', onClose: () => Taro.navigateBack()})
         }else{
-          toastService({title: '绑卡失败'+res.message})
+          toastService({title: '绑卡失败:'+res.message})
           setBusy(false)
         }
       })
