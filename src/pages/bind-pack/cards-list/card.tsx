@@ -11,6 +11,7 @@ import nrhcPng from '@/images/icons/nrhc.png'
 import cardUpgradePng from '@/images/icons/card_upgrade.png'
 import { HEALTH_CARD_RES_CODE, HEALTH_CARD_TYPE_EN } from '@/enums/index'
 import { useState } from 'react'
+import { custom } from '@/custom/index'
 
 export default function Card(props: {
   action?: string,
@@ -118,7 +119,8 @@ export default function Card(props: {
   return (
     <View className='card' style={props.style? props.style : ''} onClick={onClickCard} >
       <View className='card-header'>
-        <View className='card-header-organ'>广东省卫生健康委员会</View>
+        {/* 特殊处理 */}
+        <View className='card-header-organ'>{custom.hospName === 'jszyy' ? '广州市卫生健康委员会' : '广东省卫生健康委员会'}</View>
         <View className='card-header-wrap'>
           <Image className='card-header-icon' src={crossPng}></Image>
           <View className='card-header-title'>电子健康卡</View>

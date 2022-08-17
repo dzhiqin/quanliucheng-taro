@@ -5,16 +5,14 @@ import BkPanel from '@/components/bk-panel/bk-panel'
 import BkButton from '@/components/bk-button/bk-button'
 import {  useReady } from '@tarojs/taro'
 import { useState } from 'react'
-import { AtSwitch } from 'taro-ui'
+import { AtSwitch, AtTabs, AtTabsPane } from 'taro-ui'
 import { CardsHealper } from '@/utils/cards-healper'
 import './card-detail.less'
 import { toastService } from '@/service/toast-service'
 import nrhcPng from '@/images/icons/nrhc.png'
-import { custom } from '@/custom/index'
 import drawQrcode from '@/utils/weapp.qrcode.esm'
 
 export default function CardDetail(props: any) {
-  const bindCardConfig = custom.feat.bindCard
   const [busy,setBusy] = useState(false)
   const [isDefault,setIsDefault] = useState(false)
   const [card,setCard] = useState({
@@ -29,6 +27,7 @@ export default function CardDetail(props: any) {
     qrCodeText: '',
     type: ''
   })
+  const [currentTab,setCurrentTab] = useState(0)
   useReady(() => {
     let currentCard = Taro.getStorageSync('card')
     if(!currentCard){
@@ -41,6 +40,14 @@ export default function CardDetail(props: any) {
       height: 150,
       canvasId: 'myQrcode',
       text: currentCard.cardNo,
+      // 添加图片
+      // image:{
+      //   imageResource: '../../../images/icons/nrhc.png',
+      //   dx: 60,
+      //   dy: 60,
+      //   dWidth: 30,
+      //   dHeight: 30
+      // }
     })
   })
   const handleChange = (e) => {
@@ -70,28 +77,35 @@ export default function CardDetail(props: any) {
       toastService({title: err+''})
     })
   }
-  
+  const handleTabChange = (value) => {
+    setCurrentTab(value)
+  }
   return(
     <View className='card-detail'>
-      {
-        card && card.qrCode && 
-        <BkPanel style='margin-bottom: 40rpx'>
-          {
-            bindCardConfig.elecHealthCard && 
-            <View className='card-wrap'>
-              <Image src={`data:image/jpg;base64,${card.qrCode}`} className='card-image' />
-              <Image src={nrhcPng} className='card-icon' />
-            </View>
-          }
-          {
-            !bindCardConfig.elecHealthCard &&
-            <View className='flex-justify-center'>
+      <BkPanel style='margin-bottom: 40rpx; padding-top: 0;'>
+        <AtTabs animated={false} current={currentTab} tabList={[{title: '诊疗卡'},{title: '电子健康卡'}]} onClick={handleTabChange}>
+          <AtTabsPane index={0} current={currentTab} className='card-detail-pane'>
+            <View className='flex-justify-center' >
               <Canvas className='canvas' style='width: 150px; height: 150px;' canvasId='myQrcode'></Canvas>
             </View>
-          }
-          <View className='card-tips'>出诊时出示此二维码</View>
-        </BkPanel>
-      }
+          </AtTabsPane>
+          <AtTabsPane index={1} current={currentTab} className='card-detail-pane'>
+            {
+              card && card.qrCode ?
+              <View className='card-wrap'>
+                <Image src={`data:image/jpg;base64,${card.qrCode}`} className='card-image' />
+                <Image src={nrhcPng} className='card-icon' />
+              </View>
+              :
+              <View className='card-wrap'>
+                暂未升级电子健康卡
+              </View>
+            }
+            
+          </AtTabsPane>
+          </AtTabs>
+        <View className='card-tips'>出诊时出示此二维码</View>
+      </BkPanel>
       <BkPanel>
         <View className='card-item'>
           <View>姓名</View>

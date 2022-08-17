@@ -29,7 +29,7 @@ export default function DoctorSchedule(props) {
           <View className='doctor-btn unable'>满诊</View>
         }
         {
-          (!props.doctor.isHalt && props.doctor.leaveTotalCount > 0) ? 
+          (!props.doctor.isHalt && props.doctor.leaveTotalCount > 0 && props.doctor.isTimePoint) ? 
           <View className='doctor-btn enable'>有号</View> :
           <View className='doctor-btn unable'>无号</View>
         }

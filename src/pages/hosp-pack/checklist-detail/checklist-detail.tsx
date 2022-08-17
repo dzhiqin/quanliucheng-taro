@@ -62,9 +62,9 @@ export default function ChecklistDetail() {
   })
   const getBillCategories = () => {
     fetchInHospBillCategories({registerId,billDate,inCardNo:card.cardNo}).then(res => {      
-      if(res.resultCode === 0 && res.data.categoryBillList.length > 0){
-        const _categories = res.data.categoryBillList
-        setCategories(res.data.categoryBillList)
+      if(res.resultCode === 0 && res.data.length > 0){
+        const _categories = res.data
+        setCategories(res.data)
         let arr = [{title: '全部'}]
         _categories.forEach(i => {
           arr.push({title: i.categoryName})

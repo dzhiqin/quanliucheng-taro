@@ -241,7 +241,7 @@ export default function BindingCard() {
           {
             (balance || balance == 0) && 
             <BkPanel >
-              <View className='deposit-title'>挂号费余额：</View>
+              <View className='deposit-title'>就诊卡余额：</View>
               <View className='deposit-price'>{balance}元</View>
             </BkPanel>
           }
