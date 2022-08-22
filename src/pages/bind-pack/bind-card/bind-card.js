@@ -12,7 +12,7 @@ import SubscribeNotice from '@/components/subscribe-notice/subscribe-notice'
 import { createCard, fetchUserInfoByHealthCode, TaroGetLocation } from '@/service/api'
 import { CardsHealper } from '@/utils/cards-healper'
 import { loadingService, toastService } from '@/service/toast-service'
-// import BKInput from '@/components/bk-input/bk-input'
+import BkInput from '@/components/bk-input/bk-input'
 import './bind-card.less'
 
 export default class BindCard extends React.Component {
@@ -97,7 +97,6 @@ export default class BindCard extends React.Component {
     this.setState({busy: true})
     const {result,msg}= this.formValidator()
     if(result){
-      
       const subRes = await subscribeService(onetimeTemplates.bindCard())
       if(subRes.result){
         this.handleCreateCard()
@@ -148,7 +147,6 @@ export default class BindCard extends React.Component {
       isHaveCard: card.isHaveCard,
       openId: Taro.getStorageSync('openId')
     }
-    // console.log('buildparams', params);
     return params
   }
   formValidator() {
@@ -315,17 +313,9 @@ export default class BindCard extends React.Component {
         <AtForm
           onSubmit={this.onSubmit.bind(this)}
         >
-          <AtInput 
-            name='patientName' 
-            title='姓名' 
-            type='text' 
-            placeholder='请输入姓名' 
-            value={this.state.card.patientName} 
-            onChange={this.handleCardChange.bind(this,'patientName')} 
-          />
-          {/* <BKInput name='patientName' title='姓名' type='text' placeholder='请输入姓名' value={this.state.card.patientName}
+          <BkInput name='patientName' title='姓名' type='text' placeholder='请输入姓名' value={this.state.card.patientName} maxLength={15}
             onChange={this.handleCardChange.bind(this,'patientName')}
-          ></BKInput> */}
+          ></BkInput>
           <Picker mode='selector' range={this.state.idenTypeNames} onChange={this.onIdenTypeChange.bind(this)} value={this.state.currentIdenTypeIndex}>
             <AtList>
               <AtListItem
@@ -376,25 +366,34 @@ export default class BindCard extends React.Component {
             </Picker> 
           }
 
-          <AtInput 
+          {/* <AtInput 
             name='phone' 
             title='电话号码' 
             type='number' 
             placeholder='请输入电话号码' 
             value={this.state.card.phone} 
             onChange={this.handleCardChange.bind(this,'phone')} 
+          /> */}
+          <BkInput 
+            name='phone' 
+            title='电话号码' 
+            type='number' 
+            placeholder='请输入电话号码' 
+            maxLength={11}
+            value={this.state.card.phone} 
+            onChange={this.handleCardChange.bind(this,'phone')} 
           />
-
-          <AtInput 
+          <BkInput 
             name='address' 
             title='详细地址' 
             type='text' 
             placeholder='请输入详细地址' 
+            maxLength={30}
             value={this.state.card.address} 
             onChange={this.handleCardChange.bind(this,'address')}
           >
             <AtIcon value='map-pin' size='20' color='#56A1F4' onClick={this.getAddressFromMap.bind(this)}></AtIcon>
-          </AtInput>
+          </BkInput>
 
           {
             this.state.bindCardConfig.hasCard &&
