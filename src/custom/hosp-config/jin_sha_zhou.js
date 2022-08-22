@@ -79,11 +79,18 @@ export default {
               url: '/pages/service-pack/deposit/deposit'
             }, 
             {
-              icon: imgUrl.new_home_icon11,
+              icon: imgUrl.new_home_icon9,
               name: '健康申报',
               event: 'jump',
-              target: 'yuejiantong'
+              appId: 'wx42f62e0e1c6d9ff0',
+              path: 'subpackages/hz_xier_yss/pages/jksbk/index'
             },
+            {
+              icon: imgUrl.new_home_icon7,
+              name: '电子健康卡',
+              event: 'navigate',
+              url: '/pages/bind-pack/cards-list/cards-list'
+            }
           ]
         },
         {
@@ -126,11 +133,18 @@ export default {
         // {
         //   title: "其他",
         //   entrances:[
-        //     {
-        //       name: "自助核酸缴费",
-        //       icon: imgUrl.new_home_icon10,
-        //       event: "jump"
-        //     },
+        //     // {
+        //     //   name: "自助核酸缴费",
+        //     //   icon: imgUrl.new_home_icon10,
+        //     //   event: "jump"
+        //     // },
+        //     // {
+        //     //   name: "电子票夹",
+        //     //   icon: imgUrl.new_home_icon10,
+        //     //   event: "jump",
+        //     //   appId: 'wx8e0b79a7f627ca18',
+        //     //   path: 'pages/index/index?agencyCode=ccd5fa6bc02f4420a131d6d46e165c71'
+        //     // },
         //   ]
         // }
       ]
@@ -151,6 +165,7 @@ export default {
       updateNotice: false, // 绑卡和解绑发送消息通知
     },
     register: {
+      cancelReservedTime: false, // 取消挂号预留时间
       popupNotice: true,// 挂号提示弹窗
       intradayAndAppointment: false,// 是否区分当天挂号和预约挂号
       type: 'byDept',// byDept-按科室挂号；byDeptAndTime-按科室和时间挂号；byCategoryAndDoctorAndTime-按分类、医生、日期挂号

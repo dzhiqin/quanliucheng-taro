@@ -87,3 +87,20 @@ export enum PAY_RESULT {
   SUCCESS = 'success',
   FAIL = 'fail'
 }
+export enum RGISTER_ORDER_STATUS {
+  UNLOCK = 0,// 未锁号
+  LOCK_FAILED = 2,// 锁号失败
+  CANCEL_LOCK_SUCCESS = 5,// 取消锁号成功
+  CANCEL_LOCK_FAILED = 6,// 取消锁号失败
+  APPOINTMENT_FAILED = 9,// 预约失败
+  CANCEL_APPOINTMENT_SUCCESS = 11,// 取消预约成功
+  CANCEL_APPOINTMENT_FAILED = 12,// 取消预约失败
+  PAYING = 13,// 支付中
+  PAY_FAILED = 14,// 支付失败
+  PAY_SUCCESS = 15, // 支付成功
+  FETCHING_NUMBER = 16,//取号中
+  FETCH_NUMBER_FAILED = 17,// 取号失败
+  REFUND_FAILED = 20,// 退款失败
+  FETCH_NUMBER_SUCCESS = 21,// 取号成功
+  REFUND_SUCCESS = 24 // 退款退号成功
+}

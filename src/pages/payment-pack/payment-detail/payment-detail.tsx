@@ -17,7 +17,8 @@ import {
   handleHeSuanRefund,
   TaroNavToYiBao,
   login,
-  createPaymentOrderByQRCode
+  createPaymentOrderByQRCode,
+  TaroNavToMiniProgram
 } from '@/service/api'
 import { CardsHealper } from '@/utils/cards-healper'
 import './payment-detail.less'
@@ -237,6 +238,11 @@ export default function PaymentDetail() {
     return paymentParams
   }
   const showInvoice = (item) => {
+    // 特殊处理
+    if(custom.hospName === 'jszyy'){
+      TaroNavToMiniProgram({appId: 'wx8e0b79a7f627ca18', path: 'pages/index/index?agencyCode=ccd5fa6bc02f4420a131d6d46e165c71'})
+      return
+    }
     Taro.showLoading({title: '加载中……',mask:true})
     fetchPaymentOrderInvoice({serialNo: item.serialNo}).then(res => {
       if(res.resultCode === 0){

@@ -7,7 +7,7 @@
 * `npm install`安装依赖
 * `npm run dev:weapp`已开发环境启动项目，待命令跑完后打开小程序开发工具，创建或导入项目，目录地址定位到项目根目录。
 * `npm run prod:build`，这个指令会在生产环境下构建项目，构建出来的代码体积更小
-
+* 如果执行安装过慢，可以切换npm源`npm config set registry https://registry.npm.taobao.org`
 
 必须是小程序的开发者才能正常打开小程序，如果不是开发者请联系产品经理处理。
 医院名称 | appid

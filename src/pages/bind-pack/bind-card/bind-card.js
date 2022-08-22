@@ -12,6 +12,7 @@ import SubscribeNotice from '@/components/subscribe-notice/subscribe-notice'
 import { createCard, fetchUserInfoByHealthCode, TaroGetLocation } from '@/service/api'
 import { CardsHealper } from '@/utils/cards-healper'
 import { loadingService, toastService } from '@/service/toast-service'
+// import BKInput from '@/components/bk-input/bk-input'
 import './bind-card.less'
 
 export default class BindCard extends React.Component {
@@ -37,7 +38,7 @@ export default class BindCard extends React.Component {
         phone: '',
         address: '',
         isDefault: true,
-        isHaveCard: false,
+        isHaveCard: true,
         cardNo: '',
         maritalStatus: '未婚',
         nationality: '中国',
@@ -166,7 +167,7 @@ export default class BindCard extends React.Component {
         if(!card.isHaveCard && key === 'cardNo') continue
         if(this.state.currentIdenTypeValue !== '儿童(无证件)' && (key === 'parentName' || key === 'parentId')) continue
         if(key ==='wechatCode') continue
-        msg = (validateMessages[keys[i]] || key) + '的值不能为空'
+        msg = validateMessages[keys[i]] || (key + '的值不能为空')
         result = false
         break
       }
@@ -322,7 +323,9 @@ export default class BindCard extends React.Component {
             value={this.state.card.patientName} 
             onChange={this.handleCardChange.bind(this,'patientName')} 
           />
-
+          {/* <BKInput name='patientName' title='姓名' type='text' placeholder='请输入姓名' value={this.state.card.patientName}
+            onChange={this.handleCardChange.bind(this,'patientName')}
+          ></BKInput> */}
           <Picker mode='selector' range={this.state.idenTypeNames} onChange={this.onIdenTypeChange.bind(this)} value={this.state.currentIdenTypeIndex}>
             <AtList>
               <AtListItem

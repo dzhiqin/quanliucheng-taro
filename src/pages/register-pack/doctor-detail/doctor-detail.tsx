@@ -142,7 +142,7 @@ export default function DoctorDefault(props) {
     <View className='doctor-detail'>
       <BaseModal show={show} cancel={() => setShow(false)} confirm={() => setShow(false)} title='医生详情'>
         <View className='flex'>
-          <Image src={doctorDetail.faceUrl || defaultDoctorAvatar} className='doctor-modal-image' />
+          <Image src={doctorDetail.faceUrl || defaultDoctorAvatar} className='doctor-modal-image' mode='aspectFill' />
           <View style='margin-left: 10rpx;'>
             <View className='doctor-detail-name'>{doctorDetail.name}</View>
             <View>{doctorDetail.deptName}</View>
@@ -167,7 +167,7 @@ export default function DoctorDefault(props) {
         </View>
       </BaseModal>
       <View className='doctor-detail-info' onClick={() => setShow(true)}>
-          <Image src={doctorDetail.faceUrl || defaultDoctorAvatar} className='doctor-detail-info-avatar' />
+          <Image src={doctorDetail.faceUrl || defaultDoctorAvatar} className='doctor-detail-info-avatar' mode='aspectFill' />
         <View style='margin-left: 20rpx;'>
           <View>
             <text className='doctor-detail-name'>{doctorDetail.name}</text>

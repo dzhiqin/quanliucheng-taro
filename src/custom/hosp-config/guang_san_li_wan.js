@@ -136,6 +136,7 @@ export default {
       updateNotice: true, // 绑卡和解绑发送消息通知
     },
     register: {
+      cancelReservedTime: 3600 * 1000 * 2, // 取消挂号预留时间，默认2小时
       popupNotice: false,// 挂号提示弹窗
       intradayAndAppointment: true,// 是否区分当天挂号和预约挂号
       type: 'byCategoryAndDoctorAndTime',// byDept按科室挂号；byDeptAndTime按科室和时间挂号；byCategoryAndDoctorAndTime按分类、医生、日期挂号

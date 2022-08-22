@@ -4,6 +4,7 @@ import * as React from 'react'
 import * as Taro from '@tarojs/taro'
 import BkTabs from '../bk-tabs/bk-tabs'
 import './quick-entrance.less'
+import { TaroNavToMiniProgram } from '@/service/api'
 
 export default function QuickEntrance(props: {
   quickEntrance?:any
@@ -26,23 +27,14 @@ export default function QuickEntrance(props: {
       Taro.navigateTo({url: item.url})
     }
     if(item.event === 'jump'){
-      if(item.target === 'yuejiantong'){
-        jumpToYueJianTongWeapp()
-      }
+      TaroNavToMiniProgram({appId: item.appId, path: item.path}).then(() => {
+        console.log('跳转小程序成功');
+      }).catch(() => {
+        console.error('跳转小程序失败')
+      })
     }
   }
-  const jumpToYueJianTongWeapp = () => {
-    Taro.navigateToMiniProgram({
-      appId: 'wx42f62e0e1c6d9ff0',
-      path: 'subpackages/hz_xier_yss/pages/jksbk/index',
-      success: () => {
-        console.log('跳转粤健通成功');
-      },
-      fail: () => {
-        console.error('跳转粤健通失败')
-      }
-    })
-  }
+  
   return(
     <View className='quick-entrance'>
       <BkTabs onTabChange={onTabChange} tabs={tabs}></BkTabs>

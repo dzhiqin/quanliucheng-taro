@@ -52,7 +52,7 @@ export default function DoctorList() {
   return(
     <View className='doctor-list'>
       <View className='doctor-list-dept'>
-        <Image src={crossFlagPng} className='doctor-list-dept-icon' />
+        <Image src={crossFlagPng} className='doctor-list-dept-icon' mode='aspectFill'></Image>
         <View className='doctor-list-dept-name'>{deptName}</View>
       </View>
       <View style='padding: 20rpx 40rpx; background: white'>

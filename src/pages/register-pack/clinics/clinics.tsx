@@ -69,11 +69,11 @@ export default function Clinics() {
       Taro.navigateTo({url: '/pages/bind-pack/cards-list/cards-list?action=jumpOut'})
       return
     }
-    if(custom.hospName === 'jszyy' && item.allowJump === '1'){
-      // 特殊处理 金沙洲部分一级科室直接跳转到医生列表
-      Taro.navigateTo({url: `/pages/register-pack/doctors/doctors?deptId=${item.deptId}&deptName=${item.deptName}`})
-      return
-    }
+    // if(custom.hospName === 'jszyy' && item.allowJump === '1'){
+    //   // 特殊处理 金沙洲部分一级科室直接跳转到医生列表
+    //   Taro.navigateTo({url: `/pages/register-pack/doctors/doctors?deptId=${item.deptId}&deptName=${item.deptName}`})
+    //   return
+    // }
     if(item.deptId !== deptId){
       setCurrentDept(index)
       setDeptId(item.deptId)

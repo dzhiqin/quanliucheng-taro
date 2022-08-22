@@ -12,8 +12,10 @@ import BkTabs from '@/components/bk-tabs/bk-tabs'
 import BkNone from '@/components/bk-none/bk-none'
 import { checkOverTime } from '@/utils/tools'
 import BaseModal from '@/components/base-modal/base-modal'
+import { custom } from '@/custom/index'
 
 const tabs = [{title: '15日内订单',value: 'current'},{title: '历史订单',value: 'history'}]
+const registerConfig = custom.feat.register
 
 export default function OrderList() {
   const [currentTab,setCurrentTab] = useState(0)
@@ -30,8 +32,7 @@ export default function OrderList() {
     cancelAppointment({orderId: order.orderId}).then(res => {
       if(res.resultCode === 0){
         toastService({title: '取消成功！'})
-        setList(list.filter(item => item.orderId !== order.orderId))
-        // getList()
+        getList()
       }else{
         toastService({title: res.message})
       }
@@ -142,6 +143,13 @@ export default function OrderList() {
                   </View>
                 }
                 {
+                  item.regNo &&
+                  <View className='order-list-card-item'>
+                    <View className='order-list-card-title'>排队号：</View>
+                    <View className='order-list-card-text'>{item.regNo}</View>
+                  </View>
+                }
+                {
                   item.serialNo && 
                   <View className='order-list-card-item'>
                     <View className='order-list-card-title'>电子发票：</View>
@@ -149,7 +157,7 @@ export default function OrderList() {
                   </View>
                 }
                 {
-                  !checkOverTime(item.regDate, item.startTime, 3600 * 2 * 1000) && item.orderStatus !== 24 &&
+                  !checkOverTime(item.regDate, item.startTime, registerConfig.cancelReservedTime) && item.orderStatus !== 24 &&
                   <View style='padding: 40rpx'>
                     <BkButton theme='danger' title='取消预约' onClick={showCancelModal.bind(this,item)} />
                   </View>
@@ -160,6 +168,10 @@ export default function OrderList() {
         </view>
         :
         <BkNone msg='暂无订单' />
+      }
+      {
+        list && list.length > 0 && currentTab === 1 &&
+        <View style='color: #bbb; text-align: center;'>最多显示近3个月的挂号订单</View>
       }
       <BaseModal show={show} closeOutside={false} confirm={onConfirm} cancel={onCancel} title='是否取消预约?' >
         <View className='order-list-modal'>
