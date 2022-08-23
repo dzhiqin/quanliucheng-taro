@@ -5,8 +5,8 @@ import { useState,useEffect } from 'react'
 import { loadingService, toastService } from '@/service/toast-service'
 import { getDoctorsByFirstDeptId } from '@/service/api'
 import { AtList, AtListItem } from 'taro-ui'
-import defaltAvatar from '@/images/default-avatar.png'
 import './doctors.less'
+import { getImageSrc } from '@/utils/image-src'
 
 export default function Doctors() {
   const router = Taro.useRouter()
@@ -46,7 +46,7 @@ export default function Doctors() {
               arrow='right' 
               onClick={handleClickDoctor.bind(null, doctor)}
               note={doctor.title}
-              thumb={doctor.imgPic || defaltAvatar}
+              thumb={doctor.imgPic || getImageSrc('default-avatar.png')}
             ></AtListItem>
             )
         }

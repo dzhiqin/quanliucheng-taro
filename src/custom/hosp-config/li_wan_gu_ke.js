@@ -88,7 +88,7 @@ export default {
       {title: '检验', value: REPORT_ITEM_TYPE_CN.化验},
       {title: '检查', value: REPORT_ITEM_TYPE_CN.检查},
     ],
-    hospitalizationTabs: [
+    hospItemTabs: [
       {title: '检验', value: REPORT_ITEM_TYPE_CN.化验},
       {title: '检查', value: REPORT_ITEM_TYPE_CN.检查},
     ],

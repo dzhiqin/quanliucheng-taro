@@ -8,7 +8,7 @@ interface Response {
   popUpCode?: number
 }
 export interface HttpResponse extends Response {
-  data?: object | string | any
+  data?: any
 }
 
 export interface DownloadResponse extends Response {

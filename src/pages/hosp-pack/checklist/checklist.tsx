@@ -19,27 +19,20 @@ export default function BindingCard() {
   const [card,setCard] = useState(null)
   const [registerId, setRegisterId]= useState('')
   Taro.useReady(() => {
-    let _card = Taro.getStorageSync('inCard')
-    if(_card){
-      setCard(_card)
-      getList(_card.cardNo)
-      handleGetInHospInfo(_card.cardNo)
-    }else{
-      fetchInHospCards().then(res => {
-        if(res.resultCode === 0){
-          if(res.data && res.data.length > 0){
-            setShowModal(false)
-            const hospCard = res.data.find(i => i.isDefault)
-            Taro.setStorageSync('inCard',hospCard)
-            setCard(hospCard)
-            getList(hospCard.cardNo)
-            handleGetInHospInfo(hospCard.cardNo)
-          }else{
-            setShowModal(true)
-          }
+    fetchInHospCards().then(res => {
+      if(res.resultCode ===0){
+        if(res.data && res.data.length > 0){
+          setShowModal(false)
+          const hospCard = res.data.find(i => i.isDefault)
+          Taro.setStorageSync('inCard',hospCard)
+          setCard(hospCard)
+          getList(hospCard.cardNo)
+          handleGetInHospInfo(hospCard.cardNo)
+        }else{
+          setShowModal(true)
         }
-      })
-    }
+      }
+    })
   })
   Taro.useDidShow(() => {
     const currentCard = Taro.getStorageSync('inCard')
@@ -58,11 +51,11 @@ export default function BindingCard() {
           setRegisterId(_registerId)
           resolve({result: true, data: _registerId})
         }else{
-          reject({result: false, data: ''})
+          resolve({result: false, data: ''})
         }
       })
       .catch(err => {
-        reject({result: false, data: err})
+        resolve({result: false, data: err})
       })
     })
   }
@@ -71,7 +64,7 @@ export default function BindingCard() {
     getInHospBillList({inCardNo: _cardNo}).then(res => {
       if(res.resultCode === 0){
         loadingService(false)
-        setList(res.data.billInfoList)
+        res.data && setList(res.data.billInfoList)
       }else{
         toastService({title: '' + res.message})
       }

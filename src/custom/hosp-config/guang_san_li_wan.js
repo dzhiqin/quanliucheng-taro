@@ -5,6 +5,7 @@ export default {
   latitude: 23.122721,
   longitude: 113.240994,
   hospName: "gysylw",
+  banner: 'https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/applets-imgs/banner2.png',
   logo: "https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/lwgk/20220309-basic/gysy.png",
   hospitalName: "广州医科大学附属第三医院",
   // baseUrl: "https://applets.gdbkyz.com", // 倍康测试
@@ -148,7 +149,7 @@ export default {
   },
   reportsPage:{
     urlDetail: true, // 报告详情页用图片展示
-    reportItemType: [
+    reportItemTabs: [
       {title: '化验', value: REPORT_ITEM_TYPE_CN.化验},
       {title: '放射', value: REPORT_ITEM_TYPE_CN.放射},
       {title: '超声', value: REPORT_ITEM_TYPE_CN.超声},
@@ -156,7 +157,7 @@ export default {
       {title: '内镜', value: REPORT_ITEM_TYPE_CN.内镜},
       {title: '产前', value: REPORT_ITEM_TYPE_CN.产前超声},
     ],
-    hospitalizationTabs: [
+    hospItemTabs: [
       {title: '化验', value: REPORT_ITEM_TYPE_CN.化验},
       {title: '放射', value: REPORT_ITEM_TYPE_CN.放射},
       {title: '超声', value: REPORT_ITEM_TYPE_CN.超声},

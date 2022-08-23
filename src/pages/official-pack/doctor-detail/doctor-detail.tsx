@@ -6,7 +6,7 @@ import { loadingService, toastService } from '@/service/toast-service'
 import { useState } from 'react'
 import BkTitle from '@/components/bk-title/bk-title'
 import './doctor-detail.less'
-import defaultAvatar from '@/images/default-avatar.png'
+import { getImageSrc } from '@/utils/image-src'
 
 export default function DoctorDetail() {
   const router = Taro.useRouter()
@@ -34,7 +34,7 @@ export default function DoctorDetail() {
   return(
     <View className='doctor-detail'>
       <View className='doctor-detail-header'>
-        <Image src={doctorInfo.faceUrl || defaultAvatar} className='doctor-detail-avatar' mode='aspectFill'></Image>
+        <Image src={doctorInfo.faceUrl || getImageSrc('default-avatar.png')} className='doctor-detail-avatar' mode='aspectFill'></Image>
         <View className='doctor-detail-name'>{doctorInfo.name}</View>
         <View className='doctor-detail-title'>{doctorInfo.title}</View>
       </View>

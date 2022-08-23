@@ -57,12 +57,16 @@
 **关于医院配置：** 为了适配不同医院专门创建了一个custom文件夹，在`custom/hosp-config`目录下，一个医院对应一个配置文件，在`src/custom/index.ts`文件里把`hospName`设置对应医院的文件名即可
 例如广三老院区：
 ```
-
-const hospName = 'guang_san_li_wan'
+type HospName = 
+  'guang_san_li_wan' |
+  'en_ping_fu_you' |
+  'li_wan_gu_ke' |
+  'shun_de_jun_an' | 
+  'jin_sha_zhou'
+const hospName:HospName = 'jin_sha_zhou'
 const hospConfig = require(`./hosp-config/${hospName}`)
-const config = hospConfig.default
 
-export default config
+export const custom = hospConfig.default
 ```
 
 **微信小程序开发预览：**
@@ -77,7 +81,8 @@ export default config
 **关于接口书写：** 
 * 与后端约定如果是post请求，那传参就放在body里，如果是get请求，传参就放在url里；
 * 本项目支持typescript，接口入参最好定义成类型，方便调用；
-* 接口命名尽量体现接口用途和方法；查询类的接口，如果是post请求就用fetch开头，如果是get请求就用get开头
+* 接口命名尽量体现接口用途和方法，减少不必要的代码注释；
+* 查询类的接口，如果是post请求就用fetch开头，如果是get请求就用get开头
 例如：
 ```
 export const fetchMedicineInfo = (data: {orderId: string}) => {
@@ -117,4 +122,8 @@ wip: work in progress 工作中 还没完成
 chore: 其他修改（不在上述类型中的修改）
 release: 发版
 deps: 依赖相关的修改
+```
+例如：
+```
+git commit -m "fix: 修复一些已知问题"
 ```

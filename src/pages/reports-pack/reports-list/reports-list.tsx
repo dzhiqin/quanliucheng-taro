@@ -22,7 +22,7 @@ export default function ReportList() {
   const [itemType,setItemType] = useState(REPORT_ITEM_TYPE_CN.化验)
   const [list,setList] = useState([])
   const clinicTabs = custom.reportsPage.reportItemTabs
-  const hospitalizationTabs = custom.reportsPage.hospitalizationTabs
+  const hospItemTabs = custom.reportsPage.hospItemTabs
   const onTabChange = (index,value) => {
     if(value !== itemType){
       setItemType(value)
@@ -63,7 +63,7 @@ export default function ReportList() {
   return(
     <View className='reports-list'>
       <HealthCards />
-      <BkTabs tabs={reportType === REPORT_TYPE_EN.clinic? clinicTabs : hospitalizationTabs} onTabChange={onTabChange} />
+      <BkTabs tabs={reportType === REPORT_TYPE_EN.clinic? clinicTabs : hospItemTabs} onTabChange={onTabChange} />
       {
         list.length > 0
         ?

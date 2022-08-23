@@ -5,10 +5,11 @@ import { useEffect,useState } from 'react'
 import { fetchClinicDoctors, fetchClinicIntro } from '@/service/api'
 import { toastService } from '@/service/toast-service'
 import { AtTabs, AtAvatar } from 'taro-ui'
-import defaultAvatar from '@/images/default-avatar.png'
 import './clinic-intro.less'
 import BkPanel from '@/components/bk-panel/bk-panel'
 import BkNone from '@/components/bk-none/bk-none'
+import { getImageSrc } from '@/utils/image-src'
+
 
 export default function ClinicIntro() {
   const router = Taro.useRouter()
@@ -57,7 +58,7 @@ export default function ClinicIntro() {
                 doctorList.map((item,index) => 
                   <BkPanel arrow key={index} style='margin-top: 20rpx;border-radius: unset;' onClick={onClickItem.bind(null, item)} >
                     <View style='display:flex'>
-                      <AtAvatar image={item.faceUrl || defaultAvatar} size='large' circle customStyle='flex-shrink: 0;'></AtAvatar>
+                      <AtAvatar image={item.faceUrl || getImageSrc('default-avatar.png')} size='large' circle customStyle='flex-shrink: 0;'></AtAvatar>
                       <View style='margin-left: 20rpx;'>
                         <View className='clinic-intro-doctors-name'>{item.name}</View>
                         <View className='clinic-intro-doctors-title'>{item.title}</View>

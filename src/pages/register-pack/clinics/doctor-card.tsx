@@ -1,8 +1,8 @@
 import * as React from 'react'
 import * as Taro from '@tarojs/taro'
 import { View, Image } from '@tarojs/components'
-import defaultAvatar from '@/images/default-avatar.png'
 import './clinics.less'
+import { getImageSrc } from '@/utils/image-src'
 
 export default function DoctorCard(props) {
   const onClick = () => {
@@ -11,7 +11,7 @@ export default function DoctorCard(props) {
   }
   return(
     <View className='doctor-card' onClick={onClick}>
-      <Image className='doctor-avatar' src={props.doctor.faceUrl || defaultAvatar} ></Image>
+      <Image className='doctor-avatar' src={props.doctor.faceUrl || getImageSrc('default-avatar.png')} ></Image>
       <View className='doctor-info'>
         <View className='doctor-name'>{props.doctor.doctorName}</View>
         <View className='doctor-clinic'>{props.doctor.deptName}</View>
