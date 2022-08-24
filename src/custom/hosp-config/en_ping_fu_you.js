@@ -84,11 +84,11 @@ export default {
   },
   reportsPage:{
     urlDetail: false, // 报告详情页用图片展示
-    reportItemTabs: [
+    clinicReportTabs: [
       {title: '检验', value: REPORT_ITEM_TYPE_CN.化验},
       {title: '检查', value: REPORT_ITEM_TYPE_CN.检查},
     ],
-    hospItemTabs: [
+    hospReportTabs: [
       {title: '检验', value: REPORT_ITEM_TYPE_CN.化验},
       {title: '检查', value: REPORT_ITEM_TYPE_CN.检查},
     ],

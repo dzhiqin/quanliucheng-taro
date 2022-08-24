@@ -85,18 +85,18 @@ export default function DoctorDefault(props) {
   const onDateChange = (date) => {
     if(!date) return
     setSelectedDate(date)
-    Taro.showLoading({title: '加载中……'})
+    loadingService(true)
     fetchTimeListByDate({deptId: deptInfo.deptId, regDate: date, doctorId: doctorDetail.doctorId}).then(res => {
       if(res.resultCode === 0){
         setList(res.data.timePoints)
       }
     }).finally(() => {
-      Taro.hideLoading()
+      loadingService(false)
     })
   }
   useEffect(() => {
-    loadingService(true)
     setBusy(true)
+    setList([])
     fetchDoctorSchedules({
       doctorId: params.doctorId, 
       deptId: deptInfo.deptId, 
@@ -121,7 +121,6 @@ export default function DoctorDefault(props) {
         }else{
           setList(res.data.timePoints)
           setTimeout(() => {
-            loadingService(false)
             setBusy(false)
           }, 500);
         }

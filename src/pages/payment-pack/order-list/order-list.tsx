@@ -31,7 +31,8 @@ export default function OrderList(){
     getList(searchType)
   })
   const getList = (type: string) => {
-    Taro.showLoading({title: '加载中……'})
+    // Taro.showLoading({title: '加载中……'})
+    setBusy(true)
     fetchPaymentOrderList({type}).then(res => {
       if(res.resultCode === 0){
         setList(res.data)
@@ -39,7 +40,8 @@ export default function OrderList(){
         toastService({title: res.message})
       }
     }).finally(() => {
-      Taro.hideLoading()
+      // Taro.hideLoading()
+      setBusy(false)
     })
   }
   const onTabChange = (e,value) => {
@@ -131,7 +133,7 @@ export default function OrderList(){
     return paymentParams
   }
   useEffect(() => {
-    Taro.showLoading({title: '加载中……'})
+    setBusy(true)
     fetchPaymentOrderList({type: searchType}).then(res => {
       if(res.resultCode === 0){
         setList(res.data)
@@ -139,7 +141,7 @@ export default function OrderList(){
         toastService({title: res.message})
       }
     }).finally(() => {
-      Taro.hideLoading()
+      setBusy(false)
     })
   },[searchType])
   const onClickItem = (item) => {
@@ -214,7 +216,7 @@ export default function OrderList(){
           }
         </View>
         :
-        <BkNone msg='暂无缴费单' />
+        <BkNone loading={busy} msg='暂无缴费单' />
       }
     </View>
   )

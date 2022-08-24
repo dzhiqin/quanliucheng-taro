@@ -20,6 +20,7 @@ const registerConfig = custom.feat.register
 export default function OrderList() {
   const [currentTab,setCurrentTab] = useState(0)
   const [list,setList] = useState([])
+  const [busy,setBusy] = useState(false)
   const [order,setOrder] = useState({
     patientName: '',
     totalFee: '',
@@ -64,14 +65,14 @@ export default function OrderList() {
   }
   const getList = useCallback(() => {
     setList([])
-    loadingService(true)
+    setBusy(true)
     fetchRegOrderList({type: tabs[currentTab].value}).then(res => {
       if(res.resultCode === 0){
-        loadingService(false)
         setList(res.data)
       }else{
         toastService({title: res.message})
       }
+      setBusy(false)
     })
   },[currentTab])
   useEffect(() => {
@@ -95,7 +96,7 @@ export default function OrderList() {
                   item.orderStatusDesc &&
                   <View className='order-list-card-item'>
                     <View className='order-list-card-title'>订单状态：</View>
-                    <View className='order-list-card-text'>{item.orderStatusDesc}</View>
+                    <View className='order-list-card-text price-color'>{item.orderStatusDesc}</View>
                   </View>
                 }
                 <View className='order-list-card-item'>
@@ -167,7 +168,7 @@ export default function OrderList() {
           }
         </view>
         :
-        <BkNone msg='暂无订单' />
+        <BkNone loading={busy} msg='暂无订单' />
       }
       {
         list && list.length > 0 && currentTab === 1 &&

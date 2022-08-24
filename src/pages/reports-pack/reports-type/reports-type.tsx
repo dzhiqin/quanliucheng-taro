@@ -20,7 +20,7 @@ export default function ReportsType() {
       </BkPanel>
       {
         !custom.reportsPage.hideInHosp && 
-        <BkPanel arrow style='background: #3CC7B0;color: white' onClick={onClickHospitalization}>
+        <BkPanel arrow style='background: #3CC7B0;color: white' onClick={onClickHospitalization} iconColor='#fff'>
           住院报告
         </BkPanel>
       }

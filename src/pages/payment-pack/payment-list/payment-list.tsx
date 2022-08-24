@@ -22,14 +22,12 @@ export default function PaymentList() {
       toastService({title: '请先绑卡'})
       return
     }
-    Taro.showLoading({title: '加载中……'})
     fetchPaymentListFromHis({cardId: card.id}).then(res => {
       if(res.resultCode === 0){
         setList(res.data.bills)
       }
     }).finally(() => {
       setLoading(false)
-      Taro.hideLoading()
     })
   })
   const handleClick = (item) => {

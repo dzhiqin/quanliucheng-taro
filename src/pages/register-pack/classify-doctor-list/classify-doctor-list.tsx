@@ -17,6 +17,7 @@ export default function ClassifyDoctorList(props) {
   const specializedSubject = router.params.clinic
   const regDate = router.params.date || ''
   const [list,setList] = useState([])
+  const [busy,setBusy] = useState(false)
   const onClick = (doctor) => {
     if(doctor.isHalt){
       toastService({title: '已停诊'})
@@ -43,7 +44,8 @@ export default function ClassifyDoctorList(props) {
   },[deptId,specializedSubject])
   useEffect(() => {
     if(!regDate) return
-    loadingService(true)
+    // loadingService(true)
+    setBusy(true)
     fetchDoctorsByDate({deptId,regDate}).then(res => {
       if(res.resultCode === 0){
         loadingService(false)
@@ -51,6 +53,7 @@ export default function ClassifyDoctorList(props) {
       }else{
         toastService({title: ''+res.message})
       }
+      setBusy(false)
     })
   },[deptId,regDate])
   return(
@@ -86,7 +89,7 @@ export default function ClassifyDoctorList(props) {
             }
           </AtList>
         </View>
-        : <BkNone msg='没号了~' />
+        : <BkNone loading={busy} msg='没号了~' />
       }
     </View>
   )

@@ -76,11 +76,11 @@ export default function BindingCard() {
           }
         </View>
         :
-        <BkNone msg='暂无候诊数据' />
+        <BkNone loading={loading} msg='暂无候诊数据' />
       }
       
       <View className='waiting-list-footer'>
-        <AtButton loading={loading} size='normal' type='primary' onClick={handleRefresh} >刷新数据</AtButton>
+        <AtButton loading={loading} full size='normal' type='primary' onClick={handleRefresh} >刷新数据</AtButton>
       </View> 
     </View>
   )

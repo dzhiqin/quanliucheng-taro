@@ -24,8 +24,8 @@ export default function BkTabs(props: {
     onTabChange(index,value)
   }
   useEffect(() => {
-    setCurrent(0)
-  }, [])
+    setCurrent(current || 0)
+  }, [current])
   useEffect(() => {
     setList(props.tabs)
   }, [props])

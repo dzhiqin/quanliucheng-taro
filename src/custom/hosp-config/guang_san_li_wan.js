@@ -149,7 +149,7 @@ export default {
   },
   reportsPage:{
     urlDetail: true, // 报告详情页用图片展示
-    reportItemTabs: [
+    clinicReportTabs: [
       {title: '化验', value: REPORT_ITEM_TYPE_CN.化验},
       {title: '放射', value: REPORT_ITEM_TYPE_CN.放射},
       {title: '超声', value: REPORT_ITEM_TYPE_CN.超声},
@@ -157,7 +157,7 @@ export default {
       {title: '内镜', value: REPORT_ITEM_TYPE_CN.内镜},
       {title: '产前', value: REPORT_ITEM_TYPE_CN.产前超声},
     ],
-    hospItemTabs: [
+    hospReportTabs: [
       {title: '化验', value: REPORT_ITEM_TYPE_CN.化验},
       {title: '放射', value: REPORT_ITEM_TYPE_CN.放射},
       {title: '超声', value: REPORT_ITEM_TYPE_CN.超声},

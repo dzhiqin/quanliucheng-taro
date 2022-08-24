@@ -24,12 +24,15 @@ export default function Notice() {
   },[])
   return(
     <View>
-      <AtSegmentedControl
-        onClick={handleClick.bind(this)}
-        fontSize={32}
-        current={current}
-        values={['当天挂号', '预约挂号']}
-      />
+      <View style='padding: 0 20rpx'>
+        <AtSegmentedControl
+          onClick={handleClick.bind(this)}
+          fontSize={34}
+          current={current}
+          values={['当天挂号', '预约挂号']}
+        />
+      </View>
+      
       {
         current === 0 
         ? <IntrodayRegNotice />

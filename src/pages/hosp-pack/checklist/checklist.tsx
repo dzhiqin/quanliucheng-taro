@@ -18,6 +18,7 @@ export default function BindingCard() {
   const [list,setList] = useState([])
   const [card,setCard] = useState(null)
   const [registerId, setRegisterId]= useState('')
+  const [busy,setBusy] = useState(false)
   Taro.useReady(() => {
     fetchInHospCards().then(res => {
       if(res.resultCode ===0){
@@ -60,14 +61,16 @@ export default function BindingCard() {
     })
   }
   const getList = (_cardNo: string) => {
-    loadingService(true)
+    // loadingService(true)
+    setBusy(true)
     getInHospBillList({inCardNo: _cardNo}).then(res => {
       if(res.resultCode === 0){
-        loadingService(false)
+        // loadingService(false)
         res.data && setList(res.data.billInfoList)
       }else{
         toastService({title: '' + res.message})
       }
+      setBusy(false)
     })
   }
   const handleClickItem = async (item) => {
@@ -129,7 +132,7 @@ export default function BindingCard() {
             }
           </View>
           :
-          <BkNone msg='暂无每日清单数据' />
+          <BkNone loading={busy} msg='暂无每日清单数据' />
         }
         
       </View>

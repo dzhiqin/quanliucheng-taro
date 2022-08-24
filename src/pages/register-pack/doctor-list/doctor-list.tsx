@@ -17,6 +17,7 @@ export default function DoctorList() {
   const [doctors,setDoctors] = useState([])
   const [defaultDay,setDefaultDay] = useState()
   const [deptId, setDeptId] = useState(params.deptId || '')
+  const [busy,setBusy] = useState(false)
   const deptName = params.deptName || ''
   const onDateChange = (e) => {
     setDefaultDay(e)
@@ -24,7 +25,7 @@ export default function DoctorList() {
   useEffect(() => {
     const _deptId = router.params.deptId
     setDeptId(_deptId)
-    Taro.showLoading({title: '加载中……'})
+    setBusy(true)
     fetchDoctorsByDefault({deptId: _deptId}).then(res => {
       if(res.resultCode === 0){
         setWeek(res.data.regDays)
@@ -32,18 +33,18 @@ export default function DoctorList() {
         setDefaultDay(res.data.defaultSelectedDay)
       }
     }).finally(() => {
-      Taro.hideLoading()
+      setBusy(false)
     })
   },[router.params.deptId])
   useEffect(() => {
     if(!deptId || !defaultDay) return
-    Taro.showLoading({title: '加载中……'})
+    setBusy(true)
+    setDoctors([])
     fetchDoctorsByDate({deptId, regDate: defaultDay}).then(res => {
       if(res.resultCode === 0){
         setDoctors(res.data)
       }
-    }).finally(() => {
-      Taro.hideLoading()
+      setBusy(false)
     })
   }, [defaultDay,deptId])
   const handleClickDoctor = (e) => {
@@ -70,7 +71,7 @@ export default function DoctorList() {
             }
           </View>
           :
-          <BkNone />
+          <BkNone loading={busy} />
         }
       </View>
     </View>

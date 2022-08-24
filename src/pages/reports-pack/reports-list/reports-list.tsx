@@ -16,13 +16,23 @@ import { custom } from '@/custom/index'
 import './reports-list.less'
 
 export default function ReportList() {
+  const [busy,setBusy] = useState(false)
   const router = useRouter()
   const params = router.params
   const reportType = params.reportType as REPORT_TYPE_EN
-  const [itemType,setItemType] = useState(REPORT_ITEM_TYPE_CN.化验)
+  // 传参tab的取值，和配置文件中定义的tabs列表的子项序号相关联
+  const [itemType, setItemType] = useState(() => {
+    if(reportType === REPORT_TYPE_EN.clinic){
+      return custom.reportsPage.clinicReportTabs[Number(params.tab) || 0].value
+    }
+    if(reportType === REPORT_TYPE_EN.hospitalization){
+      return custom.reportsPage.hospReportTabs[Number(params.tab) || 0].value
+    }
+  })
   const [list,setList] = useState([])
-  const clinicTabs = custom.reportsPage.reportItemTabs
-  const hospItemTabs = custom.reportsPage.hospItemTabs
+  const [currentTab] = useState(Number(params.tab) || 0)
+  const clinicTabs = custom.reportsPage.clinicReportTabs
+  const hospReportTabs = custom.reportsPage.hospReportTabs
   const onTabChange = (index,value) => {
     if(value !== itemType){
       setItemType(value)
@@ -30,15 +40,17 @@ export default function ReportList() {
     }
   }
   const getList = (_itemType: REPORT_ITEM_TYPE_CN) => {
-    loadingService(true)
+    // loadingService(true)
+    setBusy(true)
     fetchReportsList({itemType: _itemType, reportType: reportType }).then(res => {
       if(res.resultCode === 0){
-        loadingService(false)
+        // loadingService(false)
         setList(res.data.checks)
       }else{
         toastService({title: res.message})
         setList([])
       }
+      setBusy(false)
     })
   }
   // Taro.useReady(() => {
@@ -55,7 +67,7 @@ export default function ReportList() {
       toastService({title: '请先绑卡'})
       return
     }
-    getList(itemType)
+    getList(itemType as REPORT_ITEM_TYPE_CN)
   })
   const onClickItem = (e) => {
     Taro.navigateTo({url: `/pages/reports-pack/reports-detail/reports-detail?examId=${e.id}&examDate=${e.date}&itemType=${itemType}&reportType=${reportType}`})
@@ -63,7 +75,7 @@ export default function ReportList() {
   return(
     <View className='reports-list'>
       <HealthCards />
-      <BkTabs tabs={reportType === REPORT_TYPE_EN.clinic? clinicTabs : hospItemTabs} onTabChange={onTabChange} />
+      <BkTabs current={currentTab} tabs={reportType === REPORT_TYPE_EN.clinic? clinicTabs : hospReportTabs} onTabChange={onTabChange} />
       {
         list.length > 0
         ?
@@ -88,7 +100,7 @@ export default function ReportList() {
             }
           </View>
         :
-          <BkNone />
+          <BkNone loading={busy} />
       }
     </View>
   )

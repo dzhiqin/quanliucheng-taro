@@ -68,7 +68,11 @@ type HospConfig = {
   reportsPage: {
     hideInHosp: boolean,
     urlDetail: boolean,
-    reportItemTabs: [],
-    hospItemTabs: []
+    clinicReportTabs: [
+      {title: string, value: string}
+    ],
+    hospReportTabs: [
+      {title: string, value: string}
+    ]
   }
 }

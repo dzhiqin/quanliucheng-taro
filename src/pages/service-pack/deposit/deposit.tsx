@@ -94,15 +94,15 @@ export default function BindingCard() {
     getAccountBalance()
   })
   const getList = () => {
-    loadingService(true)
+    setBusy(true)
     getRegisterDepositOrderList({cardNo: card.cardNo}).then(res => {
       if(res.resultCode === 0){
         setList(res.data)
-        loadingService(false)
       }else{
         toastService({title: res.message})
         setList([])
       }
+      setBusy(false)
     })
   }
   const handleConfirm = () => {
@@ -267,7 +267,7 @@ export default function BindingCard() {
                   list.map((item,index) => <DepositListItem item={item} key={index} onClickItem={onClickItem}></DepositListItem>)
                 }
               </View>
-            : <BkNone msg='暂无记录' />
+            : <BkNone loading={busy} msg='暂无记录' />
           }
         </View>
       }

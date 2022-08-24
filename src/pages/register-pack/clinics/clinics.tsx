@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { View, Image } from '@tarojs/components'
+import { View, Image, ScrollView } from '@tarojs/components'
 import * as Taro from '@tarojs/taro'
 import { useState,useEffect } from 'react'
 import locationPng from '@/images/icons/location2.png'
@@ -92,17 +92,6 @@ export default function Clinics() {
       url: `/pages/register-pack/classify-doctor-list/classify-doctor-list?deptId=${deptId}&date=${date}`
     })
   }
-  // Taro.useReady(() => {
-  //   const query = Taro.createSelectorQuery()
-  //   query.select('#header').boundingClientRect()
-  //   query.selectViewport().scrollOffset()
-  //   query.exec(function(res){
-  //     const top = res[0].top       // #the-id节点的上边界坐标
-  //     const bottom = res[1].scrollTop // 显示区域的竖直滚动位置
-  //     console.log(`top=${top}`);
-  //     console.log(`bottom=${bottom}`);
-  //   })
-  // })
   return(
     <View className='clinics'>
       <View className='header' id='header'>
@@ -139,9 +128,9 @@ export default function Clinics() {
           <BkVerticalTab list={deptList} name='deptName' current={currentDept} key='deptId' style='flex: 2' onChange={onTabChange} />
           {
             registerConfig.departmentLevel === '2' &&
-            <View className='clinics-list' style='flex: 2'>
+            <ScrollView className='clinics-list' style='flex: 2' scrollY>
               <ClinicList  clinics={clinicList} />
-            </View>
+            </ScrollView>
           }
         </View>
       }

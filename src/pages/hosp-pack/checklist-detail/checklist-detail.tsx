@@ -21,6 +21,7 @@ export default function ChecklistDetail() {
   const [tabList,setTabList] = useState([])
   const [currentTab,setCurrentTab] = useState(0)
   const [categories,setCategories] = useState([])
+  const [busy,setBusy] = useState(false)
   const card = Taro.getStorageSync('inCard')
   const Row = React.memo(({id,index,style,data}) => {
     return (
@@ -80,15 +81,17 @@ export default function ChecklistDetail() {
     getAllInHospBills()
   })
   const getAllInHospBills = () => {
-    loadingService(true)
+    // loadingService(true)
+    setBusy(true)
     fetchAllInHospBillDetail({registerId,billDate,inCardNo: card.cardNo})
     .then(res => {
-      loadingService(false)
+      // loadingService(false)
       if(res.resultCode === 0){
         setList(res.data)
       }else{
         toastService({title: res.message})
       }
+      setBusy(false)
     })
     .catch(err => {
       toastService({title: '获取数据失败'+err})
@@ -114,6 +117,7 @@ export default function ChecklistDetail() {
     if(categoryId){
       getInHospBillsByCategory(categoryId)
     }else{
+      setList([])
       getAllInHospBills()
     }
   }
@@ -134,22 +138,8 @@ export default function ChecklistDetail() {
           {Row} 
         </VirtualList>
         :
-        <BkNone msg='暂无明细' />
+        <BkNone loading={busy} msg='暂无明细' />
       }
-
-      {/* {
-        list.length > 0
-        ?
-        <View style='padding: 40rpx'>
-          {
-            list.map((item,index) => 
-              <ChcekListItem item={item} key={index}></ChcekListItem>
-            )
-          }
-        </View>
-        :
-        <BkNone msg='暂无明细' />
-      } */}
     </View>
   )
 }

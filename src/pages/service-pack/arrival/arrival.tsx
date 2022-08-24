@@ -19,8 +19,8 @@ export default function BindingCard() {
   const [showBtn,setShowBtn] = useState(true)
   const [list,setList] = useState([])
   const [hospLatLong,setHospLatLong] = useState({
-    latitude: '',
-    longitude: ''
+    latitude: null,
+    longitude: null
   })
   const [distance,setDistance] = useState(null)
   const handleRefresh = () => {
@@ -176,7 +176,7 @@ export default function BindingCard() {
             }
           </View>
           :
-          <BkNone msg='暂无报到内容' />
+          <BkNone loading={loading} msg='暂无报到内容' />
         }
       </View>
       {/* <View className='arrival-footer'>
