@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { View, Image } from '@tarojs/components'
-import defaltAvatar from '@/images/default-avatar.png'
 import './doctor-schedule.less'
+import { getImageSrc } from '@/utils/image-src'
 
 export default function DoctorSchedule(props) {
   const {onClick} = props
@@ -14,14 +14,14 @@ export default function DoctorSchedule(props) {
   }
   return (
     <View className='doctor-schedule' style={props.style ? props.style : ''} onClick={handleClick}>
-      <Image src={props.doctor.faceUrl || defaltAvatar} className='doctor-avatar' />
+      <Image src={props.doctor.faceUrl || getImageSrc('default-avatar.png')} className='doctor-avatar' />
       <View className='doctor-content'>
         <View className='doctor-info'>
           <View className='doctor-info-name'>{props.doctor.doctorName}</View>
           <View className='doctor-info-title'>{props.doctor.title}</View>
         </View>
         {/* <View className='doctor-fee'>￥{props.doctor.regFee}</View> */}
-        <View className='doctor-major'>{props.doctor.specializedSubject}</View>
+        <View className='doctor-major'>{props.doctor.specialty}</View>
       </View>
       <View>
         {

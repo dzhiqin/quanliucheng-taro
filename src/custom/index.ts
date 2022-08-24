@@ -4,7 +4,7 @@ type HospName =
   'li_wan_gu_ke' |
   'shun_de_jun_an' | 
   'jin_sha_zhou'
-const hospName:HospName = 'guang_san_li_wan'
+const hospName:HospName = 'jin_sha_zhou'
 const hospConfig = require(`./hosp-config/${hospName}`)
 
 export const custom = hospConfig.default as HospConfig
@@ -66,6 +66,7 @@ type HospConfig = {
     ZhuYuanCardName: boolean
   },
   reportsPage: {
+    hideInHosp: boolean,
     urlDetail: boolean,
     reportItemTabs: [],
     hospItemTabs: []

@@ -13,6 +13,7 @@ export default function BkPanel(props: {
   arrow?: boolean,
   style?: string,
   children?: any,
+  iconColor?: string,
   onClick?: Function,
 }) {
   const { onClick } = props
@@ -29,10 +30,9 @@ export default function BkPanel(props: {
       {
         props.arrow &&
         <View style='display:flex;align-items: center'>
-          <AtIcon size='20' value='chevron-right' color='#C3C3C7' />
+          <AtIcon size='20' value='chevron-right' color={props.iconColor ? props.iconColor : '#C3C3C7'} />
         </View>
       }
-
     </View>
   )
 }

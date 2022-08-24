@@ -15,7 +15,7 @@ export default function ReportsType() {
   }
   return(
     <View className='reports-type' style='padding: 40rpx'>
-      <BkPanel arrow style='background: #3CC7B0; margin-bottom: 20rpx;color: white;' onClick={onClickClinic}>
+      <BkPanel arrow style='background: #3CC7B0; margin-bottom: 20rpx;color: white;' onClick={onClickClinic} iconColor='#fff'>
         门诊报告
       </BkPanel>
       {

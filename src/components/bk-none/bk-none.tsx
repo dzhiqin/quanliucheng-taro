@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { View, Image } from '@tarojs/components'
-import nonePng from '@/images/none.png'
+import { getImageSrc } from '@/utils/image-src'
 /**
  * 
  * @param size: 'small' || ''
@@ -26,7 +26,7 @@ export default function BkNone(props:{
   }
   return(
     <View style='width: 100%;height: 100%; display:flex; flex-direction: column; justify-content: center; align-items: center'>
-      <Image src={nonePng} style={props.size === "small" ? smallImage : normalImage} />
+      <Image src={getImageSrc('none.png')} style={props.size === "small" ? smallImage : normalImage} />
       <View style='font-size: 26rpx;color: #999; margin-top: 20rpx'>{_loading ? '请稍后~' : (props.msg || '暂无内容')}</View>
     </View>
   )

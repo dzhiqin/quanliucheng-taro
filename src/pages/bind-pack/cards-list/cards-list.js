@@ -2,12 +2,12 @@ import { View, Image } from '@tarojs/components'
 import * as React from 'react'
 import * as Taro from '@tarojs/taro'
 import BkButton from '@/components/bk-button/bk-button'
-import noCardPng from '@/images/no_card.png'
 import {custom} from '@/custom/index'
 import Card from './card'
 import './cards-list.less'
 import { loadingService, toastService } from '@/service/toast-service'
 import { TaroNavToYiBao } from '@/service/api'
+import { getImageSrc } from '@/utils/image-src'
 
 export default class CardList2 extends React.Component {
   constructor(props){
@@ -63,7 +63,7 @@ export default class CardList2 extends React.Component {
           this.state.cards.map(item => <Card card={item} key={item.id} style='margin-bottom: 40rpx' action={this.state.params.action} />) 
           : 
           <View className='empty'>
-            <Image src={noCardPng} className='empty-icon'></Image>
+            <Image src={getImageSrc('no_card.png')} className='empty-icon'></Image>
             <View className='empty-txt'>暂无健康卡</View>
           </View>
         }

@@ -12,6 +12,7 @@ import cardUpgradePng from '@/images/icons/card_upgrade.png'
 import { HEALTH_CARD_RES_CODE, HEALTH_CARD_TYPE_EN } from '@/enums/index'
 import { useState } from 'react'
 import { custom } from '@/custom/index'
+import { getImageSrc } from '@/utils/image-src'
 
 export default function Card(props: {
   action?: string,
@@ -143,7 +144,7 @@ export default function Card(props: {
           {
             !props.card.qrCodeText &&
             <health-card-btn onlogin={handleUpgrade}>
-              <Image src={cardUpgradePng} style='width: 100rpx;height:100rpx' onClick={onClickIcon} />
+              <Image src={getImageSrc('card_upgrade.png')} style='width: 100rpx;height:100rpx' onClick={onClickIcon} />
             </health-card-btn>
           }
         </View>
