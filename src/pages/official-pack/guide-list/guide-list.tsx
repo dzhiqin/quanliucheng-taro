@@ -4,7 +4,7 @@ import { View } from '@tarojs/components'
 import { useEffect,useState } from 'react'
 import { fetchGuideList } from '@/service/api'
 import { loadingService, toastService } from '@/service/toast-service'
-import BkNone from '@/components/bk-none/bk-none'
+import BkLoading from '@/components/bk-loading/bk-loading'
 import {AtList,AtListItem} from 'taro-ui'
 
 export default function GuideList() {
@@ -37,7 +37,7 @@ export default function GuideList() {
           }
         </AtList>
         :
-        <BkNone msg='暂无相关指引' />
+        <BkLoading msg='暂无相关指引' />
       }
     </View>
   )

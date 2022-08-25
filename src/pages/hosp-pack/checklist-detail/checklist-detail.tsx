@@ -8,7 +8,7 @@ import { useState } from 'react'
 import VirtualList from '@tarojs/components/virtual-list'
 import BkPanel from '@/components/bk-panel/bk-panel'
 import BkTabs from '@/components/bk-tabs/bk-tabs'
-import BkNone from '@/components/bk-none/bk-none'
+import BkLoading from '@/components/bk-loading/bk-loading'
 import './checklist-detail.less'
 
 export default function ChecklistDetail() {
@@ -138,7 +138,7 @@ export default function ChecklistDetail() {
           {Row} 
         </VirtualList>
         :
-        <BkNone loading={busy} msg='暂无明细' />
+        <BkLoading loading={busy} msg='暂无明细' />
       }
     </View>
   )

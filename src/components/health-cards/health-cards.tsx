@@ -5,7 +5,7 @@ import { useState } from 'react'
 import * as React from 'react'
 import { subscribeService } from '@/service/api/taro-api'
 import { longtermTemplates } from '@/utils/index'
-import { CardsHealper } from '@/utils/cards-healper'
+// import { CardsHealper } from '@/utils/cards-healper'
 import { useDidShow } from '@tarojs/taro'
 import qrcodeImg from '../../images/icons/qrcode.png'
 import './health-cards.less'
@@ -52,7 +52,6 @@ export default function HealthCards(props: {
     }
   }
   const handleAddCard = () => {
-    // Taro.navigateTo({url: '/pages/bind-pack/bind-card/bind-card'})
     Taro.navigateTo({url: '/pages/bind-pack/cards-list/cards-list'})
   }
   const onCardChange = (e) => {
@@ -102,7 +101,7 @@ export default function HealthCards(props: {
     return (
       <View style='padding:40rpx 40rpx 0'>
         <View className='add-card single-card'>
-            <View className='single-card-content'>
+            <View className='single-card-content' onClick={navToCardDetail.bind(null,cards[0])}>
               <View>
                 <View style='color: white'>您好，{cards[0].name}</View>
                 <View className='single-card-txt'>诊疗卡号{cards[0].cardNo}</View>
@@ -149,7 +148,7 @@ export default function HealthCards(props: {
             {
               cards && cards.map((item,index) => 
                 <SwiperItem key={index} className='swiper-item-wrap'>
-                  <View className='swiper-item'>
+                  <View className='swiper-item' onClick={navToCardDetail.bind(null,item)}>
                     <View className='swiper-item-info'>
                       <View className='swiper-item-name'>您好，{item.name}</View>
                       <View className='swiper-item-card'>诊疗卡号{item.cardNo}</View>

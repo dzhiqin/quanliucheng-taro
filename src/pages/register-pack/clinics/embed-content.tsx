@@ -6,7 +6,7 @@ import './embed-content.less'
 import { fetchClinicsByDeptId,fetchDoctorsByDept, fetchScheduleDays } from '@/service/api'
 import { AtList, AtListItem } from "taro-ui"
 import { toastService } from '@/service/toast-service'
-import BkNone from '@/components/bk-none/bk-none'
+import BkLoading from '@/components/bk-loading/bk-loading'
 
 export default function EmbedContent(props) {
   const [current,setCurrent] = useState(0)
@@ -74,7 +74,7 @@ export default function EmbedContent(props) {
                   )
                 }
               </AtList>
-            : <BkNone size='small' msg='当前科室暂无分类' />
+            : <BkLoading size='small' msg='当前科室暂无分类' />
           }
         </View>
       }
@@ -90,7 +90,7 @@ export default function EmbedContent(props) {
                   )
                 }
               </AtList>
-            : <BkNone size='small' />
+            : <BkLoading size='small' />
           }
         </View>
       }
@@ -106,7 +106,7 @@ export default function EmbedContent(props) {
                   )
                 }
               </AtList>
-            : <BkNone size='small' />
+            : <BkLoading size='small' />
           }
         </View>
       }

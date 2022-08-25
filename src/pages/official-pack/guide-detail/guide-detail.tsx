@@ -1,7 +1,7 @@
 import * as Taro from '@tarojs/taro'
 import * as React from 'react'
 import {View,RichText} from '@tarojs/components'
-import BkNone from '@/components/bk-none/bk-none'
+import BkLoading from '@/components/bk-loading/bk-loading'
 
 export default function GuideDetail() {
   const value = Taro.getStorageSync('content')
@@ -16,7 +16,7 @@ export default function GuideDetail() {
         ?
         <RichText nodes={content}></RichText>
         :
-        <BkNone msg='正在完善……' />
+        <BkLoading msg='正在完善……' />
       }
     </View>
   )

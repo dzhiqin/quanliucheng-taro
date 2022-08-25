@@ -7,7 +7,7 @@ import { CardsHealper } from '@/utils/cards-healper'
 import { toastService } from '@/service/toast-service'
 import { fetchPaymentListFromHis } from '@/service/api'
 import { useState } from 'react'
-import BkNone from '@/components/bk-none/bk-none'
+import BkLoading from '@/components/bk-loading/bk-loading'
 import './payment-list.less'
 import BkPrice from '@/components/bk-price/bk-price'
 import { ORDER_STATUS_EN, PAYMENT_FROM, PAY_STATUS_EN } from '@/enums/index'
@@ -60,7 +60,7 @@ export default function PaymentList() {
               }
             </View>
           :
-            <BkNone msg='暂无缴费单' loading={loading} />
+            <BkLoading msg='暂无缴费单' loading={loading} />
         }
       </View>
     </View>

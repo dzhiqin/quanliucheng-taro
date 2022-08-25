@@ -8,9 +8,9 @@ import { REPORT_TYPE_EN, REPORT_ITEM_TYPE_CN } from '@/enums/index'
 import HealthCards from '@/components/health-cards/health-cards'
 import BkPanel from '@/components/bk-panel/bk-panel'
 import BkTabs from '@/components/bk-tabs/bk-tabs'
-import BkNone from '@/components/bk-none/bk-none'
+import BkLoading from '@/components/bk-loading/bk-loading'
 import { humanDateAndTime } from '@/utils/format'
-import { loadingService, toastService } from '@/service/toast-service'
+import { toastService } from '@/service/toast-service'
 import { CardsHealper } from '@/utils/cards-healper'
 import { custom } from '@/custom/index'
 import './reports-list.less'
@@ -19,7 +19,8 @@ export default function ReportList() {
   const [busy,setBusy] = useState(false)
   const router = useRouter()
   const params = router.params
-  const reportType = params.reportType as REPORT_TYPE_EN
+  // 如果没有传参，默认reportType='0',itemType='C'
+  const reportType = params.reportType as REPORT_TYPE_EN || REPORT_TYPE_EN.clinic
   // 传参tab的取值，和配置文件中定义的tabs列表的子项序号相关联
   const [itemType, setItemType] = useState(() => {
     if(reportType === REPORT_TYPE_EN.clinic){
@@ -100,7 +101,7 @@ export default function ReportList() {
             }
           </View>
         :
-          <BkNone loading={busy} />
+          <BkLoading loading={busy} />
       }
     </View>
   )

@@ -4,7 +4,7 @@ import { View, Image } from '@tarojs/components'
 import { fetchDoctorsBySubject, fetchDoctorsByDate } from '@/service/api'
 import { useEffect, useState } from 'react'
 import { useRouter } from '@tarojs/taro'
-import BkNone from '@/components/bk-none/bk-none'
+import BkLoading from '@/components/bk-loading/bk-loading'
 import { loadingService, toastService } from '@/service/toast-service'
 import { AtList, AtListItem } from "taro-ui"
 import './classify-doctor-list.less'
@@ -89,7 +89,7 @@ export default function ClassifyDoctorList(props) {
             }
           </AtList>
         </View>
-        : <BkNone loading={busy} msg='没号了~' />
+        : <BkLoading loading={busy} msg='没号了~' />
       }
     </View>
   )

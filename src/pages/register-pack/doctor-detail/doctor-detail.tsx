@@ -7,7 +7,7 @@ import { useRouter } from '@tarojs/taro'
 import { loadingService, toastService } from '@/service/toast-service'
 import ScheduleDays from '@/components/schedule-days/schedule-days'
 import { AtList, AtListItem } from "taro-ui"
-import BkNone from '@/components/bk-none/bk-none'
+import BkLoading from '@/components/bk-loading/bk-loading'
 import './doctor-detail.less'
 import { CardsHealper } from '@/utils/cards-healper'
 import BaseModal from '@/components/base-modal/base-modal'
@@ -209,7 +209,7 @@ export default function DoctorDefault(props) {
                 )
               }
             </AtList>
-          : <BkNone loading={busy} msg='暂无排班信息' />
+          : <BkLoading loading={busy} msg='暂无排班信息' />
         }
       </View>
     </View>

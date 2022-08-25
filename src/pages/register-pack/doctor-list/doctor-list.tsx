@@ -8,7 +8,7 @@ import ScheduleDays from '@/components/schedule-days/schedule-days'
 import DoctorSchedule from '@/components/doctor-schedule/doctor-schedule'
 import crossFlagPng from '@/images/icons/cross_flag.png'
 import './doctor-list.less'
-import BkNone from '@/components/bk-none/bk-none'
+import BkLoading from '@/components/bk-loading/bk-loading'
 
 export default function DoctorList() {
   const router = useRouter()
@@ -56,9 +56,7 @@ export default function DoctorList() {
         <Image src={crossFlagPng} className='doctor-list-dept-icon' mode='aspectFill'></Image>
         <View className='doctor-list-dept-name'>{deptName}</View>
       </View>
-      <View style='padding: 20rpx 40rpx; background: white'>
-        <ScheduleDays showMonth days={week} defaultDay={defaultDay} onChange={onDateChange} />
-      </View>
+       <ScheduleDays showMonth days={week} defaultDay={defaultDay} onChange={onDateChange} />
       <View>
         {
           doctors.length > 0 
@@ -71,7 +69,7 @@ export default function DoctorList() {
             }
           </View>
           :
-          <BkNone loading={busy} />
+          <BkLoading loading={busy} />
         }
       </View>
     </View>

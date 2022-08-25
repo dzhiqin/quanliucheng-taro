@@ -7,17 +7,19 @@ import { toastService } from '@/service/toast-service'
 import { AtTabs, AtAvatar } from 'taro-ui'
 import './clinic-intro.less'
 import BkPanel from '@/components/bk-panel/bk-panel'
-import BkNone from '@/components/bk-none/bk-none'
+import BkLoading from '@/components/bk-loading/bk-loading'
 import { getImageSrc } from '@/utils/image-src'
 
 
 export default function ClinicIntro() {
   const router = Taro.useRouter()
   const params = router.params
+  const [busy,setBusy] = useState(false)
   const [current,setCurrent] = useState(0)
   const [doctorList,setDoctorList] = useState([])
   const [clinicInfo,setClinicInfo] = useState({desc: '暂无描述'})
   useEffect(() => {
+    setBusy(true)
     fetchClinicIntro({deptId: params.deptId}).then(res => {
       if(res.resultCode === 0){
         setClinicInfo(res.data)
@@ -29,6 +31,7 @@ export default function ClinicIntro() {
     fetchClinicDoctors({deptId: params.deptId}).then(res => {
       if(res.resultCode === 0){
         setDoctorList(res.data)
+        setBusy(false)
       }
     })
   }, [params.deptId])
@@ -70,7 +73,7 @@ export default function ClinicIntro() {
               }
             </View>
             :
-            <BkNone msg='暂无医生信息' />
+            <BkLoading loading={busy} msg='暂无医生信息' />
           }
         </View>
       }

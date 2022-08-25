@@ -10,7 +10,7 @@ import { PAY_TYPE_CN, ORDER_SEARCH_TYPE_EN , ORDER_STATUS_CN, ORDER_STATUS_EN, P
 import BkPanel from '@/components/bk-panel/bk-panel'
 import BkButton from '@/components/bk-button/bk-button'
 import BkTabs from '@/components/bk-tabs/bk-tabs'
-import BkNone from '@/components/bk-none/bk-none'
+import BkLoading from '@/components/bk-loading/bk-loading'
 import BkPrice from '@/components/bk-price/bk-price'
 import { onetimeTemplates } from '@/utils/templateId'
 import SubscribeNotice from '@/components/subscribe-notice/subscribe-notice'
@@ -216,7 +216,7 @@ export default function OrderList(){
           }
         </View>
         :
-        <BkNone loading={busy} msg='暂无缴费单' />
+        <BkLoading loading={busy} msg='暂无缴费单' />
       }
     </View>
   )

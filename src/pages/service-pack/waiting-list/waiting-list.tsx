@@ -3,7 +3,7 @@ import * as Taro from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import HealthCards from '@/components/health-cards/health-cards'
 import BkPanel from '@/components/bk-panel/bk-panel'
-import BkNone from '@/components/bk-none/bk-none'
+import BkLoading from '@/components/bk-loading/bk-loading'
 import { AtButton } from 'taro-ui'
 import { useState } from 'react'
 import { getWaitingList } from '@/service/api'
@@ -76,7 +76,7 @@ export default function BindingCard() {
           }
         </View>
         :
-        <BkNone loading={loading} msg='暂无候诊数据' />
+        <BkLoading loading={loading} msg='暂无候诊数据' />
       }
       
       <View className='waiting-list-footer'>

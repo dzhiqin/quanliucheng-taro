@@ -14,7 +14,8 @@ export default function WeekSchedule(props:{
   onChange?: Function,
   days: any,
   defaultDay: string,
-  showMonth?: boolean
+  showMonth?: boolean,
+  customStyle?: string
 }) {
   const {onChange} = props
   const [monthSpan,setMonthSpan] = useState('')
@@ -77,9 +78,9 @@ export default function WeekSchedule(props:{
     setMonthSpan(months.join('~'))
   }, [props.days,props.defaultDay])
   return (
-    <View className='week-schedule'>
+    <View className='week-schedule' style={props.customStyle ? props.customStyle : ''}>
       {
-        props.showMonth &&
+        props.showMonth && monthSpan &&
         <View className='month'>{monthSpan}月</View>
       }
       <View className='days'>

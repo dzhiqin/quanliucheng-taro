@@ -16,7 +16,7 @@ import BkTabs from '@/components/bk-tabs/bk-tabs'
 import BkPanel from '@/components/bk-panel/bk-panel'
 import BkButton from '@/components/bk-button/bk-button'
 import { loadingService, toastService } from '@/service/toast-service'
-import BkNone from '@/components/bk-none/bk-none'
+import BkLoading from '@/components/bk-loading/bk-loading'
 import './deposit.less'
 import { ORDER_STATUS_EN, PAY_RESULT } from '@/enums/index'
 import { requestTry } from '@/utils/retry'
@@ -79,6 +79,7 @@ export default function BindingCard() {
     setCard(defaultCard)
   })
   const getAccountBalance = () => {
+    setBusy(true)
     const currentCard = CardsHealper.getDefault()
     fetchCardDetail({cardNo: currentCard.cardNo}).then(res => {
       if(res.resultCode === 0 && res.data){
@@ -88,6 +89,7 @@ export default function BindingCard() {
         toastService({title: '获取余额失败'})
         console.error(res.message)
       }
+      setBusy(false)
     })
   }
   Taro.useReady(() => {
@@ -239,11 +241,13 @@ export default function BindingCard() {
         tabValue === 'deposit' &&
         <View style='padding: 40rpx'>
           {
-            (balance || balance == 0) && 
+            (balance || balance == 0) ?
             <BkPanel >
               <View className='deposit-title'>就诊卡余额：</View>
               <View className='deposit-price'>{balance}元</View>
             </BkPanel>
+            :
+            <BkLoading loading={busy}></BkLoading>
           }
           <View style='margin-top: 40rpx'>选择或输入充值金额：</View>
           <BkTabs block onTabChange={onMoneyChange} tabs={moneyTabs} style='margin: 40rpx 0;'></BkTabs>
@@ -267,7 +271,7 @@ export default function BindingCard() {
                   list.map((item,index) => <DepositListItem item={item} key={index} onClickItem={onClickItem}></DepositListItem>)
                 }
               </View>
-            : <BkNone loading={busy} msg='暂无记录' />
+            : <BkLoading loading={busy} msg='暂无记录' />
           }
         </View>
       }

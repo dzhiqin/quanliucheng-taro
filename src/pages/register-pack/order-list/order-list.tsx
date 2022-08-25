@@ -9,7 +9,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { loadingService, toastService } from '@/service/toast-service'
 import BkButton from '@/components/bk-button/bk-button'
 import BkTabs from '@/components/bk-tabs/bk-tabs'
-import BkNone from '@/components/bk-none/bk-none'
+import BkLoading from '@/components/bk-loading/bk-loading'
 import { checkOverTime } from '@/utils/tools'
 import BaseModal from '@/components/base-modal/base-modal'
 import { custom } from '@/custom/index'
@@ -168,7 +168,7 @@ export default function OrderList() {
           }
         </view>
         :
-        <BkNone loading={busy} msg='暂无订单' />
+        <BkLoading loading={busy} msg='暂无订单' />
       }
       {
         list && list.length > 0 && currentTab === 1 &&

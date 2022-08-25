@@ -13,7 +13,7 @@ import BkTabs from '@/components/bk-tabs/bk-tabs'
 import BkPanel from '@/components/bk-panel/bk-panel'
 import BkButton from '@/components/bk-button/bk-button'
 import { loadingService, toastService } from '@/service/toast-service'
-import BkNone from '@/components/bk-none/bk-none'
+import BkLoading from '@/components/bk-loading/bk-loading'
 import './deposit.less'
 import { ORDER_STATUS_EN, PAY_RESULT } from '@/enums/index'
 import { requestTry } from '@/utils/retry'
@@ -315,7 +315,7 @@ export default function BindingCard() {
                   list.map((item,index) => <DepositListItem item={item} key={index} onClickItem={onClickItem}></DepositListItem>)
                 }
               </View>
-            : <BkNone msg='暂无记录' />
+            : <BkLoading msg='暂无记录' />
           }
         </View>
       }

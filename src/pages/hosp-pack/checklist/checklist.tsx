@@ -9,7 +9,7 @@ import BkPanel from '@/components/bk-panel/bk-panel'
 import calanderPng from '@/images/icons/calendar.png'
 import MoneyPng from '@/images/icons/money_circle.png'
 import './checklist.less'
-import BkNone from '@/components/bk-none/bk-none'
+import BkLoading from '@/components/bk-loading/bk-loading'
 import { AtList,AtListItem } from 'taro-ui'
 import { custom } from '@/custom/index'
 
@@ -132,7 +132,7 @@ export default function BindingCard() {
             }
           </View>
           :
-          <BkNone loading={busy} msg='暂无每日清单数据' />
+          <BkLoading loading={busy} msg='暂无每日清单数据' />
         }
         
       </View>

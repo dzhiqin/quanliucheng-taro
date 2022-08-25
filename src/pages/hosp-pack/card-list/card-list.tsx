@@ -2,7 +2,7 @@ import * as React from 'react'
 import * as Taro from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import { useState } from 'react'
-import BkNone from '@/components/bk-none/bk-none'
+import BkLoading from '@/components/bk-loading/bk-loading'
 import BkButton from '@/components/bk-button/bk-button'
 import { AtList, AtListItem } from 'taro-ui'
 import { fetchInHospCards,setDefaultInHospCard } from '@/service/api'
@@ -76,7 +76,7 @@ export default function CardList(){
           
         </AtList>
         :
-        <BkNone msg='暂未绑定住院卡' />
+        <BkLoading msg='暂未绑定住院卡' />
       }
       <View style='padding: 60rpx'>
         <BkButton title='绑卡' onClick={() => Taro.navigateTo({url: '/pages/hosp-pack/binding-card/binding-card'})} />

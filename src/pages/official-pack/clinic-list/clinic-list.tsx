@@ -4,7 +4,7 @@ import { View } from '@tarojs/components'
 import { useEffect,useState } from 'react'
 import { fetchClinicList } from '@/service/api'
 import { loadingService, toastService } from '@/service/toast-service'
-import BkNone from '@/components/bk-none/bk-none'
+import BkLoading from '@/components/bk-loading/bk-loading'
 import { AtListItem } from 'taro-ui'
 import VirtualList from '@tarojs/components/virtual-list'
 
@@ -13,29 +13,33 @@ export default function ClinicList() {
   const [msg,setMsg] = useState('请稍后~')
   const sysInfo = Taro.getSystemInfoSync()
   const screenHeight = sysInfo.screenHeight
+  const [busy,setBusy] = useState(false)
   const Row = React.memo(({id,index,style,data}) => {
     return (
       <AtListItem key={index} title={data[index].deptName} arrow='right' onClick={onClickItem.bind(null,data[index])} thumb='https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/applets-imgs/intro_icon8.png' />
     )
   })
   useEffect(() => {
-    loadingService(true)
+    // loadingService(true)
+    setBusy(true)
     fetchClinicList().then(res => {
       if(res.resultCode === 0){
-        // 目前默认只有一个院区，取第一个，如果需要多个院区切换，再说
+        // 目前默认只有一个院区，默认取第一个，如果需要多个院区切换，需要修改这里的代码
         const deptList = res.data[0].deptList
         setList(deptList)
+        setBusy(false)
         if(!deptList || deptList.length === 0){
           setMsg('暂无数据')
         }
       }else{
         toastService({title: '' + res.message})
+        setBusy(false)
       }
     })
   },[])
-  useEffect(() => {
-    loadingService(false)
-  },[list])
+  // useEffect(() => {
+  //   loadingService(false)
+  // },[list])
   const onClickItem = (item) => {
     Taro.navigateTo({url: '/pages/official-pack/clinic-intro/clinic-intro?deptId=' + item.deptId})
   }
@@ -54,7 +58,7 @@ export default function ClinicList() {
           {Row}
         </VirtualList>
         :
-        <BkNone msg={msg} />
+        <BkLoading loading={busy} msg={msg} />
       }
     </View>
   )

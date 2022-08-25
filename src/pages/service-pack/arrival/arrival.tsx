@@ -8,7 +8,7 @@ import { fetchCheckInInfo, fetchOfficialContent, TaroGetLocation,handleCheckIn, 
 import BkPanel from '@/components/bk-panel/bk-panel'
 import BkButton from '@/components/bk-button/bk-button'
 import BkTitle from '@/components/bk-title/bk-title'
-import BkNone from '@/components/bk-none/bk-none'
+import BkLoading from '@/components/bk-loading/bk-loading'
 import { computeDistanceFromLatLong } from '@/utils/tools'
 import { loadingService, toastService } from '@/service/toast-service'
 import {custom} from '@/custom/index'
@@ -176,7 +176,7 @@ export default function BindingCard() {
             }
           </View>
           :
-          <BkNone loading={loading} msg='暂无报到内容' />
+          <BkLoading loading={loading} msg='暂无报到内容' />
         }
       </View>
       {/* <View className='arrival-footer'>

@@ -1,14 +1,14 @@
 import * as React from 'react'
 import { View, Image } from '@tarojs/components'
 import { getImageSrc } from '@/utils/image-src'
-import './bk-none.less'
+import './bk-loading.less'
 /**
  * 
  * @param size: 'small' || ''
  * @param msg: string 
  * @returns 
  */
-export default function BkNone(props:{
+export default function BkLoading(props:{
   size?:'small' | '', 
   msg?: string,
   loading?: boolean
@@ -26,14 +26,14 @@ export default function BkNone(props:{
     height: '200rpx'
   }
   return(
-    <View className='none'>
+    <View className='loading'>
       {
         _loading ? 
         <View className='loader'></View>
         :
-        <View className='none-content'>
+        <View className='loading-content'>
           <Image src={getImageSrc('none.png')} style={props.size === "small" ? smallImage : normalImage} />
-          <View className='none-msg' >{props.msg || '暂无内容'}</View>
+          <View className='loading-msg' >{props.msg || '暂无内容'}</View>
         </View>
       }
     </View>
