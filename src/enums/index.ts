@@ -42,7 +42,7 @@ export enum ORDER_STATUS_EN {
 export enum ORDER_STATUS_CN {
   '未缴费' = 0,
   '缴费中' = 1,
-  '支付成功' = 2,
+  '支付完成' = 2,
   '支付失败' = 3,
   '缴费成功' = 4,   // 支付成功，通知His成功
   '缴费失败' = 5,      // 支付成功，但通知His失败

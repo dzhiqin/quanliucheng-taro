@@ -20,7 +20,7 @@ export default function BindingCard() {
   const today = humanDate(new Date())
   const getList = () => {
     setLoading(true)
-    Taro.showLoading({title: '加载中……'})
+    // Taro.showLoading({title: '加载中……'})
     getWaitingList({queueDate: today}).then(res => {
       if(res.resultCode === 0){
         setList(res.data)
@@ -31,7 +31,7 @@ export default function BindingCard() {
       setTimeout(() => {
         setLoading(false)
       }, 3000)
-      Taro.hideLoading()
+      // Taro.hideLoading()
     })
   }
   Taro.useDidShow(() => {

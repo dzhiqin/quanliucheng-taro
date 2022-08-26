@@ -2,12 +2,7 @@ import * as React from 'react'
 import { View, Image } from '@tarojs/components'
 import { getImageSrc } from '@/utils/image-src'
 import './bk-loading.less'
-/**
- * 
- * @param size: 'small' || ''
- * @param msg: string 
- * @returns 
- */
+
 export default function BkLoading(props:{
   size?:'small' | '', 
   msg?: string,

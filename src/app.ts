@@ -5,6 +5,7 @@ import * as Taro from '@tarojs/taro'
 import "taro-ui/dist/style/index.scss"  // 全局引入样式
 import './app.less'
 import { fetchBranchHospital } from './service/api'
+import { CardsHealper } from './utils'
 
 class App extends Component {
   props: any
@@ -29,6 +30,7 @@ class App extends Component {
             fetchBranchHospital().then(resData => {
               if(resData.data && resData.data.length === 1){
                 Taro.setStorageSync('hospitalInfo',resData.data[0])
+                CardsHealper.updateAllCards()
               }
             })
           }

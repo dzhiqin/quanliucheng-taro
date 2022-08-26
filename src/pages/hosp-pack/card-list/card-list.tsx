@@ -45,7 +45,7 @@ export default function CardList(){
     setDefaultInHospCard({id: card.id}).then(res => {
       loadingService(false)
       if(res.resultCode === 0){
-        Taro.setStorageSync('inCard',card)
+        Taro.setStorageSync('inCard',{...card,isDefault: true})
         toastService({title: '设置成功',onClose: () => Taro.navigateBack(), duration: 1500})
       }else{
         toastService({title: '操作失败'+res.message})

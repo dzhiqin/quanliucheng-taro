@@ -8,6 +8,7 @@ import './cards-list.less'
 import { loadingService, toastService } from '@/service/toast-service'
 import { TaroNavToYiBao } from '@/service/api'
 import { getImageSrc } from '@/utils/image-src'
+import { CardsHealper } from '@/utils/cards-healper'
 
 export default class CardList2 extends React.Component {
   constructor(props){
@@ -54,6 +55,14 @@ export default class CardList2 extends React.Component {
       loadingService(false)
     })
   }
+  handleRefresh() {
+    loadingService(true)
+    CardsHealper.updateAllCards().then(() => {
+      loadingService(false)
+      let res = Taro.getStorageSync('cards')
+      this.setState({cards:res})
+    })
+  }
   render(){
     return(
       <View className='cards-list'>
@@ -80,6 +89,7 @@ export default class CardList2 extends React.Component {
           }
           
           <BkButton title='添加健康卡' theme='info' onClick={this.navToBindCard} style='width: 480rpx; margin-bottom: 20rpx' />
+          <BkButton title='刷新健康卡' theme='primary' onClick={this.handleRefresh.bind(this)} style='width: 480rpx; margin-bottom: 20rpx' />
           {/* 医保小程序入口改放到个人页面 */}
           {/* {
             custom.feat.bindCard.bindYiBaoCard && 

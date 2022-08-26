@@ -33,6 +33,7 @@ import { loadingService, toastService } from '@/service/toast-service'
 import { requestTry } from '@/utils/retry'
 import ResultPage from '@/components/result-page/result-page'
 import {custom} from '@/custom/index'
+import { getQueryValue } from '@/utils/tools'
 
 enum resultEnum {
   default = '',
@@ -70,15 +71,16 @@ export default function PaymentDetail() {
   const featConfig = custom.feat
   const router = useRouter()
   const params = router.params
+  const scene = decodeURIComponent(params.scene)
   const card = CardsHealper.getDefault()
   const [busy,setBusy] = useState(false)
   const [orderInfo,setOrderInfo] = useState({} as OrderInfoParams)
   let orderInfoFromList = null
   let scanParams = null
   let from: PAYMENT_FROM = null
-  if(params.prepayId){
+  if(scene){
     from = PAYMENT_FROM.scanQRCode
-    scanParams = { preQRCodePayId: params.prepayId}
+    scanParams = { preQRCodePayId: getQueryValue(scene, 'prepayid')}
   }else{
     from = params.from as PAYMENT_FROM
     orderInfoFromList = JSON.parse(params.orderInfo)

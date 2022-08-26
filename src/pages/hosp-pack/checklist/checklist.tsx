@@ -62,6 +62,7 @@ export default function BindingCard() {
   }
   const getList = (_cardNo: string) => {
     // loadingService(true)
+    setList([])
     setBusy(true)
     getInHospBillList({inCardNo: _cardNo}).then(res => {
       if(res.resultCode === 0){
@@ -96,7 +97,7 @@ export default function BindingCard() {
     <View className='checklist'>
       <SimpleModal msg='请先绑卡' show={showModal} onCancel={() => setShowModal(false)} onConfirm={handleConfirm} />
       {
-        // 金沙洲医院门诊卡和住院卡默认已关联，所以没有住院卡管理
+        // 特殊处理 金沙洲医院门诊卡和住院卡默认已关联，所以没有住院卡管理
         card && custom.hospName !== 'jszyy' &&
         <AtList>
           <AtListItem

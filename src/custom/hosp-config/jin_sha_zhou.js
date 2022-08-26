@@ -165,7 +165,7 @@ export default {
       updateNotice: false, // 绑卡和解绑发送消息通知
     },
     register: {
-      cancelReservedTime: false, // 取消挂号预留时间
+      cancelReservedTime: 0, // 取消挂号预留时间
       popupNotice: true,// 挂号提示弹窗
       intradayAndAppointment: false,// 是否区分当天挂号和预约挂号
       type: 'byDept',// byDept-按科室挂号；byDeptAndTime-按科室和时间挂号；byCategoryAndDoctorAndTime-按分类、医生、日期挂号

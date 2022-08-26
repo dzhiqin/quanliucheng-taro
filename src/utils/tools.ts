@@ -92,3 +92,12 @@ export function decryptByDES(ciphertext) {
   });
   return decrypted.toString(UTF8);
 }
+export function getQueryValue(query, queryName) {
+  const reg = new RegExp("(^|&)" + queryName + "=([^&]*)(&|$)", "i");
+  const r = query.match(reg);
+  if (r !== null){
+    return r[2];
+  } else {
+    return null;
+  }
+}

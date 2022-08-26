@@ -26,10 +26,10 @@ export default function BindingCard() {
       bindCardByCardNameAndNo({inCardName: card.cardName, inCardNo: card.cardNo})
       .then(res => {
         loadingService(false)
-        if(res.resultCode === 0 && res.message === 'SUCCESS'){
+        if(res.resultCode === 0){
           toastService({title: '绑卡成功', onClose: () => Taro.navigateBack()})
         }else{
-          toastService({title: '绑卡失败:'+res.message})
+          toastService({title: ''+res.message})
           setBusy(false)
         }
       })
@@ -41,8 +41,9 @@ export default function BindingCard() {
       bindCardByCardNo({inCardNo: card.cardNo})
       .then(res => {
         loadingService(false)
-        if(res.resultCode === 0 && res.message === 'SUCCESS'){
+        if(res.resultCode === 0 ){
           toastService({title: '绑卡成功', onClose: () => Taro.navigateBack()})
+          Taro.setStorageSync('inCard',{id: '', cardNo: res.data.inpatientNo, name: res.data.name, isDefault: true})
         }else{
           toastService({title: '绑卡失败'+res.message})
           setBusy(false)

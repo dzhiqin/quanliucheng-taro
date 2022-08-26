@@ -4,16 +4,6 @@ import { Image, View } from "@tarojs/components"
 import { AtIcon } from 'taro-ui'
 import './bk-button.less'
 
-/**
- * 
- * @param theme: 'primary' | 'info' | 'cancel'
- * @param disable: boolean
- * @param icon: string
- * @param loading: boolean
- * @param title: string
- * @param onClick: function
- * @returns 
- */
 export default function BkButton(props: {
   theme?: 'primary' | 'info' | 'cancel' | 'danger',
   disabled?: boolean,

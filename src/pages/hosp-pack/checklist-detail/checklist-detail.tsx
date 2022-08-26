@@ -25,7 +25,7 @@ export default function ChecklistDetail() {
   const card = Taro.getStorageSync('inCard')
   const Row = React.memo(({id,index,style,data}) => {
     return (
-      <BkPanel style='margin: 20rpx'>
+      <BkPanel >
         <View className='checklist-detail-item'>
           <text>编码：</text>
           <text className='checklist-detail-item-value'>{data[index].itemCode}</text>

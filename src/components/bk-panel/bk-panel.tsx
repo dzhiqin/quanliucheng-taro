@@ -3,12 +3,6 @@ import { View } from '@tarojs/components'
 import { AtIcon } from 'taro-ui'
 import './bk-panel.less'
 
-/**
- * 
- * @param onClick
- * @param arrow: boolean 
- * @returns 
- */
 export default function BkPanel(props: {
   arrow?: boolean,
   style?: string,

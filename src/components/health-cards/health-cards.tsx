@@ -106,7 +106,7 @@ export default function HealthCards(props: {
                 <View style='color: white'>您好，{cards[0].name}</View>
                 <View className='single-card-txt'>诊疗卡号{cards[0].cardNo}</View>
               </View>
-              <Image className='single-card-icon' src={qrcodeImg} onClick={navToCardDetail.bind(null,cards[0])}></Image>
+              <Image className='single-card-icon' src={qrcodeImg} ></Image>
             </View>
         </View>
       </View>
@@ -157,7 +157,7 @@ export default function HealthCards(props: {
                       item.isDefault &&
                       <view className='card-tab'>默认</view>
                     }
-                    <Image className='swiper-item-icon' src={qrcodeImg} onClick={navToCardDetail.bind(null,item)}></Image>
+                    <Image className='swiper-item-icon' src={qrcodeImg} ></Image>
                   </View>
                 </SwiperItem>  
               )
