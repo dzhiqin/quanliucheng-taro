@@ -22,13 +22,11 @@ export default function Official() {
   const [banner,setBanner] = useState('https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/applets-imgs/banner2.png')
   const [desc,setDesc] = useState('')
   const navToClinicList = () => {
-    // console.log('clinic');
     Taro.navigateTo({
       url: '/pages/official-pack/clinic-list/clinic-list'
     })
   }
   const navToGuideList = () => {
-    // console.log('guide');
     Taro.navigateTo({
       url: '/pages/official-pack/guide-list/guide-list'
     })
@@ -60,7 +58,7 @@ export default function Official() {
   return (
     <View className='official'>
       <View className='official-banner'>
-        <Image src={custom.banner} />
+        <Image src={banner || custom.banner} />
         {/* <Image src={banner} /> */}
       </View>
       <View className='official-header'>

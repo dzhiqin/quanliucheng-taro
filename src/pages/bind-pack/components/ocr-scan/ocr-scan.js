@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-import photoPath from '../../images/icons/photo.png'
+import photoPath from '@/images/icons/photo.png'
 
 Component({
   data: {
@@ -7,7 +7,7 @@ Component({
   },
   methods: {
     onSuccess(e){
-      console.log('onsuccess',e)
+      // console.log('onsuccess',e)
       this.triggerEvent('success',e.detail)
     }
   }

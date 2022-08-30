@@ -7,7 +7,7 @@ import { subscribeService } from '@/service/api/taro-api'
 import { longtermTemplates } from '@/utils/index'
 // import { CardsHealper } from '@/utils/cards-healper'
 import { useDidShow } from '@tarojs/taro'
-import qrcodeImg from '../../images/icons/qrcode.png'
+import qrcodeImg from '@/images/icons/qrcode.png'
 import './health-cards.less'
 import SubscribeNotice from '../subscribe-notice/subscribe-notice'
 

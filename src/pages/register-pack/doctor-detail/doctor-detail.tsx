@@ -5,7 +5,7 @@ import { fetchDoctorSchedules, fetchTimeListByDate, fetchDoctorDetail } from '@/
 import { useEffect, useState } from 'react'
 import { useRouter } from '@tarojs/taro'
 import { loadingService, toastService } from '@/service/toast-service'
-import ScheduleDays from '@/components/schedule-days/schedule-days'
+import ScheduleDays from '@/pages/register-pack/components/schedule-days/schedule-days'
 import { AtList, AtListItem } from "taro-ui"
 import BkLoading from '@/components/bk-loading/bk-loading'
 import './doctor-detail.less'
