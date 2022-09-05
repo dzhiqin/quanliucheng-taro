@@ -37,6 +37,7 @@ export default function OrderList(){
       if(res.resultCode === 0){
         setList(res.data)
       }else{
+        setList([])
         toastService({title: res.message})
       }
     }).finally(() => {

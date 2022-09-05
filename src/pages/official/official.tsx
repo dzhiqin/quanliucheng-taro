@@ -37,7 +37,7 @@ export default function Official() {
       if(res.resultCode === 0 && res.data){
         setHospInfo(res.data.hospInfo)
         if(res.data.banners.length > 0){
-          setBanner(res.data.banners[0])
+          setBanner(res.data.banners[0].imgPath)
         }
         setDesc(res.data.introduce)
       }

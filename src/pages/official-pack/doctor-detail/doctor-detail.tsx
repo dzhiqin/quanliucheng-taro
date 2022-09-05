@@ -18,7 +18,8 @@ export default function DoctorDetail() {
     faceUrl: '',
     name: '',
     specialty: '',
-    title: ''
+    title: '',
+    specializedSubject: ''
   })
   Taro.useDidShow(() => {
     loadingService(true)
@@ -36,7 +37,7 @@ export default function DoctorDetail() {
       <View className='doctor-detail-header'>
         <Image src={doctorInfo.faceUrl || getImageSrc('default-avatar.png')} className='doctor-detail-avatar' mode='aspectFill'></Image>
         <View className='doctor-detail-name'>{doctorInfo.name}</View>
-        <View className='doctor-detail-title'>{doctorInfo.title}</View>
+        <View className='doctor-detail-title'>{doctorInfo.title} {doctorInfo.specializedSubject}</View>
       </View>
       <BkTitle title='擅长领域' />
       <View className='doctor-detail-text'>{doctorInfo.specialty.replace(/<br>|<Br>/g, ' ') || '未填写'}</View>

@@ -71,7 +71,7 @@ export default function PaymentDetail() {
   const featConfig = custom.feat
   const router = useRouter()
   const params = router.params
-  const scene = decodeURIComponent(params.scene)
+  const scene = params.scene ? decodeURIComponent(params.scene) : null
   const card = CardsHealper.getDefault()
   const [busy,setBusy] = useState(false)
   const [orderInfo,setOrderInfo] = useState({} as OrderInfoParams)
@@ -85,7 +85,6 @@ export default function PaymentDetail() {
     from = params.from as PAYMENT_FROM
     orderInfoFromList = JSON.parse(params.orderInfo)
   }
-  
   const [_orderId,setOrderId] = useState('')
   const [list,setList] = useState([])
   const [payResult,setPayResult] = useState(resultEnum.default)

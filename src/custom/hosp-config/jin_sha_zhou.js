@@ -87,7 +87,7 @@ export default {
             },
             {
               icon: imgUrl.new_home_icon7,
-              name: '电子健康卡',
+              name: '电子诊疗卡',
               event: 'navigate',
               url: '/pages/bind-pack/cards-list/cards-list'
             }
@@ -160,7 +160,7 @@ export default {
       nationality: true,    // 国籍
       hasCard: true,  // 是否有院内就诊卡
       maritalStatus: true, // 婚姻状况
-      oneClickAuth: true,    // 一键授权，直接绑定健康卡
+      oneClickAuth: false,    // 一键授权，直接绑定健康卡
       bindYiBaoCard: true, // 绑定医保卡
       updateNotice: false, // 绑卡和解绑发送消息通知
     },

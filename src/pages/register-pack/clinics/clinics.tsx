@@ -43,11 +43,14 @@ export default function Clinics() {
         const deptListData = result.data.firstDeptInfos
         setDeptList(deptListData)
         Taro.setStorageSync('deptInfo',deptListData[0])
+        // 特殊处理
         if(custom.hospName !== 'gysylw' || deptListData[0].deptName !== '生殖助孕'){
           setDeptId(deptListData[0].deptId)
         }
         const clinicData = deptListData ? deptListData[0].secondDeptInfos : []
         setClinicList(clinicData)
+      }else{
+        toastService({title: '获取科室信息失败'})
       }
     })
   },[])

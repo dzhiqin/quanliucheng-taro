@@ -18,7 +18,7 @@ export default function DoctorSchedule(props) {
       <View className='doctor-content'>
         <View className='doctor-info'>
           <View className='doctor-info-name'>{props.doctor.doctorName}</View>
-          <View className='doctor-info-title'>{props.doctor.title}</View>
+          <View className='doctor-info-title'>{props.doctor.title} {props.doctor.specializedSubject}</View>
         </View>
         {/* <View className='doctor-fee'>￥{props.doctor.regFee}</View> */}
         <View className='doctor-major'>{props.doctor.specialty}</View>

@@ -87,9 +87,9 @@ export default class CardList2 extends React.Component {
               </View>
             </health-card-btn>
           }
-          
-          <BkButton title='添加健康卡' theme='info' onClick={this.navToBindCard} style='width: 480rpx; margin-bottom: 20rpx' />
-          <BkButton title='刷新健康卡' theme='primary' onClick={this.handleRefresh.bind(this)} style='width: 480rpx; margin-bottom: 20rpx' />
+          {/* 特殊处理 金沙洲只用诊疗卡 */}
+          <BkButton title={custom.hospName === 'jszyy' ? '添加诊疗卡' : '添加健康卡'} theme='info' onClick={this.navToBindCard} style='width: 480rpx; margin-bottom: 20rpx' />
+          <BkButton title={custom.hospName === 'jszyy' ? '刷新诊疗卡' : '刷新健康卡'} theme='primary' onClick={this.handleRefresh.bind(this)} style='width: 480rpx; margin-bottom: 20rpx' />
           {/* 医保小程序入口改放到个人页面 */}
           {/* {
             custom.feat.bindCard.bindYiBaoCard && 

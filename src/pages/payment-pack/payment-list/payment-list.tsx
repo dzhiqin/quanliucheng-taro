@@ -25,6 +25,8 @@ export default function PaymentList() {
     fetchPaymentListFromHis({cardId: card.id}).then(res => {
       if(res.resultCode === 0){
         setList(res.data.bills)
+      }else{
+        setList([])
       }
     }).finally(() => {
       setLoading(false)
