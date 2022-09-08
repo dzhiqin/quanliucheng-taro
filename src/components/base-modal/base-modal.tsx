@@ -15,15 +15,24 @@ interface ModalParams {
 export default function BaseModal(props: ModalParams) {
   const [opened,setOpened] = useState(props.show)
   const {confirm,cancel} = props
-  const handleClose = () => {
-    cancel()
+  const handleClose = (e) => {
+    setOpened(false)
+    if(typeof cancel === 'function'){
+      cancel()
+    }
   }
   const handleCancel = () => {
     setOpened(false)
+    if(typeof cancel === 'function'){
+      cancel()
+    }
     cancel()
   }
   const handleConfirm = () => {
     setOpened(false)
+    if(typeof cancel === 'function'){
+      cancel()
+    }
     confirm()
   }
   useEffect(() => {

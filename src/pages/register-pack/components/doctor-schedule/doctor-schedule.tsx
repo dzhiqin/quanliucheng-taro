@@ -4,12 +4,17 @@ import './doctor-schedule.less'
 import { getImageSrc } from '@/utils/image-src'
 
 export default function DoctorSchedule(props) {
-  const {onClick} = props
+  const {onClick,onShowDetail} = props
   const handleClick = () => {
     if(props.leaveTotalCount === 0) return
-    // console.log(props.doctor.doctorId);
     if(typeof onClick === 'function'){
       onClick(props.doctor)
+    }
+  }
+  const handleClickSpecialty = (e) => {
+    e.stopPropagation()
+    if(typeof onShowDetail === 'function'){
+      onShowDetail({doctorName: props.doctor.doctorName,specialty: props.doctor.specialty,title: props.doctor.title})
     }
   }
   return (
@@ -20,8 +25,11 @@ export default function DoctorSchedule(props) {
           <View className='doctor-info-name'>{props.doctor.doctorName}</View>
           <View className='doctor-info-title'>{props.doctor.title} {props.doctor.specializedSubject}</View>
         </View>
-        {/* <View className='doctor-fee'>￥{props.doctor.regFee}</View> */}
-        <View className='doctor-major'>{props.doctor.specialty}</View>
+        {
+          props.doctor.regFee &&
+          <View className='doctor-fee'>￥{props.doctor.regFee}</View>
+        }
+        <View className='doctor-major' onClick={handleClickSpecialty}>{props.doctor.specialty}</View>
       </View>
       <View>
         {

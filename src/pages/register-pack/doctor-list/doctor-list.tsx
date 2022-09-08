@@ -9,6 +9,7 @@ import DoctorSchedule from '@/pages/register-pack/components/doctor-schedule/doc
 import crossFlagPng from '@/images/icons/cross_flag.png'
 import './doctor-list.less'
 import BkLoading from '@/components/bk-loading/bk-loading'
+import BaseModal from '@/components/base-modal/base-modal'
 
 export default function DoctorList() {
   const router = useRouter()
@@ -18,6 +19,12 @@ export default function DoctorList() {
   const [defaultDay,setDefaultDay] = useState()
   const [deptId, setDeptId] = useState(params.deptId || '')
   const [busy,setBusy] = useState(false)
+  const [show,setShow] = useState(false)
+  const [doctorInfo,setDoctorInfo] = useState({
+    doctorName: '',
+    specialty: '',
+    title: ''
+  })
   const deptName = params.deptName || ''
   const onDateChange = (e) => {
     setDefaultDay(e)
@@ -50,6 +57,11 @@ export default function DoctorList() {
   const handleClickDoctor = (e) => {
     Taro.navigateTo({url: `/pages/register-pack/doctor-detail/doctor-detail?doctorId=${e.doctorId}&regDate=${defaultDay}`})
   }
+  const handleShowSpecialty = (info) => {
+    console.log('show specialty');
+    setShow(true)
+    setDoctorInfo(info)
+  }
   return(
     <View className='doctor-list'>
       <View className='doctor-list-dept'>
@@ -64,7 +76,13 @@ export default function DoctorList() {
           <View style='padding: 40rpx; background: #f5f5f5'>
             {
               doctors.map((doctor) => 
-                <DoctorSchedule key={doctor.doctorId} style='margin-bottom: 40rpx' doctor={doctor} onClick={handleClickDoctor}  />
+                <DoctorSchedule 
+                  key={doctor.doctorId} 
+                  style='margin-bottom: 40rpx' 
+                  doctor={doctor} 
+                  onClick={handleClickDoctor}  
+                  onShowDetail={handleShowSpecialty}
+                />
               )
             }
           </View>
@@ -72,6 +90,10 @@ export default function DoctorList() {
           <BkLoading loading={busy} />
         }
       </View>
+      <BaseModal show={show} custom closeOutside cancel={() => setShow(false)}>
+        <View style='font-weight: 500;'>{doctorInfo.doctorName} {doctorInfo.title}</View>
+        <View>擅长领域：{doctorInfo.specialty}</View>
+      </BaseModal>
     </View>
   )
 }
