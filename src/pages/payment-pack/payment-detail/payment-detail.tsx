@@ -5,7 +5,7 @@ import { useRouter , useDidShow, useReady } from '@tarojs/taro'
 import { 
   createPaymentOrder, 
   fetchPaymentDetailFromHis, 
-  subscribeService, 
+  TaroSubscribeService, 
   PayOrderParams, 
   handlePayment, 
   fetchPaymentOrderStatus, 
@@ -26,7 +26,6 @@ import { useState } from 'react'
 import BkPanel from '@/components/bk-panel/bk-panel'
 import BkButton from '@/components/bk-button/bk-button'
 import sighPng from '@/images/icons/sigh.png'
-import { onetimeTemplates } from '@/utils/templateId'
 import SubscribeNotice from '@/components/subscribe-notice/subscribe-notice'
 import { PAY_TYPE_CN, ORDER_STATUS_EN, PAY_STATUS_EN, ORDER_TYPE_CN, PAYMENT_FROM } from '@/enums/index'
 import { loadingService, toastService } from '@/service/toast-service'
@@ -91,8 +90,7 @@ export default function PaymentDetail() {
   const [payResultMsg,setPayResultMsg] = useState('')
   const [showNotice,setShowNotice] = useState(false)
   const dealWithPay = async(type) => {
-    const tempIds = onetimeTemplates.payment()
-    const subsRes = await subscribeService(tempIds)
+    const subsRes = await TaroSubscribeService(custom.onetimeSubscribe.paySuccessNotice,custom.onetimeSubscribe.refundNotice)
     if(!subsRes.result){
       setShowNotice(true)
       return

@@ -1,33 +1,34 @@
-import { longtermTemplates } from '@/utils/templateId'
 import * as Taro from '@tarojs/taro'
 import { toastService } from '../toast-service'
 import { custom } from '@/custom/index'
 
-type subscribeServiceRes =  {result: boolean, msg: string }
-export const subscribeService = (tempIds) => {
+type subscribeServiceRes =  {result: boolean, msg: string, data?: any }
+export const TaroSubscribeService = (...tempIds) => {
   if(custom.isPrivate) return {result: true}
   if(!tempIds || tempIds.length === 0) {
     return {result: false,msg: '没有订阅任何模板消息'}
   }else if(tempIds.length > 3) {
     return {result: false, msg: '一次最多订阅3条消息'}
   }
-  return new Promise<subscribeServiceRes>((resolve,reject) => {
+  return new Promise<subscribeServiceRes>((resolve) => {
     Taro.requestSubscribeMessage({
       tmplIds: tempIds,
-      success: (res) =>{
-        // console.log('reqeust subscribe :',res)
-        if(Object.values(res).includes('reject')){
-          resolve({result: false, msg: '未授权'})
+      success: (res) => {
+        console.log('subs res',res);
+        const valid = Object.values(res).every(i => i !== 'reject')
+        if(valid){
+          resolve({result: true,data: res, msg: 'success'})
         }else{
-          resolve({result: true, msg: 'ok'})
+          resolve({result: false,msg: '有消息未订阅'})
         }
       },
-      fail: res => {
-        reject({result: false, msg: '授权失败:'+res})
+      fail: err=>{
+        resolve({result: false,data: err, msg: err.errMsg})
       }
     })
   })
 }
+
 export const getSetting = () => {
   Taro.getSetting({
     success: (res) => {
@@ -133,8 +134,7 @@ export const TaroRequestAuth = (authScope: string) => {
   })
 }
 const handleConfirm = async () => {
-  const tempIds = longtermTemplates.treatmentAndPayment()
-  const subsRes = await subscribeService(tempIds)
+  const subsRes = await TaroSubscribeService(custom.longtermSubscribe.pendingPayReminder,custom.longtermSubscribe.visitReminder)
   if(subsRes.result){
     Taro.navigateTo({url: '/pages/login/login'})
   }else{

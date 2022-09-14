@@ -2,14 +2,14 @@ import imgUrl from '@/utils/imgs'
 import { REPORT_ITEM_TYPE_CN } from '@/enums/index'
 
 export default {
-  latitude: 23.122721,
-  longitude: 113.240994,
-  hospName: "gysylw",
+  latitude: 23.207584,
+  longitude: 113.492214,
+  hospName: "gysyhp",
   banner: 'https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/applets-imgs/banner2.png',
   logo: "https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/lwgk/20220309-basic/gysy.png",
-  hospitalName: "广州医科大学附属第三医院",
+  hospitalName: "黄埔院区线上诊疗",
   // baseUrl: "https://applets.gdbkyz.com", // 倍康测试
-  baseUrl: "https://gysy.wedoublecare.com",  // 正式环境
+  baseUrl: "http://43.139.42.75:30091",  // 正式环境
   // subUrl: 'https://gysycustomize.wedoublecare.com', // 测试环境
   indexPage: {
     banner: {
@@ -134,7 +134,7 @@ export default {
       maritalStatus: true, // 婚姻状况
       oneClickAuth: true,    // 一键授权，直接绑定健康卡
       bindYiBaoCard: true, // 绑定医保卡
-      updateNotice: true, // 绑卡和解绑发送消息通知
+      updateNotice: false, // 绑卡和解绑发送消息通知
     },
     register: {
       cancelReservedTime: 3600 * 1000 * 2, // 取消挂号预留时间，默认2小时
@@ -167,17 +167,17 @@ export default {
     ]
   },
   longtermSubscribe: {
-    checkReminder: 'M8e0Dbtb87M8DUXYPwTQdOxnz8sddpCkc_r7_VMd2Jc', // 审方提醒
-    pendingPayReminder: 'z5DIZhdEj9DCvfKRheU06kKod6r55bx1LC8p2VsB_O4',// 待缴费提醒
-    visitReminder: 'A8GTcQvlKDqEDSi1u19RFwKqRjrPJwW4feHMuvpZNso' // 就诊提醒
+    checkReminder: 'k122ACPjHdkS6ZSo3fuYpj1bmSiQtHm2J3k3eyXTONU', // 审方提醒
+    pendingPayReminder: 'KeFqSb4P0naN2T8j6J5K0fQgL6MojhynSiVPrCZixoA',// 待缴费提醒
+    visitReminder: 'Xn1tFWS0H10H_RQv3tvURNceOzsFnXqd7-3zn04nESs' // 就诊提醒
   },
   onetimeSubscribe: {
-    closeNotice: 'AcXeVD04Z9NegbFhak1We0UI4jG_Zb8Uj3Bfvzf_8jM',// 医生停诊通知
-    satisfactionSurveyNotice: 'sET4fH6WMDnX2V88JkFay_sPBaCcFtv1ax5NXicdWwA',// 患者满意度调查提醒
-    appointmentNotice: 'KB2AIUyjvp209JGNy-7EtKDSK4N2fgwfpbaMazZsclA', //挂号成功通知
-    paySuccessNotice: 'F5gOTB-fPJ0y5QG94_QQ0MUxaxJ0cIl1eA_NBNlQ4wk', //缴费成功通知
-    appointmentCancelNotice: 'MlDidLtES5vVTC4YcGIhYluIMIXSi7hX3JXngkgUV7s',//挂号取消通知
-    refundNotice: 'Hhj5lSuAslXx5VGEbhfp2KAiSw__Qv3_B3_1i16qt5o',//退费通知
-    bindCardNotice: 'KDkqTgWPR8SUOnWTu-QS8LPBcTPrB121kHuHOFPcRjY',//绑卡成功提醒
+    closeNotice: 'hlu656EOP1oDyNJIYiomnwiUXSeWYX9EU71FXW9IQ5M',// 医生停诊通知
+    satisfactionSurveyNotice: 'thZs1UAUNAEO4H9xmyuTOg7fd9ZzjlRQCCg706kQGCk',// 患者满意度调查提醒
+    appointmentNotice: 'lMk0FYfb_9Ab0h4OgQ4vMFzre19DvBJeNB4RY_CWQvA', //挂号成功通知
+    paySuccessNotice: 'isQ25COANNHUoeapnheDkG_A0BP_meM2VVz1g7haT6U', //缴费成功通知
+    appointmentCancelNotice: 'wh0LadWFSyzjo_u292XgUU66KieDEMR_H-CLQ65Ir54',//挂号取消通知
+    refundNotice: 'gDVRne-Bq2dHWrxfeR_63xRA_c-eRhcws1_Cd_r43_4',//退费通知
+    bindCardNotice: 'XdXvsxVVjBeXvGKDkN0sb4_IUKmz5-M9vVo5VvJQA30',//绑卡成功提醒
   }
 }

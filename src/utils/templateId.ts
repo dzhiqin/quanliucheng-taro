@@ -2,7 +2,7 @@ import {custom} from '@/custom/index'
 
 const hospName = custom.hospName
 export const longtermTemplates = {
-  // 就诊提醒和待缴费提醒
+  // 就诊提醒和待缴费提醒,审方提醒
   treatmentAndPayment: () => {
     let tempIds = []
     switch (hospName) {

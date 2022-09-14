@@ -4,7 +4,7 @@ import { View } from '@tarojs/components'
 import HealthCards from '@/components/health-cards/health-cards'
 import { useEffect, useState } from 'react'
 import { useDidShow } from '@tarojs/taro'
-import { createPaymentOrder, fetchPaymentOrderList , subscribeService , PayOrderParams, handlePayment, cancelPayment, fetchPaymentOrderStatus } from '@/service/api'
+import { createPaymentOrder, fetchPaymentOrderList , TaroSubscribeService , PayOrderParams, handlePayment, cancelPayment, fetchPaymentOrderStatus } from '@/service/api'
 import { loadingService, toastService } from '@/service/toast-service'
 import { PAY_TYPE_CN, ORDER_SEARCH_TYPE_EN , ORDER_STATUS_CN, ORDER_STATUS_EN, PAYMENT_FROM } from '@/enums/index'
 import BkPanel from '@/components/bk-panel/bk-panel'
@@ -12,10 +12,10 @@ import BkButton from '@/components/bk-button/bk-button'
 import BkTabs from '@/components/bk-tabs/bk-tabs'
 import BkLoading from '@/components/bk-loading/bk-loading'
 import BkPrice from '@/components/bk-price/bk-price'
-import { onetimeTemplates } from '@/utils/templateId'
 import SubscribeNotice from '@/components/subscribe-notice/subscribe-notice'
 import { CardsHealper } from '@/utils/cards-healper'
 import { Card } from 'src/interfaces/card'
+import { custom } from '@/custom/index'
 import { requestTry } from '@/utils/retry'
 import './order-list.less'
 
@@ -49,8 +49,7 @@ export default function OrderList(){
     setSearchType(value)
   }
   const dealWithPay = async (type,orderInfo) => {
-    const tempIds = onetimeTemplates.payment()
-    const subsRes = await subscribeService(tempIds)
+    const subsRes = await TaroSubscribeService(custom.onetimeSubscribe.paySuccessNotice,custom.onetimeSubscribe.refundNotice)
     if(!subsRes.result){
       setShowNotice(true)
       return

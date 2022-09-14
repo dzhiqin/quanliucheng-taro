@@ -14,13 +14,12 @@ import {
   fetchRegFeeType, 
   fetchRegOrderStatus, 
   getEpidemiologicalSurveyState, 
-  subscribeService, 
+  TaroSubscribeService, 
   TaroRequestPayment } from '@/service/api'
 import { CardsHealper } from '@/utils/cards-healper'
 import { loadingService, toastService } from '@/service/toast-service'
 import { requestTry } from '@/utils/retry'
 import ResultPage from '@/components/result-page/result-page'
-import { onetimeTemplates } from '@/utils/templateId'
 import SubscribeNotice from '@/components/subscribe-notice/subscribe-notice'
 import './order-create.less'
 import {custom} from '@/custom/index'
@@ -148,7 +147,11 @@ export default function OrderCreate() {
   const handleSubmit = async() => {
     if(busy) return
     setBusy(true)
-    const subsRes = await subscribeService(onetimeTemplates.registration())
+    const subsRes = await TaroSubscribeService(
+      custom.onetimeSubscribe.appointmentNotice,
+      custom.onetimeSubscribe.appointmentCancelNotice,
+      custom.onetimeSubscribe.refundNotice
+    )
     if(!subsRes.result){
       setShowNotice(true)
       return

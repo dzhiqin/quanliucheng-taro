@@ -3,8 +3,8 @@ import { AtIcon } from 'taro-ui'
 import { View,Swiper,SwiperItem,Image } from '@tarojs/components'
 import { useState } from 'react'
 import * as React from 'react'
-import { subscribeService } from '@/service/api/taro-api'
-import { longtermTemplates } from '@/utils/index'
+import { TaroSubscribeService } from '@/service/api/taro-api'
+import { custom } from '@/custom/index'
 // import { CardsHealper } from '@/utils/cards-healper'
 import { useDidShow } from '@tarojs/taro'
 import qrcodeImg from '@/images/icons/qrcode.png'
@@ -41,8 +41,7 @@ export default function HealthCards(props: {
     }
   })
   const handleLogin = async () =>{
-    const tempIds = longtermTemplates.treatmentAndPayment()
-    let subsRes = await subscribeService(tempIds)
+    let subsRes = await TaroSubscribeService(custom.longtermSubscribe.pendingPayReminder,custom.longtermSubscribe.visitReminder)
     if(!subsRes.result){
       setShowNotice(true)
     }else{

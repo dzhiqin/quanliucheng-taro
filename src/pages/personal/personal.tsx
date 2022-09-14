@@ -76,7 +76,8 @@ export default function Personal() {
         <BkPanel arrow onClick={onClickPanel.bind(this,'/pages/bind-pack/cards-list/cards-list')} style='margin-top: 20rpx'>
           <View className='panel'>
             <Image src={healthCardPng} className='panel-icon'></Image>
-            <View className='panel-name'>电子健康卡</View>
+            {/* 特殊处理 jszyy只有诊疗卡 */}
+            <View className='panel-name'>{custom.hospName === 'jszyy'? '电子诊疗卡' : '电子健康卡'}</View>
           </View>
         </BkPanel>
         {

@@ -3,7 +3,8 @@ type HospName =
   'en_ping_fu_you' |
   'li_wan_gu_ke' |
   'shun_de_jun_an' | 
-  'jin_sha_zhou'
+  'jin_sha_zhou'|
+  'guang_san_huang_pu'
 const hospName:HospName = 'jin_sha_zhou'
 const hospConfig = require(`./hosp-config/${hospName}`)
 
@@ -16,6 +17,21 @@ type HospConfig = {
   hospitalName: string,
   logo: string,
   baseUrl: string,
+  isPrivate: boolean,//是否是私人医院，私人医院无法使用公立医院的订阅模板
+  longtermSubscribe: {
+    checkReminder: string,
+    pendingPayReminder: string,
+    visitReminder: string
+  },
+  onetimeSubscribe:{
+    closeNotice: string,
+    satisfactionSurveyNotice: string,
+    appointmentNotice: string,
+    paySuccessNotice: string,
+    appointmentCancelNotice: string,
+    refundNotice: string,
+    bindCardNotice: string
+  }
   indexPage: {
     banner: {
       enable: boolean,

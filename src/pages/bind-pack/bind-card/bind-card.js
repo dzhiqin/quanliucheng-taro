@@ -5,9 +5,9 @@ import { AtInput, AtForm, AtButton,AtIcon, AtList, AtListItem } from 'taro-ui'
 import {custom} from '@/custom/index'
 import { 
   idCardValidator, getBirthdayByIdCard, getGenderByIdCard, validateMessages, phoneValidator, birthdayValidator,
-  idenTypeOptions, onetimeTemplates 
+  idenTypeOptions 
 } from '@/utils'
-import { subscribeService } from '@/service/api/taro-api'
+import { TaroSubscribeService } from '@/service/api/taro-api'
 import SubscribeNotice from '@/components/subscribe-notice/subscribe-notice'
 import { createCard, fetchUserInfoByHealthCode, TaroGetLocation } from '@/service/api'
 import { CardsHealper } from '@/utils/cards-healper'
@@ -97,7 +97,7 @@ export default class BindCard extends React.Component {
     this.setState({busy: true})
     const {result,msg}= this.formValidator()
     if(result){
-      const subRes = await subscribeService(onetimeTemplates.bindCard())
+      const subRes = await TaroSubscribeService(custom.onetimeSubscribe.bindCardNotice)
       if(subRes.result){
         this.handleCreateCard()
       }else{
