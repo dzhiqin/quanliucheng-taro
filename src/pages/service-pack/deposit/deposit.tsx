@@ -11,7 +11,6 @@ import {
   TaroRequestPayment,
   fetchCardDetail
 } from '@/service/api'
-import SimpleModal from '@/components/simple-modal/simple-modal'
 import BkTabs from '@/components/bk-tabs/bk-tabs'
 import BkPanel from '@/components/bk-panel/bk-panel'
 import BkButton from '@/components/bk-button/bk-button'
@@ -30,7 +29,6 @@ export default function BindingCard() {
   const [payResult,setPayResult] = useState(PAY_RESULT.SUCCESS)
   const [card,setCard] = useState(null)
   const [tabValue,setTabValue] = useState('deposit')
-  const [showModal,setShowModal] = useState(false)
   const [money,setMoney] = useState(null)
   const [busy,setBusy] = useState(false)
   const [list,setList] = useState([])
@@ -70,18 +68,16 @@ export default function BindingCard() {
     }
   ]
   Taro.useDidShow(() => {
-    const cards = Taro.getStorageSync('cards')
-    if(!cards || !cards.length) {
-      setShowModal(true)
-      return
-    }
+    // 特殊处理 金沙洲医院诊疗卡号和住院卡绑定
     const defaultCard = CardsHealper.getDefault()
-    setCard(defaultCard)
+    if(defaultCard){
+      setCard(defaultCard)
+      getAccountBalance(defaultCard)
+    }
   })
-  const getAccountBalance = () => {
+  const getAccountBalance = (defaultCard) => {
     setBusy(true)
-    const currentCard = CardsHealper.getDefault()
-    fetchCardDetail({cardNo: currentCard.cardNo}).then(res => {
+    fetchCardDetail({cardNo: defaultCard.cardNo}).then(res => {
       if(res.resultCode === 0 && res.data){
         const {accountBalance} = res.data
         setBalance(accountBalance)
@@ -92,9 +88,7 @@ export default function BindingCard() {
       setBusy(false)
     })
   }
-  Taro.useReady(() => {
-    getAccountBalance()
-  })
+  
   const getList = () => {
     setBusy(true)
     getRegisterDepositOrderList({cardNo: card.cardNo}).then(res => {
@@ -107,9 +101,7 @@ export default function BindingCard() {
       setBusy(false)
     })
   }
-  const handleConfirm = () => {
-    Taro.navigateTo({url: '/pages/bind-pack/cards-list/cards-list'})
-  }
+  
   const onTabChange = (e,value) => {
     // console.log('tabchange',e,value)
     setTabValue(value)
@@ -139,7 +131,7 @@ export default function BindingCard() {
     }
     TaroRequestPayment(response.data.unifiedOrderResponse).then(res => {
       requestTry(checkOrderStatus.bind(null,response.data.orderNo)).then(checkRes => {
-        getAccountBalance()
+        getAccountBalance(card)
         handlePaySuccess()
       }).catch(() => {
         setBusy(false);setResultVisible(true);setPayResult(PAY_RESULT.FAIL)
@@ -209,7 +201,6 @@ export default function BindingCard() {
       <ResultPage type={payResult} visible={resultVisible}>
         <BkButton title='返回' style='margin: 40rpx;' onClick={() => {setResultVisible(false)}} />
       </ResultPage>
-      <SimpleModal msg='请先绑卡' show={showModal} onCancel={() => setShowModal(false)} onConfirm={handleConfirm} />
       <BaseModal show={showDetail} confirm={onConfirm} cancel={() => setShowDetail(false)} title='订单详情'>
         <View className='flex-between'>
           <text>订单号</text>

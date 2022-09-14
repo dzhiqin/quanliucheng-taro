@@ -85,17 +85,24 @@ const getDefault = () => {
       })
     }
   }else{
-    Taro.showModal({
-      content: '请先绑卡',
-      success: res => {
-        if(res.confirm){
-          Taro.navigateTo({url: '/pages/bind-pack/bind-card/bind-card'})
-        }
-      }
-    })
+    showBindCardModal()
   }
   return card
  
+}
+const showBindCardModal = () => {
+  Taro.showModal({
+    content: '请先绑卡',
+    showCancel: false,
+    success: res => {
+      if(res.confirm){
+        // Taro.navigateTo({url: '/pages/bind-pack/bind-card/bind-card'})
+        Taro.navigateTo({url: '/pages/bind-pack/cards-list/cards-list'})
+      }else{
+        showBindCardModal()
+      }
+    }
+  })
 }
 export const CardsHealper = {
   updateAllCards,

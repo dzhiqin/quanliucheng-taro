@@ -47,6 +47,9 @@ export default function BkInput(props: {
     onChange(input)
   }
   const [value,setValue] = React.useState(props.value)
+  React.useEffect(() => {
+    setValue(props.value)
+  },[props.value])
   return (
     <AtInput name={name} onChange={handleInputChange.bind(null)} type={type} value={value} placeholder={placeholder}
       placeholderClass={placeholderClass} placeholderStyle={placeholderStyle} title={title}

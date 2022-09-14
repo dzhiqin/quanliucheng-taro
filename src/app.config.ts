@@ -125,7 +125,7 @@ export default {
       "provider": "wxee969de81bba9a45"
     },
     "ocr-plugin": {
-      "version": "3.1.2",
+      "version": "3.1.3",
       "provider": "wx4418e3e031e551be"
     }
   },
