@@ -41,27 +41,19 @@ export default function ReportList() {
     }
   }
   const getList = (_itemType: REPORT_ITEM_TYPE_CN) => {
-    // loadingService(true)
     setBusy(true)
     fetchReportsList({itemType: _itemType, reportType: reportType }).then(res => {
       if(res.resultCode === 0){
-        // loadingService(false)
         setList(res.data.checks)
       }else{
         toastService({title: res.message})
         setList([])
       }
+      
       setBusy(false)
     })
   }
-  // Taro.useReady(() => {
-  //   const card = CardsHealper.getDefault()
-  //   if(!card){
-  //     toastService({title: '请先绑卡'})
-  //     return
-  //   }
-  //   getList(itemType)
-  // })
+
   useDidShow(() => {
     const card = CardsHealper.getDefault()
     if(!card){
@@ -93,7 +85,7 @@ export default function ReportList() {
                     <View className='reports-list-item-text'>{item.id}</View>
                   </View>
                   <View className='flex'>
-                    <View className='reports-list-item-name'>{itemType === REPORT_ITEM_TYPE_CN.化验 ? '检验名称' : '检查名称'}</View>
+                    <View className='reports-list-item-name'>项目名称</View>
                     <View className='reports-list-item-text'>{item.name}</View>
                   </View>
                 </BkPanel>

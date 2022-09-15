@@ -131,8 +131,9 @@ export default {
       hasCard: true,  // 是否需要判定有院内就诊卡的情况
       maritalStatus: true, // 是否需要填写婚姻状况
       oneClickAuth: true,    // 是否可以一键授权，直接绑定健康卡
-      bindYiBaoCard: true, // 是否可以绑定医保卡
+      
     },
+    YiBaoCard: true, // 医保卡
     register: {
       cancelReservedTime: 3600 * 1000 * 2, // 取消挂号预留时间，默认2小时
       popupNotice: false,// 挂号提示弹窗

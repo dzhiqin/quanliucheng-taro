@@ -11,7 +11,7 @@ import { TaroSubscribeService } from '@/service/api/taro-api'
 import SubscribeNotice from '@/components/subscribe-notice/subscribe-notice'
 import { createCard, fetchUserInfoByHealthCode, TaroGetLocation } from '@/service/api'
 import { CardsHealper } from '@/utils/cards-healper'
-import { loadingService, toastService } from '@/service/toast-service'
+import { loadingService, modalService, toastService } from '@/service/toast-service'
 import BkInput from '@/components/bk-input/bk-input'
 import './bind-card.less'
 
@@ -38,7 +38,7 @@ export default class BindCard extends React.Component {
         phone: '',
         address: '',
         isDefault: true,
-        isHaveCard: true,
+        isHaveCard: false,
         cardNo: '',
         maritalStatus: '未婚',
         nationality: '中国',
@@ -128,16 +128,17 @@ export default class BindCard extends React.Component {
             toastService({title: msg,onClose:()=> Taro.navigateBack()})
           })
         }else{
-          msg = res.message
-          toastService({title: msg})
+          loadingService(false)
+          msg = res.message ? res.message : JSON.stringify(res)
           this.setState({busy: false})
+          modalService({showCancel:false,content: msg})
         }
       }
     })
     .catch(err => {
       this.setState({busy: false})
       loadingService(false)
-      toastService({title: ''+err})
+      modalService({showCancel:false,content: JSON.stringify(err)})
     })
   }
   buildCardParams() {
@@ -173,7 +174,7 @@ export default class BindCard extends React.Component {
         result = false
         msg = '请输入正确的手机号'
       }
-      if((key === 'idenNo') && !idCardValidator(value)) {
+      if((key === 'idenNo') && this.state.currentIdenTypeValue === '身份证' && !idCardValidator(value)) {
         result = false
         msg = '请输入正确的证件号'
       }
@@ -274,7 +275,7 @@ export default class BindCard extends React.Component {
           this.setState({
             card:{
               ...this.state.card,
-              address: data.address + data.name
+              address: data.address
             }
           })
         },
@@ -472,11 +473,10 @@ export default class BindCard extends React.Component {
               onChange={this.handleCardChange.bind(this,'parentId')} 
             />
           }
-          
-          <View style='padding: 60rpx;'>
-            <AtButton type='primary' loading={this.state.busy} circle onClick={this.onSubmit.bind(this)}>立即绑定</AtButton>
-          </View>
         </AtForm>
+        <View style='padding: 60rpx;'>
+          <AtButton type='primary' loading={this.state.busy} circle onClick={this.onSubmit.bind(this)}>立即绑定</AtButton>
+        </View>
       </View>
     )
   }

@@ -10,3 +10,6 @@ export const fetchReportsDetail = (data: {itemType: REPORT_ITEM_TYPE_CN, reportT
 export const fetchInspectionDetail = (data: {itemType: REPORT_ITEM_TYPE_CN, reportType: REPORT_TYPE_EN, examId: string, examDate: string}) => {
   return Post(fullUrl('api/applet/report/CheckReport/GetInspectionDetail'),data)
 }
+export const fetchReportUrl = (data: {itemType: REPORT_ITEM_TYPE_CN,examId: string}) => {
+  return Post(fullUrl('api/applet/report/CheckReport/GetCheckReportFile'),data)
+}

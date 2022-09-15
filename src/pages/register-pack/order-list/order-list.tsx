@@ -13,6 +13,7 @@ import BkLoading from '@/components/bk-loading/bk-loading'
 import { checkOverTime } from '@/utils/tools'
 import BaseModal from '@/components/base-modal/base-modal'
 import { custom } from '@/custom/index'
+import {REGISTER_ORDER_STATUS} from '@/enums/index'
 
 const tabs = [{title: '15日内订单',value: 'current'},{title: '历史订单',value: 'history'}]
 const registerConfig = custom.feat.register
@@ -158,7 +159,10 @@ export default function OrderList() {
                   </View>
                 }
                 {
-                  !checkOverTime(item.regDate, item.startTime, registerConfig.cancelReservedTime) && item.orderStatus !== 24 &&
+                  !checkOverTime(item.regDate, item.startTime, registerConfig.cancelReservedTime) 
+                  && item.orderStatus !== REGISTER_ORDER_STATUS.REFUND_AND_CANCEL_SUCCESS 
+                  &&item.orderStatus !== REGISTER_ORDER_STATUS.REFUND_SUCCESS 
+                  &&
                   <View style='padding: 40rpx'>
                     <BkButton theme='danger' title='取消预约' onClick={showCancelModal.bind(this,item)} />
                   </View>

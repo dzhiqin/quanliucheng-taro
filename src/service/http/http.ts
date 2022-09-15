@@ -62,6 +62,12 @@ const Request = (
         // const endTime = new Date().valueOf()
         resolve(res.data as HttpResponse)
         // console.log('request spent: ',endTime - startTime);
+        const api = url.split('/').pop()
+        console.log(`============${api}=============`)
+        console.log('【请求】',url)
+        console.log(`【入参】${ data ? JSON.stringify(data) : '无'}`);
+        console.log(`【token】${getHeaderAuth().token}`)
+        console.log(`【返回】`,res.data)
       },
       fail: (err: Taro.General.CallbackResult) => {
         toastService({title: '请求失败：' + err})

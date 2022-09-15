@@ -81,7 +81,7 @@ export default function Personal() {
           </View>
         </BkPanel>
         {
-          custom.feat.bindCard.bindYiBaoCard && 
+          custom.feat.YiBaoCard && 
           <BkPanel arrow onClick={navToYiBao} style='margin-top: 20rpx'>
             <View className='panel'>
               <Image src={healthCardPng} className='panel-icon'></Image>

@@ -11,7 +11,7 @@ export const validateMessages = {
   idenType: '请选择证件类型',
   phone: '请填写手机号',
   maritalStatus: '请填写婚姻状况',
-
+  cardNo: '请填写就诊卡号',
   name: '请填写姓名',
   cardType: '请选择证件类型',
   idCardNo: '请填写证件号码',

@@ -49,7 +49,7 @@ export default function RegisterNoticeModal(props:
       if(res.resultCode === 0){
         const notices = res.data
         const noticeItem = notices.find(item => item.typeStr === '预约挂号须知')
-        setNoticeContent(noticeItem.content)
+        if(noticeItem) setNoticeContent(noticeItem.content)
       }
     }) 
   },[props.show])

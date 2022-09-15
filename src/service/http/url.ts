@@ -12,7 +12,7 @@ const fullUrl = (url: string, params?: { [key: string]: any }) => {
     a = `${baseUrl}/${url}`
   }
   
-  if (!a.includes('?')) a += '?'
+  if (params && !a.includes('?')) a += '?'
   if (params) {
     Object.keys(params).forEach((key, index) => {
       if(index === 0){

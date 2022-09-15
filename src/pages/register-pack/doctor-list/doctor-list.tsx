@@ -37,7 +37,7 @@ export default function DoctorList() {
       if(res.resultCode === 0){
         setWeek(res.data.regDays)
         setDoctors(res.data.timeSlices)
-        setDefaultDay(res.data.defaultSelectedDay)
+        res.data.defaultSelectedDay !== '无剩余号源' && setDefaultDay(res.data.defaultSelectedDay)
       }
     }).finally(() => {
       setBusy(false)
@@ -55,10 +55,17 @@ export default function DoctorList() {
     })
   }, [defaultDay,deptId])
   const handleClickDoctor = (e) => {
-    Taro.navigateTo({url: `/pages/register-pack/doctor-detail/doctor-detail?doctorId=${e.doctorId}&regDate=${defaultDay}`})
+    const deptInfo = Taro.getStorageSync('deptInfo')
+    const obj = {
+      doctorId: e.doctorId,
+      regDate: defaultDay,
+      deptId: deptInfo.deptId,
+      deptName: deptName
+    }
+    Taro.navigateTo({url: `/pages/register-pack/doctor-detail/doctor-detail?options=${JSON.stringify(obj)}`})
+    // Taro.navigateTo({url: `/pages/register-pack/doctor-detail/doctor-detail?doctorId=${e.doctorId}&regDate=${defaultDay}`})
   }
   const handleShowSpecialty = (info) => {
-    console.log('show specialty');
     setShow(true)
     setDoctorInfo(info)
   }

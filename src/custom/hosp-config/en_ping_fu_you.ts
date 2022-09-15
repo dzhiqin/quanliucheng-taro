@@ -70,8 +70,9 @@ export default {
       hasCard: false,// 是否有院内就诊卡
       maritalStatus: false,// 婚姻状况
       oneClickAuth: false,    // 一键授权，直接绑定健康卡
-      bindYiBaoCard: false, // 绑定医保卡
     },
+    YiBaoCard: false, // 医保卡
+
     register: {
       cancelReservedTime: 3600 * 1000 * 2, // 取消挂号预留时间，默认2小时
       popupNotice: true,// 挂号提示弹窗

@@ -108,12 +108,13 @@ export default function OrderCreate() {
     })
   }
   const handleTaroPayment = (params:{nonceStr: string, paySign: string,timeStamp: string,package: string, signType: 'HMAC-SHA256' | 'MD5'},orderId: string) => {
-    TaroRequestPayment(params).then(taroRes => {
-      requestTry(checkOrderStatus.bind(null,orderId)).then(checkRes => {
+    TaroRequestPayment(params).then(() => {
+      loadingService(true, '查询状态中')
+      requestTry(checkOrderStatus.bind(null,orderId)).then(() => {
         setResult(resultEnum.success)
-      }).catch(checkErr=>{
+        loadingService(false)
+      }).catch(()=>{
         setResult(resultEnum.fail)
-      }).finally(() => {
         loadingService(false)
       })
     }).catch(taroErr => {
@@ -179,10 +180,10 @@ export default function OrderCreate() {
       // return
       const feeRes:any = await fetchFee()
       if(feeRes.success){
-        orderParams = buildOrderParams(feeRes.result.regFee, feeRes.result.treatFee)
+        orderParams = buildOrderParams(feeRes.data.regFee, feeRes.data.treatFee)
       }else{
         loadingService(false)
-        toastService({title: feeRes.result})
+        toastService({title: feeRes.msg})
         setResult(resultEnum.fail)
         return
       }
@@ -202,11 +203,12 @@ export default function OrderCreate() {
           }
           handleTaroPayment(payParams,orderId)
         }else{
-          requestTry(checkOrderStatus.bind(null,orderId)).then(checkRes => {
+          loadingService(true, '查询状态中')
+          requestTry(checkOrderStatus.bind(null,orderId)).then(() => {
             setResult(resultEnum.success)
-          }).catch(checkErr=>{
+            loadingService(false)
+          }).catch(()=>{
             setResult(resultEnum.fail)
-          }).finally(() => {
             loadingService(false)
           })
         }
@@ -247,19 +249,19 @@ export default function OrderCreate() {
     })
   })
   const fetchFee = () => {
-    return new Promise((resolve,reject) => {
+    return new Promise((resolve) => {
       fetchOrderFee(buildFeeParams()).then(res => {
         if(res.resultCode === 0){
           const _regFee = res.data.regFee
           const _treatFee = res.data.treatFee
           setRegFee(_regFee)
           setTreatFee(_treatFee)
-          resolve({success: true, result: {regFee: _regFee,treatFee: _treatFee}})
+          resolve({success: true, data: {regFee: _regFee,treatFee: _treatFee}})
         }else{
-          reject({success: false, result: '获取金额失败'})
+          resolve({success: false, msg: '获取金额失败'})
         }
       }).catch(err => {
-        reject({success: false, result: '获取金额失败' + err})
+        resolve({success: false, msg: JSON.stringify(err)})
       })
     })
   }
@@ -322,7 +324,7 @@ export default function OrderCreate() {
           </View>
           <View className='flex-center'>
             <AtIcon value='alert-circle' size='15' color='#FF7C25'></AtIcon>
-            <text className='price-color'>3、目前微信支付仅自费缴费和广州医保，如省直、市直、公费记账请移步到窗口人工缴纳</text>
+            <text className='price-color'>3、目前微信支付仅自费缴费{custom.feat.YiBaoCard ? '和广州医保' : ''}，如省直、市直、公费记账请移步到窗口人工缴纳</text>
           </View>
           <View className='flex-center'>
             <AtIcon value='alert-circle' size='15' color='#FF7C25'></AtIcon>

@@ -87,7 +87,7 @@ export enum PAY_RESULT {
   SUCCESS = 'success',
   FAIL = 'fail'
 }
-export enum RGISTER_ORDER_STATUS {
+export enum REGISTER_ORDER_STATUS {
   UNLOCK = 0,// 未锁号
   LOCK_FAILED = 2,// 锁号失败
   CANCEL_LOCK_SUCCESS = 5,// 取消锁号成功
@@ -101,6 +101,7 @@ export enum RGISTER_ORDER_STATUS {
   FETCHING_NUMBER = 16,//取号中
   FETCH_NUMBER_FAILED = 17,// 取号失败
   REFUND_FAILED = 20,// 退款失败
+  REFUND_SUCCESS = 19, // 退款成功
   FETCH_NUMBER_SUCCESS = 21,// 取号成功
-  REFUND_SUCCESS = 24 // 退款退号成功
+  REFUND_AND_CANCEL_SUCCESS = 24 // 退款退号成功
 }

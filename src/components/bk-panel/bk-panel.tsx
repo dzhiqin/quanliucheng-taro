@@ -18,7 +18,7 @@ export default function BkPanel(props: {
   }
   return(
     <View style={props.style ? props.style : ''} className='bk-panel' onClick={onclick.bind(this)}>
-      <View style='flex:1'>
+      <View style={props.arrow ? '' : 'width: 100%'}>
         {props.children}
       </View>
       {

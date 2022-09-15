@@ -41,7 +41,11 @@ export default function HealthCards(props: {
     }
   })
   const handleLogin = async () =>{
-    let subsRes = await TaroSubscribeService(custom.longtermSubscribe.pendingPayReminder,custom.longtermSubscribe.visitReminder)
+    let subsRes = await TaroSubscribeService(
+      custom.longtermSubscribe.visitReminder,
+      custom.longtermSubscribe.pendingPayReminder,
+      custom.longtermSubscribe.checkReminder
+    )
     if(!subsRes.result){
       setShowNotice(true)
     }else{
@@ -98,7 +102,7 @@ export default function HealthCards(props: {
     )
   }else if(cards.length === 1){
     return (
-      <View style='padding:40rpx 40rpx 0'>
+      <View style='padding:20rpx 40rpx 0'>
         <View className='add-card single-card'>
             <View className='single-card-content' onClick={navToCardDetail.bind(null,cards[0])}>
               <View>

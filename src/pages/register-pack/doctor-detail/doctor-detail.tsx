@@ -13,12 +13,45 @@ import { CardsHealper } from '@/utils/cards-healper'
 import BaseModal from '@/components/base-modal/base-modal'
 import { getImageSrc } from '@/utils/image-src'
 
+interface Options {
+  doctorId: string,
+  regDate: string,
+  deptId: string,
+  deptName?: string,
+  branchId: string
+}
 export default function DoctorDefault(props) {
   const router = useRouter()
-  const params = router.params
+  const {scene,slices} = router.params
+  let options = JSON.parse(router.params.options) as Options
+  const hospitalInfo = Taro.getStorageSync('hospitalInfo')
+  options.branchId = hospitalInfo.branchId
+  if(scene){
+    // 场景值：扫描小程序码1047; 长按图片识别小程序码1048; 扫描手机相册中选取的小程序码1049
+    // 扫小程序码会带名为scene的参数，参数格式为 scene: "slices=01_145_11042" 
+    // scene值说明：slices=branchId_deptId_doctorId
+    const a = decodeURIComponent(scene)
+    const b = a.replace('slices=','').split('_')
+    options = {
+      branchId: b[0],
+      deptId: b[1],
+      doctorId: b[2],
+      regDate: ''
+    }
+  }
+  if(slices){
+    // 兼容荔湾骨科旧的医生二维码
+    const a = decodeURIComponent(slices)
+    const b = JSON.parse(a)
+    options = {
+      branchId: b.branchId,
+      deptId: b.deptId,
+      doctorId: b.doctorId,
+      regDate: b.defaultDay ? b.defaultDay : ''
+    }
+  }
   const [regDays,setRegDays] = useState([])
-  const deptInfo = Taro.getStorageSync('deptInfo')
-  const [selectedDate,setSelectedDate] = useState(params.regDate || '')
+  const [selectedDate,setSelectedDate] = useState(options.regDate || '')
   const [list,setList] = useState([])
   const [busy,setBusy] = useState(true)
   const [show,setShow] = useState(false)
@@ -41,7 +74,6 @@ export default function DoctorDefault(props) {
     specializedSubject:''
   })
   const onClickItem = (item) => {
-    const hospitalInfo = Taro.getStorageSync('hospitalInfo')
     const userInfo = Taro.getStorageSync('userInfo')
     const card = CardsHealper.getDefault()
     if(!card) {
@@ -52,11 +84,11 @@ export default function DoctorDefault(props) {
       const orderParams = {
         cardNo: card.cardNo,
         hospitalId: userInfo.hospitalId,
-        branchId: hospitalInfo.branchId,
+        branchId: options.branchId,
         patientId: card.patientId,
         patientName: card.name,
-        deptId: deptInfo.deptId, 
-        deptName: deptInfo.deptName,
+        deptId: options.deptId, 
+        deptName: options.deptName,
         doctorId: doctorDetail.doctorId,
         doctorName: doctorDetail.name || doctorDetail.doctorName,
         regDate: selectedDate,
@@ -76,7 +108,6 @@ export default function DoctorDefault(props) {
         regTypeId: doctorInfo.regTypeId
       }
       Taro.setStorageSync('orderParams',orderParams)
-      // console.log('orderparams:',Taro.getStorageSync('orderParams'));
       Taro.navigateTo({url: '/pages/register-pack/order-create/order-create'})
     }else{
       toastService({title: '没号了~请重新选择'})
@@ -86,7 +117,7 @@ export default function DoctorDefault(props) {
     if(!date) return
     setSelectedDate(date)
     loadingService(true)
-    fetchTimeListByDate({deptId: deptInfo.deptId, regDate: date, doctorId: doctorDetail.doctorId}).then(res => {
+    fetchTimeListByDate({deptId: options.deptId, regDate: date, doctorId: options.doctorId}).then(res => {
       if(res.resultCode === 0){
         setList(res.data.timePoints)
       }
@@ -94,13 +125,13 @@ export default function DoctorDefault(props) {
       loadingService(false)
     })
   }
-  useEffect(() => {
+  Taro.useDidShow(() => {
     setBusy(true)
     setList([])
     fetchDoctorSchedules({
-      doctorId: params.doctorId, 
-      deptId: deptInfo.deptId, 
-      regDate: params.regDate || '' 
+      doctorId: options.doctorId, 
+      deptId: options.deptId, 
+      regDate: options.regDate || '' 
     }).then((res:any) => {
       if(res.resultCode === 0){
         if(res.data.doctorDetail){
@@ -129,14 +160,20 @@ export default function DoctorDefault(props) {
         setBusy(false)
       }
     })
-  }, [deptInfo.deptId,params.doctorId,params.regDate])
+  })
+ 
   useEffect(() => {
-    fetchDoctorDetail({deptId: deptInfo.deptId, doctorId: params.doctorId}).then(res => {
+    fetchDoctorDetail({deptId: options.deptId, doctorId: options.doctorId}).then(res => {
       if(res.resultCode === 0 && res.data){
         setDoctorDetail(res.data)
       }
     })
-  },[deptInfo.deptId,params.doctorId])
+  },[options.deptId,options.doctorId])
+  const renderTickets = (item) => {
+    if(item.isHalt) return '停诊'
+    if(item.leaveCount > 0) return `剩余:${item.leaveCount}`
+    return '无号'
+  }
   return(
     <View className='doctor-detail'>
       <BaseModal show={show} cancel={() => setShow(false)} confirm={() => setShow(false)} title='医生详情'>
@@ -201,8 +238,8 @@ export default function DoctorDefault(props) {
                   <AtListItem 
                     key={index} 
                     title={`${item.startTime} - ${item.endTime}`} 
-                    extraText={item.leaveCount > 0 ? '剩余:'+item.leaveCount : '无号'} 
-                    className={item.leaveCount > 0 ? 'ticket-btn-active' : 'ticket-btn-unactive'} 
+                    extraText={renderTickets(item)}
+                    className={item.leaveCount > 0 && !item.isHalt ? 'ticket-btn-active' : 'ticket-btn-unactive'} 
                     arrow='right' 
                     onClick={onClickItem.bind(null,item)}
                   />

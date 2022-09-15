@@ -10,6 +10,7 @@ export const TaroSubscribeService = (...tempIds) => {
   }else if(tempIds.length > 3) {
     return {result: false, msg: '一次最多订阅3条消息'}
   }
+  // console.log('tempids',tempIds)
   return new Promise<subscribeServiceRes>((resolve) => {
     Taro.requestSubscribeMessage({
       tmplIds: tempIds,
@@ -134,7 +135,11 @@ export const TaroRequestAuth = (authScope: string) => {
   })
 }
 const handleConfirm = async () => {
-  const subsRes = await TaroSubscribeService(custom.longtermSubscribe.pendingPayReminder,custom.longtermSubscribe.visitReminder)
+  const subsRes = await TaroSubscribeService(
+    custom.longtermSubscribe.pendingPayReminder,
+    custom.longtermSubscribe.visitReminder,
+    custom.longtermSubscribe.checkReminder
+  )
   if(subsRes.result){
     Taro.navigateTo({url: '/pages/login/login'})
   }else{

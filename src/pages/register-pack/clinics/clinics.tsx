@@ -81,7 +81,16 @@ export default function Clinics() {
       setCurrentDept(index)
       setDeptId(item.deptId)
       Taro.setStorageSync('deptInfo',item)
-      setClinicList(item.secondDeptInfos)
+      if(item.secondDeptInfos && item.secondDeptInfos.length){
+        setClinicList(item.secondDeptInfos)
+      }else{
+        if(registerConfig.type === 'byDept'){
+          // 没有二级科室，直接跳转到医生列表
+          Taro.navigateTo({url: `/pages/register-pack/doctor-list/doctor-list?deptId=${item.deptId}&deptName=${item.deptName}`})
+          setClinicList([])
+        }
+        
+      }
     }
   }
 
