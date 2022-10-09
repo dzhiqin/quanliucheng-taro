@@ -27,17 +27,25 @@ export default function ClassifyDoctorList(props) {
       toastService({title: '没号了~请重新选择'})
       return
     }
-    Taro.navigateTo({url: `/pages/register-pack/doctor-detail/doctor-detail?doctorId=${doctor.doctorId}&regDate=${regDate}`})
+    const obj = {
+      doctorId: doctor.doctorId,
+      regDate: regDate,
+      deptId: deptId,
+      deptName: deptInfo.deptName
+    }
+    Taro.navigateTo({url: `/pages/register-pack/doctor-detail/doctor-detail?options=${JSON.stringify(obj)}`})
   }
   
   useEffect(() => {
     if(!specializedSubject) return
-    loadingService(true)
+    // loadingService(true)
+    setBusy(true)
     fetchDoctorsBySubject({deptId,specializedSubject}).then(res => {
       if(res.resultCode === 0){
-        loadingService(false)
         setList(res.data)
+        setBusy(false)
       }else{
+        setBusy(false)
         toastService({title: ''+res.message})
       }
     })

@@ -63,7 +63,6 @@ export default function DoctorList() {
       deptName: deptName
     }
     Taro.navigateTo({url: `/pages/register-pack/doctor-detail/doctor-detail?options=${JSON.stringify(obj)}`})
-    // Taro.navigateTo({url: `/pages/register-pack/doctor-detail/doctor-detail?doctorId=${e.doctorId}&regDate=${defaultDay}`})
   }
   const handleShowSpecialty = (info) => {
     setShow(true)

@@ -74,44 +74,53 @@ export default function DoctorDefault(props) {
     specializedSubject:''
   })
   const onClickItem = (item) => {
+    if(!item.isTimeValid){
+      toastService({title: '已超过挂号时间'})
+      return
+    }
+    if(item.isHalt){
+      toastService({title: '已停诊'})
+      return
+    }
     const userInfo = Taro.getStorageSync('userInfo')
     const card = CardsHealper.getDefault()
     if(!card) {
       toastService({title: '找不到就诊卡'})
       return
     }
-    if(item.leaveCount > 0){
-      const orderParams = {
-        cardNo: card.cardNo,
-        hospitalId: userInfo.hospitalId,
-        branchId: options.branchId,
-        patientId: card.patientId,
-        patientName: card.name,
-        deptId: options.deptId, 
-        deptName: options.deptName,
-        doctorId: doctorDetail.doctorId,
-        doctorName: doctorDetail.name || doctorDetail.doctorName,
-        regDate: selectedDate,
-        scheduleId: item.scheduleId,
-        timeSlice: item.startTime.split(':')[0] > 12 ? '下午' : '上午',
-        sliceId: item.sliceId,
-        sqNo: item.sqNo,
-        startTime: item.startTime,
-        endTime: item.endTime,
-        sourceType: doctorInfo.sourceType,
-        sourceId: doctorInfo.regType,
-        regNo: '',
-        feeType: '0',   // 对应feeCode字段
-        regFee: doctorInfo.regFee,
-        treatFee: '',
-        address: doctorInfo.address,
-        regTypeId: doctorInfo.regTypeId
-      }
-      Taro.setStorageSync('orderParams',orderParams)
-      Taro.navigateTo({url: '/pages/register-pack/order-create/order-create'})
-    }else{
+    if(item.leaveCount <= 0) {
       toastService({title: '没号了~请重新选择'})
+      return
     }
+    const orderParams = {
+      cardNo: card.cardNo,
+      hospitalId: userInfo.hospitalId,
+      branchId: options.branchId,
+      patientId: card.patientId,
+      patientName: card.name,
+      deptId: options.deptId, 
+      deptName: options.deptName,
+      doctorId: doctorDetail.doctorId,
+      doctorName: doctorDetail.name || doctorDetail.doctorName,
+      regDate: selectedDate,
+      scheduleId: item.scheduleId,
+      timeSlice: item.startTime.split(':')[0] > 12 ? '下午' : '上午',
+      sliceId: item.sliceId,
+      sqNo: item.sqNo,
+      startTime: item.startTime,
+      endTime: item.endTime,
+      sourceType: doctorInfo.sourceType,
+      sourceId: doctorInfo.regType,
+      regNo: '',
+      feeType: '0',   // 对应feeCode字段
+      regFee: doctorInfo.regFee,
+      treatFee: '',
+      address: doctorInfo.address,
+      regTypeId: doctorInfo.regTypeId
+    }
+    Taro.setStorageSync('orderParams',orderParams)
+    Taro.navigateTo({url: '/pages/register-pack/order-create/order-create'})
+    
   } 
   const onDateChange = (date) => {
     if(!date) return
@@ -119,7 +128,12 @@ export default function DoctorDefault(props) {
     loadingService(true)
     fetchTimeListByDate({deptId: options.deptId, regDate: date, doctorId: options.doctorId}).then(res => {
       if(res.resultCode === 0){
-        setList(res.data.timePoints)
+        setList(res.data.timePoints.map(item => {
+          return {
+            ...item,
+            isTimeValid: timeValid(item)
+          }
+        }))
       }
     }).finally(() => {
       loadingService(false)
@@ -150,7 +164,12 @@ export default function DoctorDefault(props) {
           toastService({title: msg})
           setBusy(false)
         }else{
-          setList(res.data.timePoints)
+          setList(res.data.timePoints.map(item => {
+            return {
+              ...item,
+              isTimeValid: timeValid(item)
+            }
+          }))
           setTimeout(() => {
             setBusy(false)
           }, 500);
@@ -173,6 +192,12 @@ export default function DoctorDefault(props) {
     if(item.isHalt) return '停诊'
     if(item.leaveCount > 0) return `剩余:${item.leaveCount}`
     return '无号'
+  }
+  const currentTime = new Date().getTime()
+  const timeValid = (item) => {
+    if(!item.endTime) return true
+    const date = options.regDate + ' ' + item.endTime
+    return new Date(date).getTime() >  currentTime
   }
   return(
     <View className='doctor-detail'>
@@ -237,9 +262,9 @@ export default function DoctorDefault(props) {
                 list.map((item,index) => 
                   <AtListItem 
                     key={index} 
-                    title={`${item.startTime} - ${item.endTime}`} 
+                    title={`${item.timeSlice}${item.startTime} - ${item.endTime}`} 
                     extraText={renderTickets(item)}
-                    className={item.leaveCount > 0 && !item.isHalt ? 'ticket-btn-active' : 'ticket-btn-unactive'} 
+                    className={item.leaveCount > 0 && !item.isHalt && item.isTimeValid ? 'ticket-btn-active' : 'ticket-btn-unactive'} 
                     arrow='right' 
                     onClick={onClickItem.bind(null,item)}
                   />

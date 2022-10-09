@@ -42,11 +42,14 @@ export default function SearchResult() {
     Taro.navigateTo({url: `/pages/register-pack/doctor-list/doctor-list?deptId=${dept.deptId}&deptName=${dept.deptName}`})
   }
   const onClickDoctor = (doctor) => {
-    Taro.setStorageSync('deptInfo',{
+    const obj = {
+      doctorId: doctor.doctorId,
+      regDate: '',
       deptId: doctor.deptId,
       deptName: doctor.deptName
-    })
-    Taro.navigateTo({url: `/pages/register-pack/doctor-detail/doctor-detail?doctorId=${doctor.doctorId}&deptId=${doctor.deptId}`})
+    }
+
+    Taro.navigateTo({url: `/pages/register-pack/doctor-detail/doctor-detail?options=${JSON.stringify(obj)}`})
   }
   return(
     <View className='search-result'>
@@ -66,8 +69,8 @@ export default function SearchResult() {
             <BkTitle title='医生' />
             {
               doctors.map(item => 
-                <BkPanel arrow key={item.doctorId} style='margin: 20rpx 0'>
-                  <View onClick={onClickDoctor.bind(null,item)}>
+                <BkPanel arrow key={item.doctorId} style='margin: 20rpx 0' onClick={onClickDoctor.bind(null,item)}>
+                  <View>
                     <View>
                       <text className='search-result-item-name'>{item.doctorName}</text>
                       <text className='search-result-item-title'>{item.title}</text>
@@ -87,8 +90,8 @@ export default function SearchResult() {
             <BkTitle title='科室' />
             {
               depts.map(item => 
-                <BkPanel arrow key={item.deptId} style='margin: 20rpx 0'>
-                  <View onClick={onClickDept.bind(null,item)}>
+                <BkPanel arrow key={item.deptId} style='margin: 20rpx 0' onClick={onClickDept.bind(null,item)}>
+                  <View>
                     <text className='search-result-item-name'>{item.deptName}</text>
                   </View>
                 </BkPanel>

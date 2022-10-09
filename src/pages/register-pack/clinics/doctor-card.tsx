@@ -1,3 +1,4 @@
+
 import * as React from 'react'
 import * as Taro from '@tarojs/taro'
 import { View, Image } from '@tarojs/components'
@@ -5,9 +6,14 @@ import './clinics.less'
 import { getImageSrc } from '@/utils/image-src'
 
 export default function DoctorCard(props) {
+  const {doctor: {deptId, deptName, doctorId}} = props
   const onClick = () => {
-    Taro.setStorageSync('deptInfo',{deptId: props.doctor.deptId, deptName: props.doctor.deptName})
-    Taro.navigateTo({url: `/pages/register-pack/doctor-detail/doctor-detail?doctorId=${props.doctor.doctorId}`})
+    const obj = {
+      doctorId,
+      deptId,
+      deptName
+    }
+    Taro.navigateTo({url: `/pages/register-pack/doctor-detail/doctor-detail?options=${JSON.stringify(obj)}`})
   }
   return(
     <View className='doctor-card' onClick={onClick}>

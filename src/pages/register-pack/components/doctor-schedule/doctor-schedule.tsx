@@ -17,6 +17,17 @@ export default function DoctorSchedule(props) {
       onShowDetail({doctorName: props.doctor.doctorName,specialty: props.doctor.specialty,title: props.doctor.title})
     }
   }
+  const renderStatusView = () => {
+    if(props.doctor.isHalt){
+      return(<View className='doctor-btn unable'>停诊</View>)
+    }else{
+      if(props.doctor.leaveTotalCount > 0 && props.doctor.isTimePoint){
+        return(<View className='doctor-btn enable'>有号</View>)
+      }else{
+        return(<View className='doctor-btn unable'>无号</View>) 
+      }
+    }
+  }
   return (
     <View className='doctor-schedule' style={props.style ? props.style : ''} onClick={handleClick}>
       <Image src={props.doctor.faceUrl || getImageSrc('default-avatar.png')} className='doctor-avatar' />
@@ -33,13 +44,7 @@ export default function DoctorSchedule(props) {
       </View>
       <View>
         {
-          props.doctor.isHalt &&
-          <View className='doctor-btn unable'>满诊</View>
-        }
-        {
-          (!props.doctor.isHalt && props.doctor.leaveTotalCount > 0 && props.doctor.isTimePoint) ? 
-          <View className='doctor-btn enable'>有号</View> :
-          <View className='doctor-btn unable'>无号</View>
+          renderStatusView()
         }
       </View>
     </View>

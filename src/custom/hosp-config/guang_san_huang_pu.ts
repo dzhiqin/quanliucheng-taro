@@ -50,7 +50,7 @@ export default {
     },
     
     quickEntrance: {
-      enable: false,
+      enable: true,
       tabList: [
         {
           title: '门诊',
@@ -73,43 +73,43 @@ export default {
             // }
           ]
         },
-        {
-          title: '住院',
-          entrances: [
-            // {
-            //   icon: imgUrl.new_home_icon9,
-            //   name: '住院登记',
-            //   event: 'navigate',
-            // }, 
-            // {
-            //   icon: imgUrl.zybk,
-            //   name: '住院绑卡',
-            //   event: 'navigate',
-            // }, 
-            {
-              icon: imgUrl.new_home_icon10,
-              name: '住院押金',
-              event: 'navigate',
-              url: '/pages/hosp-pack/deposit/deposit',
-            }, 
-            {
-              icon: imgUrl.new_home_icon11,
-              name: '每日清单',
-              event: 'navigate',
-              url: '/pages/hosp-pack/checklist/checklist',
-            },
-            // {
-            //   icon: imgUrl.cyjs,
-            //   name: '出院结算',
-            //   event: 'navigate',
-            // },
-            // {
-            //   icon: imgUrl.bafy,
-            //   name: '病案复印',
-            //   event: 'toMiniProgram',
-            // }
-          ]
-        },
+        // {
+        //   title: '住院',
+        //   entrances: [
+        //     // {
+        //     //   icon: imgUrl.new_home_icon9,
+        //     //   name: '住院登记',
+        //     //   event: 'navigate',
+        //     // }, 
+        //     // {
+        //     //   icon: imgUrl.zybk,
+        //     //   name: '住院绑卡',
+        //     //   event: 'navigate',
+        //     // }, 
+        //     {
+        //       icon: imgUrl.new_home_icon10,
+        //       name: '住院押金',
+        //       event: 'navigate',
+        //       url: '/pages/hosp-pack/deposit/deposit',
+        //     }, 
+        //     {
+        //       icon: imgUrl.new_home_icon11,
+        //       name: '每日清单',
+        //       event: 'navigate',
+        //       url: '/pages/hosp-pack/checklist/checklist',
+        //     },
+        //     // {
+        //     //   icon: imgUrl.cyjs,
+        //     //   name: '出院结算',
+        //     //   event: 'navigate',
+        //     // },
+        //     // {
+        //     //   icon: imgUrl.bafy,
+        //     //   name: '病案复印',
+        //     //   event: 'toMiniProgram',
+        //     // }
+        //   ]
+        // },
         // {
         //   title: "其他",
         //   entrances:[
@@ -138,7 +138,7 @@ export default {
     },
     YiBaoCard: false, // 医保卡
     register: {
-      cancelReservedTime: 3600 * 1000 * 2, // 取消挂号预留时间，默认2小时
+      cancelReservedTime: 0, // 取消挂号预留时间，默认2小时
       popupNotice: true,// 挂号提示弹窗
       intradayAndAppointment: false,// 是否区分当天挂号和预约挂号
       type: 'byDept',// byDept按科室挂号；byDeptAndTime按科室和时间挂号；byCategoryAndDoctorAndTime按分类、医生、日期挂号
@@ -147,6 +147,10 @@ export default {
     },
     hospitalNavigation: false,  // 院内导航
     ZhuYuanCardName: false, // 住院绑卡是否需要姓名
+    arrivalService: {
+      arrival: true,
+      waitingList: false
+    }
   },
   reportsPage:{
     hideInHosp: true, // 隐藏住院报告入口

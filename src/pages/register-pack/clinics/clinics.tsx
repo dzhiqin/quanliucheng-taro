@@ -20,7 +20,7 @@ export default function Clinics() {
   const [doctors,setDoctors] = useState([])
   const [clinicList,setClinicList] = useState([])
   const [deptId,setDeptId] = useState()
-  const [currentDept,setCurrentDept] = useState(0)
+  const [currentDept,setCurrentDept] = useState(null)
   const hospitalInfo = Taro.getStorageSync('hospitalInfo')
   
   Taro.useReady(() => {
@@ -72,25 +72,18 @@ export default function Clinics() {
       Taro.navigateTo({url: '/pages/bind-pack/cards-list/cards-list?action=jumpOut'})
       return
     }
-    // if(custom.hospName === 'jszyy' && item.allowJump === '1'){
-    //   // 特殊处理 金沙洲部分一级科室直接跳转到医生列表
-    //   Taro.navigateTo({url: `/pages/register-pack/doctors/doctors?deptId=${item.deptId}&deptName=${item.deptName}`})
-    //   return
-    // }
-    if(item.deptId !== deptId){
-      setCurrentDept(index)
-      setDeptId(item.deptId)
-      Taro.setStorageSync('deptInfo',item)
-      if(item.secondDeptInfos && item.secondDeptInfos.length){
-        setClinicList(item.secondDeptInfos)
-      }else{
-        if(registerConfig.type === 'byDept'){
-          // 没有二级科室，直接跳转到医生列表
-          Taro.navigateTo({url: `/pages/register-pack/doctor-list/doctor-list?deptId=${item.deptId}&deptName=${item.deptName}`})
-          setClinicList([])
-        }
-        
+    setCurrentDept(index)
+    setDeptId(item.deptId)
+    Taro.setStorageSync('deptInfo',item)
+    if(item.secondDeptInfos && item.secondDeptInfos.length){
+      setClinicList(item.secondDeptInfos)
+    }else{
+      if(registerConfig.type === 'byDept'){
+        // 没有二级科室，直接跳转到医生列表
+        Taro.navigateTo({url: `/pages/register-pack/doctor-list/doctor-list?deptId=${item.deptId}&deptName=${item.deptName}`})
+        setClinicList([])
       }
+      
     }
   }
 

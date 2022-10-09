@@ -20,8 +20,14 @@ export default function EmbedContent(props) {
       onClick(e)
     }
   }
-  const onClickDoctorItem = (doctorId) => {
-    Taro.navigateTo({url: '/pages/register-pack/doctor-detail/doctor-detail?doctorId=' + doctorId})
+  const onClickDoctorItem = (doctor) => {
+    const {deptId,deptName,doctorId} = doctor
+    const obj = {
+      deptId,
+      deptName,
+      doctorId
+    }
+    Taro.navigateTo({url: `/pages/register-pack/doctor-detail/doctor-detail?options=${JSON.stringify(obj)}`})
   }
   const onClickDateItem = (date) => {
     // console.log(date);
@@ -86,7 +92,7 @@ export default function EmbedContent(props) {
             ? <AtList>
                 {
                   doctors.map((doctor,index) => 
-                    <AtListItem key={doctor.doctorId} title={doctor.doctorName} note={doctor.title} arrow='right' thumb={doctor.faceUrl} onClick={onClickDoctorItem.bind(null,doctor.doctorId)} />
+                    <AtListItem key={doctor.doctorId} title={doctor.doctorName} note={doctor.title} arrow='right' thumb={doctor.faceUrl} onClick={onClickDoctorItem.bind(null,doctor)} />
                   )
                 }
               </AtList>

@@ -144,6 +144,10 @@ export default {
     },
     hospitalNavigation: true,  // 院内导航
     ZhuYuanCardName: false, // 住院绑卡是否需要姓名
+    arrivalService: {
+      arrival: true,
+      waitingList: true
+    }
   },
   reportsPage:{
     urlDetail: true, // 报告详情页用图片展示

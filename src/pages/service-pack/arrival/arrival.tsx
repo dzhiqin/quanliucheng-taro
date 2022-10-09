@@ -43,30 +43,20 @@ export default function BindingCard() {
       const {latitude,longitude} = res
       computeDistance(latitude,longitude,hospLatLong.latitude,hospLatLong.longitude)
     }).catch(err => {
-      if(err.errMsg==='getLocation:fail auth deny'){
-        Taro.showModal({
-          content: '检测到您没有打开小程序的定位授权，是否手动打开？',
-          confirmText: '确认',
-          cancelText: '取消',
-          success: result => {
-            if(result.confirm){
-              Taro.openSetting({
-                success: openRes => {}
-              })
-            }else{
-              Taro.navigateBack()
-            }
-          }
-        })
-      }else{
-        toastService({title: '获取位置失败：' + err})
-        console.log(err)
-      }
+      toastService({title: '获取位置失败：' + err})
     }).finally(() => {
       setTimeout(() => {
         setLoading(false)
       }, 10000)
     }) 
+  }
+  const renderBkLoading = () => {
+    if(custom.hospName === 'gysyhp'){
+      // 特殊处理
+      return null
+    }else{
+      return(<BkLoading loading={loading} msg='暂无报到内容' />)
+    }
   }
   const computeDistance = (userLat,userLong,hospLat,hospLong) => {
     if(hospLat && hospLong){
@@ -95,7 +85,10 @@ export default function BindingCard() {
     
   }
   Taro.useDidShow(() => {
-    getList()
+    if(custom.hospName !== 'gysyhp'){
+      // 特殊处理 
+      getList()
+    }
     refreshDistance()
   })
   const handleClick = (item:any) => {
@@ -176,7 +169,7 @@ export default function BindingCard() {
             }
           </View>
           :
-          <BkLoading loading={loading} msg='暂无报到内容' />
+          renderBkLoading()
         }
       </View>
       {/* <View className='arrival-footer'>

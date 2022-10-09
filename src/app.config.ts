@@ -132,6 +132,13 @@ export default {
   "permission": {
     "scope.userLocation": {
       "desc": "你的位置信息将用于小程序定位"
+    },
+    "scope.getLocation": {
+      "desc": "你的位置信息将用于小程序定位"
     }
-  }
+  },
+  "requiredPrivateInfos": [
+    "chooseLocation",
+    "getLocation"
+  ],
 }

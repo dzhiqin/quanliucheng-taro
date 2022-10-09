@@ -15,7 +15,6 @@ export const TaroSubscribeService = (...tempIds) => {
     Taro.requestSubscribeMessage({
       tmplIds: tempIds,
       success: (res) => {
-        console.log('subs res',res);
         const valid = Object.values(res).every(i => i !== 'reject')
         if(valid){
           resolve({result: true,data: res, msg: 'success'})
@@ -60,10 +59,50 @@ export const TaroGetLocation = (option:{type: 'gcj02' | 'wgs84'}) => {
         type: option.type,
         isHighAccuracy: true,
         success: (res) => {resolve(res)},
-        fail: (res) => {reject(res)}
+        fail: (err) => {
+          if(err.errMsg==='getLocation:fail auth deny'){
+            Taro.showModal({
+              content: '检测到您没有打开小程序的定位授权，是否手动打开？',
+              confirmText: '确认',
+              cancelText: '取消',
+              success: result => {
+                if(result.confirm){
+                  Taro.openSetting({
+                    success: openRes => {}
+                  })
+                }else{
+                  Taro.navigateBack()
+                }
+              }
+            })
+          }else if(err.errMsg==='getLocation:fail:system permission denied') {
+            Taro.showModal({
+              content: '检测到您没有开启系统定位权限，请按以下步骤手动打开。\n返回微信-[我]-[设置]-[个人信息与权限]-[系统权限管理]-[前往系统设置]-[应用权限]-打开位置信息权限',
+              confirmText: '确认',
+              cancelText: '取消',
+              success: result => {
+                Taro.navigateBack()
+              }
+            })
+          }else if(err.errMsg === 'getLocation:fail:timeout'){
+            Taro.showModal({
+              content: '定位超时'
+            })
+          }else if(err.errMsg === 'getLocation:fail:ERROR_NETWORK'){
+            Taro.showModal({
+              title: '网络异常'
+            })
+          }else{
+            Taro.showModal({
+              title: err.errMsg
+            })
+          }
+          reject(err.errMsg)
+        }
       })
-    }catch(e){
-      reject(e)
+    }catch(err){
+      
+      reject(err)
     }
     
   })

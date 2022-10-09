@@ -82,7 +82,11 @@ export interface HospConfig {
       checkEpiLogicalSurvey: boolean
     }
     hospitalNavigation: boolean,
-    ZhuYuanCardName: boolean
+    ZhuYuanCardName: boolean,
+    arrivalService: {
+      arrival: boolean,
+      waitingList: boolean
+    }
   },
   reportsPage: {
     hideInHosp: boolean,
