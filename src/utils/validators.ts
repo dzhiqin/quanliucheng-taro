@@ -29,6 +29,6 @@ export const validateMessages = {
 }
 export const birthdayValidator = (value: string) => {
   const current = new Date()
-  const date = new Date(value)
+  const date = new Date(value.replace(/-/g, "/"))
   return date <= current
 }

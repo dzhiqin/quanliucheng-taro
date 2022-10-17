@@ -44,7 +44,7 @@ export const getRegType = () => {
 export const checkOverTime = (date: string,time = '18:00',reservedTime: number) => {
   if(!date) return false
   const current = new Date().getTime()
-  let dateTime = new Date(date + ' ' + time).getTime()
+  let dateTime = new Date((date + ' ' + time).replace(/-/g, "/")).getTime()
   if(reservedTime){
     // reservedTime 预留时间，有的医院要求提前2小时才可退号
     dateTime = dateTime - reservedTime

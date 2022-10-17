@@ -249,7 +249,7 @@ export default function QuestionItem(props: {
           <AtInput 
             name={props.id}
             title='' 
-            type='number' 
+            type='text' 
             value={props.answer}
             placeholder='请输入' 
             onChange={handleChange.bind(this,props.id)}

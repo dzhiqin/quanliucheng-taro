@@ -176,7 +176,7 @@ export default {
     ZhuYuanCardName: false, // 住院绑卡是否需要姓名
   },
   reportsPage:{
-    hideInHosp: true, // 隐藏住院报告入口
+    hideInHosp: false, // 隐藏住院报告入口
     urlDetail: false, // 报告详情页用图片展示
     clinicReportTabs: [
       {title: '检验', value: REPORT_ITEM_TYPE_CN.化验},

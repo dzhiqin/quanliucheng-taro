@@ -49,10 +49,10 @@ export default function TestReport(props) {
           {
             checkItems.map((item,index) => 
               <View className='at-row' key={index}>
-                <View className='at-col table-body-item table-body-scroll at-col-4'>{item.labRepItemName}{item.prompt ? '/'+item.prompt : ''}</View>
+                <View className='at-col table-body-item at-col-4'>{item.labRepItemName}{item.prompt ? '/'+item.prompt : ''}</View>
                 <View className='at-col table-body-item at-col-2'>{item.labRepResult}</View>
                 <View className='at-col table-body-item at-col-2'  style='font-size: 26rpx'>{item.labRepUnits}</View>
-                <View className='at-col table-body-item at-col-2 table-body-scroll'>{item.labContext}</View>
+                <View className='at-col table-body-item at-col-2'>{item.labContext}</View>
                 <View className='at-col table-body-item at-col-2'>
                   {getReferResult(item.labInd)}
                 </View>

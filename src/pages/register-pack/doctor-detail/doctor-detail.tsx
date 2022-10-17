@@ -12,6 +12,7 @@ import './doctor-detail.less'
 import { CardsHealper } from '@/utils/cards-healper'
 import BaseModal from '@/components/base-modal/base-modal'
 import { getImageSrc } from '@/utils/image-src'
+// import {mockList} from './mock'
 
 interface Options {
   doctorId: string,
@@ -116,7 +117,8 @@ export default function DoctorDefault(props) {
       regFee: doctorInfo.regFee,
       treatFee: '',
       address: doctorInfo.address,
-      regTypeId: doctorInfo.regTypeId
+      regTypeId: doctorInfo.regTypeId,
+      timeInterval: item.timeInterval // 广三黄埔新增字段
     }
     Taro.setStorageSync('orderParams',orderParams)
     Taro.navigateTo({url: '/pages/register-pack/order-create/order-create'})
@@ -131,7 +133,7 @@ export default function DoctorDefault(props) {
         setList(res.data.timePoints.map(item => {
           return {
             ...item,
-            isTimeValid: timeValid(item)
+            isTimeValid: timeValid(date,item.endTime)
           }
         }))
       }
@@ -164,10 +166,11 @@ export default function DoctorDefault(props) {
           toastService({title: msg})
           setBusy(false)
         }else{
+          // res.data.timePoints=mockList
           setList(res.data.timePoints.map(item => {
             return {
               ...item,
-              isTimeValid: timeValid(item)
+              isTimeValid: timeValid(res.data.defaultSelectedDay,item.endTime)
             }
           }))
           setTimeout(() => {
@@ -194,10 +197,10 @@ export default function DoctorDefault(props) {
     return '无号'
   }
   const currentTime = new Date().getTime()
-  const timeValid = (item) => {
-    if(!item.endTime) return true
-    const date = options.regDate + ' ' + item.endTime
-    return new Date(date).getTime() >  currentTime
+  const timeValid = (date,time) => {
+    if(!time) return true
+    const dateAndTime = date + ' ' + time
+    return new Date(dateAndTime.replace(/-/g, "/")).getTime() >  currentTime
   }
   return(
     <View className='doctor-detail'>
@@ -262,9 +265,9 @@ export default function DoctorDefault(props) {
                 list.map((item,index) => 
                   <AtListItem 
                     key={index} 
-                    title={`${item.timeSlice}${item.startTime} - ${item.endTime}`} 
+                    title={`${item.timeSlice ? item.timeSlice: ''}${item.startTime} - ${item.endTime}`} 
                     extraText={renderTickets(item)}
-                    className={item.leaveCount > 0 && !item.isHalt && item.isTimeValid ? 'ticket-btn-active' : 'ticket-btn-unactive'} 
+                    className={(item.leaveCount > 0 && !item.isHalt && item.isTimeValid) ? 'ticket-btn-active' : 'ticket-btn-unactive'} 
                     arrow='right' 
                     onClick={onClickItem.bind(null,item)}
                   />

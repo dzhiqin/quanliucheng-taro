@@ -83,6 +83,7 @@ export default {
     hospitalNavigation: false  // 院内导航
   },
   reportsPage:{
+    hideInHosp: false, // 隐藏住院报告入口
     urlDetail: false, // 报告详情页用图片展示
     clinicReportTabs: [
       {title: '检验', value: REPORT_ITEM_TYPE_CN.化验},

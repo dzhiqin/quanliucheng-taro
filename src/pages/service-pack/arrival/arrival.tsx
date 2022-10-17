@@ -15,6 +15,7 @@ import {custom} from '@/custom/index'
 import './arrival.less'
 
 export default function BindingCard() {
+  let [count,setCount] = useState(10)
   const [loading,setLoading] = useState(false)
   const [showBtn,setShowBtn] = useState(true)
   const [list,setList] = useState([])
@@ -27,36 +28,57 @@ export default function BindingCard() {
     if(loading) return
     refreshDistance()
   }
+  const startTimer = () => {
+    setTimeout(() => {
+      if(count > 0){
+        setCount(--count)
+        startTimer()
+      }
+    },1100)
+  }
+  React.useEffect(() => {
+    startTimer()
+  }, [count])
+  const renderCountdownBtn = () => {
+    return(
+      <View className='arrival-btns'>
+        <AtButton  circle type='secondary' onClick={handleRefresh} disabled={count ? true : false} >{count ? `(${count})` : ''}刷新距离</AtButton>
+      </View>
+    )
+  }
   const getList = () => {
-    Taro.showLoading({title: '正在获取数据'})
+    setLoading(true)
     fetchCheckInInfo().then(res => {
       if(res.resultCode === 0){
         setList(res.data)
+        // setList([
+        //   {
+        //     deptName: '科室名称',
+        //     doctor: '陈医生',
+        //     // clinicType: '好别',
+        //     // address: '科室地址科室地址科室地址',
+        //     visitDate: '2022-10-10',
+        //     visitTimeDesc: '09:00-12:22'
+        //   }
+        // ])
       }
     }).finally(() => {
-      Taro.hideLoading()
+      setLoading(false)
     })
   }
   const refreshDistance = () => {
-    setLoading(true)
+    setCount(10)
+    setDistance(null)
     TaroGetLocation({type: 'gcj02'}).then((res:any) => {
       const {latitude,longitude} = res
       computeDistance(latitude,longitude,hospLatLong.latitude,hospLatLong.longitude)
     }).catch(err => {
       toastService({title: '获取位置失败：' + err})
     }).finally(() => {
-      setTimeout(() => {
-        setLoading(false)
-      }, 10000)
     }) 
   }
   const renderBkLoading = () => {
-    if(custom.hospName === 'gysyhp'){
-      // 特殊处理
-      return null
-    }else{
-      return(<BkLoading loading={loading} msg='暂无报到内容' />)
-    }
+    return(<BkLoading loading={loading} msg='暂无报到内容' />)
   }
   const computeDistance = (userLat,userLong,hospLat,hospLong) => {
     if(hospLat && hospLong){
@@ -85,10 +107,7 @@ export default function BindingCard() {
     
   }
   Taro.useDidShow(() => {
-    if(custom.hospName !== 'gysyhp'){
-      // 特殊处理 
-      getList()
-    }
+    getList()
     refreshDistance()
   })
   const handleClick = (item:any) => {
@@ -115,16 +134,16 @@ export default function BindingCard() {
     <View className='arrival'>
       <HealthCards switch />
       <View className='arrival-hosp'>
-        <View>
-          经度：{hospLatLong.longitude}
+        {/* <View>
+          目标经度：{hospLatLong.longitude}
         </View>
         <View>
-          维度：{hospLatLong.latitude}
-        </View>
-        <View>距离院区：{distance}米</View>
-        <View className='arrival-btns'>
-          <AtButton loading={loading} size='small' circle type='secondary' onClick={handleRefresh} >刷新数据</AtButton>
-        </View>
+          目标纬度：{hospLatLong.latitude}
+        </View> */}
+        <View className='arrival-hosp-desc'>距离院区：{distance}米</View>
+        {
+          renderCountdownBtn()
+        }
       </View>
       <View className='arrival-content'>
         {
@@ -146,17 +165,24 @@ export default function BindingCard() {
                     <View className='flat-title'>医生姓名：</View>
                     <View className='arrival-content-item-text'>{item.doctor}</View>
                   </View>
-                  <View className='arrival-content-item'>
-                    <View className='flat-title'>号别：</View>
-                    <View className='arrival-content-item-text'>{item.clinicType}</View>
-                  </View>
-                  <View className='arrival-content-item'>
-                    <View className='flat-title'>科室地址：</View>
-                    <View className='arrival-content-item-text'>{item.address}</View>
-                  </View>
+                  {
+                    item.clinicType &&
+                    <View className='arrival-content-item'>
+                      <View className='flat-title'>号别：</View>
+                      <View className='arrival-content-item-text'>{item.clinicType}</View>
+                    </View>
+                  }
+                  {
+                    item.address &&
+                    <View className='arrival-content-item'>
+                      <View className='flat-title'>科室地址：</View>
+                      <View className='arrival-content-item-text'>{item.address}</View>
+                    </View>
+                  }
+                  
                   <View className='arrival-content-item'>
                     <View className='flat-title'>就诊时间：</View>
-                    <View className='arrival-content-item-text'>{item.visitDate} - {item.visitTimeDesc}</View>
+                    <View className='arrival-content-item-text'>{item.visitDate} {item.visitTimeDesc}</View>
                   </View>
                   <View className='arrival-content-action'>
                     {
@@ -172,9 +198,6 @@ export default function BindingCard() {
           renderBkLoading()
         }
       </View>
-      {/* <View className='arrival-footer'>
-        <AtButton loading={loading} size='normal' type='primary' onClick={handleRefresh} >刷新数据</AtButton>
-      </View> */}
     </View>
   )
 }
