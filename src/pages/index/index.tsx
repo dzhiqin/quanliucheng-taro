@@ -11,6 +11,7 @@ import HospBlog from '@/components/hosp-blog/hosp-blog'
 import { MyContext } from '@/utils/my-context'
 import './index.less'
 
+console.log('custom',custom)
 export default function Index() {
   const [indexPage] = useState(custom.indexPage)
   useEffect(() => {

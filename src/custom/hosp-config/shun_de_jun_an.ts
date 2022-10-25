@@ -78,7 +78,12 @@ export default {
       departmentLevel: '2', // 2级科室
       checkEpiLogicalSurvey: true, // 是否要先填流调表才可以挂号
     },
-    hospitalNavigation: false  // 院内导航
+    hospitalNavigation: false,  // 院内导航
+    ZhuYuanCardName: false, // 住院绑卡是否需要姓名
+    arrivalService: {
+      arrival: true,
+      waitingList: true
+    }
   },
   reportsPage:{
     hideInHosp: false, // 隐藏住院报告入口

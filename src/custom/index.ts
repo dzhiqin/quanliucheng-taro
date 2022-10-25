@@ -5,11 +5,14 @@ type HospName =
   'shun_de_jun_an' | 
   'jin_sha_zhou'|
   'guang_san_huang_pu'
-const hospName:HospName = 'guang_san_huang_pu'
+const hospName:HospName = 'jin_sha_zhou'
 const hospConfig = require(`./hosp-config/${hospName}.ts`)
 
-// export const custom = hospConfig.default
 export const custom = hospConfig.default as HospConfig
+interface TabListItem {
+  title: string,
+  entrances: any[]
+}
 export interface HospConfig {
   latitude: number,
   longitude: number,
@@ -47,16 +50,11 @@ export interface HospConfig {
     },
     functionBox: {
       enable: boolean,
-      list: []
+      list: any[]
     },
     quickEntrance: {
       enable: boolean,
-      tabList: [
-        {
-          title: string,
-          entrances: []
-        }
-      ]
+      tabList: TabListItem[]
     },
     hospBlog: {
       enable: boolean
@@ -68,7 +66,7 @@ export interface HospConfig {
       parentInfo: boolean,
       nationality: boolean,
       hasCard: boolean,
-      maritialStatus: boolean,
+      maritalStatus: boolean,
       oneClickAuth: boolean,
       updateNotice: boolean
     }
@@ -91,11 +89,7 @@ export interface HospConfig {
   reportsPage: {
     hideInHosp: boolean,
     urlDetail: boolean,
-    clinicReportTabs: [
-      {title: string, value: string}
-    ],
-    hospReportTabs: [
-      {title: string, value: string}
-    ]
+    clinicReportTabs: {title: string, value: string}[],
+    hospReportTabs: {title: string, value: string}[]
   }
 }

@@ -1,7 +1,9 @@
 import imgUrl from '@/utils/imgs'
 import { REPORT_ITEM_TYPE_CN } from '@/enums/index'
+import { mergeRecursive } from '@/utils/tools'
+import DefaultConfig from './default'
 
-export default {
+const config = {
   latitude: 23.207584,
   longitude: 113.492214,
   hospName: "gysyhp",
@@ -14,44 +16,7 @@ export default {
   // baseUrl: "http://192.168.4.83:5002",
   // subUrl: 'https://gysycustomize.wedoublecare.com', // 附加功能环境
   indexPage: {
-    banner: {
-      enable: true,
-      url: imgUrl.banner
-    },
-    healthCard: {
-      enable: true
-    },
-    navCard:{
-      enable: false
-    },
-    functionBox:{
-      enable: true,
-      list: [
-        {
-          icon: imgUrl.new_home_icon3,
-          title: '预约挂号',
-          event: 'register',
-          desc: '专家名医提前约'
-        },
-        {
-          icon: imgUrl.new_home_icon4,
-          title: '就诊缴费',
-          event: 'navigate',
-          desc: '线上缴费免排队',
-          url: '/pages/payment-pack/payment-list/payment-list'
-        },
-        {
-          icon: imgUrl.new_home_icon5,
-          title: '查看报告',
-          event: 'navigate',
-          desc: '检查检验随时查',
-          url: '/pages/reports-pack/reports-type/reports-type'
-        }
-      ]
-    },
-    
     quickEntrance: {
-      enable: true,
       tabList: [
         {
           title: '门诊',
@@ -62,81 +27,13 @@ export default {
               event: 'navigate',
               url: '/pages/service-pack/arrival-service/arrival-service'
             }, 
-            // {
-            //   icon: imgUrl.new_home_icon7,
-            //   name: '检查预约',
-            //   event: 'navigate',
-            // }, 
-            // {
-            //   icon: imgUrl.new_home_icon8,
-            //   name: '满意度调查',
-            //   event: 'navigate',
-            // }
+            
           ]
-        },
-        // {
-        //   title: '住院',
-        //   entrances: [
-        //     // {
-        //     //   icon: imgUrl.new_home_icon9,
-        //     //   name: '住院登记',
-        //     //   event: 'navigate',
-        //     // }, 
-        //     // {
-        //     //   icon: imgUrl.zybk,
-        //     //   name: '住院绑卡',
-        //     //   event: 'navigate',
-        //     // }, 
-        //     {
-        //       icon: imgUrl.new_home_icon10,
-        //       name: '住院押金',
-        //       event: 'navigate',
-        //       url: '/pages/hosp-pack/deposit/deposit',
-        //     }, 
-        //     {
-        //       icon: imgUrl.new_home_icon11,
-        //       name: '每日清单',
-        //       event: 'navigate',
-        //       url: '/pages/hosp-pack/checklist/checklist',
-        //     },
-        //     // {
-        //     //   icon: imgUrl.cyjs,
-        //     //   name: '出院结算',
-        //     //   event: 'navigate',
-        //     // },
-        //     // {
-        //     //   icon: imgUrl.bafy,
-        //     //   name: '病案复印',
-        //     //   event: 'toMiniProgram',
-        //     // }
-        //   ]
-        // },
-        // {
-        //   title: "其他",
-        //   entrances:[
-        //     {
-        //       name: "自助核酸缴费",
-        //       icon: imgUrl.new_home_icon10,
-        //       event: "jump"
-        //     },
-        //   ]
-        // }
+        }
       ]
-    },
-    hospBlog: {
-      enable: false
     }
   },
   feat:{
-    bindCard: {
-      elecHealthCard: true, // 电子健康卡
-      parentInfo: false,     // 监护人信息(儿童无证件)
-      nationality: true,    // 国籍
-      hasCard: true,  // 是否有院内就诊卡
-      maritalStatus: true, // 婚姻状况
-      oneClickAuth: true,    // 一键授权，直接绑定健康卡
-      updateNotice: false, // 绑卡和解绑发送消息通知
-    },
     YiBaoCard: false, // 医保卡
     register: {
       cancelReservedTime: 0, // 取消挂号预留时间，默认2小时
@@ -180,3 +77,5 @@ export default {
     bindCardNotice: 'XdXvsxVVjBeXvGKDkN0sb4_IUKmz5-M9vVo5VvJQA30',//绑卡成功提醒
   }
 }
+const mergedConfig = mergeRecursive(DefaultConfig,config)
+export default mergedConfig

@@ -1,7 +1,9 @@
 import imgUrl from '@/utils/imgs'
 import { REPORT_ITEM_TYPE_CN } from '@/enums/index'
+import { mergeRecursive } from '@/utils/tools'
+import DefaultConfig from './default'
 
-export default {
+const config = {
   latitude: 23.16121,
   longitude: 113.206085,
   hospName: "jszyy",
@@ -12,44 +14,7 @@ export default {
   // baseUrl: "https://applets.gdbkyz.com", // 倍康测试
   baseUrl: "https://jszyy-applets.wedoublecare.com",  // 正式环境
   // subUrl: 'https://gysycustomize.wedoublecare.com', // 测试环境
-  
   indexPage: {
-    banner: {
-      enable: true,
-      url: imgUrl.banner
-    },
-    healthCard: {
-      enable: true
-    },
-    navCard:{
-      enable: false
-    },
-    functionBox:{
-      enable: true,
-      list: [
-        {
-          icon: imgUrl.new_home_icon3,
-          title: '预约挂号',
-          event: 'register',
-          desc: '专家名医提前约'
-        },
-        {
-          icon: imgUrl.new_home_icon4,
-          title: '就诊缴费',
-          event: 'navigate',
-          desc: '线上缴费免排队',
-          url: '/pages/payment-pack/payment-list/payment-list'
-        },
-        {
-          icon: imgUrl.new_home_icon5,
-          title: '查看报告',
-          event: 'navigate',
-          desc: '检查检验随时查',
-          url: '/pages/reports-pack/reports-type/reports-type'
-        }
-      ]
-    },
-    
     quickEntrance: {
       enable: true,
       tabList: [
@@ -62,16 +27,6 @@ export default {
             //   event: 'navigate',
             //   url: '/pages/service-pack/arrival-service/arrival-service'
             // }, 
-            // {
-            //   icon: imgUrl.new_home_icon7,
-            //   name: '检查预约',
-            //   event: 'navigate',
-            // }, 
-            // {
-            //   icon: imgUrl.new_home_icon8,
-            //   name: '满意度调查',
-            //   event: 'navigate',
-            // }
             {
               icon: imgUrl.new_home_icon10,
               name: '挂号充值',
@@ -117,49 +72,14 @@ export default {
               name: '每日清单',
               event: 'navigate',
               url: '/pages/hosp-pack/checklist/checklist',
-            },
-            // {
-            //   icon: imgUrl.cyjs,
-            //   name: '出院结算',
-            //   event: 'navigate',
-            // },
-            // {
-            //   icon: imgUrl.bafy,
-            //   name: '病案复印',
-            //   event: 'toMiniProgram',
-            // }
+            }
           ]
-        },
-        // {
-        //   title: "其他",
-        //   entrances:[
-        //     // {
-        //     //   name: "自助核酸缴费",
-        //     //   icon: imgUrl.new_home_icon10,
-        //     //   event: "jump"
-        //     // },
-        //     // {
-        //     //   name: "电子票夹",
-        //     //   icon: imgUrl.new_home_icon10,
-        //     //   event: "jump",
-        //     //   appId: 'wx8e0b79a7f627ca18',
-        //     //   path: 'pages/index/index?agencyCode=ccd5fa6bc02f4420a131d6d46e165c71'
-        //     // },
-        //   ]
-        // }
+        }
       ]
     },
-    hospBlog: {
-      enable: false
-    }
   },
   feat:{
     bindCard: {
-      elecHealthCard: true, // 电子健康卡
-      parentInfo: false,     // 监护人信息(儿童无证件)
-      nationality: true,    // 国籍
-      hasCard: true,  // 是否有院内就诊卡
-      maritalStatus: true, // 婚姻状况
       oneClickAuth: false,    // 一键授权，直接绑定健康卡
       updateNotice: false, // 绑卡和解绑发送消息通知
     },
@@ -174,6 +94,10 @@ export default {
     },
     hospitalNavigation: true,  // 院内导航
     ZhuYuanCardName: false, // 住院绑卡是否需要姓名
+    arrivalService: {
+      arrival: true,
+      waitingList: true
+    }
   },
   reportsPage:{
     hideInHosp: false, // 隐藏住院报告入口
@@ -202,3 +126,5 @@ export default {
     bindCardNotice: '',//绑卡成功提醒
   }
 }
+const mergedConfig = mergeRecursive(DefaultConfig,config)
+export default mergedConfig
