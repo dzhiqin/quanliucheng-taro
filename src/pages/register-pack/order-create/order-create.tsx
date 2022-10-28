@@ -23,6 +23,7 @@ import ResultPage from '@/components/result-page/result-page'
 import SubscribeNotice from '@/components/subscribe-notice/subscribe-notice'
 import './order-create.less'
 import {custom} from '@/custom/index'
+import RegisterNotice from './notice'
 
 export default function OrderCreate() {
   const [order,setOrder] = useState({
@@ -312,29 +313,7 @@ export default function OrderCreate() {
         <View style='padding: 0 40rpx'>
           <BkButton title='确认挂号' disabled={busy} onClick={handleSubmit} />
         </View>
-        <View className='order-create-title'>挂号须知</View>
-        <View className='order-create-notice'>
-          <View className='flex-center'>
-            <AtIcon value='alert-circle' size='15' color='#999'></AtIcon>
-            <text>缴费提供微信支付</text>
-          </View>
-          <View className='flex-center'>
-            <AtIcon value='alert-circle' size='15' color='#999'></AtIcon>
-            <text>处方24小时有效</text>
-          </View>
-          {
-            // 特殊处理
-            custom.hospName !== 'gysyhp' &&
-            <View className='flex-center'>
-              <AtIcon value='alert-circle' size='15' color='#FF7C25'></AtIcon>
-              <text className='price-color'>目前微信支付仅自费缴费{custom.feat.YiBaoCard ? '和广州医保' : ''}，如省直、市直、公费记账请移步到窗口人工缴纳</text>
-            </View>
-          }
-          <View className='flex-center'>
-            <AtIcon value='alert-circle' size='15' color='#FF7C25'></AtIcon>
-            <text className='price-color'>需要打印发票和费用清单的请到一楼大厅自助机自行打印</text>
-          </View>
-        </View>
+        <RegisterNotice />
         
       </View>
     )

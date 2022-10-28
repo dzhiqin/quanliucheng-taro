@@ -54,13 +54,14 @@ export default function OrderList() {
     Taro.showLoading({title: '加载中……',mask:true})
     fetchRegInvoiceInfo({serialNo: item.serialNo}).then(res => {
       if(res.resultCode === 0){
+        Taro.hideLoading()
         const invoiceUrl = res.data.invoiceUrl
         Taro.setStorageSync('webViewSrc',invoiceUrl)
         Taro.navigateTo({url: '/pages/web-view-page/web-view-page'})
       }else{
         toastService({title: '获取电子发票失败：' + res.message})
       }
-    }).finally(() => {
+    }).catch(() => {
       Taro.hideLoading()
     })
   }
