@@ -136,9 +136,13 @@ export default function DoctorDefault(props) {
             isTimeValid: timeValid(date,item.endTime)
           }
         }))
+        loadingService(false)
+      }else{
+        toastService({title: '获取分时失败'})
+        setList([])
       }
-    }).finally(() => {
-      loadingService(false)
+    }).catch((err) => {
+      toastService({title: '获取分时失败'})
     })
   }
   Taro.useDidShow(() => {

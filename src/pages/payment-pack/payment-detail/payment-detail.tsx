@@ -105,7 +105,11 @@ export default function PaymentDetail() {
           setOrderId(res.data.orderId)
           payOrderById(res.data.orderId,type)
         }else{
-          toastService({title: '创建订单失败' + res.message})
+          // toastService({title: '创建订单失败' + res.message})
+          Taro.showToast({
+            title: '创建订单失败' + res.message,
+            icon: 'none'
+          })
           setBusy(false)
         }
       })
@@ -115,7 +119,11 @@ export default function PaymentDetail() {
           setOrderId(res.data.orderId)
           payOrderById(res.data.orderId,type)
         }else{
-          toastService({title: '创建订单失败' + res.message})
+          // toastService({title: '创建订单失败' + res.message})
+          Taro.showToast({
+            title: '创建订单失败' + res.message,
+            icon: 'none'
+          })
           setBusy(false)
         }
       })

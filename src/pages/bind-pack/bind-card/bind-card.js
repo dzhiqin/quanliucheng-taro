@@ -217,7 +217,6 @@ export default class BindCard extends React.Component {
     const index = e.detail.value
     const name =this.state.idenTypeNames[index]
     const item = idenTypeOptions.find(i => i.name === name)
-    
     this.setState({
       currentIdenTypeIndex: index,
       currentIdenTypeValue: name
@@ -328,7 +327,7 @@ export default class BindCard extends React.Component {
           </Picker>
 
           {
-            this.state.currentIdenTypeValue !== '儿童(无证件)' || !this.state.bindCardConfig.parentInfo ? 
+            this.state.currentIdenTypeValue !== '儿童(无证件)' &&
             <AtInput 
               name='idenNo' 
               title='证件号码' 
@@ -337,8 +336,7 @@ export default class BindCard extends React.Component {
               value={this.state.card.idenNo} 
               onChange={this.handleCardChange.bind(this,'idenNo')} 
             >
-            </AtInput> : 
-            ''
+            </AtInput> 
           }
         
           {
@@ -451,7 +449,7 @@ export default class BindCard extends React.Component {
             </View>
           </View>
           {
-            this.state.currentIdenTypeValue === '儿童(无证件)' &&
+            this.state.currentIdenTypeValue === '儿童(无证件)' && custom.feat.bindCard.parentInfo &&
             <AtInput 
               name='parentName' 
               title='监护人姓名' 
@@ -463,7 +461,7 @@ export default class BindCard extends React.Component {
           }
           
           {
-            this.state.currentIdenTypeValue === '儿童(无证件)' &&
+            this.state.currentIdenTypeValue === '儿童(无证件)' && custom.feat.bindCard.parentInfo &&
             <AtInput 
               name='parentId' 
               title='监护人身份证号' 

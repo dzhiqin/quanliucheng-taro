@@ -30,7 +30,6 @@ export default function DefaultReport(props:{
     
   }
   const handleFetchPdfUrl = () => {
-    handleViewPdf('')
     setBusy(true)
     fetchReportUrl({examId,itemType}).then(res => {
       if(res.resultCode === 0){
@@ -73,7 +72,6 @@ export default function DefaultReport(props:{
         })
       }
     })
-  
   }
   return(
     <View className='reports-detail' style='padding: 40rpx;'>
@@ -88,7 +86,7 @@ export default function DefaultReport(props:{
         )
       }
       {
-        // 特殊处理 广三黄埔院区返回的是base64格式的报告
+        // 特殊处理 广三黄埔院区返回的是base64格式的报告，后端处理成url资源
         custom.hospName === 'gysyhp' &&
         <AtButton type='primary' loading={busy} circle onClick={handleFetchPdfUrl}>查看pdf</AtButton>
       }

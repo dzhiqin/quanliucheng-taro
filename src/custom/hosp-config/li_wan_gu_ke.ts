@@ -10,7 +10,7 @@ const config = {
   logo: "https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/lwgk/20220308-basic/lwgk.png",
   reportsPage:{
     hideInHosp: false, // 隐藏住院报告入口
-    urlDetail: false, // 报告详情页用图片展示
+    showImageDetail: false, // 图片展示检验报告详情
     clinicReportTabs: [
       {title: '检验', value: REPORT_ITEM_TYPE_CN.化验},
       {title: '检查', value: REPORT_ITEM_TYPE_CN.检查},

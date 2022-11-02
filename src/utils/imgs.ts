@@ -26,6 +26,7 @@ export default {
   outpatient: `${url}outpatient.png`,
   queue: `${url}queue.png`,
   queue_back: `${url}queue_back.png`,
+  hospital: `${url}hospital.png`,
   // 首页图标
   home_icon1: `${url}home_icon1.png`,
   home_icon2: `${url}home_icon2.png`,

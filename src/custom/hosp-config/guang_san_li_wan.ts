@@ -57,7 +57,7 @@ const config = {
       popupNotice: false,
       intradayAndAppointment: true,// 是否区分当天挂号和预约挂号
       type: 'byCategoryAndDoctorAndTime',// byDept按科室挂号；byDeptAndTime按科室和时间挂号；byCategoryAndDoctorAndTime按分类、医生、日期挂号
-      checkEpiLogicalSurvey: true, // 是否要先填流调表才可以挂号
+      checkEpiLogicalSurvey: false, // 是否要先填流调表才可以挂号
     },
     hospitalNavigation: true,  // 院内导航
   },

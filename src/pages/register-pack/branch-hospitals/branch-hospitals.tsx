@@ -6,7 +6,7 @@ import { fetchBranchHospital } from '@/service/api/register-api'
 
 export default function BranchHospitals() {
   useEffect(() => {
-    fetchBranchHospital({branchId: ''}).then((res) => {
+    fetchBranchHospital().then((res) => {
       // console.log('branch hospitals',res);
       if(res.resultCode === 0){
         if(res.data.length === 1){

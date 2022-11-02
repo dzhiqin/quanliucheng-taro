@@ -1,5 +1,4 @@
 import * as React from 'react'
-// import { View } from '@tarojs/components'
 import { custom } from '@/custom/index'
 import BkButton from '@/components/bk-button/bk-button'
 import './reports-detail.less'
@@ -7,7 +6,6 @@ import { loadingService,toastService } from '@/service/toast-service'
 import DefaultReport from './default-report'
 
 export default function AltraSoundReport(props) {
-  const setting = custom.reportsPage
   const {checkItems,examId,itemType} = props
   const [busy,setBusy] = React.useState(false)
   const handleViewPdf = () => {
@@ -41,13 +39,11 @@ export default function AltraSoundReport(props) {
     })
   
   }
-  if(setting.urlDetail) {
+  if(custom.hospName === 'gysylw'){ // 特殊处理
     return(
       <BkButton title='查看PDF' onClick={handleViewPdf} loading={busy} />
     )
   }else{
     return <DefaultReport checkItems={checkItems} examId={examId} itemType={itemType} />
   }
-  
-  
 }

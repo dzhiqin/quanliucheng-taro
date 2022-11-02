@@ -27,7 +27,13 @@ const config = {
               event: 'navigate',
               url: '/pages/service-pack/arrival-service/arrival-service'
             }, 
-            
+            {
+              icon: imgUrl.hospital,
+              name: '远程门诊',
+              event: 'jump',
+              appId: 'wx0c6ba48b835df0bf',
+              path: 'pages/index/index'
+            }
           ]
         }
       ]
@@ -52,7 +58,7 @@ const config = {
   },
   reportsPage:{
     hideInHosp: true, // 隐藏住院报告入口
-    urlDetail: false, // 报告详情页用图片展示
+    showImageDetail: false, // 图片展示检验报告详情
     clinicReportTabs: [
       {title: '检验', value: REPORT_ITEM_TYPE_CN.化验},
       {title: '检查', value: REPORT_ITEM_TYPE_CN.检查},
