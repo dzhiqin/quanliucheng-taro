@@ -45,8 +45,6 @@ export default function Card(props: {
         path: `pages/toLogin/tologin?url=${encodeURIComponent(path)}&type=wxChat&unitId=${branchId}&alySign=${alySign}`
       }).then(res => {
         console.log(res);
-      }).catch(err => {
-        console.log(err);
       })
     }else{
       Taro.setStorageSync('card',props.card)

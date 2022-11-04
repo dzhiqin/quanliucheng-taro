@@ -10,6 +10,7 @@ import { useDidShow } from '@tarojs/taro'
 import qrcodeImg from '@/images/icons/qrcode.png'
 import './health-cards.less'
 import SubscribeNotice from '../subscribe-notice/subscribe-notice'
+import { CARD_ACTIONS } from '@/enums/index'
 
 export default function HealthCards(props: {
   cards?: any,
@@ -18,27 +19,39 @@ export default function HealthCards(props: {
   const [isLogin, setLoginStatus] = useState(false)
   const [showNotice,setShowNotice] = useState(false)
   const [cards,setCards] = useState(props.cards || [])
-  const [currentCard,setCurrentCard] = useState(0)
+  const [currentIndex,setCurrentIndex] = useState(0)
   const [selectedCard, setSelected] = useState({
     name: '',
     cardNo: '',
     isDefault: false
   })
+  
   useDidShow(() => {
     const res = Taro.getStorageSync('userInfo')
     if(res){
       setLoginStatus(true)
     }
-    const cardsList = Taro.getStorageSync('cards')
-    // console.log('cardslist',cardsList);
-    setCards(cardsList)
-    for(let i =0;i< cardsList.length;i++){
-      if(cardsList[i].isDefault){
-        setCurrentCard(i)
-        setSelected(cardsList[i])
+    const cardsTemp = Taro.getStorageSync('cards')
+    setCards(cardsTemp)
+    for(let i =0;i< cardsTemp.length;i++){
+      if(cardsTemp[i].isDefault){
+        setCurrentIndex(i)
+        setSelected(cardsTemp[i])
         break
       }
     }
+    Taro.eventCenter.on(CARD_ACTIONS.UPDATE_ALL,() => {
+      const cardsList = Taro.getStorageSync('cards')
+      setCards(cardsList)
+      for(let i =0;i< cardsList.length;i++){
+        if(cardsList[i].isDefault){
+          setCurrentIndex(i)
+          setSelected(cardsList[i])
+          break
+        }
+      }
+    })
+    
   })
   const handleLogin = async () =>{
     let subsRes = await TaroSubscribeService(
@@ -60,7 +73,7 @@ export default function HealthCards(props: {
   const onCardChange = (e) => {
     // const index = e.detail.current
     // const cardId = cards[index].id
-    // setCurrentCard(index)
+    // setCurrentIndex(index)
     // CardsHealper.setDefault(cardId)
     // Taro.showToast({
     //   title: '您已切换默认卡',
@@ -146,7 +159,7 @@ export default function HealthCards(props: {
             circular
             indicatorDots
             onChange={onCardChange.bind(this)}
-            current={currentCard}
+            current={currentIndex}
           >
             {
               cards && cards.map((item,index) => 

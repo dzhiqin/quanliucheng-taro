@@ -65,15 +65,15 @@ const Request = (
         // const endTime = new Date().valueOf()
         resolve(res.data as HttpResponse)
         if(res.data.resultCode === 1 && res.data.message === '请先登录授权'){
-          handleLogin()
+          // handleLogin()
         }
         // console.log('request spent: ',endTime - startTime);
-        const api = url.split('/').pop()
-        console.log(`============${api}=============`)
-        console.log('【请求】',url)
-        console.log(`【入参】${ data ? JSON.stringify(data) : '无'}`);
-        console.log(`【token】${getHeaderAuth().token}`)
-        console.log(`【返回】`,res.data)
+        // const api = url.split('/').pop()
+        // console.log(`============${api}=============`)
+        // console.log('【请求】',url)
+        // console.log(`【入参】${ data ? JSON.stringify(data) : '无'}`);
+        // console.log(`【token】${getHeaderAuth().token}`)
+        // console.log(`【返回】`,res.data)
         
       },
       fail: (err: Taro.General.CallbackResult) => {
@@ -132,30 +132,30 @@ const UploadFile = (
     })
   })
 }
-const handleLogin = () => {
-  Taro.login({
-    success: res => {
-      let { code } = res
-      login({code}).then((result:any) => {
-        if(result.statusCode === 200) {
-          const {data: {data}} = result
-          Taro.setStorageSync('token', data.token)
-          Taro.setStorageSync('openId', data.openId)
-          fetchBranchHospital().then(resData => {
-            if(resData.data && resData.data.length === 1){
-              Taro.setStorageSync('hospitalInfo',resData.data[0])
-              CardsHealper.updateAllCards()
-              // Taro.navigateTo({url: '/pages/login/login'})
-            }
-          })
-        }
-      }).catch(() => {
-        Taro.showToast({
-          title: '获取token失败',
-          icon: 'none'
-        })
-      })
-    }
-  })
-}
+// const handleLogin = () => {
+//   Taro.login({
+//     success: res => {
+//       let { code } = res
+//       login({code}).then((result:any) => {
+//         if(result.statusCode === 200) {
+//           const {data: {data}} = result
+//           Taro.setStorageSync('token', data.token)
+//           Taro.setStorageSync('openId', data.openId)
+//           fetchBranchHospital().then(resData => {
+//             if(resData.data && resData.data.length === 1){
+//               Taro.setStorageSync('hospitalInfo',resData.data[0])
+//               CardsHealper.updateAllCards()
+//               // Taro.navigateTo({url: '/pages/login/login'})
+//             }
+//           })
+//         }
+//       }).catch(() => {
+//         Taro.showToast({
+//           title: '获取token失败',
+//           icon: 'none'
+//         })
+//       })
+//     }
+//   })
+// }
 export { Request, Get, Post, DownloadFile, UploadFile }

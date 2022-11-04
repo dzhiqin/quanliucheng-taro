@@ -135,8 +135,9 @@ export const TaroNavToMiniProgram = (data:{appId: string, path: string}) => {
       appId:data.appId,
       path:data.path,
       success: (res) => {resolve(res)},
-      fail: (err) => {reject(err)},
       complete: () => {}
+    }).catch(err => {
+      toastService({title: '您已取消跳转'})
     })
   })
 }

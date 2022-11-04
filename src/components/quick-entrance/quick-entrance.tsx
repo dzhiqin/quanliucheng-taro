@@ -29,8 +29,6 @@ export default function QuickEntrance(props: {
     if(item.event === 'jump'){
       TaroNavToMiniProgram({appId: item.appId, path: item.path}).then(() => {
         console.log('跳转小程序成功');
-      }).catch((err) => {
-        console.error('跳转小程序失败')
       })
     }
   }

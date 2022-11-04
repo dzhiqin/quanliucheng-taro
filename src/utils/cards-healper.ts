@@ -1,6 +1,5 @@
 import * as Taro from '@tarojs/taro'
 import { setDefaultCard, deleteCard, fetchHealthCards } from '@/service/api'
-
 import {Card} from '../interfaces/card'
 
 const updateAllCards = () => {

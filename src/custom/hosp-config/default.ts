@@ -107,7 +107,9 @@ const config:HospConfig = {
             {
               icon: imgUrl.bafy,
               name: '病案复印',
-              event: 'toMiniProgram',
+              event: 'jump',
+              appId: 'wx075e060a6f21ae66',
+              path: 'pages/index/index'
             }
           ]
         },
@@ -117,7 +119,9 @@ const config:HospConfig = {
             {
               name: "自助核酸缴费",
               icon: imgUrl.new_home_icon10,
-              event: "jump"
+              event: "jump",
+              appId: '',
+              path: ''
             },
             {
               name: "电子票夹",
