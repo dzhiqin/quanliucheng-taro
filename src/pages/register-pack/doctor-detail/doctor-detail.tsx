@@ -197,6 +197,9 @@ export default function DoctorDefault(props) {
   },[options.deptId,options.doctorId])
   const renderTickets = (item) => {
     if(item.isHalt) return '停诊'
+    // eslint-disable-next-line no-restricted-globals
+    if(isNaN(parseInt(item.leaveCount))) return item.leaveCount
+    if(item.leaveCount > 9999) return '不限号' // 特殊处理
     if(item.leaveCount > 0) return `剩余:${item.leaveCount}`
     return '无号'
   }
@@ -205,6 +208,12 @@ export default function DoctorDefault(props) {
     if(!time) return true
     const dateAndTime = date + ' ' + time
     return new Date(dateAndTime.replace(/-/g, "/")).getTime() >  currentTime
+  }
+  const isActive = (item) => {
+    // eslint-disable-next-line no-restricted-globals
+    if(isNaN(parseInt(item.leaveCount))) return true
+    if(parseInt(item.leaveCount) > 0 && !item.isHalt && item.isTimeValid) return true
+    return false
   }
   return(
     <View className='doctor-detail'>
@@ -271,7 +280,7 @@ export default function DoctorDefault(props) {
                     key={index} 
                     title={`${item.timeSlice ? item.timeSlice: ''}${item.startTime} - ${item.endTime}`} 
                     extraText={renderTickets(item)}
-                    className={(item.leaveCount > 0 && !item.isHalt && item.isTimeValid) ? 'ticket-btn-active' : 'ticket-btn-unactive'} 
+                    className={isActive(item) ? 'ticket-btn-active' : 'ticket-btn-unactive'} 
                     arrow='right' 
                     onClick={onClickItem.bind(null,item)}
                   />

@@ -7,7 +7,7 @@ export default function PreRegNotice() {
     <View style='padding: 0 40rpx 40rpx'>
       <View className='title'>温馨提示：</View>
       <View className='text'>
-        1.<text>自2022年10月26日起，除急危重症孕产妇及其他急危重症患者等特殊人员外，进入我院人员须持48小时内核酸阴性结果；</text>
+        1.<text>自2022年11月9日起，除急危重症孕产妇及其他急危重症患者等特殊人员外，进入我院人员须持24小时内核酸阴性结果；</text>
       </View>
       <View className='text'>
         2.<text>因承担疫情防控紧急任务，可能存在出诊医生临时停诊情况，请您留意我院相关通知或查看医院服务号出诊安排。</text>

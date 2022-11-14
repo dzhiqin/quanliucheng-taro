@@ -91,5 +91,8 @@ export interface HospConfig {
     showImageDetail: boolean, // 图片展示检验报告详情
     clinicReportTabs: {title: string, value: string}[],
     hospReportTabs: {title: string, value: string}[]
+  },
+  paymentOrderPage: {
+    tackingMedicineGuide: false //取药指引
   }
 }

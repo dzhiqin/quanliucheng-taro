@@ -21,7 +21,7 @@ class App extends Component {
       success: res => {
         let { code } = res
         login({code}).then((result:any) => {
-          console.log('login res',result.data.data.openId)
+          // console.log('login res',result.data.data.openId)
           if(result.statusCode === 200) {
             const {data: {data}} = result
             Taro.setStorageSync('token', data.token)

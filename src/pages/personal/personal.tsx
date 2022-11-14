@@ -52,7 +52,7 @@ export default function Personal() {
             {/* <View className='header-info-number'>1234567</View> */}
           </View>
         </View>
-        <HealthCards cards={cards}></HealthCards>
+        <HealthCards cards={cards} switch></HealthCards>
       </View>
       <View className='content'>
         <BkPanel arrow onClick={onClickPanel.bind(this,'/pages/register-pack/order-list/order-list')} >

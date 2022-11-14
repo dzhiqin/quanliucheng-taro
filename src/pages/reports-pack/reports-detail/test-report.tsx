@@ -1,4 +1,5 @@
 import * as React from 'react'
+import * as Taro from '@tarojs/taro'
 import { View, Image } from '@tarojs/components'
 import { AtButton } from 'taro-ui'
 import { custom } from '@/custom/index'
@@ -88,10 +89,7 @@ export default function TestReport(props: {
           </View>
         </View>
       }
-      {// 特殊处理
-        custom.hospName === 'gysyhp' && 
-        <AtButton type='primary' loading={busy} circle onClick={handleFetchPdfUrl}>查看pdf</AtButton>
-      }
+      
       {
         !setting.showImageDetail &&
         <View className='table'>
@@ -116,6 +114,10 @@ export default function TestReport(props: {
             )
           }
         </View>
+      }
+      {// 特殊处理
+        custom.hospName === 'gysyhp' && 
+        <AtButton customStyle='margin: 40rpx' type='primary' loading={busy} circle onClick={handleFetchPdfUrl}>查看pdf</AtButton>
       }
     </View>
   )

@@ -21,7 +21,7 @@ export default function Index() {
     <View className='index'>
       <MyContext.Provider value={indexPage}>
         {indexPage.banner.enable && <Image src={indexPage.banner.url} className='banner'></Image>}
-        {indexPage.healthCard.enable && <HealthCards />}
+        {indexPage.healthCard.enable && <HealthCards switch />}
         {indexPage.navCard.enable && <NavCard></NavCard>}
         {indexPage.functionBox.enable && <FunctionBoxes ></FunctionBoxes>}
         {indexPage.quickEntrance.enable && <QuickEntrance quickEntrance={indexPage.quickEntrance}></QuickEntrance>}

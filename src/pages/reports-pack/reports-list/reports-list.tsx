@@ -67,7 +67,7 @@ export default function ReportList() {
   }
   return(
     <View className='reports-list'>
-      <HealthCards />
+      <HealthCards switch />
       <BkTabs current={currentTab} tabs={reportType === REPORT_TYPE_EN.clinic? clinicTabs : hospReportTabs} onTabChange={onTabChange} />
       {
         list.length > 0

@@ -540,6 +540,10 @@ export default function PaymentDetail() {
             }
           </View>
         }
+        {
+          orderInfoFromList && custom.paymentOrderPage.tackingMedicineGuide &&
+          <BkButton title='取药指引' onClick={() => Taro.navigateTo({url: `/pages/payment-pack/medicine-guide/medicine-guide?orderId=${orderInfoFromList.orderId}`})} style='margin-top: 20rpx;' />
+        }
         <View className='payment-detail-tips'>
           <View className='payment-detail-tips-item'>
             <Image src={sighPng} />

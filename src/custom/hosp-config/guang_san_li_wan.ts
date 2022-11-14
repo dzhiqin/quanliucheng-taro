@@ -11,8 +11,8 @@ const config = {
   logo: "https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/lwgk/20220309-basic/gysy.png",
   hospitalName: "广州医科大学附属第三医院",
   // baseUrl: "https://applets.gdbkyz.com", // 倍康测试
-  baseUrl: "https://gysy.wedoublecare.com",  // 正式环境
-  // baseUrl: "https://weixin2.gy3y.com",
+  // baseUrl: "https://gysy.wedoublecare.com",  // 正式环境
+  baseUrl: "https://weixin2.gy3y.com", // 新正式环境
   // subUrl: 'https://gysycustomize.wedoublecare.com', // 测试环境
   indexPage: {
     quickEntrance: {
@@ -74,6 +74,9 @@ const config = {
     appointmentCancelNotice: 'MlDidLtES5vVTC4YcGIhYluIMIXSi7hX3JXngkgUV7s',//挂号取消通知
     refundNotice: 'Hhj5lSuAslXx5VGEbhfp2KAiSw__Qv3_B3_1i16qt5o',//退费通知
     bindCardNotice: 'KDkqTgWPR8SUOnWTu-QS8LPBcTPrB121kHuHOFPcRjY',//绑卡成功提醒
+  },
+  paymentOrderPage: {
+    tackingMedicineGuide: true
   }
 }
 const mergedConfig = mergeRecursive(DefaultConfig, config)

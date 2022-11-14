@@ -42,9 +42,9 @@ export const fetchPaymentOrderDetail = (data: {billOrderId: string}) => {
 export const fetchPaymentOrderStatus = (data: {orderId: string}) => {
   return Post(fullUrl('api/applet/paybill/Bill/GetBillStatus?orderId=' + data.orderId),data)
 }
-// export const fetchGuideList = (data: {orderId: string}) => {
-//   return Post(fullUrl('api/applet/paybill/Bill/GetGuideList'),data)
-// }
+export const fetchMedicineGuideList = (data: {orderId: string}) => {
+  return Post(fullUrl('api/applet/paybill/Bill/GetGuideList'),data)
+}
 export const fetchMedicineInfo = (data: {orderId: string}) => {
   return Post(fullUrl('api/applet/paybill/Bill/GetDrugStateInfo'),data)
 }
