@@ -1,8 +1,8 @@
 import * as Taro from '@tarojs/taro'
 import { toastService } from '../toast-service'
-import { login } from '@/service/api/user-api'
-import { fetchBranchHospital } from '@/service/api'
-import { CardsHealper } from '@/utils/cards-healper'
+// import { login } from '@/service/api/user-api'
+// import { fetchBranchHospital } from '@/service/api'
+// import { CardsHealper } from '@/utils/cards-healper'
 
 interface Response {
   resultCode: number
@@ -68,12 +68,12 @@ const Request = (
           // handleLogin()
         }
         // console.log('request spent: ',endTime - startTime);
-        const api = url.split('/').pop()
-        console.log(`============${api}=============`)
-        console.log('【请求】',url)
-        console.log(`【入参】${ data ? JSON.stringify(data) : '无'}`);
-        console.log(`【token】${getHeaderAuth().token}`)
-        console.log(`【返回】`,res.data)
+        // const api = url.split('/').pop()
+        // console.log(`============${api}=============`)
+        // console.log('【请求】',url)
+        // console.log(`【入参】${ data ? JSON.stringify(data) : '无'}`);
+        // console.log(`【token】${getHeaderAuth().token}`)
+        // console.log(`【返回】`,res.data)
         
       },
       fail: (err: Taro.General.CallbackResult) => {

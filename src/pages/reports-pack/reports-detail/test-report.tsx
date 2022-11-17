@@ -16,11 +16,17 @@ export default function TestReport(props: {
 }) {
   const setting = custom.reportsPage
   const {checkItems,examId,itemType} = props
+  let urls = []
+  checkItems.forEach(item => {
+    if(item.url){
+      urls.push(item.url)
+    }
+  })
   const [busy,setBusy] = React.useState(false)
-  const onClick = (e) => {
+  const showImages = (_urls) => {
     Taro.previewImage({
-      current: e,
-      urls: [e]
+      current: _urls[0],
+      urls: _urls
     })
   }
   const getReferResult = (key) => {
@@ -82,9 +88,13 @@ export default function TestReport(props: {
         <View className='reports-detail-content'>
           <Image src={checkItems[0]? checkItems[0].url : ''} />
           <View className='reports-detail-footer'>
-            {
+            {/* {
               checkItems[0] && checkItems[0].url &&
               <BkButton title='查看图片' onClick={onClick.bind(null,checkItems[0]? checkItems[0].url : '')} />
+            } */}
+            {
+              urls.length > 0 && 
+              <BkButton title='查看图片' onClick={showImages.bind(null,urls)} />
             }
           </View>
         </View>
