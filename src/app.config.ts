@@ -1,4 +1,4 @@
-export default {
+const config = {
   pages: [
     'pages/index/index',
     'pages/login/login',
@@ -6,89 +6,9 @@ export default {
     'pages/personal/personal',
     'pages/web-view-page/web-view-page'
   ],
-  subpackages: [
-    {
-      root: 'pages/bind-pack',
-      name: 'bind',
-      pages: [
-        'bind-card/bind-card',
-        'cards-list/cards-list',
-        'card-detail/card-detail',
-        'elec-healthcard-auth/elec-healthcard-auth',
-        'elec-healthcard-users/elec-healthcard-users'
-      ]
-    },
-    {
-      root: 'pages/register-pack',
-      name: 'register',
-      pages: [
-        'branch-hospitals/branch-hospitals',
-        'clinics/clinics',
-        'notice/notice',
-        'doctor-list/doctor-list',
-        'doctor-detail/doctor-detail',
-        'search-result/search-result',
-        'classify-doctor-list/classify-doctor-list',
-        'order-create/order-create',
-        'order-list/order-list',
-        'doctors/doctors'
-      ]
-    },
-    {
-      root: 'pages/official-pack',
-      name: 'official',
-      pages: [
-        'clinic-list/clinic-list',
-        'guide-list/guide-list',
-        'clinic-intro/clinic-intro',
-        'doctor-detail/doctor-detail'
-      ]
-    },
-    {
-      root: 'pages/reports-pack',
-      name: 'reports',
-      pages: [
-        'reports-list/reports-list',
-        'reports-type/reports-type',
-        'reports-detail/reports-detail',
-      ]
-    },
-    {
-      root: 'pages/payment-pack',
-      name: 'payments',
-      pages: [
-        'payment-list/payment-list',
-        'payment-detail/payment-detail',
-        'order-list/order-list',
-        'medicine-guide/medicine-guide'
-      ]
-    },
-    {
-      root: 'pages/hosp-pack',
-      name: 'hospitalization',
-      pages: [
-        'checklist/checklist',
-        'checkin/checkin',
-        'binding-card/binding-card',
-        'deposit/deposit',
-        'checklist-detail/checklist-detail',
-        'card-list/card-list'
-      ]
-    },
-    {
-      root: 'pages/service-pack',
-      name: 'service',
-      pages: [
-        'arrival/arrival',
-        'waiting-list/waiting-list',
-        'arrival-service/arrival-service',
-        'investigation/investigation',
-        'epidemiological-survey/epidemiological-survey',
-        'epidemiological-survey/result',
-        'deposit/deposit'
-      ]
-    }
-  ],
+  subpackages: undefined,
+  subPackages: undefined,
+  plugins: undefined,
   window: {
     backgroundTextStyle: 'light',
     navigationBarBackgroundColor: '#fff',
@@ -120,16 +40,6 @@ export default {
       }
     ]
   },
-  "plugins": {
-    "healthCardPlugins": {
-      "version": "3.1.8",
-      "provider": "wxee969de81bba9a45"
-    },
-    "ocr-plugin": {
-      "version": "3.1.3",
-      "provider": "wx4418e3e031e551be"
-    }
-  },
   "permission": {
     "scope.userLocation": {
       "desc": "你的位置信息将用于小程序定位"
@@ -143,3 +53,113 @@ export default {
     "getLocation"
   ],
 }
+
+const subPackages = [
+  {
+    root: 'pages/bind-pack',
+    name: 'bind',
+    pages: process.env.TARO_ENV === 'weapp' ? 
+    [
+      'bind-card/bind-card',
+      'cards-list/cards-list',
+      'card-detail/card-detail',
+      'elec-healthcard-auth/elec-healthcard-auth',
+      'elec-healthcard-users/elec-healthcard-users'
+    ] 
+    :
+    [
+      'bind-card/bind-card',
+      'cards-list-alipay/cards-list-alipay',
+      'card-detail/card-detail',
+    ]
+  },
+  {
+    root: 'pages/register-pack',
+    name: 'register',
+    pages: [
+      'branch-hospitals/branch-hospitals',
+      'clinics/clinics',
+      'notice/notice',
+      'doctor-list/doctor-list',
+      'doctor-detail/doctor-detail',
+      'search-result/search-result',
+      'classify-doctor-list/classify-doctor-list',
+      'order-create/order-create',
+      'order-list/order-list',
+      'doctors/doctors'
+    ]
+  },
+  {
+    root: 'pages/official-pack',
+    name: 'official',
+    pages: [
+      'clinic-list/clinic-list',
+      'guide-list/guide-list',
+      'clinic-intro/clinic-intro',
+      'doctor-detail/doctor-detail'
+    ]
+  },
+  {
+    root: 'pages/reports-pack',
+    name: 'reports',
+    pages: [
+      'reports-list/reports-list',
+      'reports-type/reports-type',
+      'reports-detail/reports-detail',
+    ]
+  },
+  {
+    root: 'pages/payment-pack',
+    name: 'payments',
+    pages: [
+      'payment-list/payment-list',
+      'payment-detail/payment-detail',
+      'order-list/order-list',
+      'medicine-guide/medicine-guide'
+    ]
+  },
+  {
+    root: 'pages/hosp-pack',
+    name: 'hospitalization',
+    pages: [
+      'checklist/checklist',
+      'checkin/checkin',
+      'binding-card/binding-card',
+      'deposit/deposit',
+      'checklist-detail/checklist-detail',
+      'card-list/card-list'
+    ]
+  },
+  {
+    root: 'pages/service-pack',
+    name: 'service',
+    pages: [
+      'arrival/arrival',
+      'waiting-list/waiting-list',
+      'arrival-service/arrival-service',
+      'investigation/investigation',
+      'epidemiological-survey/epidemiological-survey',
+      'epidemiological-survey/result',
+      'deposit/deposit'
+    ]
+  }
+]
+if(process.env.TARO_ENV === 'weapp'){
+  const plugins = {
+    "healthCardPlugins": {
+      "version": "3.1.8",
+      "provider": "wxee969de81bba9a45"
+    },
+    "ocr-plugin": {
+      "version": "3.1.3",
+      "provider": "wx4418e3e031e551be"
+    }
+  }
+  config.plugins = plugins
+  config.subpackages = subPackages
+}
+if(process.env.TARO_ENV === 'alipay'){
+  config.subPackages = subPackages
+  
+}
+export default config

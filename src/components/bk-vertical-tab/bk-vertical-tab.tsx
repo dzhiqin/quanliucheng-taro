@@ -25,7 +25,7 @@ export default function BkVerticalTab(props:{
     setCurrent(props.current)
   }, [props,current])
   return(
-    <ScrollView id='bk-vertical-tab' className={`'bk-vertical-tab'`} style={props.style ? props.style : ''} scrollY >
+    <ScrollView id='bk-vertical-tab' className='bk-vertical-tab' style={props.style ? props.style : ''} scrollY >
       {
         props.list && props.list.map((item,index) => 
           <View className={`tab-item ${current == index ? 'tab-item-active' : ''}`} onClick={onClick.bind(null,index,item)} key={key ? item[key]: index}>{item[name]}</View>

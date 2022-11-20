@@ -14,10 +14,12 @@ import QuestionItem from './question-item';
 import BkButton from '@/components/bk-button/bk-button';
 import HealthCards from '@/components/health-cards/health-cards';
 import { CardsHealper } from '@/utils/cards-healper';
+import parse from 'mini-html-parser2'
 import { QUES_TYPE } from './enums';
 
 export default function EpidemiologicalSurvey(){
   const [surveyInfo,setSurveyInfo] = useState(null)
+  const [richTextNodes,setNodes] = useState(undefined)
   const [basicInfo,setBasicInfo] = useState(null)
   const [questions,setQuestions] = useState([])
   const [busy,setBusy] = useState(false)
@@ -27,6 +29,12 @@ export default function EpidemiologicalSurvey(){
     getEpidemiologicalSurveyInfo().then(res => {
       if(res.resultCode === 0){
         setSurveyInfo(res.data[0])
+        const richTextStr = res.data[0].description
+        parse(richTextStr,(err,nodes) => {
+          if(!err){
+            setNodes(nodes)
+          }
+        })
         getEpidemiologicalSurveyQuestions({typeId: res.data[0].questionnaireTypeId}).then(data => {
           if(data.resultCode === 0){
             setBasicInfo(data.data.basic)
@@ -236,7 +244,7 @@ export default function EpidemiologicalSurvey(){
         surveyInfo && 
         <View style='padding: 40rpx'>
           <View className='survey-title'>{surveyInfo.title}</View>
-          <RichText nodes={surveyInfo.description} />
+          <RichText nodes={richTextNodes} />
         </View>
       }
       <BkTitle title='一、基本信息' style='margin-left: 40rpx' />

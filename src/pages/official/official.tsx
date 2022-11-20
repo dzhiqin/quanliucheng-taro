@@ -8,6 +8,7 @@ import phonePng from '@/images/icons/phone.png'
 import globalPng from '@/images/icons/global.png'
 import locationPng from '@/images/icons/location.png'
 import {custom} from '@/custom/index'
+import parse from 'mini-html-parser2';
 import './official.less'
 
 export default function Official() {
@@ -20,7 +21,7 @@ export default function Official() {
     natures:''
   })
   const [banner,setBanner] = useState('https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/applets-imgs/banner2.png')
-  const [desc,setDesc] = useState('')
+  const [desc,setDesc] = useState(undefined)
   const navToClinicList = () => {
     Taro.navigateTo({
       url: '/pages/official-pack/clinic-list/clinic-list'
@@ -39,7 +40,12 @@ export default function Official() {
         if(res.data.banners.length > 0){
           setBanner(res.data.banners[0].imgPath)
         }
-        setDesc(res.data.introduce)
+        parse(res.data.introduce,(err,nodes) => {
+          if(!err){
+            setDesc(ndoes)
+          }
+        })
+        
       }
     }).finally(() => {
       Taro.hideLoading()
