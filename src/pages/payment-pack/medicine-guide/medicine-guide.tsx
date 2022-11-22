@@ -1,6 +1,6 @@
 import * as Taro from '@tarojs/taro'
 import * as React from 'react'
-import { View } from '@tarojs/components'
+import { View, Image } from '@tarojs/components'
 import { fetchMedicineGuideList } from '@/service/api'
 import { toastService } from '@/service/toast-service'
 import './medicine-guide.less'
@@ -43,6 +43,11 @@ export default function MedicineGuide() {
           <View className='flat-title' style='margin-right: 10rpx'>发药窗口</View>
           <View>{item.disWin}</View>
         </View>
+        {
+          item.visitNoCode &&
+          <Image src={`data:image/jpg;base64,${item.visitNoCode}`} className='barcode' />
+        }
+        
       </BkPanel>
     )
   }

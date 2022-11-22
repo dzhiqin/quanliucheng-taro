@@ -250,13 +250,20 @@ export default function PaymentDetail() {
       TaroNavToMiniProgram({appId: 'wx8e0b79a7f627ca18', path: 'pages/index/index?agencyCode=ccd5fa6bc02f4420a131d6d46e165c71'})
       return
     }
+    
     Taro.showLoading({title: '加载中……',mask:true})
     fetchPaymentOrderInvoice({serialNo: item.serialNo}).then(res => {
       if(res.resultCode === 0){
         loadingService(false)
         const invoiceUrl = res.data.invoiceUrl
         Taro.setStorageSync('webViewSrc',invoiceUrl)
-        Taro.navigateTo({url: '/pages/web-view-page/web-view-page'})
+        // Taro.navigateTo({url: '/pages/web-view-page/web-view-page'})
+        // 跳转到外部小程序
+        const pathParams = `pages/invoiceDisplayDWDZ/invoiceDisplayDWDZ?q=${encodeURIComponent(invoiceUrl)}`
+        TaroNavToMiniProgram({
+          appId: 'wx8e0b79a7f627ca18',
+          path: pathParams
+        })
       }else{
         toastService({title: '获取电子发票失败：' + res.message})
       }

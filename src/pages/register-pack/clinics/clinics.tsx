@@ -123,7 +123,7 @@ export default function Clinics() {
       {
         registerConfig.type === 'byCategoryAndDoctorAndTime' && 
         <View className='clinics-content'>
-          <BkVerticalTab list={deptList} name='deptName' current={currentDept} key='deptId' style='flex: 2' onChange={onTabChange} />
+          <BkVerticalTab list={deptList} name='deptName' current={currentDept} key='deptId' style='flex:2' onChange={onTabChange} />
           <EmbedContent deptId={deptId} style='flex: 3' onClickDept={onClickClinicItem} onClickDate={onClickDate} />
         </View>
       }

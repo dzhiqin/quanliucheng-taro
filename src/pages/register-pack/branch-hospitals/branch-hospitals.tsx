@@ -28,6 +28,6 @@ export default function BranchHospitals() {
     
   }
   return (
-    <View>BranchHospitals</View>
+    <View>尚未获取分院信息</View>
   )
 }

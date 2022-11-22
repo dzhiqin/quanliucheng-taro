@@ -38,11 +38,14 @@ export default function Card(props: {
       }
       const alySign = encryptByDES(JSON.stringify(params))
       const path = 'https://ivf.gy3y.com/patients/#/SubscribeListNum'
-      const branchId = getBranchId()
+      // const branchId = getBranchId()
+      const pathParams = `pages/toLogin/tologin?url=${encodeURIComponent(path)}&type=H5&unitId=36&alySign=${alySign}`
+      console.log('path====',pathParams)
+      // `pages/toLogin/tologin?url=${encodeURIComponent(path)}&type=h5&unitId=${branchId}&alySign=${alySign}`
       TaroNavToMiniProgram({
         // 跳转柔济孕宝小程序
         appId: 'wx2958acfb26e6b4cd',
-        path: `pages/toLogin/tologin?url=${encodeURIComponent(path)}&type=wxChat&unitId=${branchId}&alySign=${alySign}`
+        path: pathParams
       }).then(res => {
         console.log(res);
       })

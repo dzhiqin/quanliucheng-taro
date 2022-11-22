@@ -78,11 +78,13 @@ export default function RegisterNoticeModal(props:
       <AtModalContent>
         <ScrollView className='register-notice' scrollY>
           <View className='notice-modal-title'>挂号须知</View>
-          { 
-            noticeContent ? 
-            <RichText nodes={noticeContent} /> : 
-            <View className='notice-modal-content'>暂无内容</View>
-          }
+          <View className='notice-modal-content'>
+            {
+              noticeContent ? 
+              <RichText nodes={noticeContent} className='notice-modal-content' /> : 
+              <View>暂无内容</View>
+            }
+          </View>
           <View className={`notice-modal-footer ${enable ? 'enable' : 'disable'}`} onClick={handleConfirm.bind(this)}>
             {enable ? '已阅读并同意' : `阅读${count}秒后同意`}
           </View>
