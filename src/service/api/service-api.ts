@@ -40,3 +40,9 @@ export const cancelRegisterDepositOrder = (data: {orderNo: string}) => {
 export const getRegisterDepositOrderStatus = (data: {orderNo: string}) => {
   return Get(fullUrl('api/customize/applet/Bill/CheckOrderStatus'),data)
 }
+export const fetchRecoveryFee = () => {
+  return Post(fullUrl('api/applet/paybill/SupplementaryPay/GetOrderInfo'))
+}
+export const fetchRecoveryPayParams = () => {
+  return Post(fullUrl('api/applet/paybill/SupplementaryPay/PayBill'))
+}

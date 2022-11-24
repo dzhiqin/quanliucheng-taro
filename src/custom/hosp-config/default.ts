@@ -3,6 +3,7 @@ import { REPORT_ITEM_TYPE_CN } from '@/enums/index'
 import {HospConfig} from '../index'
 
 const config:HospConfig = {
+  // 经纬度来源：百度坐标拾取系统 https://api.map.baidu.com/lbsapi/getpoint/index.html
   latitude: 23.122721,    // 院区维度
   longitude: 113.240994,  // 院区经度
   banner: '',
@@ -197,6 +198,9 @@ const config:HospConfig = {
     appointmentCancelNotice: 'wh0LadWFSyzjo_u292XgUU66KieDEMR_H-CLQ65Ir54',//挂号取消通知
     refundNotice: 'gDVRne-Bq2dHWrxfeR_63xRA_c-eRhcws1_Cd_r43_4',//退费通知
     bindCardNotice: 'XdXvsxVVjBeXvGKDkN0sb4_IUKmz5-M9vVo5VvJQA30',//绑卡成功提醒
+  },
+  paymentOrderPage: {
+    tackingMedicineGuide: false //取药指引
   }
 }
 export default config

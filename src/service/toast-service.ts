@@ -33,7 +33,7 @@ export const loadingService = (show: boolean, msg?: string) => {
 export const modalService = (props: {
   cancelText?: string,
   confirmText?: string,
-  showCancel?: true,
+  showCancel?: boolean,
   title?:string,
   content: string,
   success?: any

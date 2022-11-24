@@ -35,7 +35,19 @@ const config = {
               path: 'pages/index/index'
             }
           ]
-        }
+        },
+        // {
+        //   title: "其他",
+        //   entrances:[
+        //     {
+        //       name: "补缴入口",
+        //       icon: imgUrl.new_home_icon10,
+        //       event: "navigate",
+        //       url: '/pages/service-pack/recovery/recovery'
+        //     },
+
+        //   ]
+        // }
       ]
     }
   },

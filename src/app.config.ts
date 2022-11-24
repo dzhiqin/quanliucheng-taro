@@ -140,7 +140,8 @@ const subPackages = [
       'investigation/investigation',
       'epidemiological-survey/epidemiological-survey',
       'epidemiological-survey/result',
-      'deposit/deposit'
+      'deposit/deposit',
+      'recovery/recovery'
     ]
   }
 ]

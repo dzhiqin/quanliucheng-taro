@@ -17,7 +17,7 @@ import {
   TaroSubscribeService, 
   TaroRequestPayment } from '@/service/api'
 import { CardsHealper } from '@/utils/cards-healper'
-import { loadingService, toastService } from '@/service/toast-service'
+import { loadingService, modalService, toastService } from '@/service/toast-service'
 import { requestTry } from '@/utils/retry'
 import ResultPage from '@/components/result-page/result-page'
 import SubscribeNotice from '@/components/subscribe-notice/subscribe-notice'
@@ -217,6 +217,12 @@ export default function OrderCreate() {
         setBusy(false)
         toastService({title: res.message})
       }
+    }).catch(err => {
+      loadingService(false)
+      modalService({
+        content: JSON.stringify(err,null,2),
+        showCancel: false
+      })
     })
   }
   useEffect(() => {
