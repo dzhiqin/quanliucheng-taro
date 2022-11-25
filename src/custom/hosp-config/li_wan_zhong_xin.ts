@@ -6,12 +6,12 @@ import DefaultConfig from './default'
 const config = {
   latitude: 23.132274,
   longitude: 113.248191,
-  hospName: "lwzx",
+  hospName: "lwzxyy",
   banner: 'https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/applets-imgs/banner2.png',
-  logo: "https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/lwgk/20220309-basic/gysy.png",
+  logo: "https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/common/li-wan-zhong-xin.jpeg",
   hospitalName: "广州市荔湾中心医院",
-  baseUrl: "https://lwzxyy-applets.wedoublecare.com", // 测试
-  // baseUrl: "https://gysy.wedoublecare.com",  // 正式环境
+  // baseUrl: "http://119.29.152.149:30102", // 测试
+  baseUrl: "https://lwzxyy-applets.wedoublecare.com",  // 正式环境
   // subUrl: 'https://gysycustomize.wedoublecare.com', // 测试环境
   indexPage: {
     quickEntrance: {
@@ -43,6 +43,18 @@ const config = {
               event: 'navigate',
               url: '/pages/hosp-pack/checklist/checklist',
             }
+          ]
+        },
+        {
+          title: "其他",
+          entrances:[
+            {
+              name: "电子票夹",
+              icon: imgUrl.new_home_icon10,
+              event: "jump",
+              appId: 'wx8e0b79a7f627ca18',
+              path: `pages/invoiceDisplayDWDZ/invoiceDisplayDWDZ?q=${encodeURIComponent("https://www.chinaebill.cn/d?t=501&a=89AMy0Cj6&d=44060122_8040675619_3f7484_20221118&s=B62B74A4D1")}`
+            },
           ]
         }
       ]

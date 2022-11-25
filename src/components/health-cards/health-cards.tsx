@@ -5,12 +5,13 @@ import { useState } from 'react'
 import * as React from 'react'
 import { TaroSubscribeService } from '@/service/api/taro-api'
 import { custom } from '@/custom/index'
-// import { CardsHealper } from '@/utils/cards-healper'
+import { CardsHealper } from '@/utils/cards-healper'
 import { useDidShow } from '@tarojs/taro'
 import qrcodeImg from '@/images/icons/qrcode.png'
 import './health-cards.less'
 import SubscribeNotice from '../subscribe-notice/subscribe-notice'
 import { CARD_ACTIONS } from '@/enums/index'
+import BoxItem from '../function-boxes/box-item'
 
 export default function HealthCards(props: {
   cards?: any,
@@ -71,10 +72,13 @@ export default function HealthCards(props: {
     Taro.navigateTo({url: '/pages/bind-pack/cards-list/cards-list'})
   }
   const onCardChange = (e) => {
-    // const index = e.detail.current
-    // const cardId = cards[index].id
-    // setCurrentIndex(index)
-    // CardsHealper.setDefault(cardId)
+    const index = e.detail.current
+    const cardId = cards[index].id
+    setCurrentIndex(index)
+    CardsHealper.setDefault(cardId).then(() => {
+      const cardsTemp = cards.map(item => ({...item, isDefault: item.id === cardId}))
+      setCards(cardsTemp)
+    })
     // Taro.showToast({
     //   title: '您已切换默认卡',
     //   icon: 'none'

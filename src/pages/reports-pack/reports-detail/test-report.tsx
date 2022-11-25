@@ -126,7 +126,7 @@ export default function TestReport(props: {
         </View>
       }
       {// 特殊处理
-        custom.hospName === 'gysyhp' && 
+        custom.hospName === 'gy3yhp' && 
         <AtButton customStyle='margin: 40rpx' type='primary' loading={busy} circle onClick={handleFetchPdfUrl}>查看pdf</AtButton>
       }
     </View>

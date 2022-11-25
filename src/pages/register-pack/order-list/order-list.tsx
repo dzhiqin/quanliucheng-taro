@@ -3,7 +3,7 @@ import * as Taro from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import { useDidShow } from '@tarojs/taro'
 import './order-list.less'
-import { cancelAppointment, fetchRegInvoiceInfo, fetchRegOrderList } from '@/service/api'
+import { cancelAppointment, fetchRegInvoiceInfo, fetchRegOrderList,TaroNavToMiniProgram } from '@/service/api'
 import HealthCards from '@/components/health-cards/health-cards'
 import { useState, useEffect, useCallback } from 'react'
 import { loadingService, toastService } from '@/service/toast-service'
@@ -56,8 +56,13 @@ export default function OrderList() {
       if(res.resultCode === 0){
         Taro.hideLoading()
         const invoiceUrl = res.data.invoiceUrl
-        Taro.setStorageSync('webViewSrc',invoiceUrl)
-        Taro.navigateTo({url: '/pages/web-view-page/web-view-page'})
+        const pathParams = `pages/invoiceDisplayDWDZ/invoiceDisplayDWDZ?q=${encodeURIComponent(invoiceUrl)}`
+        TaroNavToMiniProgram({
+          appId: 'wx8e0b79a7f627ca18',
+          path: pathParams
+        })
+        // Taro.setStorageSync('webViewSrc',invoiceUrl)
+        // Taro.navigateTo({url: '/pages/web-view-page/web-view-page'})
       }else{
         toastService({title: '获取电子发票失败：' + res.message})
       }

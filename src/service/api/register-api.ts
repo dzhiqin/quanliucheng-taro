@@ -31,7 +31,13 @@ export const fetchDoctorsByDept = (data: {deptId: string}) => {
 export const fetchScheduleDays = () => {
   return Post(fullUrl('api/applet/appt/SignalSource/GetRegScheduleDays'),{isReg: getRegType()})
 }
-export const fetchDoctorSchedules = (data: {deptId: string,doctorId:string,regDate:string}) => {
+export const fetchDoctorSchedules = (data: 
+  {
+    deptId: string,
+    doctorId:string,
+    regDate:string,
+    sourceType?:string // 荔湾中心医院新增字段
+  }) => {
   return Post(fullUrl('api/applet/appt/SignalSource/GetScheduleDaysByDoctor'),{...data,branchId: getBranchId(), isReg: getRegType()})
 }
 export const fetchTimeListByDate = (data: {deptId: string,doctorId: string, regDate: string, regType?: string, address?: string}) => {

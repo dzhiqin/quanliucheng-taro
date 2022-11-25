@@ -62,7 +62,8 @@ interface OrderInfoParams {
   insuType?:string,
   mdtrtMode?: string,
   hospitalCode?: string,
-  pactCode?: string
+  pactCode?: string,
+  feeTypeId?: string
 }
 // 注意进入页面场景有3：
 // 1-从缴费列表进入；2-从订单列表进入；3-扫码进入
@@ -250,7 +251,10 @@ export default function PaymentDetail() {
       TaroNavToMiniProgram({appId: 'wx8e0b79a7f627ca18', path: 'pages/index/index?agencyCode=ccd5fa6bc02f4420a131d6d46e165c71'})
       return
     }
-    
+    // if(custom.hospName === 'lwzxyy'){
+    //   TaroNavToMiniProgram({appId: 'wx8e0b79a7f627ca18', path: 'pages/index/index'})
+    //   return
+    // }
     Taro.showLoading({title: '加载中……',mask:true})
     fetchPaymentOrderInvoice({serialNo: item.serialNo}).then(res => {
       if(res.resultCode === 0){
@@ -345,6 +349,7 @@ export default function PaymentDetail() {
           orderType: data.pactCode,
           prescMoney: data.sumMoney,
           payState: PAY_STATUS_EN.unpay,
+          feeTypeId: data.feeTypeId
         })
         const param = {
           cardNo: data.cardNo,
@@ -529,7 +534,7 @@ export default function PaymentDetail() {
               <BkButton title='微信支付' icon='icons/wechat.png' theme='info' disabled={busy} onClick={dealWithPay.bind(null,PAY_TYPE_CN.微信)} />
             }
             {
-              orderInfo.payState === PAY_STATUS_EN.unpay && orderInfo.orderType === 'YiBao' &&
+              orderInfo.payState === PAY_STATUS_EN.unpay && orderInfo.orderType === ORDER_TYPE_CN.医保单 &&
               <BkButton title='医保支付' icon='icons/card.png' theme='primary' disabled={busy} onClick={dealWithPay.bind(null,PAY_TYPE_CN.医保)} />
             }
           </View>
@@ -542,13 +547,13 @@ export default function PaymentDetail() {
               <BkButton title='微信支付' icon='icons/wechat.png' theme='info' disabled={busy} onClick={dealWithPay.bind(null,PAY_TYPE_CN.微信)} />
             }
             {
-              orderInfoFromList.payState === PAY_STATUS_EN.unpay && orderInfoFromList.orderType === 'YiBao' &&
+              orderInfoFromList.payState === PAY_STATUS_EN.unpay && orderInfoFromList.orderType === ORDER_TYPE_CN.医保单 &&
               <BkButton title='医保支付' icon='icons/card.png' theme='primary' disabled={busy} onClick={dealWithPay.bind(null,PAY_TYPE_CN.医保)} />
             }
           </View>
         }
         {
-          orderInfoFromList && custom.paymentOrderPage.tackingMedicineGuide &&
+          orderInfoFromList && custom.paymentOrderPage.tackingMedicineGuide && orderInfoFromList.orderState === ORDER_STATUS_EN.paySuccess_and_His_success &&
           <BkButton title='取药指引' onClick={() => Taro.navigateTo({url: `/pages/payment-pack/medicine-guide/medicine-guide?orderId=${orderInfoFromList.orderId}`})} style='margin-top: 20rpx;' />
         }
         <View className='payment-detail-tips'>

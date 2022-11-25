@@ -7,7 +7,7 @@ const config:HospConfig = {
   latitude: 23.122721,    // 院区维度
   longitude: 113.240994,  // 院区经度
   banner: '',
-  hospName: "gysylw",
+  hospName: "gy3ylw",
   hospitalName: "广州医科大学附属第三医院",
   logo: "https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/lwgk/20220308-basic/epfy.png",
   // baseUrl: "https://applets.gdbkyz.com/api/applet", // 倍康测试
@@ -87,6 +87,7 @@ const config:HospConfig = {
               icon: imgUrl.zybk,
               name: '住院绑卡',
               event: 'navigate',
+              url: '/pages/hosp-pack/binding-card/binding-card',
             }, 
             {
               icon: imgUrl.new_home_icon10,

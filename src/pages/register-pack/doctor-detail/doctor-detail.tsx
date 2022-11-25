@@ -19,9 +19,10 @@ interface Options {
   regDate: string,
   deptId: string,
   deptName?: string,
-  branchId: string
+  branchId: string,
+  sourceType?: string
 }
-export default function DoctorDefault(props) {
+export default function DoctorDefault() {
   const router = useRouter()
   const {scene,slices} = router.params
   let options = JSON.parse(router.params.options) as Options
@@ -60,7 +61,7 @@ export default function DoctorDefault(props) {
     deptName: '',
     faceUrl: '',
     name: '',
-    title: '',
+    title: '',  // 来源医生信息的医生title
     specialty:'',
     doctorId: '',
     doctorName: '',
@@ -72,7 +73,8 @@ export default function DoctorDefault(props) {
     regFee: '',
     address: '',
     regTypeId:'',
-    specializedSubject:''
+    specializedSubject:'',
+    title: '' // 来源his排班信息的医生title
   })
   const onClickItem = (item) => {
     if(!item.isTimeValid){
@@ -128,7 +130,12 @@ export default function DoctorDefault(props) {
     if(!date) return
     setSelectedDate(date)
     loadingService(true)
-    fetchTimeListByDate({deptId: options.deptId, regDate: date, doctorId: options.doctorId}).then(res => {
+    fetchTimeListByDate({
+      deptId: options.deptId, 
+      regDate: date, 
+      doctorId: options.doctorId,
+      regType: options.sourceType//regtype和sourceType值相同，字段未统一
+    }).then(res => {
       if(res.resultCode === 0){
         setList(res.data.timePoints.map(item => {
           return {
@@ -151,7 +158,8 @@ export default function DoctorDefault(props) {
     fetchDoctorSchedules({
       doctorId: options.doctorId, 
       deptId: options.deptId, 
-      regDate: options.regDate || '' 
+      regDate: options.regDate || '' ,
+      sourceType: options.sourceType
     }).then((res:any) => {
       if(res.resultCode === 0){
         if(res.data.doctorDetail){
@@ -223,7 +231,7 @@ export default function DoctorDefault(props) {
           <View style='margin-left: 10rpx;'>
             <View className='doctor-detail-name'>{doctorDetail.name}</View>
             <View>{doctorDetail.deptName}</View>
-            <View>{doctorDetail.title}</View>
+            <View>{doctorInfo.title}</View>
           </View>
         </View>
         <View>
@@ -249,7 +257,7 @@ export default function DoctorDefault(props) {
           <View>
             <text className='doctor-detail-name'>{doctorDetail.name}</text>
             <text className='doctor-detail-title'>{doctorDetail.deptName}</text>
-            <text className='doctor-detail-title'>{doctorDetail.title}</text>
+            <text className='doctor-detail-title'>{doctorInfo.title}</text>
           </View>
           {
             doctorDetail.desc && 

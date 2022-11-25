@@ -18,10 +18,10 @@ export const longtermTemplates = {
       case 'epfy':
         tempIds = ['bSRjI78XTOZypmNQrXjjdvP8S8EoFmKpXXUIUPevuOI','7K1_PxerIwdUR6AAMkW_toK5kcwAxRkA3dYsjiSzfRw','Kw34uIwJA3OJkX8gFLWvVV_eIKzymIniLGLoaQdIlBA']
         break
-      case 'gysy':
+      case 'gysyhp':
         tempIds = ['k122ACPjHdkS6ZSo3fuYpj1bmSiQtHm2J3k3eyXTONU','KeFqSb4P0naN2T8j6J5K0fQgL6MojhynSiVPrCZixoA','Xn1tFWS0H10H_RQv3tvURNceOzsFnXqd7-3zn04nESs']
         break
-      case 'gysylw':
+      case 'gy3ylw':
         tempIds = ['z5DIZhdEj9DCvfKRheU06kKod6r55bx1LC8p2VsB_O4','A8GTcQvlKDqEDSi1u19RFwKqRjrPJwW4feHMuvpZNso','M8e0Dbtb87M8DUXYPwTQdOxnz8sddpCkc_r7_VMd2Jc']
         break
     }
@@ -47,7 +47,7 @@ export const onetimeTemplates = {
       case 'gysy':
         tempIds = ['XdXvsxVVjBeXvGKDkN0sb4_IUKmz5-M9vVo5VvJQA30']
         break
-      case 'gysylw':
+      case 'gy3ylw':
         tempIds = ['KDkqTgWPR8SUOnWTu-QS8LPBcTPrB121kHuHOFPcRjY']
         break
     }
@@ -72,7 +72,7 @@ export const onetimeTemplates = {
       case 'gysy':
         tempIds = ['lMk0FYfb_9Ab0h4OgQ4vMFzre19DvBJeNB4RY_CWQvA','wh0LadWFSyzjo_u292XgUU66KieDEMR_H-CLQ65Ir54','gDVRne-Bq2dHWrxfeR_63xRA_c-eRhcws1_Cd_r43_4']
         break
-      case 'gysylw':
+      case 'gy3ylw':
         tempIds = ['KB2AIUyjvp209JGNy-7EtKDSK4N2fgwfpbaMazZsclA','MlDidLtES5vVTC4YcGIhYluIMIXSi7hX3JXngkgUV7s','Hhj5lSuAslXx5VGEbhfp2KAiSw__Qv3_B3_1i16qt5o']
         break
     }
@@ -97,7 +97,7 @@ export const onetimeTemplates = {
       case 'gysy':
         tempIds = ['isQ25COANNHUoeapnheDkG_A0BP_meM2VVz1g7haT6U','gDVRne-Bq2dHWrxfeR_63xRA_c-eRhcws1_Cd_r43_4']
         break
-      case 'gysylw':
+      case 'gy3ylw':
         tempIds = ['F5gOTB-fPJ0y5QG94_QQ0MUxaxJ0cIl1eA_NBNlQ4wk','Hhj5lSuAslXx5VGEbhfp2KAiSw__Qv3_B3_1i16qt5o']
         break
     }

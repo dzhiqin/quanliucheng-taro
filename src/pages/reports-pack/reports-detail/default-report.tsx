@@ -87,7 +87,7 @@ export default function DefaultReport(props:{
       }
       {
         // 特殊处理 广三黄埔院区返回的是base64格式的报告，后端处理成url资源
-        custom.hospName === 'gysyhp' &&
+        custom.hospName === 'gy3yhp' &&
         <AtButton type='primary' loading={busy} circle onClick={handleFetchPdfUrl}>查看pdf</AtButton>
       }
     </View>

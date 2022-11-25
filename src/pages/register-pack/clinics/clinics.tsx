@@ -44,7 +44,7 @@ export default function Clinics() {
         setDeptList(deptListData)
         Taro.setStorageSync('deptInfo',deptListData[0])
         // 特殊处理
-        if(custom.hospName !== 'gysylw' || deptListData[0].deptName !== '生殖助孕'){
+        if(custom.hospName !== 'gy3ylw' || deptListData[0].deptName !== '生殖助孕'){
           setDeptId(deptListData[0].deptId)
         }
         const clinicData = deptListData ? deptListData[0].secondDeptInfos : []
@@ -67,7 +67,7 @@ export default function Clinics() {
     
   }
   const onTabChange = (item,index) => {
-    if(custom.hospName === 'gysylw' && item.deptName === '生殖助孕'){
+    if(custom.hospName === 'gy3ylw' && item.deptName === '生殖助孕'){
       // 特殊处理广三老院区荔湾的生殖助孕门诊
       Taro.navigateTo({url: '/pages/bind-pack/cards-list/cards-list?action=jumpOut'})
       return

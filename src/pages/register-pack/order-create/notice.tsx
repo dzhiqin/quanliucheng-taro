@@ -4,7 +4,7 @@ import * as React from 'react'
 import { AtIcon } from 'taro-ui'
 
 export default function RegisterNotice () {
-  if(custom.hospName === 'gysylw'){
+  if(custom.hospName === 'gy3ylw'){
     return(
       <View>
         <View className='order-create-title'>挂号须知</View>
@@ -39,7 +39,7 @@ export default function RegisterNotice () {
           </View>
           {
             // 特殊处理
-            custom.hospName !== 'gysyhp' &&
+            custom.hospName !== 'gy3yhp' &&
             <View className='flex-center'>
               <AtIcon value='alert-circle' size='15' color='#FF7C25'></AtIcon>
               <text className='price-color'>目前微信支付仅自费缴费{custom.feat.YiBaoCard ? '和广州医保' : ''}，如省直、市直、公费记账请移步到窗口人工缴纳</text>

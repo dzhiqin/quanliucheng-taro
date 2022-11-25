@@ -6,7 +6,7 @@ import DefaultConfig from './default'
 const config = {
   latitude: 23.122721,
   longitude: 113.240994,
-  hospName: "gysylw",
+  hospName: "gy3ylw",
   banner: 'https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/applets-imgs/banner2.png',
   logo: "https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/lwgk/20220309-basic/gysy.png",
   hospitalName: "广州医科大学附属第三医院",
@@ -32,6 +32,12 @@ const config = {
         {
           title: '住院',
           entrances: [
+            {
+              icon: imgUrl.zybk,
+              name: '住院绑卡',
+              event: 'navigate',
+              url: '/pages/hosp-pack/binding-card/binding-card',
+            }, 
             {
               icon: imgUrl.new_home_icon10,
               name: '住院押金',

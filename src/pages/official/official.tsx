@@ -42,7 +42,7 @@ export default function Official() {
         }
         parse(res.data.introduce,(err,nodes) => {
           if(!err){
-            setDesc(ndoes)
+            setDesc(nodes)
           }
         })
         

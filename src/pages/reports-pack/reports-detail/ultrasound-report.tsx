@@ -39,7 +39,7 @@ export default function AltraSoundReport(props) {
     })
   
   }
-  if(custom.hospName === 'gysylw'){ // 特殊处理
+  if(custom.hospName === 'gy3ylw'){ // 特殊处理
     return(
       <BkButton title='查看PDF' onClick={handleViewPdf} loading={busy} />
     )

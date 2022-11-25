@@ -1,10 +1,10 @@
 type HospName = 
-  'guang_san_li_wan' |
+  'guang_3_li_wan' |
   'en_ping_fu_you' |
   'li_wan_gu_ke' |
   'shun_de_jun_an' | 
   'jin_sha_zhou'|
-  'guang_san_huang_pu' |
+  'guang_3_huang_pu' |
   'li_wan_zhong_xin'
 const hospName:HospName = 'li_wan_zhong_xin'
 const hospConfig = require(`./hosp-config/${hospName}.ts`)

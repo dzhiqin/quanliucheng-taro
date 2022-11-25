@@ -303,18 +303,20 @@ export default function OrderCreate() {
             <View className='order-create-item-title'>金额</View>
             <View className='order-create-item-value price-color'>{regFee ? regFee : treatFee}元</View>
           </View>
-          <View className='order-create-item'>
-            <View className='order-create-item-title'>费用类型</View>
-            <View className='order-create-item-value'>
-              <Picker mode='selector' range={feeOptions} onChange={onFeeTypeChange} >
-                <View className='flex-between'>
-                  <View>{feeType}</View>
-                  <AtIcon value='chevron-right' size='20' color='#999'></AtIcon>
-                </View>
-              </Picker>
+          {// 特殊处理
+            (custom.hospName === 'g1yy' || custom.hospName === 'lwgk') &&
+            <View className='order-create-item'>
+              <View className='order-create-item-title'>费用类型</View>
+              <View className='order-create-item-value'>
+                <Picker mode='selector' range={feeOptions} onChange={onFeeTypeChange} >
+                  <View className='flex-between'>
+                    <View>{feeType}</View>
+                    <AtIcon value='chevron-right' size='20' color='#999'></AtIcon>
+                  </View>
+                </Picker>
+              </View>
             </View>
-  
-          </View>
+          }
         </BkPanel>
         <View style='padding: 0 40rpx'>
           <BkButton title='确认挂号' disabled={busy} onClick={handleSubmit} />
