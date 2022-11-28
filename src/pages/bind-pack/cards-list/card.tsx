@@ -24,6 +24,7 @@ export default function Card(props: {
     // console.log('click icon',e);
     e.stopPropagation()
   }
+  const userInfo = Taro.getStorageSync('userInfo')
   const onClickCard = async (e) => {
     if(props.action === 'switchCard'){
       await CardsHealper.setDefault(props.card.id)
@@ -39,7 +40,7 @@ export default function Card(props: {
       const alySign = encryptByDES(JSON.stringify(params))
       const path = 'https://ivf.gy3y.com/patients/#/SubscribeListNum'
       // const branchId = getBranchId()
-      const pathParams = `pages/toLogin/tologin?url=${encodeURIComponent(path)}&type=H5&unitId=36&alySign=${alySign}`
+      const pathParams = `pages/toLogin/tologin?url=${encodeURIComponent(path)}&type=H5&unitId=36&alySign=${alySign}&userCode=${userInfo.openId}`
       console.log('path====',pathParams)
       // `pages/toLogin/tologin?url=${encodeURIComponent(path)}&type=h5&unitId=${branchId}&alySign=${alySign}`
       TaroNavToMiniProgram({

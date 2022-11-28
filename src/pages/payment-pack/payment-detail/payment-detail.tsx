@@ -553,7 +553,7 @@ export default function PaymentDetail() {
           </View>
         }
         {
-          orderInfoFromList && custom.paymentOrderPage.tackingMedicineGuide && orderInfoFromList.orderState === ORDER_STATUS_EN.paySuccess_and_His_success &&
+          orderInfoFromList && custom.paymentOrderPage.tackingMedicineGuide && orderInfoFromList.orderState !== ORDER_STATUS_EN.unpay &&
           <BkButton title='取药指引' onClick={() => Taro.navigateTo({url: `/pages/payment-pack/medicine-guide/medicine-guide?orderId=${orderInfoFromList.orderId}`})} style='margin-top: 20rpx;' />
         }
         <View className='payment-detail-tips'>

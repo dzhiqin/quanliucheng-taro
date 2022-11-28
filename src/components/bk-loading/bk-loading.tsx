@@ -6,7 +6,8 @@ import './bk-loading.less'
 export default function BkLoading(props:{
   size?:'small' | '', 
   msg?: string,
-  loading?: boolean
+  loading?: boolean,
+  style?: string
 }){
   const [_loading,setLoading] = React.useState(true)
   React.useEffect(() => {
@@ -21,7 +22,7 @@ export default function BkLoading(props:{
     height: '200rpx'
   }
   return(
-    <View className='loading'>
+    <View className='loading' style={props.style ? props.style : ''}>
       {
         _loading ? 
         <View className='loader'></View>

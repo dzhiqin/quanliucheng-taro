@@ -73,6 +73,9 @@ const config = {
     appointmentCancelNotice: 'PoxDaXOIgTAOEabRwqxspBIvXVDYPt3YW9CC9iFWLF8',//挂号取消通知
     refundNotice: 'D9RWkCaZ9DPyU0B1w4mojh0mtGzvLiutZ6uAiG992FM',//退费通知
     bindCardNotice: 'y6NcaNKQ9nPBlt0sI8xEMEk-AHUXS3hKEyJ96aR4oqg',//绑卡成功提醒
+  },
+  paymentOrderPage: {
+    tackingMedicineGuide: true //取药指引
   }
 }
 const mergedConfig = mergeRecursive(DefaultConfig, config)

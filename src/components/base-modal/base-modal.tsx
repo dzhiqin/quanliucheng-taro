@@ -10,7 +10,8 @@ interface ModalParams {
   children?: any,
   closeOutside?: boolean,
   custom?: boolean,
-  title?: string
+  title?: string,
+  hideCancel?: boolean
 }
 export default function BaseModal(props: ModalParams) {
   const [opened,setOpened] = useState(props.show)
@@ -58,7 +59,11 @@ export default function BaseModal(props: ModalParams) {
       {
         !props.custom && 
         <AtModalAction> 
-          <Button onClick={handleCancel}>取消</Button> 
+          {
+            !props.hideCancel && 
+            <Button onClick={handleCancel}>取消</Button> 
+          }
+          
           <Button onClick={handleConfirm}>确定</Button> 
         </AtModalAction>
       }

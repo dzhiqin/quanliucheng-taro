@@ -67,12 +67,16 @@ export default function ReportList() {
   }
   return(
     <View className='reports-list'>
-      <HealthCards switch />
-      <BkTabs current={currentTab} tabs={reportType === REPORT_TYPE_EN.clinic? clinicTabs : hospReportTabs} onTabChange={onTabChange} />
+      <View className='reports-list-header'>
+        <HealthCards switch />
+        <BkTabs current={currentTab} tabs={reportType === REPORT_TYPE_EN.clinic? clinicTabs : hospReportTabs} onTabChange={onTabChange} />
+      </View>
+      
+      
       {
         list.length > 0
         ?
-          <View className='reports-list-content' style='padding: 40rpx'>
+          <View className='reports-list-content'>
             {
               list.map(item => 
                 <BkPanel arrow onClick={onClickItem.bind(null,item)} key={item.id} style='margin-bottom: 40rpx'>
@@ -93,7 +97,7 @@ export default function ReportList() {
             }
           </View>
         :
-          <BkLoading loading={busy} />
+          <BkLoading style='margin-top: 300rpx;' loading={busy} />
       }
     </View>
   )

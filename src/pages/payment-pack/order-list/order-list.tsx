@@ -165,13 +165,17 @@ export default function OrderList(){
   }
   return (
     <View className='payment-order-list'>
-      <HealthCards switch />
+      <View className='payment-order-list-header'>
+        <HealthCards switch />
+        <BkTabs tabs={tabs} onTabChange={onTabChange} />
+      </View>
+      
       <SubscribeNotice show={showNotice} />
-      <BkTabs tabs={tabs} onTabChange={onTabChange} />
+      
       {
         list.length > 0 
         ?
-        <View style='padding: 40rpx'>
+        <View style='padding: 40rpx;margin-top: 300rpx'>
           {
             list.map((item,index) => 
               <BkPanel key={index} style='margin-bottom: 40rpx' onClick={onClickItem.bind(null,item)}>
@@ -217,7 +221,7 @@ export default function OrderList(){
           }
         </View>
         :
-        <BkLoading loading={busy} msg='暂无缴费单' />
+        <BkLoading style='margin-top: 300rpx' loading={busy} msg='暂无缴费单' />
       }
     </View>
   )

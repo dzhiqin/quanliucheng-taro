@@ -24,6 +24,10 @@ export default function BindingCard() {
     longitude: null
   })
   const [distance,setDistance] = useState(null)
+  const [currentLatLong,setCurrent] = useState({
+    latitude: undefined,
+    longitude: undefined
+  })
   const handleRefresh = () => {
     if(loading) return
     refreshDistance()
@@ -71,6 +75,7 @@ export default function BindingCard() {
     setDistance(null)
     TaroGetLocation({type: 'gcj02'}).then((res:any) => {
       const {latitude,longitude} = res
+      setCurrent({latitude,longitude})
       computeDistance(latitude,longitude,hospLatLong.latitude,hospLatLong.longitude)
     }).catch(err => {
       toastService({title: '获取位置失败：' + err})
@@ -140,6 +145,7 @@ export default function BindingCard() {
         <View>
           目标纬度：{hospLatLong.latitude}
         </View> */}
+        <View>当前经纬度：{currentLatLong.longitude}，{currentLatLong.latitude}</View>
         <View className='arrival-hosp-desc'>距离院区：{distance}米</View>
         {
           renderCountdownBtn()

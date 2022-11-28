@@ -90,8 +90,10 @@ export default function OrderList() {
   })
   return(
     <View className='order-list'>
-      <HealthCards switch />
-      <BkTabs tabs={tabs} onTabChange={onTabChange} current={currentTab} />
+      <View className='order-list-header'>
+        <HealthCards switch />
+        <BkTabs tabs={tabs} onTabChange={onTabChange} current={currentTab}  />
+      </View>
       {
         list && list.length > 0 
         ?
@@ -178,7 +180,7 @@ export default function OrderList() {
           }
         </view>
         :
-        <BkLoading loading={busy} msg='暂无订单' />
+        <BkLoading style='margin-top: 300rpx' loading={busy} msg='暂无订单' />
       }
       {
         list && list.length > 0 && currentTab === 1 &&
