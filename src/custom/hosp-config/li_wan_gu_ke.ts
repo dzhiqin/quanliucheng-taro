@@ -5,6 +5,8 @@ import DefaultConfig from './default'
 
 const config = {
   hospName: "lwgk",
+  latitude: 23.120284,
+  longitude: 113.244332,
   hospitalName: "广州市荔湾区骨伤科医院",
   baseUrl: "https://lwgk.joyfulboo.com",
   logo: "https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/lwgk/20220308-basic/lwgk.png",

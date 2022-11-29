@@ -94,6 +94,6 @@ export interface HospConfig {
     hospReportTabs: {title: string, value: string}[]
   },
   paymentOrderPage: {
-    tackingMedicineGuide: false //取药指引
+    tackingMedicineGuide: boolean //取药指引
   }
 }

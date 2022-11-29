@@ -3,7 +3,7 @@ import { REPORT_ITEM_TYPE_CN } from '@/enums/index'
 import {HospConfig} from '../index'
 
 const config:HospConfig = {
-  // 经纬度来源：百度坐标拾取系统 https://api.map.baidu.com/lbsapi/getpoint/index.html
+  // 经纬度来源：腾讯位置服务 https://lbs.qq.com/getPoint/
   latitude: 23.122721,    // 院区维度
   longitude: 113.240994,  // 院区经度
   banner: '',
@@ -201,7 +201,7 @@ const config:HospConfig = {
     bindCardNotice: 'XdXvsxVVjBeXvGKDkN0sb4_IUKmz5-M9vVo5VvJQA30',//绑卡成功提醒
   },
   paymentOrderPage: {
-    tackingMedicineGuide: false //取药指引
+    tackingMedicineGuide: true //取药指引
   }
 }
 export default config

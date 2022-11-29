@@ -5,6 +5,8 @@ import { mergeRecursive } from '@/utils/tools'
 import DefaultConfig from './default'
 
 const config = {
+  latitude: 22.188096,
+  longitude: 112.349162,
   hospName: "epfy",
   hospitalName: "恩平市妇幼保健院",
   baseUrl: "https://epsfy.joyfulboo.com/api",

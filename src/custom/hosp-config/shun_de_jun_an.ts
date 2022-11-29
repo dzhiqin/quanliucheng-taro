@@ -2,6 +2,8 @@ import imgUrl from '@/utils/imgs'
 import { REPORT_ITEM_TYPE_CN } from '@/enums/index'
 
 export default {
+  latitude: 22.709653,
+  longitude:113.15497,
   hospName: "jayy",
   hospitalName: "佛山市顺德区均安医院",
   logo: "https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/lwgk/20220308-basic/jayy.png",

@@ -4,8 +4,8 @@ import { mergeRecursive } from '@/utils/tools'
 import DefaultConfig from './default'
 
 const config = {
-  latitude: 23.132274,
-  longitude: 113.248191,
+  latitude: 23.12634,
+  longitude: 113.241833,
   hospName: "lwzxyy",
   banner: 'https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/applets-imgs/banner2.png',
   logo: "https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/common/li-wan-zhong-xin.jpeg",

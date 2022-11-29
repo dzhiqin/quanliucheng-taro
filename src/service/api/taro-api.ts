@@ -75,9 +75,10 @@ export const TaroGetLocation = (option:{type: 'gcj02' | 'wgs84'}) => {
                 }
               }
             })
-          }else if(err.errMsg==='getLocation:fail:system permission denied') {
+          }else if(err.errMsg==='getLocation:fail:system permission denied' || err.errMsg==='getLocation:fail:ERROR_NOCELL&WIFI_LOCATIONSWITCHOFF') {
             Taro.showModal({
-              content: '检测到您没有开启系统定位权限，请按以下步骤手动打开。\n返回微信-[我]-[设置]-[个人信息与权限]-[系统权限管理]-[前往系统设置]-[应用权限]-打开位置信息权限',
+              // wechat version >= 8.0.16
+              content: '检测到您没有开启系统定位权限，请先更新微信到最新版本，再按以下步骤手动打开。\n返回微信-[我]-[设置]-[个人信息与权限]-[系统权限管理]-[前往系统设置]-[应用权限]-打开位置信息权限',
               confirmText: '确认',
               cancelText: '取消',
               success: result => {

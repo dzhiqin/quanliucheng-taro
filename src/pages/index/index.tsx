@@ -25,11 +25,6 @@ export default function Index() {
       setShow(true)
     }
   }, [])
-  if(process.env.TARO_ENV === 'weapp'){
-    wx.onCopyUrl(() => {
-      console.log('copy url');
-    })
-  }
   const onConfirm = () => {
     setShow(false)
   }
