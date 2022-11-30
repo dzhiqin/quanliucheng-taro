@@ -148,10 +148,7 @@ export default function PaymentDetail() {
     Taro.showLoading({title: '支付中……'})
     handlePayment({orderId: id, payType: Number(payType)})
     .then(res => {
-      if(res.popUpCode === 3){
-        loadingService(false)
-        navToOtherWeapp(res.message)
-      }else if(res.resultCode === 0 && !res.data){
+      if(res.resultCode === 0 && !res.data){
         setPayResult(resultEnum.success)
         setPayResultMsg('提交订单成功，还未支付')
         loadingService(false)
@@ -159,7 +156,15 @@ export default function PaymentDetail() {
         setBusy(false)
         toastService({title: res.message})
       }else{
-        const {nonceStr, paySign, signType, timeStamp, pay_appid, pay_url} = res.data
+        const {nonceStr, paySign, signType, timeStamp, pay_appid, pay_url, jumpUrl, appId} = res.data
+        if(jumpUrl){
+          loadingService(false)
+          Taro.navigateToMiniProgram({
+            appId:appId,
+            path: jumpUrl
+          })
+          return
+        }
         if(payType === PAY_TYPE_CN.医保){
           loadingService(true,'正在跳转')
           Taro.navigateToMiniProgram({

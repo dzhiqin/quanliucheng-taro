@@ -76,7 +76,12 @@ export default function Clinics() {
     setDeptId(item.deptId)
     Taro.setStorageSync('deptInfo',item)
     if(item.secondDeptInfos && item.secondDeptInfos.length){
-      setClinicList(item.secondDeptInfos)
+      if(custom.hospName === 'lwzxyy' && item.deptId === '00000011'){
+        // 特殊处理 荔湾中心医院【其他门诊】下过滤掉精神科门诊1037 ；发热门诊（成人）1006 ；发热门诊（儿童）1079
+        setClinicList(item.secondDeptInfos.filter(i => ['1037','1006','1079'].indexOf(i.deptId) === -1 ))
+      }else{
+        setClinicList(item.secondDeptInfos)
+      }
     }else{
       if(registerConfig.type === 'byDept'){
         // 没有二级科室，直接跳转到医生列表

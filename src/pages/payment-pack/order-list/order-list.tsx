@@ -178,7 +178,7 @@ export default function OrderList(){
         <View style='padding: 40rpx;margin-top: 300rpx'>
           {
             list.map((item,index) => 
-              <BkPanel key={index} style='margin-bottom: 40rpx' onClick={onClickItem.bind(null,item)}>
+              <BkPanel key={index} style='margin-bottom: 40rpx' onClick={onClickItem.bind(null,item)} arrow>
                 <View className='order-list-item'>
                   <View className='order-list-item-title flat-title'>门诊号:</View>
                   <View className='order-list-item-text'>{item.clinicCode}</View>

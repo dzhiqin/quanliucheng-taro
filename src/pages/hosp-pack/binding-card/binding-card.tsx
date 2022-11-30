@@ -85,7 +85,7 @@ export default function BindingCard() {
         <AtInput
           name='cardNo'
           title='住院号'
-          type='number'
+          type='text'
           placeholder='请输入住院号'
           value={card.cardNo}
           onChange={handleChange.bind(this, 'cardNo')}

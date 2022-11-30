@@ -163,7 +163,8 @@ export default class BindCard extends React.Component {
         // console.log('key=',keys[i],'value=',card[keys[i]])
         if(this.state.currentIdenTypeValue === '儿童(无证件)' && key === 'idenNo') continue
         if(!this.state.bindCardConfig.nationality && key === 'nationality') continue
-        if(!card.isHaveCard && key === 'cardNo') continue
+        if(!card.isHaveCard && key === 'cardNo') continue // 点选有卡时，不允许卡号为空
+        // if(key==='cardNo') continue // 允许卡号为空
         if(this.state.currentIdenTypeValue !== '儿童(无证件)' && (key === 'parentName' || key === 'parentId')) continue
         if(key ==='wechatCode') continue
         msg = validateMessages[keys[i]] || (key + '的值不能为空')

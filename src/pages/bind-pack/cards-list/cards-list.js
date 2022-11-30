@@ -9,6 +9,7 @@ import { loadingService, toastService } from '@/service/toast-service'
 import { TaroNavToYiBao } from '@/service/api'
 import { getImageSrc } from '@/utils/image-src'
 import { CardsHealper } from '@/utils/cards-healper'
+import { AtNoticebar } from 'taro-ui'
 
 export default class CardList2 extends React.Component {
   constructor(props){
@@ -65,39 +66,45 @@ export default class CardList2 extends React.Component {
   }
   render(){
     return(
-      <View className='cards-list'>
-        {
-          this.state.cards && this.state.cards.length > 0 
-          ?
-          this.state.cards.map(item => <Card card={item} key={item.id} style='margin-bottom: 40rpx' action={this.state.params.action} />) 
-          : 
-          <View className='empty'>
-            <Image src={getImageSrc('no_card.png')} className='empty-icon'></Image>
-            <View className='empty-txt'>暂无健康卡</View>
-          </View>
-        }
-        
-        <View className='btns-wrap'>
+      <View className='cards'>
+        <View className='cards-header'>
+          <AtNoticebar>点击卡片可查看更多信息</AtNoticebar>
+        </View>
+        <View className='cards-list'>
           {
-            custom.feat.bindCard.oneClickAuth &&
-            <health-card-btn onlogin={this.onLoginResult.bind(this)}>
-              <View className='btn'>
-                <View className='btn-title'>一键授权</View>
-                <View className='btn-subtitle'>已有健康卡用户直接绑定</View>
-              </View>
-            </health-card-btn>
+            this.state.cards && this.state.cards.length > 0 
+            ?
+            this.state.cards.map(item => <Card card={item} key={item.id} style='margin-bottom: 40rpx' action={this.state.params.action} />) 
+            : 
+            <View className='empty'>
+              <Image src={getImageSrc('no_card.png')} className='empty-icon'></Image>
+              <View className='empty-txt'>暂无健康卡</View>
+            </View>
           }
-          {/* 特殊处理 金沙洲只用诊疗卡 */}
-          <BkButton title={custom.hospName === 'jszyy' ? '添加诊疗卡' : '添加健康卡'} theme='info' onClick={this.navToBindCard} style='width: 480rpx; margin-bottom: 20rpx' />
-          <BkButton title={custom.hospName === 'jszyy' ? '刷新诊疗卡' : '刷新健康卡'} theme='primary' onClick={this.handleRefresh.bind(this)} style='width: 480rpx; margin-bottom: 20rpx' />
-          {/* 医保小程序入口改放到个人页面 */}
-          {/* {
-            custom.feat.YiBaoCard && 
-            <BkButton title='医保卡绑定' onClick={this.navToYiBao} style='width: 480rpx;margin-bottom: 20rpx' />
-          } */}
+          
+          <View className='btns-wrap'>
+            {
+              custom.feat.bindCard.oneClickAuth &&
+              <health-card-btn onlogin={this.onLoginResult.bind(this)}>
+                <View className='btn'>
+                  <View className='btn-title'>一键授权</View>
+                  <View className='btn-subtitle'>已有健康卡用户直接绑定</View>
+                </View>
+              </health-card-btn>
+            }
+            {/* 特殊处理 金沙洲只用诊疗卡 */}
+            <BkButton title={custom.hospName === 'jszyy' ? '添加诊疗卡' : '添加健康卡'} theme='info' onClick={this.navToBindCard} style='width: 480rpx; margin-bottom: 20rpx' />
+            <BkButton title={custom.hospName === 'jszyy' ? '刷新诊疗卡' : '刷新健康卡'} theme='primary' onClick={this.handleRefresh.bind(this)} style='width: 480rpx; margin-bottom: 20rpx' />
+            {/* 医保小程序入口改放到个人页面 */}
+            {/* {
+              custom.feat.YiBaoCard && 
+              <BkButton title='医保卡绑定' onClick={this.navToYiBao} style='width: 480rpx;margin-bottom: 20rpx' />
+            } */}
 
+          </View>
         </View>
       </View>
+      
     )
   }
 }

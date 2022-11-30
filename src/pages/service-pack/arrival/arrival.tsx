@@ -10,7 +10,7 @@ import BkButton from '@/components/bk-button/bk-button'
 import BkTitle from '@/components/bk-title/bk-title'
 import BkLoading from '@/components/bk-loading/bk-loading'
 import { computeDistanceFromLatLong } from '@/utils/tools'
-import { loadingService, toastService } from '@/service/toast-service'
+import { loadingService, modalService, toastService } from '@/service/toast-service'
 import {custom} from '@/custom/index'
 import './arrival.less'
 
@@ -126,10 +126,17 @@ export default function BindingCard() {
     handleCheckIn({visitDate,visitNo,branchNo,hisOrderId,deptId}).then(res => {
       loadingService(false)
       if(res.resultCode === 0){
-        Taro.showToast({title: '报到成功',icon:'success'})
+        modalService({
+          content: "报到成功!",
+          showCancel: false
+        })
         setShowBtn(false)
       }else{
-        Taro.showToast({title: '报到失败' + res.message, icon: 'none'})
+        modalService({
+          title: '报到失败',
+          content: res.message,
+          showCancel: false
+        })
       }
     }).catch((err) => {
       toastService({title: '' + err})

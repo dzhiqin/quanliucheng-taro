@@ -53,8 +53,11 @@ export default function EmbedContent(props:{
     fetchClinicsByDeptId({deptId}).then(res => {
       if(res.resultCode === 0){
         setClinics(res.data)
-        if(res.data.length === 0)
+        if(res.data.length === 0){
           setCurrent(1)
+        }else{
+          setCurrent(0)
+        }
       }else{
         toastService({title: '获取分类失败'})
       }

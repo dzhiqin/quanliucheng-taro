@@ -5,7 +5,7 @@ import BkPanel from '@/components/bk-panel/bk-panel'
 import BkButton from '@/components/bk-button/bk-button'
 import {  useReady } from '@tarojs/taro'
 import { useState } from 'react'
-import { AtSwitch, AtTabs, AtTabsPane } from 'taro-ui'
+import { AtSwitch, AtTabs, AtTabsPane,AtAccordion } from 'taro-ui'
 import { CardsHealper } from '@/utils/cards-healper'
 import './card-detail.less'
 import { toastService } from '@/service/toast-service'
@@ -15,6 +15,7 @@ import drawQrcode from '@/utils/weapp.qrcode.esm'
 export default function CardDetail(props: any) {
   const [busy,setBusy] = useState(false)
   const [isDefault,setIsDefault] = useState(false)
+  const [open,setOpen] = useState(false)
   const [card,setCard] = useState({
     name: '',
     id: '',
@@ -106,34 +107,36 @@ export default function CardDetail(props: any) {
           </AtTabs>
         <View className='card-tips'>出诊时出示此二维码</View>
       </BkPanel>
-      <BkPanel>
-        <View className='card-item'>
-          <View>姓名</View>
-          <View>{card.name}</View>
-        </View>
-        <View className='card-item'>
-          <View>出生日期</View>
-          <View>{card.birthdate}</View>
-        </View>
-        <View className='card-item'>
-          <View>证件号码</View>
-          <View>{card.idenNo}</View>
-        </View>
-        <View className='card-item'>
-          <View>手机号</View>
-          <View>{card.cellphone}</View>
-        </View>
-        {
-          !isDefault &&
+      <AtAccordion title='更多信息' open={open} onClick={() => {setOpen(!open)}}>
+        <BkPanel>
           <View className='card-item'>
-            <View>设为默认就诊人</View>
-            <View>
-              <AtSwitch border={false} checked={card.isDefault} onChange={handleChange} />
-            </View>
+            <View>姓名</View>
+            <View>{card.name}</View>
           </View>
-        }
-        
-      </BkPanel>
+          <View className='card-item'>
+            <View>出生日期</View>
+            <View>{card.birthdate}</View>
+          </View>
+          <View className='card-item'>
+            <View>证件号码</View>
+            <View>{card.idenNo.replace(/(\d{4})\d*([0-9a-zA-Z]{4})/, "$1******$2" )}</View>
+          </View>
+          <View className='card-item'>
+            <View>手机号</View>
+            <View>{card.cellphone}</View>
+          </View>
+          {
+            !isDefault &&
+            <View className='card-item'>
+              <View>设为默认就诊人</View>
+              <View>
+                <AtSwitch border={false} checked={card.isDefault} onChange={handleChange} />
+              </View>
+            </View>
+          }
+        </BkPanel>
+      </AtAccordion>
+      
       <View className='btns'>
         <BkButton title='解除绑定' onClick={handleUnBind} loading={busy} />
       </View>
