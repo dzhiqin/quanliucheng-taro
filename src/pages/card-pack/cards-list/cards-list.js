@@ -41,14 +41,14 @@ export default class CardList2 extends React.Component {
     const result = e.detail.result
     if(result.type === 3) {
       // 用户还未授权
-      Taro.navigateTo({url: '/pages/bind-pack/elec-healthcard-auth/elec-healthcard-auth'})
+      Taro.navigateTo({url: '/pages/card-pack/elec-healthcard-auth/elec-healthcard-auth'})
     }else{
       // 用户已经授权过
-      Taro.navigateTo({url: '/pages/bind-pack/elec-healthcard-users/elec-healthcard-users'})
+      Taro.navigateTo({url: '/pages/card-pack/elec-healthcard-users/elec-healthcard-users'})
     }
   }
   navToBindCard() {
-    Taro.navigateTo({url: '/pages/bind-pack/bind-card/bind-card'})
+    Taro.navigateTo({url: '/pages/card-pack/create-card/create-card'})
   }
   navToYiBao() {
     loadingService(true,'即将跳转……')
@@ -91,6 +91,13 @@ export default class CardList2 extends React.Component {
                   <View className='btn-subtitle'>已有健康卡用户直接绑定</View>
                 </View>
               </health-card-btn>
+            }
+            {
+              !custom.feat.bindCard.elecHealthCard && 
+              <View className='btn' onClick={()=> Taro.navigateTo({url: '/pages/card-pack/bind-card/bind-card'})}>
+                <View className='btn-title'>绑卡</View>
+                <View className='btn-subtitle'>已有就诊卡用户直接绑定</View>
+              </View>
             }
             {/* 特殊处理 金沙洲只用诊疗卡 */}
             <BkButton title={custom.hospName === 'jszyy' ? '添加诊疗卡' : '添加健康卡'} theme='info' onClick={this.navToBindCard} style='width: 480rpx; margin-bottom: 20rpx' />

@@ -28,7 +28,7 @@ Page({
       Taro.setStorageSync('upgradeCardId',this.data.cardId)
       Taro.navigateBack()
     }else{
-      Taro.redirectTo({url: '/pages/bind-pack/elec-healthcard-users/elec-healthcard-users'})
+      Taro.redirectTo({url: '/pages/card-pack/elec-healthcard-users/elec-healthcard-users'})
     }
   }
 })

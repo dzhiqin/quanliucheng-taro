@@ -44,7 +44,7 @@ const config = {
               icon: imgUrl.new_home_icon7,
               name: '电子诊疗卡',
               event: 'navigate',
-              url: '/pages/bind-pack/cards-list/cards-list'
+              url: '/pages/card-pack/cards-list/cards-list'
             }
           ]
         },
@@ -80,6 +80,7 @@ const config = {
   },
   feat:{
     bindCard: {
+      elecHealthCard: false,
       oneClickAuth: false,    // 一键授权，直接绑定健康卡
       updateNotice: false, // 绑卡和解绑发送消息通知
     },

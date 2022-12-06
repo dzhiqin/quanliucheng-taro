@@ -18,14 +18,14 @@ Page({
     if(data.healthCode){
       Taro.setStorageSync('healthCode', data.healthCode)
       healthCardLogin().then(res => {
-        Taro.redirectTo({url: '/pages/bind-pack/bind-card/bind-card?wechatCode='+res.result.wechatCode})
+        Taro.redirectTo({url: '/pages/card-pack/create-card/create-card?wechatCode='+res.result.wechatCode})
       })
     }
   },
   addCard(){
     healthCardLogin().then(res => {
       Taro.redirectTo({
-        url: '/pages/bind-pack/bind-card/bind-card?wechatCode=' + res.result.wechatCode,
+        url: '/pages/card-pack/create-card/create-card?wechatCode=' + res.result.wechatCode,
       })
     })
   }

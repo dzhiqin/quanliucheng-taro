@@ -33,7 +33,7 @@
       |-icons --图标
   |-interfaces --接口文件
   |-pages --小程序页面
-      |-bind-pack --绑卡相关页面分包
+      |-card-pack --绑卡相关页面分包
       |-hosp-pack --住院模块分包
       |-official-pack --官网模块分包
       |-payment-pack --缴费模块分包

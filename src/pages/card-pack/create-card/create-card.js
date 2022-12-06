@@ -13,7 +13,7 @@ import { createCard, fetchUserInfoByHealthCode, TaroGetLocation } from '@/servic
 import { CardsHealper } from '@/utils/cards-healper'
 import { loadingService, modalService, toastService } from '@/service/toast-service'
 import BkInput from '@/components/bk-input/bk-input'
-import './bind-card.less'
+import './create-card.less'
 
 export default class BindCard extends React.Component {
   constructor (props) {
@@ -308,7 +308,7 @@ export default class BindCard extends React.Component {
   }
   render() {
     return (
-      <View className='bind-card'>
+      <View className='create-card'>
         <SubscribeNotice show={this.state.showNotice} />
         <ocr-scan onsuccess={this.onScanResult.bind(this)}></ocr-scan>
         <AtForm
@@ -397,7 +397,7 @@ export default class BindCard extends React.Component {
 
           {
             this.state.bindCardConfig.hasCard &&
-            <View className='bind-card-item'>
+            <View className='create-card-item'>
               <View>院内就诊卡</View>
               <View style='display: flex;'>
                 <View className={`btn ${this.state.card.isHaveCard ? 'primary' : 'cancel'}`} onClick={this.onIsHaveCardChange.bind(this, true)}>有</View>
@@ -420,7 +420,7 @@ export default class BindCard extends React.Component {
           
           {
             this.state.bindCardConfig.maritalStatus &&
-            <View className='bind-card-item'>
+            <View className='create-card-item'>
               <View>婚姻状况</View>
               <View style='display: flex;'>
               <View className={`btn ${this.state.card.maritalStatus === '未婚' ? 'info' : 'cancel'}`} onClick={this.onMaritalStatusChange.bind(this, '未婚')}>未婚</View>
@@ -442,7 +442,7 @@ export default class BindCard extends React.Component {
               onChange={this.handleCardChange.bind(this,'nationality')} 
             /> 
           }
-          <View className='bind-card-item'>
+          <View className='create-card-item'>
             <View>是否设置为默认健康卡</View>
             <View style='display: flex;'>
               <View className={`btn ${this.state.card.isDefault ? 'info' : 'cancel'}`} onClick={this.onDefaultChange.bind(this, true)}>是</View>

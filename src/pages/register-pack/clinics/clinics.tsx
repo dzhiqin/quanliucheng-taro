@@ -69,7 +69,7 @@ export default function Clinics() {
   const onTabChange = (item,index) => {
     if(custom.hospName === 'gy3ylw' && item.deptName === '生殖助孕'){
       // 特殊处理广三老院区荔湾的生殖助孕门诊
-      Taro.navigateTo({url: '/pages/bind-pack/cards-list/cards-list?action=jumpOut'})
+      Taro.navigateTo({url: '/pages/card-pack/cards-list/cards-list?action=jumpOut'})
       return
     }
     setCurrentDept(index)

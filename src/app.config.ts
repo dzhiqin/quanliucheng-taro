@@ -56,21 +56,23 @@ const config = {
 
 const subPackages = [
   {
-    root: 'pages/bind-pack',
+    root: 'pages/card-pack',
     name: 'bind',
     pages: process.env.TARO_ENV === 'weapp' ? 
     [
-      'bind-card/bind-card',
+      'create-card/create-card',
       'cards-list/cards-list',
       'card-detail/card-detail',
       'elec-healthcard-auth/elec-healthcard-auth',
-      'elec-healthcard-users/elec-healthcard-users'
+      'elec-healthcard-users/elec-healthcard-users',
+      'bind-card/bind-card'
     ] 
     :
     [
-      'bind-card/bind-card',
+      'create-card/create-card',
       'cards-list-alipay/cards-list-alipay',
       'card-detail/card-detail',
+      'bind-card/bind-card'
     ]
   },
   {

@@ -95,8 +95,8 @@ const showBindCardModal = () => {
     showCancel: false,
     success: res => {
       if(res.confirm){
-        // Taro.navigateTo({url: '/pages/bind-pack/bind-card/bind-card'})
-        Taro.navigateTo({url: '/pages/bind-pack/cards-list/cards-list'})
+        // Taro.navigateTo({url: '/pages/card-pack/create-card/create-card'})
+        Taro.navigateTo({url: '/pages/card-pack/cards-list/cards-list'})
       }else{
         showBindCardModal()
       }

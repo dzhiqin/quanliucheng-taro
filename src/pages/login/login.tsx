@@ -53,7 +53,7 @@ export default function Login() {
           if(result.resultCode === 0){
             CardsHealper.saveCards(result.data).then(() => {
               if(result.data.length === 0){
-                Taro.redirectTo({url: '/pages/bind-pack/bind-card/bind-card'})
+                Taro.redirectTo({url: '/pages/card-pack/create-card/create-card'})
               }else{
                 Taro.navigateBack()
               }
@@ -61,11 +61,11 @@ export default function Login() {
           }else{
             if(custom.feat.bindCard.elecHealthCard){
               Taro.navigateTo({
-                url: '/pages/bind-pack/elec-healthcard-auth/elec-healthcard-auth'
+                url: '/pages/card-pack/elec-healthcard-auth/elec-healthcard-auth'
               })
             }else{
               Taro.navigateTo({
-                url: '/pages/bind-pack/bind-card/bind-card'
+                url: '/pages/card-pack/create-card/create-card'
               })
             }
           }

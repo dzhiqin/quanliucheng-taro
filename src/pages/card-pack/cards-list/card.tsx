@@ -51,7 +51,7 @@ export default function Card(props: {
       })
     }else{
       Taro.setStorageSync('card',props.card)
-      Taro.navigateTo({url: `/pages/bind-pack/card-detail/card-detail`})
+      Taro.navigateTo({url: `/pages/card-pack/card-detail/card-detail`})
     }
   }
   const handleBindHealthCard = (cardParams) => {
@@ -61,7 +61,7 @@ export default function Card(props: {
       if(res.resultCode === 0){
         toastService({title: '升级成功', onClose: () => {
           CardsHealper.updateAllCards().then(() => {
-            Taro.redirectTo({url: '/pages/bind-pack/cards-list/cards-list'})
+            Taro.redirectTo({url: '/pages/card-pack/cards-list/cards-list'})
           })
         }})
       }else{
@@ -101,7 +101,7 @@ export default function Card(props: {
     if(result.type === HEALTH_CARD_RES_CODE.no_auth_before){
       setUpgrading(false)
       loadingService(false)
-      Taro.navigateTo({url: `/pages/bind-pack/elec-healthcard-auth/elec-healthcard-auth?nextPage=cardList&cardId=${props.card.id}`})
+      Taro.navigateTo({url: `/pages/card-pack/elec-healthcard-auth/elec-healthcard-auth?nextPage=cardList&cardId=${props.card.id}`})
     }else{
       handleBindHealthCard(buildCardParams({wechatCode: result.wechatCode}))
     }
