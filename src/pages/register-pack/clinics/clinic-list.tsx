@@ -6,10 +6,6 @@ export default function ClinicList(props:{
   clinics: any[],
 }) {
   const onClickItem = (clinic) => {
-    Taro.setStorageSync('deptInfo',{
-      deptId: clinic.deptId,
-      deptName: clinic.deptName
-    })
     Taro.navigateTo({url: `/pages/register-pack/doctor-list/doctor-list?deptId=${clinic.deptId}&deptName=${clinic.deptName}`})
   }
   return (

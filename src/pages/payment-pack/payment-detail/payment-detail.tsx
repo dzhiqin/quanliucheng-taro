@@ -28,7 +28,7 @@ import BkButton from '@/components/bk-button/bk-button'
 import sighPng from '@/images/icons/sigh.png'
 import SubscribeNotice from '@/components/subscribe-notice/subscribe-notice'
 import { PAY_TYPE_CN, ORDER_STATUS_EN, PAY_STATUS_EN, ORDER_TYPE_CN, PAYMENT_FROM } from '@/enums/index'
-import { loadingService, toastService } from '@/service/toast-service'
+import { loadingService, modalService, toastService } from '@/service/toast-service'
 import { requestTry } from '@/utils/retry'
 import ResultPage from '@/components/result-page/result-page'
 import {custom} from '@/custom/index'
@@ -148,24 +148,28 @@ export default function PaymentDetail() {
     Taro.showLoading({title: '支付中……'})
     handlePayment({orderId: id, payType: Number(payType)})
     .then(res => {
+      if(res.data.jumpUrl && res.data.appId){
+        loadingService(false)
+        Taro.navigateToMiniProgram({
+          appId: res.data.appId,
+          path: res.data.jumpUrl
+        })
+        return
+      }
       if(res.resultCode === 0 && !res.data){
         setPayResult(resultEnum.success)
         setPayResultMsg('提交订单成功，还未支付')
         loadingService(false)
       }else if(res.resultCode ===1){
         setBusy(false)
-        toastService({title: res.message})
+        // toastService({title: res.message})
+        modalService({
+          content: res.message,
+          showCancel: false
+        })
       }else{
-        const {nonceStr, paySign, signType, timeStamp, pay_appid, pay_url, jumpUrl, appId} = res.data
-        if(jumpUrl){
-          loadingService(false)
-          Taro.navigateToMiniProgram({
-            appId:appId,
-            path: jumpUrl
-          })
-          return
-        }
-        if(payType === PAY_TYPE_CN.医保){
+        const {nonceStr, paySign, signType, timeStamp, pay_appid, pay_url} = res.data
+        if(payType === PAY_TYPE_CN.医保 && pay_url){
           loadingService(true,'正在跳转')
           Taro.navigateToMiniProgram({
             appId: pay_appid,

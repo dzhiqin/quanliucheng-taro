@@ -35,10 +35,6 @@ export default function SearchResult() {
     getList()
   })
   const onClickDept = (dept) => {
-    Taro.setStorageSync('deptInfo',{
-      deptId: dept.deptId,
-      deptName: dept.deptName
-    })
     Taro.navigateTo({url: `/pages/register-pack/doctor-list/doctor-list?deptId=${dept.deptId}&deptName=${dept.deptName}`})
   }
   const onClickDoctor = (doctor) => {

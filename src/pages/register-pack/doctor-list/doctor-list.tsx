@@ -55,11 +55,10 @@ export default function DoctorList() {
     })
   }, [defaultDay,deptId])
   const handleClickDoctor = (e) => {
-    const deptInfo = Taro.getStorageSync('deptInfo')
     const obj = {
       doctorId: e.doctorId,
       regDate: defaultDay,
-      deptId: deptInfo.deptId,
+      deptId: deptId,
       deptName: deptName,
       sourceType: e.sourceType
     }

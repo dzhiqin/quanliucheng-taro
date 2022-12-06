@@ -112,14 +112,14 @@ export default function DoctorDefault() {
       sqNo: item.sqNo,
       startTime: item.startTime,
       endTime: item.endTime,
-      sourceType: doctorInfo.sourceType,
+      sourceType: item.sourceType || doctorInfo.sourceType, // 优先获取从GetScheduleTimePoints中获取的sourceType
       sourceId: doctorInfo.regType,
       regNo: '',
       feeType: '0',   // 对应feeCode字段
       regFee: doctorInfo.regFee,
       treatFee: '',
       address: doctorInfo.address,
-      regTypeId: doctorInfo.regTypeId,
+      regTypeId: item.regTypeId || doctorInfo.regTypeId, // 优先获取从GetScheduleTimePoints中获取的regTypeId
       timeInterval: item.timeInterval // 广三黄埔新增字段
     }
     Taro.setStorageSync('orderParams',orderParams)

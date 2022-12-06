@@ -10,12 +10,9 @@ import { getImageSrc } from '@/utils/image-src'
 
 export default function Doctors() {
   const router = Taro.useRouter()
-  // const params = router.params
-  // const [deptId,setDeptId] = useState(params.deptId || '')
   const [list,setList] = useState([])
   useEffect(() => {
     const id = router.params.deptId
-    // setDeptId(id)
     loadingService(true)
     getDoctorsByFirstDeptId({departId: id}).then(res => {
       if(res.resultCode === 0){
@@ -29,11 +26,7 @@ export default function Doctors() {
     })
   },[router.params.deptId])
   const handleClickDoctor = (doctor) => {
-    Taro.setStorageSync('deptInfo',{
-      deptId: doctor.deptId,
-      deptName: doctor.deptName
-    })
-    Taro.navigateTo({url: `/pages/register-pack/doctor-detail/doctor-detail?doctorId=${doctor.doctorId}&regDate=`})
+    Taro.navigateTo({url: `/pages/register-pack/doctor-detail/doctor-detail?deptId=${doctor.deptId}&deptName=${doctor.deptName}doctorId=${doctor.doctorId}&regDate=`})
   }
   return (
     <View className='doctors'>

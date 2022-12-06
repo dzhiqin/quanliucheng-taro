@@ -7,7 +7,7 @@ import { updateUserInfo, fetchHealthCards } from '@/service/api/'
 import {custom} from '@/custom/index'
 import { CardsHealper } from '@/utils/cards-healper'
 import './login.less'
-import { loadingService } from '@/service/toast-service'
+import { loadingService, modalService } from '@/service/toast-service'
 
 export default function Login() {
   useEffect(() => {
@@ -32,7 +32,21 @@ export default function Login() {
         }
 
         updateUserInfo(data).then(result => {
-          Taro.setStorageSync('userInfo',result.data)
+          if(result.resultCode === 0){
+            Taro.setStorageSync('userInfo',result.data)
+            if(!result.data){
+              modalService({
+                content: '用户信息为空！',
+                showCancel: false
+              })
+            }
+          }else{
+            modalService({
+              content: '更新用户信息失败'+result.message,
+              showCancel: false
+            })
+          }
+          // Taro.setStorageSync('userInfo','')
         })
 
         fetchHealthCards().then(result=>{

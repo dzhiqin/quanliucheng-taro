@@ -40,6 +40,11 @@ const getHeaderAuth = () => {
   }
   return headerAuth
 }
+let version = 'develop'
+if(process.env.TARO_ENV === 'weapp'){
+  version = __wxConfig.envVersion  // 开发版develop；体验版trial；正式版release
+}
+
 const Request = (
   method:
     | 'GET'
@@ -68,13 +73,14 @@ const Request = (
           // handleLogin()
         }
         // console.log('request spent: ',endTime - startTime);
-        const api = url.split('/').pop()
-        console.log(`============${api}=============`)
-        console.log('【请求】',url)
-        console.log(`【入参】${ data ? JSON.stringify(data) : '无'}`);
-        console.log(`【token】${getHeaderAuth().token}`)
-        console.log(`【返回】`,res.data)
-        
+        if(version !== 'release'){
+          const api = url.split('/').pop()
+          console.log(`============${api}=============`)
+          console.log('【请求】',url)
+          console.log(`【入参】${ data ? JSON.stringify(data) : '无'}`);
+          console.log(`【token】${getHeaderAuth().token}`)
+          console.log(`【返回】`,res.data)
+        }
       },
       fail: (err: Taro.General.CallbackResult) => {
         toastService({title: '请求失败：' + err})
