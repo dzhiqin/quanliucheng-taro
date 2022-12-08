@@ -63,7 +63,7 @@ export default function ReportList() {
     getList(itemType as REPORT_ITEM_TYPE_CN)
   })
   const onClickItem = (e) => {
-    Taro.navigateTo({url: `/pages/reports-pack/reports-detail/reports-detail?examId=${e.id}&examDate=${e.date}&itemType=${itemType}&reportType=${reportType}`})
+    Taro.navigateTo({url: `/pages/reports-pack/reports-detail/reports-detail?pId=${e.pId}&examId=${e.id}&examDate=${e.date}&itemType=${itemType}&reportType=${reportType}`})
   }
   return(
     <View className='reports-list'>
@@ -82,7 +82,7 @@ export default function ReportList() {
                 <BkPanel arrow onClick={onClickItem.bind(null,item)} key={item.id} style='margin-bottom: 40rpx'>
                   <View className='flex'>
                     <View className='reports-list-item-name'>开单日期</View>
-                    <View className='reports-list-item-text'>{item.date.length > 10 ? humanDateAndTime(new Date(item.date.replace(/-/g, "/"))) : item.date}</View>
+                    <View className='reports-list-item-text'>{item.date?.length > 10 ? humanDateAndTime(new Date(item.date.replace(/-/g, "/"))) : item.date}</View>
                   </View>
                   <View className='flex'>
                     <View className='reports-list-item-name'>开单编号</View>

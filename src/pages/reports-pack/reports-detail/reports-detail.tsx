@@ -14,12 +14,12 @@ import DefaultReport from './default-report'
 export default function ReportsDetail() {
   const router = useRouter()
   const [checkItems,setCheckItems] = useState([])
-  const params = router.params as {examId: string,examDate: string, itemType: REPORT_ITEM_TYPE_CN, reportType: REPORT_TYPE_EN}
-  const {examId, examDate, itemType, reportType} = params
+  const params = router.params as {pId: string,examId: string,examDate: string, itemType: REPORT_ITEM_TYPE_CN, reportType: REPORT_TYPE_EN}
+  const {examId, examDate, itemType, reportType,pId} = params
   const [busy,setBusy] = useState(false)
   useEffect(() => {
     setBusy(true)
-    fetchReportsDetail({examId,examDate,itemType,reportType}).then(res => {
+    fetchReportsDetail({examId,examDate,itemType,reportType,pId}).then(res => {
       if(res.resultCode === 0){
         setCheckItems(res.data.checkItems)
         setBusy(false)

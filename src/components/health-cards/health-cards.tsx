@@ -11,7 +11,6 @@ import qrcodeImg from '@/images/icons/qrcode.png'
 import './health-cards.less'
 import SubscribeNotice from '../subscribe-notice/subscribe-notice'
 import { CARD_ACTIONS } from '@/enums/index'
-import BoxItem from '../function-boxes/box-item'
 
 export default function HealthCards(props: {
   cards?: any,

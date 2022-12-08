@@ -1,3 +1,4 @@
+import { REPORT_ITEM_TYPE_CN } from '@/enums/index'
 import imgUrl from '@/utils/imgs'
 // import { REPORT_ITEM_TYPE_CN } from '@/enums/index'
 import { mergeRecursive } from '@/utils/tools'
@@ -59,6 +60,17 @@ const config = {
         }
       ]
     }
+  },
+  reportsPage:{
+    showImageDetail: false,
+    clinicReportTabs: [  // 门诊报告分类
+      {title: '化验', value: REPORT_ITEM_TYPE_CN.化验},
+      {title: '检查', value: REPORT_ITEM_TYPE_CN.检查}
+    ],
+    hospReportTabs: [  // 住院报告分类
+      {title: '化验', value: REPORT_ITEM_TYPE_CN.化验},
+      {title: '检查', value: REPORT_ITEM_TYPE_CN.检查}
+    ]
   },
   longtermSubscribe: {
     checkReminder: '51HqQTe4hEx0mY3D3DxkHx9YkiO0xUnNzDEIogqQsEE', // 审方提醒

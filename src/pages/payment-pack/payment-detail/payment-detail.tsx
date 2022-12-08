@@ -2,6 +2,7 @@ import * as Taro from '@tarojs/taro'
 import * as React from 'react'
 import { View,Image } from '@tarojs/components'
 import { useRouter , useDidShow, useReady } from '@tarojs/taro'
+import { AtAccordion } from 'taro-ui'
 import { 
   createPaymentOrder, 
   fetchPaymentDetailFromHis, 
@@ -16,9 +17,10 @@ import {
   TaroNavToZhongXun,
   handleHeSuanRefund,
   TaroNavToYiBao,
-  login,
   createPaymentOrderByQRCode,
-  TaroNavToMiniProgram
+  TaroNavToMiniProgram,
+  fetchMedicineGuideList,
+  handleLogin
 } from '@/service/api'
 import { CardsHealper } from '@/utils/cards-healper'
 import './payment-detail.less'
@@ -27,7 +29,7 @@ import BkPanel from '@/components/bk-panel/bk-panel'
 import BkButton from '@/components/bk-button/bk-button'
 import sighPng from '@/images/icons/sigh.png'
 import SubscribeNotice from '@/components/subscribe-notice/subscribe-notice'
-import { PAY_TYPE_CN, ORDER_STATUS_EN, PAY_STATUS_EN, ORDER_TYPE_CN, PAYMENT_FROM } from '@/enums/index'
+import { PAY_TYPE_CN, ORDER_STATUS_EN, PAY_STATUS_EN, ORDER_TYPE_CN, PAYMENT_FROM, CARD_ACTIONS } from '@/enums/index'
 import { loadingService, modalService, toastService } from '@/service/toast-service'
 import { requestTry } from '@/utils/retry'
 import ResultPage from '@/components/result-page/result-page'
@@ -72,10 +74,25 @@ export default function PaymentDetail() {
   const router = useRouter()
   const params = router.params
   const scene = params.scene ? decodeURIComponent(params.scene) : null
-  const card = CardsHealper.getDefault()
+  let card = CardsHealper.getDefault()
   const [busy,setBusy] = useState(false)
   const [orderInfo,setOrderInfo] = useState({} as OrderInfoParams)
-  let orderInfoFromList = null
+  const [open,setOpen] = useState(false)
+  let orderInfoFromList = {
+    orderId: '',
+    clinicNo: '',
+    recipeSeq: '',
+    prescMoney: '',
+    cardNo: '',
+    orderDept: '',
+    orderDoctor: '',
+    orderDate: '',
+    oweMoney: '',
+    serialNo: '',
+    payState: undefined,
+    orderState: undefined,
+    orderType: undefined
+  }
   let scanParams = null
   let from: PAYMENT_FROM = null
   if(scene){
@@ -85,11 +102,15 @@ export default function PaymentDetail() {
     from = params.from as PAYMENT_FROM
     orderInfoFromList = JSON.parse(params.orderInfo)
   }
+  console.log(`from=${from},scene=${scene}`)
+  console.log('orderInfo='+params.orderInfo)
+  let billOrderId
   const [_orderId,setOrderId] = useState('')
   const [list,setList] = useState([])
   const [payResult,setPayResult] = useState(resultEnum.default)
   const [payResultMsg,setPayResultMsg] = useState('')
   const [showNotice,setShowNotice] = useState(false)
+  const [medicineList,setMedicineList] = useState([])
   const dealWithPay = async(type) => {
     const subsRes = await TaroSubscribeService(custom.onetimeSubscribe.paySuccessNotice,custom.onetimeSubscribe.refundNotice)
     if(!subsRes.result){
@@ -284,6 +305,16 @@ export default function PaymentDetail() {
       Taro.hideLoading()
     })
   }
+  React.useEffect(() => {
+    if(!orderInfoFromList.orderId) return
+    fetchMedicineGuideList({orderId: orderInfoFromList.orderId}).then(res => {
+      if(res.resultCode === 0){
+        setMedicineList(res.data)
+      }else{
+        // toastService({title: res.message})
+      }
+    })
+  },[orderInfoFromList.orderId])
   const handleClickNavitator = (execRoom) => {
     TaroNavToZhongXun(execRoom)
   }
@@ -303,28 +334,26 @@ export default function PaymentDetail() {
       setBusy(false)
     })
   }
-  const handleLogin = () => {
-    return new Promise((resolve) => {
-      Taro.login({
-        success: res => {
-          const { code } = res
-          login({code})
-          .then((result: any) => {
-            if(result.statusCode === 200){
-              const { data: {data} } = result
-              Taro.setStorageSync('token',data.token)
-              Taro.setStorageSync('openId',data.openId)
-              resolve({result: true, data: {...data}})
-            }else{
-              resolve({result: false, message: result.data.message})
-            }
-          })
-          .catch(err => {
-            resolve({result: false, data: err, message: '登陆失败'})
-          })
+  const ListItem = (props) => {
+    const {item} = props
+    return (
+      <BkPanel style='margin: 40rpx 0; padding: 0 20rpx 20rpx;'>
+        <View className='tag-primary'>{item.disWinAdd}</View>
+        <View className='flex'>
+          <View className='flat-title' style='margin-right: 10rpx'>发药流水号</View>
+          <View>{item.visitNo}</View>
+        </View>
+        <View className='flex'>
+          <View className='flat-title' style='margin-right: 10rpx'>发药窗口</View>
+          <View>{item.disWin}</View>
+        </View>
+        {
+          item.visitNoCode &&
+          <Image src={`data:image/jpg;base64,${item.visitNoCode}`} className='barcode' />
         }
-      })
-    })
+        
+      </BkPanel>
+    )
   }
   useDidShow(() => {
     if(_orderId){
@@ -386,6 +415,21 @@ export default function PaymentDetail() {
       }
     })
   }
+  Taro.eventCenter.on(CARD_ACTIONS.UPDATE_ALL, () => {
+    // 如果是直接从消息通知跳转进来的，可监听CARD_ACTIONS.UPDATE_ALL事件，即登录完成后再调接口获取数据
+    fetchPaymentOrderDetail({billOrderId}).then(res => {
+      if(res.resultCode === 0){
+        setList(res.data)
+      }
+    })
+    fetchMedicineGuideList({orderId: orderInfoFromList.orderId}).then(res => {
+      if(res.resultCode === 0){
+        setMedicineList(res.data)
+      }else{
+        // toastService({title: res.message})
+      }
+    })
+  })
   const getOrderDetailFromData = (param:{
     billOrderId: string
   }) => {
@@ -394,7 +438,8 @@ export default function PaymentDetail() {
         loadingService(false)
         setList(res.data)
       }else{
-        toastService({title: '获取详情失败'})
+        // toastService({title: '获取详情失败'})
+        loadingService(false)
       }
     })
     
@@ -424,6 +469,7 @@ export default function PaymentDetail() {
       const param = {
         billOrderId: orderInfoFromList.orderId
       }
+      billOrderId = orderInfoFromList.orderId
       getOrderDetailFromData(param)
     }
   })
@@ -442,7 +488,7 @@ export default function PaymentDetail() {
           </View>
           <View className='flex'>
             <View className='flat-title'>姓名</View>
-            <View className='payment-detail-item-text'>{orderInfoFromList ? card.name : orderInfo.patientName}</View>
+            <View className='payment-detail-item-text'>{orderInfoFromList ? card?.name : orderInfo.patientName}</View>
           </View>
           <View className='flex'>
             <View className='flat-title'>开单科室</View>
@@ -492,49 +538,65 @@ export default function PaymentDetail() {
           }
         </BkPanel>
         {
-          list.length > 0 &&
-          <BkPanel style='margin-top: 40rpx'>
+          orderInfoFromList && custom.paymentOrderPage.tackingMedicineGuide && orderInfoFromList.orderState !== ORDER_STATUS_EN.unpay &&
+          <View className='medicine-guide'>
             {
-              list.map((item,index) => 
-                <View className='payment-detail-medicine' key={index}>
-                  <View className='payment-detail-medicine-title'>{item.itemName}</View>
-                  <View className='payment-detail-medicine-item'>
-                    <text>类型：</text>
-                    <text>{item.type}</text>
-                  </View>
-                  {
-                    item.execRoomName &&
-                    <View className='payment-detail-medicine-item'>
-                      <text>执行科室：</text>
-                      <text>{item.execRoomName}</text>
-                    </View>
-                  }
-                  <View className='payment-detail-medicine-item'>
-                    <text>数量：</text>
-                    <text>{item.account}</text>
-                    <text>&nbsp;&nbsp;&nbsp;&nbsp;</text>
-                    <text>单位：</text>
-                    <text>{item.unit}</text>
-                  </View>
-                  <View className='payment-detail-medicine-item'>
-                    <text>单价：</text>
-                    <text>{item.itemPrice}元</text>
-                    <text>&nbsp;&nbsp;&nbsp;&nbsp;</text>
-                    <text>小计：</text>
-                    <text>{item.money}元</text>
-                  </View>
-                  {
-                    featConfig.hospitalNavigation && item.execRoom && 
-                    <View className='payment-detail-medicine-item'>
-                      <text>院内导航：</text>
-                      <text className='clickable' onClick={handleClickNavitator}>一键导航</text>
-                    </View>
-                  }
-                </View>  
-              )
+              medicineList.length > 0 &&
+              <View>
+                {
+                  medicineList.map((item,index) => <ListItem item={item} key={index}></ListItem>)
+                }
+              </View>
             }
-          </BkPanel>
+          </View>
         }
+        <AtAccordion title='药品详情' open={open} onClick={() => setOpen(!open)}>
+          {
+            list.length > 0 &&
+            <BkPanel style='margin: 10rpx'>
+              {
+                list.map((item,index) => 
+                  <View className='payment-detail-medicine' key={index}>
+                    <View className='payment-detail-medicine-title'>{item.itemName}</View>
+                    <View className='payment-detail-medicine-item'>
+                      <text>类型：</text>
+                      <text>{item.type}</text>
+                    </View>
+                    {
+                      item.execRoomName &&
+                      <View className='payment-detail-medicine-item'>
+                        <text>执行科室：</text>
+                        <text>{item.execRoomName}</text>
+                      </View>
+                    }
+                    <View className='payment-detail-medicine-item'>
+                      <text>数量：</text>
+                      <text>{item.account}</text>
+                      <text>&nbsp;&nbsp;&nbsp;&nbsp;</text>
+                      <text>单位：</text>
+                      <text>{item.unit}</text>
+                    </View>
+                    <View className='payment-detail-medicine-item'>
+                      <text>单价：</text>
+                      <text>{item.itemPrice}元</text>
+                      <text>&nbsp;&nbsp;&nbsp;&nbsp;</text>
+                      <text>小计：</text>
+                      <text>{item.money}元</text>
+                    </View>
+                    {
+                      featConfig.hospitalNavigation && item.execRoom && 
+                      <View className='payment-detail-medicine-item'>
+                        <text>院内导航：</text>
+                        <text className='clickable' onClick={handleClickNavitator}>一键导航</text>
+                      </View>
+                    }
+                  </View>  
+                )
+              }
+            </BkPanel>
+          }
+        </AtAccordion>
+
         {
           Object.keys(orderInfo).length > 0 && 
           <View className='flex-around' style='padding: 40rpx'>
@@ -560,10 +622,6 @@ export default function PaymentDetail() {
               <BkButton title='医保支付' icon='icons/card.png' theme='primary' disabled={busy} onClick={dealWithPay.bind(null,PAY_TYPE_CN.医保)} />
             }
           </View>
-        }
-        {
-          orderInfoFromList && custom.paymentOrderPage.tackingMedicineGuide && orderInfoFromList.orderState !== ORDER_STATUS_EN.unpay &&
-          <BkButton title='取药指引' onClick={() => Taro.navigateTo({url: `/pages/payment-pack/medicine-guide/medicine-guide?orderId=${orderInfoFromList.orderId}`})} style='margin-top: 20rpx;' />
         }
         <View className='payment-detail-tips'>
           <View className='payment-detail-tips-item'>

@@ -400,6 +400,10 @@ export default class BindCard extends React.Component {
             <View className='create-card-item'>
               <View>院内就诊卡</View>
               <View style='display: flex;'>
+                {
+                  custom.hospName !== 'jszyy' &&
+                  <View style='font-size: 26rpx;color: red; line-height: 60rpx;'>如果不记得卡号可选无</View>
+                }
                 <View className={`btn ${this.state.card.isHaveCard ? 'primary' : 'cancel'}`} onClick={this.onIsHaveCardChange.bind(this, true)}>有</View>
                 <View className={`btn ${this.state.card.isHaveCard ? 'cancel' : 'primary'}`} onClick={this.onIsHaveCardChange.bind(this,false)}>无</View>
               </View>

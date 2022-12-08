@@ -116,8 +116,7 @@ const subPackages = [
     pages: [
       'payment-list/payment-list',
       'payment-detail/payment-detail',
-      'order-list/order-list',
-      'medicine-guide/medicine-guide'
+      'order-list/order-list'
     ]
   },
   {

@@ -84,6 +84,12 @@ export default class CardList2 extends React.Component {
           
           <View className='btns-wrap'>
             {
+              custom.hospName === 'jszyy' ?
+              <View style='color: red;font-size: 26rpx;'>如就诊卡遗失或忘记卡号，请去人工收费窗口办理补卡</View> :
+              <View style='color: red;font-size: 26rpx;'>备注：如果不记得卡号，请选择{custom.feat.bindCard.elecHealthCard ? '[添加健康卡]' : '[添加诊疗卡]'}</View> 
+            }
+            
+            {
               custom.feat.bindCard.oneClickAuth &&
               <health-card-btn onlogin={this.onLoginResult.bind(this)}>
                 <View className='btn'>

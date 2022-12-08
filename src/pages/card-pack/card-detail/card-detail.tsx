@@ -86,8 +86,9 @@ export default function CardDetail(props: any) {
       <BkPanel style='margin-bottom: 40rpx; padding-top: 0;'>
         <AtTabs animated={false} current={currentTab} tabList={[{title: '诊疗卡'},{title: '电子健康卡'}]} onClick={handleTabChange}>
           <AtTabsPane index={0} current={currentTab} className='card-detail-pane'>
-            <View className='flex-justify-center' >
+            <View className='card-detail-pane-content' >
               <Canvas className='canvas' style='width: 150px; height: 150px;' canvasId='myQrcode'></Canvas>
+              <View>诊疗卡号：{card.cardNo}</View>
             </View>
           </AtTabsPane>
           <AtTabsPane index={1} current={currentTab} className='card-detail-pane'>
@@ -105,6 +106,7 @@ export default function CardDetail(props: any) {
             
           </AtTabsPane>
           </AtTabs>
+          
         <View className='card-tips'>出诊时出示此二维码</View>
       </BkPanel>
       <AtAccordion title='更多信息' open={open} onClick={() => {setOpen(!open)}}>

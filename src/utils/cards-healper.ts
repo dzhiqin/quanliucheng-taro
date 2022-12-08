@@ -1,6 +1,7 @@
 import * as Taro from '@tarojs/taro'
-import { setDefaultCard, deleteCard, fetchHealthCards } from '@/service/api'
+import { setDefaultCard, deleteCard, fetchHealthCards,handleLogin, fetchBranchHospital } from '@/service/api'
 import {Card} from '../interfaces/card'
+import { modalService } from '@/service/toast-service'
 
 const updateAllCards = () => {
   return new Promise((resolve,reject) => {
@@ -73,6 +74,7 @@ const setDefault = async (cardId:string) => {
 }
 const getDefault = () => {
   let cards = Taro.getStorageSync('cards')
+  const token = Taro.getStorageSync('token')
   let card:Card = null
   if(cards && cards.length > 0){
     card = cards.find(i => i.isDefault)
@@ -84,7 +86,10 @@ const getDefault = () => {
       })
     }
   }else{
-    showBindCardModal()
+    if(token){
+      // 如果未登录状态先跳过
+      showBindCardModal()
+    }
   }
   return card
  

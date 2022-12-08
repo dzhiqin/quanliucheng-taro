@@ -3,7 +3,29 @@ import {custom} from '@/custom/index'
 import { fullUrl, Post } from "../http";
 
 const baseUrl = custom.baseUrl
-
+export const handleLogin = () => {
+  return new Promise((resolve) => {
+    Taro.login({
+      success: res => {
+        const { code } = res
+        login({code})
+        .then((result: any) => {
+          if(result.statusCode === 200){
+            const { data: {data} } = result
+            Taro.setStorageSync('token',data.token)
+            Taro.setStorageSync('openId',data.openId)
+            resolve({result: true, data: {...data}})
+          }else{
+            resolve({result: false, message: result.data.message})
+          }
+        })
+        .catch(err => {
+          resolve({result: false, data: err, message: '登陆失败'})
+        })
+      }
+    })
+  })
+}
 export const login = (data:{code: string}) => {
   return new Promise((resolve, reject) => {
     Taro.request({

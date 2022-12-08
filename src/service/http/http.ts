@@ -72,10 +72,11 @@ const Request = (
         if(res.data.resultCode === 1 && res.data.message === '请先登录授权'){
           // handleLogin()
         }
-        // console.log('request spent: ',endTime - startTime);
+        
         if(version !== 'release'){
           const api = url.split('/').pop()
           console.log(`============${api}=============`)
+          // console.log('request spent: ',endTime - startTime);
           console.log('【请求】',url)
           console.log(`【入参】${ data ? JSON.stringify(data) : '无'}`);
           console.log(`【token】${getHeaderAuth().token}`)

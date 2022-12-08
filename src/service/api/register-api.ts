@@ -90,3 +90,6 @@ export const fetchCardDetail = (data: {cardNo: string}) => {
 export const getDoctorsByFirstDeptId = (data: {departId: string}) => {
   return Get(fullUrl('api/customize/applet/Reg/GetLevelDoctor',data))
 }
+export const fetchClinicNotice = () => {
+  return Post(fullUrl('api/applet/content/SysNotice/GetClinicNotice'))
+}
