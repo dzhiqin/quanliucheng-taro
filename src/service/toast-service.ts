@@ -38,7 +38,7 @@ export const modalService = (props: {
   content: string,
   success?: any
 }) => {
-  const {cancelText = '取消',confirmText = '确认',showCancel,title = '提示',content,success} = props
+  const {cancelText = '取消',confirmText = '确认',showCancel = false,title = '提示',content,success} = props
   Taro.showModal({
     cancelText: cancelText,
     confirmText: confirmText,

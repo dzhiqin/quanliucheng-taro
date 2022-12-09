@@ -7,7 +7,7 @@ import {
  } from '@/service/api';
 import { View, RichText } from '@tarojs/components'
 import { useState } from 'react';
-import { loadingService, toastService } from '@/service/toast-service';
+import { loadingService, modalService, toastService } from '@/service/toast-service';
 import { AtInput,AtCheckbox } from 'taro-ui';
 import BkTitle from '@/components/bk-title/bk-title';
 import QuestionItem from './question-item';
@@ -41,11 +41,11 @@ export default function EpidemiologicalSurvey(){
             setQuestions(data.data.questionnaireSubjectList)
             setQuesId(data.data.questionnaireId)
           }else{
-            toastService({title: '获取流调表失败'})
+            modalService({title: '获取流调表失败',content: data.message})
           }
         })
       }else{
-        toastService({title: '获取数据失败'})
+        modalService({title: '获取数据失败',content: res.message})
       }
     })
   })
@@ -140,7 +140,8 @@ export default function EpidemiologicalSurvey(){
         if(res.resultCode === 0){
           toastService({title: '提交成功', onClose: () => {Taro.navigateBack();Taro.setStorageSync('checkEpiLogicalSurvey',true)}})
         }else{
-          toastService({title: '提交失败' + res.message})
+          loadingService(false)
+          modalService({content: res.message})
         }
       })
     }else{

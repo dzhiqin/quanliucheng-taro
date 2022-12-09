@@ -5,7 +5,7 @@ import { fetchDoctorsBySubject, fetchDoctorsByDate } from '@/service/api'
 import { useEffect, useState } from 'react'
 import { useRouter } from '@tarojs/taro'
 import BkLoading from '@/components/bk-loading/bk-loading'
-import { loadingService, toastService } from '@/service/toast-service'
+import {  modalService, toastService } from '@/service/toast-service'
 import { AtList, AtListItem } from "taro-ui"
 import './classify-doctor-list.less'
 import crossFlagPng from '@/images/icons/cross_flag.png'
@@ -38,7 +38,6 @@ export default function ClassifyDoctorList(props) {
   
   useEffect(() => {
     if(!specializedSubject) return
-    // loadingService(true)
     setBusy(true)
     fetchDoctorsBySubject({deptId,specializedSubject}).then(res => {
       if(res.resultCode === 0){
@@ -46,20 +45,18 @@ export default function ClassifyDoctorList(props) {
         setBusy(false)
       }else{
         setBusy(false)
-        toastService({title: ''+res.message})
+        modalService({content: res.message})
       }
     })
   },[deptId,specializedSubject])
   useEffect(() => {
     if(!regDate) return
-    // loadingService(true)
     setBusy(true)
     fetchDoctorsByDate({deptId,regDate}).then(res => {
       if(res.resultCode === 0){
-        loadingService(false)
         setList(res.data)
       }else{
-        toastService({title: ''+res.message})
+        modalService({content: res.message})
       }
       setBusy(false)
     })

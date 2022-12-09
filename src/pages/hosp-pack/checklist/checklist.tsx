@@ -4,7 +4,7 @@ import { View, Image } from '@tarojs/components'
 import SimpleModal from '@/components/simple-modal/simple-modal'
 import { useState } from 'react'
 import { getInHospBillList, fetchInHospCards, getInHospInfo } from '@/service/api'
-import { loadingService, toastService } from '@/service/toast-service'
+import { loadingService, modalService, toastService } from '@/service/toast-service'
 import BkPanel from '@/components/bk-panel/bk-panel'
 import calanderPng from '@/images/icons/calendar.png'
 import MoneyPng from '@/images/icons/money_circle.png'
@@ -61,15 +61,13 @@ export default function BindingCard() {
     })
   }
   const getList = (_cardNo: string) => {
-    // loadingService(true)
     setList([])
     setBusy(true)
     getInHospBillList({inCardNo: _cardNo}).then(res => {
       if(res.resultCode === 0){
-        // loadingService(false)
         res.data && setList(res.data.billInfoList)
       }else{
-        toastService({title: '' + res.message})
+        modalService({content: res.message})
       }
       setBusy(false)
     })

@@ -1,5 +1,5 @@
 import * as Taro from '@tarojs/taro'
-import { toastService } from '../toast-service'
+import { modalService } from '../toast-service'
 import { custom } from '@/custom/index'
 
 type subscribeServiceRes =  {result: boolean, msg: string, data?: any }
@@ -184,7 +184,7 @@ const handleConfirm = async () => {
   if(subsRes.result){
     Taro.navigateTo({url: '/pages/login/login'})
   }else{
-    toastService({title: '由于您没有选择接受订阅消息，导致无法正常使用本小程序，请重新登录'})
+    modalService({content: '由于您没有选择接受订阅消息，导致无法正常使用本小程序，请重新登录'})
     TaroRemindLoginModal()
   }
 }

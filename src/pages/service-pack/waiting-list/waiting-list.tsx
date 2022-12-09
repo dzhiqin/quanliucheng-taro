@@ -8,7 +8,7 @@ import { AtButton } from 'taro-ui'
 import { useState } from 'react'
 import { getWaitingList } from '@/service/api'
 import { humanDate } from '@/utils/format'
-import { toastService } from '@/service/toast-service'
+import { loadingService, modalService } from '@/service/toast-service'
 import './waiting-list.less'
 
 export default function BindingCard() {
@@ -20,18 +20,13 @@ export default function BindingCard() {
   const today = humanDate(new Date())
   const getList = () => {
     setLoading(true)
-    // Taro.showLoading({title: '加载中……'})
     getWaitingList({queueDate: today}).then(res => {
+      loadingService(false)
       if(res.resultCode === 0){
         setList(res.data)
       }else{
-        toastService({title: '获取数据失败：' + res.message})
+        modalService({title: '获取数据失败：',content: res.message})
       }
-    }).finally(() => {
-      setTimeout(() => {
-        setLoading(false)
-      }, 3000)
-      // Taro.hideLoading()
     })
   }
   Taro.useDidShow(() => {

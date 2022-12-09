@@ -1,7 +1,6 @@
 import * as Taro from '@tarojs/taro'
-import { setDefaultCard, deleteCard, fetchHealthCards,handleLogin, fetchBranchHospital } from '@/service/api'
+import { setDefaultCard, deleteCard, fetchHealthCards } from '@/service/api'
 import {Card} from '../interfaces/card'
-import { modalService } from '@/service/toast-service'
 
 const updateAllCards = () => {
   return new Promise((resolve,reject) => {

@@ -25,7 +25,9 @@ export default function HealthCards(props: {
     cardNo: '',
     isDefault: false
   })
-  
+  Taro.useDidHide(() => {
+    Taro.eventCenter.off(CARD_ACTIONS.UPDATE_ALL)
+  })
   useDidShow(() => {
     const res = Taro.getStorageSync('userInfo')
     if(res){
@@ -53,6 +55,7 @@ export default function HealthCards(props: {
     })
     
   })
+  
   const handleLogin = async () =>{
     let subsRes = await TaroSubscribeService(
       custom.longtermSubscribe.visitReminder,

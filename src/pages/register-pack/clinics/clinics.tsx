@@ -5,7 +5,7 @@ import { useState,useEffect } from 'react'
 import locationPng from '@/images/icons/location2.png'
 import { AtSearchBar } from 'taro-ui'
 import { fetchDepatmentList, fetchPreviousVisits } from '@/service/api'
-import { toastService } from '@/service/toast-service'
+import { modalService, toastService } from '@/service/toast-service'
 import {custom} from '@/custom/index'
 import BkVerticalTab from '@/components/bk-vertical-tab/bk-vertical-tab'
 import ClinicList from './clinic-list'
@@ -50,7 +50,7 @@ export default function Clinics() {
         const clinicData = deptListData ? deptListData[0].secondDeptInfos : []
         setClinicList(clinicData)
       }else{
-        toastService({title: '获取科室信息失败'})
+        modalService({title: '获取科室失败',content: result.message})
       }
     })
   },[])

@@ -6,7 +6,7 @@ import './order-list.less'
 import { cancelAppointment, fetchRegInvoiceInfo, fetchRegOrderList,TaroNavToMiniProgram } from '@/service/api'
 import HealthCards from '@/components/health-cards/health-cards'
 import { useState, useEffect, useCallback } from 'react'
-import { loadingService, toastService } from '@/service/toast-service'
+import { loadingService, modalService, toastService } from '@/service/toast-service'
 import BkButton from '@/components/bk-button/bk-button'
 import BkTabs from '@/components/bk-tabs/bk-tabs'
 import BkLoading from '@/components/bk-loading/bk-loading'
@@ -14,6 +14,7 @@ import { checkOverTime } from '@/utils/tools'
 import BaseModal from '@/components/base-modal/base-modal'
 import { custom } from '@/custom/index'
 import {REGISTER_ORDER_STATUS} from '@/enums/index'
+import { CardsHealper } from '@/utils/cards-healper'
 
 const tabs = [{title: '15日内订单',value: 'current'},{title: '历史订单',value: 'history'}]
 const registerConfig = custom.feat.register
@@ -27,6 +28,7 @@ export default function OrderList() {
     totalFee: '',
     orderId: ''
   })
+  const card = CardsHealper.getDefault()
   const [show,setShow] = useState(false)
   const onConfirm = () => {
     setShow(false)
@@ -36,7 +38,8 @@ export default function OrderList() {
         toastService({title: '取消成功！'})
         getList()
       }else{
-        toastService({title: res.message})
+        loadingService(false)
+        modalService({content: res.message})
       }
     })
   }
@@ -53,8 +56,8 @@ export default function OrderList() {
   const showInvoice = (item) => {
     Taro.showLoading({title: '加载中……',mask:true})
     fetchRegInvoiceInfo({serialNo: item.serialNo}).then(res => {
+      Taro.hideLoading()
       if(res.resultCode === 0){
-        Taro.hideLoading()
         const invoiceUrl = res.data.invoiceUrl
         const pathParams = `pages/invoiceDisplayDWDZ/invoiceDisplayDWDZ?q=${encodeURIComponent(invoiceUrl)}`
         TaroNavToMiniProgram({
@@ -64,7 +67,7 @@ export default function OrderList() {
         // Taro.setStorageSync('webViewSrc',invoiceUrl)
         // Taro.navigateTo({url: '/pages/web-view-page/web-view-page'})
       }else{
-        toastService({title: '获取电子发票失败：' + res.message})
+        modalService({title: '获取电子发票失败：',content: res.message})
       }
     }).catch(() => {
       Taro.hideLoading()
@@ -77,7 +80,7 @@ export default function OrderList() {
       if(res.resultCode === 0){
         setList(res.data)
       }else{
-        toastService({title: res.message})
+        modalService({content: res.message})
       }
       setBusy(false)
     })
@@ -115,6 +118,10 @@ export default function OrderList() {
                 <View className='order-list-card-item'>
                   <View className='order-list-card-title'>就诊人：</View>
                   <View className='order-list-card-text'>{item.patientName}</View>
+                </View>
+                <View className='order-list-card-item'>
+                  <View className='order-list-card-title'>诊疗卡号：</View>
+                  <View className='order-list-card-text'>{card.cardNo}</View>
                 </View>
                 <View className='order-list-card-item'>
                   <View className='order-list-card-title'>已缴费：</View>

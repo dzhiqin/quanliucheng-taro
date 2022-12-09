@@ -4,7 +4,7 @@ import { View } from '@tarojs/components'
 import {custom} from '@/custom/index'
 import { AtButton, AtForm, AtInput } from 'taro-ui'
 import { useState } from 'react'
-import { loadingService, toastService } from '@/service/toast-service'
+import { loadingService, modalService, toastService } from '@/service/toast-service'
 import { bindCardByCardNameAndNo, bindCardByCardNo } from '@/service/api'
 
 export default function BindingCard() {
@@ -29,13 +29,14 @@ export default function BindingCard() {
         if(res.resultCode === 0){
           toastService({title: '绑卡成功', onClose: () => Taro.navigateBack()})
         }else{
-          toastService({title: ''+res.message})
+          modalService({title: '绑卡失败',content: res.message})
           setBusy(false)
         }
       })
       .catch(err => {
         setBusy(false)
-        toastService({title: err})
+        loadingService(false)
+        modalService({content: JSON.stringify(err)})
       })
     }else{
       bindCardByCardNo({inCardNo: card.cardNo})
@@ -45,13 +46,14 @@ export default function BindingCard() {
           toastService({title: '绑卡成功', onClose: () => Taro.navigateBack()})
           Taro.setStorageSync('inCard',{id: '', cardNo: res.data.inpatientNo, name: res.data.name, isDefault: true})
         }else{
-          toastService({title: '绑卡失败'+res.message})
+          modalService({title: '绑卡失败',content: res.message})
           setBusy(false)
         }
       })
       .catch(err => {
         setBusy(false)
-        toastService({title: err})
+        loadingService(false)
+        modalService({content: JSON.stringify(err)})
       })
     }
   }

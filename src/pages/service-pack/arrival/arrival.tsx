@@ -78,7 +78,7 @@ export default function BindingCard() {
       setCurrent({latitude,longitude})
       computeDistance(latitude,longitude,hospLatLong.latitude,hospLatLong.longitude)
     }).catch(err => {
-      toastService({title: '获取位置失败：' + err})
+      modalService({content: JSON.stringify(err)})
     }).finally(() => {
     }) 
   }
@@ -139,7 +139,8 @@ export default function BindingCard() {
         })
       }
     }).catch((err) => {
-      toastService({title: '' + err})
+      loadingService(false)
+      modalService({content: JSON.stringify(err)})
     })
   }
   return(

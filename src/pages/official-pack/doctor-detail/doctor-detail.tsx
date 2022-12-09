@@ -2,7 +2,7 @@ import * as React from 'react'
 import * as Taro from '@tarojs/taro'
 import { View, Image } from '@tarojs/components'
 import { fetchDoctorDetail } from '@/service/api'
-import { loadingService, toastService } from '@/service/toast-service'
+import { loadingService, modalService } from '@/service/toast-service'
 import { useState } from 'react'
 import BkTitle from '@/components/bk-title/bk-title'
 import './doctor-detail.less'
@@ -28,7 +28,7 @@ export default function DoctorDetail() {
       if(res.resultCode === 0){
         setDoctorInfo(res.data)
       }else{
-        toastService({title: '' + res.message})
+        modalService({content: res.message})
       }
     })
   })

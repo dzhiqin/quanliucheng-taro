@@ -8,7 +8,7 @@ import { useState } from 'react'
 import { AtSwitch, AtTabs, AtTabsPane,AtAccordion } from 'taro-ui'
 import { CardsHealper } from '@/utils/cards-healper'
 import './card-detail.less'
-import { toastService } from '@/service/toast-service'
+import { modalService } from '@/service/toast-service'
 import nrhcPng from '@/images/icons/nrhc.png'
 import drawQrcode from '@/utils/weapp.qrcode.esm'
 
@@ -75,7 +75,7 @@ export default function CardDetail(props: any) {
       })
       setBusy(false)
     }).catch(err => {
-      toastService({title: err+''})
+      modalService({title: '解绑失败',content: JSON.stringify(err)})
     })
   }
   const handleTabChange = (value) => {

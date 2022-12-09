@@ -10,7 +10,7 @@ import BkPanel from '@/components/bk-panel/bk-panel'
 import BkTabs from '@/components/bk-tabs/bk-tabs'
 import BkLoading from '@/components/bk-loading/bk-loading'
 import { humanDateAndTime } from '@/utils/format'
-import { toastService } from '@/service/toast-service'
+import { modalService, toastService } from '@/service/toast-service'
 import { CardsHealper } from '@/utils/cards-healper'
 import { custom } from '@/custom/index'
 import './reports-list.less'
@@ -42,11 +42,12 @@ export default function ReportList() {
   }
   const getList = (_itemType: REPORT_ITEM_TYPE_CN) => {
     setBusy(true)
+    setList([])
     fetchReportsList({itemType: _itemType, reportType: reportType }).then(res => {
       if(res.resultCode === 0){
         setList(res.data.checks)
       }else{
-        toastService({title: res.message})
+        modalService({content: res.message})
         setList([])
       }
       

@@ -1,6 +1,6 @@
 import * as Taro from '@tarojs/taro'
 import * as React from 'react'
-import { View } from '@tarojs/components'
+import { View,Image } from '@tarojs/components'
 import { AtButton } from 'taro-ui'
 import './reports-detail.less'
 import BkPanel from '@/components/bk-panel/bk-panel'
@@ -8,6 +8,7 @@ import { custom } from '@/custom/index'
 import { toastService, loadingService } from '@/service/toast-service'
 import { fetchReportUrl } from '@/service/api/reports-api'
 import { REPORT_ITEM_TYPE_CN } from '@/enums/index'
+import BkButton from '@/components/bk-button/bk-button'
 
 export default function DefaultReport(props:{
   checkItems: any[],
@@ -16,6 +17,13 @@ export default function DefaultReport(props:{
 }) {
   const {checkItems,examId,itemType} = props
   const [busy,setBusy] = React.useState(false)
+  const setting = custom.reportsPage
+  let urls = []
+  checkItems.forEach(item => {
+    if(item.url){
+      urls.push(item.url)
+    }
+  })
   const CardItem = (params) => {
     if(params.text){
       return(
@@ -41,6 +49,12 @@ export default function DefaultReport(props:{
         }
         handleViewPdf(url)
       }
+    })
+  }
+  const showImages = (_urls) => {
+    Taro.previewImage({
+      current: _urls[0],
+      urls: _urls
     })
   }
   const handleViewPdf = (url) => {
@@ -76,7 +90,23 @@ export default function DefaultReport(props:{
   return(
     <View className='reports-detail' style='padding: 40rpx;'>
       {
-        checkItems.map((item,index) => 
+        setting.showImageDetail && 
+        <View className='reports-detail-content'>
+          <Image src={checkItems[0]? checkItems[0].url : ''} />
+          <View className='reports-detail-footer'>
+            {/* {
+              checkItems[0] && checkItems[0].url &&
+              <BkButton title='查看图片' onClick={onClick.bind(null,checkItems[0]? checkItems[0].url : '')} />
+            } */}
+            {
+              urls.length > 0 && 
+              <BkButton title='查看图片' onClick={showImages.bind(null,urls)} />
+            }
+          </View>
+        </View>
+      }
+      {
+        !setting.showImageDetail && checkItems.map((item,index) => 
           <BkPanel key={index}>
             <CardItem title='编号' text={item.No} />
             <CardItem title='名称' text={item.examItemName} />

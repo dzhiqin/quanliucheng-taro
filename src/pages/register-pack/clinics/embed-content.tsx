@@ -5,7 +5,7 @@ import { useState,useEffect } from 'react'
 import './embed-content.less'
 import { fetchClinicsByDeptId,fetchDoctorsByDept, fetchScheduleDays } from '@/service/api'
 import { AtList, AtListItem } from "taro-ui"
-import { toastService } from '@/service/toast-service'
+import { modalService, toastService } from '@/service/toast-service'
 import BkLoading from '@/components/bk-loading/bk-loading'
 
 export default function EmbedContent(props:{
@@ -44,7 +44,7 @@ export default function EmbedContent(props:{
       if(res.resultCode === 0){
         setDays(res.data)
       }else{
-        toastService({title: '获取日期失败'})
+        modalService({content: res.message})
       }
     })
   },[])
@@ -59,14 +59,14 @@ export default function EmbedContent(props:{
           setCurrent(0)
         }
       }else{
-        toastService({title: '获取分类失败'})
+        modalService({content: res.message, title: '获取分类失败'})
       }
     })
     fetchDoctorsByDept({deptId}).then(res => {
       if(res.resultCode === 0){
         setDoctors(res.data)
       }else{
-        toastService({title: '获取医生数据失败'})
+        modalService({title: '获取医生数据失败',content: res.message})
       }
     })
   },[deptId])

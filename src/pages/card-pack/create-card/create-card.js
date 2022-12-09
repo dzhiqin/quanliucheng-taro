@@ -59,8 +59,8 @@ export default class BindCard extends React.Component {
     if(healthCode){
       loadingService(true)
       fetchUserInfoByHealthCode({healthCode}).then(res => {
+        loadingService(false)
         if(res.resultCode === 0){
-          loadingService(false)
           Taro.removeStorageSync('healthCode')
           const data = res.data
           this.setState({
@@ -81,7 +81,7 @@ export default class BindCard extends React.Component {
             currentGenderValue: data.gender
           })
         }else{
-          toastService({title: ''+res.message})
+          modalService({content: res.message})
         }
       })
     }else{

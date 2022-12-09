@@ -3,7 +3,7 @@ import * as Taro from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import { useEffect,useState } from 'react'
 import { fetchClinicDoctors, fetchClinicIntro } from '@/service/api'
-import { toastService } from '@/service/toast-service'
+import { modalService } from '@/service/toast-service'
 import { AtTabs, AtAvatar } from 'taro-ui'
 import './clinic-intro.less'
 import BkPanel from '@/components/bk-panel/bk-panel'
@@ -25,7 +25,7 @@ export default function ClinicIntro() {
         setClinicInfo(res.data)
         Taro.setNavigationBarTitle({title: res.data.deptName})
       }else{
-        toastService({title: ''+res.message})
+        modalService({content: res.message})
       }
     })
     fetchClinicDoctors({deptId: params.deptId}).then(res => {

@@ -1,7 +1,7 @@
 import * as Taro from '@tarojs/taro'
 import * as React from 'react'
 import { View,Image } from '@tarojs/components'
-import { useRouter , useDidShow, useReady } from '@tarojs/taro'
+import { useRouter , useDidShow, useReady, useDidHide } from '@tarojs/taro'
 import { AtAccordion } from 'taro-ui'
 import { 
   createPaymentOrder, 
@@ -127,11 +127,8 @@ export default function PaymentDetail() {
           setOrderId(res.data.orderId)
           payOrderById(res.data.orderId,type)
         }else{
-          // toastService({title: '创建订单失败' + res.message})
-          Taro.showToast({
-            title: '创建订单失败' + res.message,
-            icon: 'none'
-          })
+          loadingService(false)
+          modalService({title: '创建订单失败',content: res.message})
           setBusy(false)
         }
       })
@@ -141,11 +138,8 @@ export default function PaymentDetail() {
           setOrderId(res.data.orderId)
           payOrderById(res.data.orderId,type)
         }else{
-          // toastService({title: '创建订单失败' + res.message})
-          Taro.showToast({
-            title: '创建订单失败' + res.message,
-            icon: 'none'
-          })
+          loadingService(false)
+          modalService({title: '创建订单失败', content: res.message})
           setBusy(false)
         }
       })
@@ -169,10 +163,10 @@ export default function PaymentDetail() {
     Taro.showLoading({title: '支付中……'})
     handlePayment({orderId: id, payType: Number(payType)})
     .then(res => {
-      if(res.data.jumpUrl && res.data.appId){
+      if(res.data.jumpUrl && res.data.appid){
         loadingService(false)
         Taro.navigateToMiniProgram({
-          appId: res.data.appId,
+          appId: res.data.appid,
           path: res.data.jumpUrl
         })
         return
@@ -183,11 +177,8 @@ export default function PaymentDetail() {
         loadingService(false)
       }else if(res.resultCode ===1){
         setBusy(false)
-        // toastService({title: res.message})
-        modalService({
-          content: res.message,
-          showCancel: false
-        })
+        loadingService(false)
+        modalService({content: res.message})
       }else{
         const {nonceStr, paySign, signType, timeStamp, pay_appid, pay_url} = res.data
         if(payType === PAY_TYPE_CN.医保 && pay_url){
@@ -236,9 +227,9 @@ export default function PaymentDetail() {
         
       }
     }).catch((err) => {
-      console.error('pay fail',err);
       setBusy(false)
-      toastService({title: '支付失败'})
+      loadingService(false)
+      modalService({title: '支付失败', content: JSON.stringify(err)})
     })
   }
   const navToOtherWeapp = (content:string) => {
@@ -287,8 +278,8 @@ export default function PaymentDetail() {
     // }
     Taro.showLoading({title: '加载中……',mask:true})
     fetchPaymentOrderInvoice({serialNo: item.serialNo}).then(res => {
+      loadingService(false)
       if(res.resultCode === 0){
-        loadingService(false)
         const invoiceUrl = res.data.invoiceUrl
         Taro.setStorageSync('webViewSrc',invoiceUrl)
         // Taro.navigateTo({url: '/pages/web-view-page/web-view-page'})
@@ -299,7 +290,7 @@ export default function PaymentDetail() {
           path: pathParams
         })
       }else{
-        toastService({title: '获取电子发票失败：' + res.message})
+        modalService({title: '获取电子发票失败',content: res.message})
       }
     }).catch(() => {
       Taro.hideLoading()
@@ -307,11 +298,12 @@ export default function PaymentDetail() {
   }
   React.useEffect(() => {
     if(!orderInfoFromList.orderId) return
+    if(!Taro.getStorageSync('token')) return
     fetchMedicineGuideList({orderId: orderInfoFromList.orderId}).then(res => {
       if(res.resultCode === 0){
         setMedicineList(res.data)
       }else{
-        // toastService({title: res.message})
+        modalService({content: res.message})
       }
     })
   },[orderInfoFromList.orderId])
@@ -327,7 +319,8 @@ export default function PaymentDetail() {
       if(res.resultCode === 0){
         toastService({title: '取消成功', onClose: () => {Taro.navigateBack()}})
       }else{
-        toastService({title: '取消失败：' + res.message})
+        loadingService(false)
+        modalService({title: '取消失败', content: res.message})
       }
     })
     .finally(() => {
@@ -355,6 +348,9 @@ export default function PaymentDetail() {
       </BkPanel>
     )
   }
+  useDidHide(() => {
+    Taro.eventCenter.off(CARD_ACTIONS.UPDATE_ALL)
+  })
   useDidShow(() => {
     if(_orderId){
       setBusy(true)
@@ -374,12 +370,25 @@ export default function PaymentDetail() {
         loadingService(false)
       })
     }
+    Taro.eventCenter.on(CARD_ACTIONS.UPDATE_ALL, () => {
+      // 如果是直接从消息通知跳转进来的，可监听CARD_ACTIONS.UPDATE_ALL事件，即登录完成后再调接口获取数据
+      fetchPaymentOrderDetail({billOrderId}).then(res => {
+        if(res.resultCode === 0){
+          setList(res.data)
+        }
+      })
+      fetchMedicineGuideList({orderId: orderInfoFromList.orderId}).then(res => {
+        if(res.resultCode === 0){
+          setMedicineList(res.data)
+        }
+      })
+    })
   })
   const getOrderInfoByQRCode = () => {
     fetchPaymentOrderDetailByQRCode(scanParams).then(res => {
       // 扫码进入的因接口返回字段不同╮(╯▽╰)╭，需要重新对齐数据
+      loadingService(false)
       if(res.resultCode === 0){
-        loadingService(false)
         const data = res.data
         setOrderInfo({
           ...data,
@@ -397,7 +406,7 @@ export default function PaymentDetail() {
         }
         getOrderDetailFromHis(param)
       }else{
-        toastService({title: '获取数据失败:' + res.message})
+        modalService({content: res.message})
       }
     })
   }
@@ -411,35 +420,21 @@ export default function PaymentDetail() {
       if(res.resultCode === 0){
         setList(res.data.billDetails)
       }else{
-        toastService({title: '获取数据失败:' + res.message})
+        modalService({content: res.message})
       }
     })
   }
-  Taro.eventCenter.on(CARD_ACTIONS.UPDATE_ALL, () => {
-    // 如果是直接从消息通知跳转进来的，可监听CARD_ACTIONS.UPDATE_ALL事件，即登录完成后再调接口获取数据
-    fetchPaymentOrderDetail({billOrderId}).then(res => {
-      if(res.resultCode === 0){
-        setList(res.data)
-      }
-    })
-    fetchMedicineGuideList({orderId: orderInfoFromList.orderId}).then(res => {
-      if(res.resultCode === 0){
-        setMedicineList(res.data)
-      }else{
-        // toastService({title: res.message})
-      }
-    })
-  })
+  
   const getOrderDetailFromData = (param:{
     billOrderId: string
   }) => {
+    if(!Taro.getStorageSync('token')) return
     fetchPaymentOrderDetail(param).then(res => {
+      loadingService(false)
       if(res.resultCode === 0){
-        loadingService(false)
         setList(res.data)
       }else{
-        // toastService({title: '获取详情失败'})
-        loadingService(false)
+        modalService({content: res.message})
       }
     })
     
@@ -452,7 +447,8 @@ export default function PaymentDetail() {
         // 重新登陆获取openid
         const loginRes:any = await handleLogin()
         if(!loginRes.result){
-          toastService({title: loginRes.message})
+          loadingService(false)
+          modalService({content: loginRes.message})
           return
         }
       }

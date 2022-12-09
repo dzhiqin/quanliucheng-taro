@@ -9,7 +9,7 @@ import {custom} from '@/custom/index'
 import RegisterNoticeModal from '../register-notice-modal/register-notice-modal'
 import BoxItem from './box-item'
 import './function-boxes.less'
-import { loadingService, toastService } from '@/service/toast-service'
+import { loadingService, modalService } from '@/service/toast-service'
 import { TaroRemindLoginModal } from '@/service/api'
 
 export default function FunctionBoxes(props) {
@@ -55,7 +55,8 @@ export default function FunctionBoxes(props) {
             })
           }
         }else{
-          toastService({title: '获取分院出错：' + res.message})
+          loadingService(false)
+          modalService({title: '获取分院出错',content: res.message})
         }
       })
     } 

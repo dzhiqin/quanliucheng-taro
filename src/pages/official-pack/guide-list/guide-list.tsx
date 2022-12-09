@@ -3,7 +3,7 @@ import * as React from 'react'
 import { View } from '@tarojs/components'
 import { useEffect,useState } from 'react'
 import { fetchGuideList } from '@/service/api'
-import { loadingService, toastService } from '@/service/toast-service'
+import { loadingService, modalService } from '@/service/toast-service'
 import BkLoading from '@/components/bk-loading/bk-loading'
 import {AtList,AtListItem} from 'taro-ui'
 
@@ -12,11 +12,11 @@ export default function GuideList() {
   useEffect(() => {
     loadingService(true)
     fetchGuideList().then(res => {
+      loadingService(false)
       if(res.resultCode === 0){
-        loadingService(false)
         setList(res.data)
       }else{
-        toastService({title: '' + res.message})
+        modalService({content: res.message})
       }
     })
   }, [])

@@ -5,7 +5,7 @@ import crossPng from '@/images/icons/cross.png'
 import { CardsHealper } from '@/utils/cards-healper'
 import './cards-list.less'
 import { encryptByDES, getBranchId } from '@/utils/tools'
-import { loadingService, toastService } from '@/service/toast-service'
+import { loadingService, modalService, toastService } from '@/service/toast-service'
 import { TaroNavToMiniProgram, bindHealthCard } from '@/service/api'
 import nrhcPng from '@/images/icons/nrhc.png'
 import cardUpgradePng from '@/images/icons/card_upgrade.png'
@@ -65,11 +65,13 @@ export default function Card(props: {
           })
         }})
       }else{
-        toastService({title: '升级失败'+res.message})
+        loadingService(false)
+        modalService({title: '升级失败', content: res.message})
         setUpgrading(false)
       }
     }).catch(err => {
-      toastService({title: 'err'+err})
+      loadingService(false)
+      modalService({content: JSON.stringify(err)})
       setUpgrading(false)
     })
   }

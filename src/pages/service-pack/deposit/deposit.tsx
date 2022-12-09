@@ -14,7 +14,7 @@ import {
 import BkTabs from '@/components/bk-tabs/bk-tabs'
 import BkPanel from '@/components/bk-panel/bk-panel'
 import BkButton from '@/components/bk-button/bk-button'
-import { loadingService, toastService } from '@/service/toast-service'
+import { loadingService, modalService, toastService } from '@/service/toast-service'
 import BkLoading from '@/components/bk-loading/bk-loading'
 import './deposit.less'
 import { ORDER_STATUS_EN, PAY_RESULT } from '@/enums/index'
@@ -82,8 +82,7 @@ export default function BindingCard() {
         const {accountBalance} = res.data
         setBalance(accountBalance)
       }else{
-        toastService({title: '获取余额失败'})
-        console.error(res.message)
+        modalService({title: '获取余额失败',content: res.message})
       }
       setBusy(false)
     })
@@ -125,7 +124,8 @@ export default function BindingCard() {
     setBusy(true)
     const response:any = await getDepositPayParams()
     if(!response.success) {
-      toastService({title: '支付失败'+response.message})
+      loadingService(false)
+      modalService({title: '支付失败',content: response.message})
       setBusy(false)
       return
     }
@@ -184,13 +184,13 @@ export default function BindingCard() {
     setShowDetail(true)
     loadingService(true)
     getRegisterDepositOrderDetail({orderNo: data.orderNo as string}).then(res => {
+      loadingService(false)
       if(res.resultCode === 0){
-        loadingService(false)
         setDepositItem(res.data[0])
       }
     }).catch(err => {
-      toastService({title: '获取详情失败'})
-      console.error(err);
+      loadingService(false)
+      modalService({title: '获取详情失败',content: JSON.stringify(err)})
     })
   }
   const onConfirm = () => {

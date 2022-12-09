@@ -3,7 +3,7 @@ import * as React from 'react'
 import { View } from '@tarojs/components'
 import { useEffect,useState } from 'react'
 import { fetchClinicList } from '@/service/api'
-import { loadingService, toastService } from '@/service/toast-service'
+import { modalService } from '@/service/toast-service'
 import BkLoading from '@/components/bk-loading/bk-loading'
 import { AtListItem } from 'taro-ui'
 import VirtualList from '@tarojs/components/virtual-list'
@@ -20,7 +20,6 @@ export default function ClinicList() {
     )
   })
   useEffect(() => {
-    // loadingService(true)
     setBusy(true)
     fetchClinicList().then(res => {
       if(res.resultCode === 0){
@@ -32,14 +31,12 @@ export default function ClinicList() {
           setMsg('暂无数据')
         }
       }else{
-        toastService({title: '' + res.message})
+        modalService({content: res.message})
         setBusy(false)
       }
     })
   },[])
-  // useEffect(() => {
-  //   loadingService(false)
-  // },[list])
+ 
   const onClickItem = (item) => {
     Taro.navigateTo({url: '/pages/official-pack/clinic-intro/clinic-intro?deptId=' + item.deptId})
   }

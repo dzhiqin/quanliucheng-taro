@@ -3,7 +3,7 @@ import * as React from 'react'
 import { View } from '@tarojs/components'
 import { useRouter } from '@tarojs/taro'
 import { fetchAllInHospBillDetail, fetchInHospBillCategories, fetchInHospBillDetailByCategory } from '@/service/api'
-import { loadingService, toastService } from '@/service/toast-service'
+import { loadingService, modalService } from '@/service/toast-service'
 import { useState } from 'react'
 import VirtualList from '@tarojs/components/virtual-list'
 import BkPanel from '@/components/bk-panel/bk-panel'
@@ -81,20 +81,18 @@ export default function ChecklistDetail() {
     getAllInHospBills()
   })
   const getAllInHospBills = () => {
-    // loadingService(true)
     setBusy(true)
     fetchAllInHospBillDetail({registerId,billDate,inCardNo: card.cardNo})
     .then(res => {
-      // loadingService(false)
       if(res.resultCode === 0){
         setList(res.data)
       }else{
-        toastService({title: res.message})
+        modalService({content: res.message})
       }
       setBusy(false)
     })
     .catch(err => {
-      toastService({title: '获取数据失败'+err})
+      modalService({title: '获取数据失败',content: JSON.stringify(err)})
     })
   }
   const getInHospBillsByCategory = (_categoryId) => {
@@ -104,10 +102,11 @@ export default function ChecklistDetail() {
       if(res.resultCode === 0){
         setList(res.data)
       }else{
-        toastService({title: res.message})
+        modalService({content: res.message})
       }
     }).catch(err => {
-      toastService({title: '获取数据失败'+err})
+      loadingService(false)
+      modalService({content: JSON.stringify(err)})
     })
   }
   const onTabChange = (e) => {

@@ -5,7 +5,7 @@ import HealthCards from '@/components/health-cards/health-cards'
 import { useEffect, useState } from 'react'
 import { useDidShow } from '@tarojs/taro'
 import { createPaymentOrder, fetchPaymentOrderList , TaroSubscribeService , PayOrderParams, handlePayment, cancelPayment, fetchPaymentOrderStatus } from '@/service/api'
-import { loadingService, toastService } from '@/service/toast-service'
+import { loadingService, modalService, toastService } from '@/service/toast-service'
 import { PAY_TYPE_CN, ORDER_SEARCH_TYPE_EN , ORDER_STATUS_CN, ORDER_STATUS_EN, PAYMENT_FROM } from '@/enums/index'
 import BkPanel from '@/components/bk-panel/bk-panel'
 import BkButton from '@/components/bk-button/bk-button'
@@ -31,17 +31,15 @@ export default function OrderList(){
     getList(searchType)
   })
   const getList = (type: string) => {
-    // Taro.showLoading({title: '加载中……'})
     setBusy(true)
     fetchPaymentOrderList({type}).then(res => {
       if(res.resultCode === 0){
         setList(res.data)
       }else{
         setList([])
-        toastService({title: res.message})
+        modalService({content: res.message})
       }
     }).finally(() => {
-      // Taro.hideLoading()
       setBusy(false)
     })
   }
@@ -138,7 +136,7 @@ export default function OrderList(){
       if(res.resultCode === 0){
         setList(res.data)
       }else{
-        toastService({title: res.message})
+        modalService({content: res.message})
       }
     }).finally(() => {
       setBusy(false)

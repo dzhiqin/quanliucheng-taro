@@ -184,7 +184,7 @@ export default function OrderCreate() {
         orderParams = buildOrderParams(feeRes.data.regFee, feeRes.data.treatFee)
       }else{
         loadingService(false)
-        toastService({title: feeRes.msg})
+        modalService({content: feeRes.msg})
         setResult(resultEnum.fail)
         return
       }
@@ -215,14 +215,12 @@ export default function OrderCreate() {
         }
       }else{
         setBusy(false)
-        toastService({title: res.message})
+        loadingService(false)
+        modalService({content: res.message})
       }
     }).catch(err => {
       loadingService(false)
-      modalService({
-        content: JSON.stringify(err,null,2),
-        showCancel: false
-      })
+      modalService({content: JSON.stringify(err,null,2)})
     })
   }
   useEffect(() => {

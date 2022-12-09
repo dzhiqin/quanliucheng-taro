@@ -4,7 +4,7 @@ import { View, Image } from '@tarojs/components'
 import { fetchDoctorSchedules, fetchTimeListByDate, fetchDoctorDetail } from '@/service/api'
 import { useEffect, useState } from 'react'
 import { useRouter } from '@tarojs/taro'
-import { loadingService, toastService } from '@/service/toast-service'
+import { loadingService, modalService, toastService } from '@/service/toast-service'
 import ScheduleDays from '@/pages/register-pack/components/schedule-days/schedule-days'
 import { AtList, AtListItem } from "taro-ui"
 import BkLoading from '@/components/bk-loading/bk-loading'
@@ -136,6 +136,7 @@ export default function DoctorDefault() {
       doctorId: options.doctorId,
       regType: options.sourceType//regtype和sourceType值相同，字段未统一
     }).then(res => {
+      loadingService(false)
       if(res.resultCode === 0){
         setList(res.data.timePoints.map(item => {
           return {
@@ -143,13 +144,13 @@ export default function DoctorDefault() {
             isTimeValid: timeValid(date,item.endTime)
           }
         }))
-        loadingService(false)
       }else{
-        toastService({title: '获取分时失败'})
+        modalService({title: '获取分时失败',content: res.message})
         setList([])
       }
     }).catch((err) => {
-      toastService({title: '获取分时失败'})
+      loadingService(false)
+      modalService({title: '获取分时失败',content: JSON.stringify(err)})
     })
   }
   Taro.useDidShow(() => {
@@ -174,8 +175,7 @@ export default function DoctorDefault() {
           if(Taro.getStorageSync('isReg') === '1'){
             msg = '当天没号了，请选择其他日期'
           }
-          // toastService({title: msg,onClose: () => {Taro.navigateBack()}})
-          toastService({title: msg})
+          modalService({content: msg})
           setBusy(false)
         }else{
           // res.data.timePoints=mockList
@@ -190,7 +190,7 @@ export default function DoctorDefault() {
           }, 500);
         }
       }else{
-        toastService({title: '获取数据失败：'+res.message})
+        modalService({title: '获取数据失败：',content:res.message})
         setBusy(false)
       }
     })

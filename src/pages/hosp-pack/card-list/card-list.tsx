@@ -6,7 +6,7 @@ import BkLoading from '@/components/bk-loading/bk-loading'
 import BkButton from '@/components/bk-button/bk-button'
 import { AtList, AtListItem } from 'taro-ui'
 import { fetchInHospCards,setDefaultInHospCard } from '@/service/api'
-import { loadingService, toastService } from '@/service/toast-service'
+import { loadingService, modalService, toastService } from '@/service/toast-service'
 
 export default function CardList(){
   const [list,setList] = useState([])
@@ -25,7 +25,7 @@ export default function CardList(){
         //   setList([inCard])
         // }
       }else{
-        toastService({title: ''+res.message})
+        modalService({content: res.message})
       }
     })
   }
@@ -48,10 +48,11 @@ export default function CardList(){
         Taro.setStorageSync('inCard',{...card,isDefault: true})
         toastService({title: '设置成功',onClose: () => Taro.navigateBack(), duration: 1500})
       }else{
-        toastService({title: '操作失败'+res.message})
+        modalService({title: '操作失败', content: res.message})
       }
     }).catch(err => {
-      toastService({title: '' + err})
+      loadingService(false)
+      modalService({content: JSON.stringify(err)})
     })
   }
   return(

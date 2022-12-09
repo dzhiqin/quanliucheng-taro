@@ -2,7 +2,7 @@ import * as React from 'react'
 import * as Taro from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import { useState,useEffect } from 'react'
-import { loadingService, toastService } from '@/service/toast-service'
+import { loadingService, modalService } from '@/service/toast-service'
 import { getDoctorsByFirstDeptId } from '@/service/api'
 import { AtList, AtListItem } from 'taro-ui'
 import './doctors.less'
@@ -15,14 +15,15 @@ export default function Doctors() {
     const id = router.params.deptId
     loadingService(true)
     getDoctorsByFirstDeptId({departId: id}).then(res => {
+      loadingService(false)
       if(res.resultCode === 0){
         setList(res.data)
-        loadingService(false)
       }else{
-        toastService({title: '' + res.message})
+        modalService({content: res.message})
       }
-    }).catch(() => {
-      toastService({title: '获取数据失败'})
+    }).catch((err) => {
+      loadingService(false)
+      modalService({title: '获取数据失败',content: JSON.stringify(err)})
     })
   },[router.params.deptId])
   const handleClickDoctor = (doctor) => {

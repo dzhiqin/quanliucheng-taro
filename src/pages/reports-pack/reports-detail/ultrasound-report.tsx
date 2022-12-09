@@ -1,4 +1,5 @@
 import * as React from 'react'
+import * as Taro from '@tarojs/taro'
 import { custom } from '@/custom/index'
 import BkButton from '@/components/bk-button/bk-button'
 import './reports-detail.less'
