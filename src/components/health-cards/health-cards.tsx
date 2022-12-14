@@ -11,6 +11,8 @@ import qrcodeImg from '@/images/icons/qrcode.png'
 import './health-cards.less'
 import SubscribeNotice from '../subscribe-notice/subscribe-notice'
 import { CARD_ACTIONS } from '@/enums/index'
+import { compareVersion } from '@/utils/tools'
+import { modalService } from '@/service/toast-service'
 
 export default function HealthCards(props: {
   cards?: any,
@@ -55,19 +57,72 @@ export default function HealthCards(props: {
     })
     
   })
+  // const checkSubscribe = () => {
+  //   if(process.env.TARO_ENV === 'alipay') return
+  //   const version = Taro.getSystemInfoSync().SDKVersion
+  //   if(compareVersion('2.8.3',version) >= 0){
+  //     // 低版本基础库2.4.4~2.8.3，仅支持传入一个 tmplId
+  //     // tempIds = tempIds.splice(0,1)
+  //   }
+  //   Taro.getSetting({
+  //     withSubscriptions: true,
+  //     success: res => {
+  //       const itemSettings = res.subscriptionsSetting?.itemSettings
+  //       if(Object.keys(itemSettings).length === 0){
+  //         // show 
+  //       }
+  //     }
+  //   })
+  // }
   
-  const handleLogin = async () =>{
-    let subsRes = await TaroSubscribeService(
-      custom.longtermSubscribe.visitReminder,
-      custom.longtermSubscribe.pendingPayReminder,
-      custom.longtermSubscribe.checkReminder
-    )
-    if(!subsRes.result){
-      setShowNotice(true)
+  const subscribeOneByOne = async (...ids) => {
+    if(ids.length === 0) return 
+    const id = ids[0]
+    let subsRes = await TaroSubscribeService(id)
+    if(subsRes.result){
+      if(ids.length > 1){
+        modalService({
+          content: '需要您继续授权',
+          success: () => {
+            ids.shift()
+            subscribeOneByOne(...ids)
+          }
+        })
+      }else{
+        Taro.navigateTo({
+          url: '/pages/login/login'
+        })
+      }
     }else{
-      Taro.navigateTo({
-        url: '/pages/login/login'
-      })
+      setShowNotice(true)
+    }
+  }
+  const handleLogin = async () =>{
+    const sysInfo = Taro.getSystemInfoSync()
+    const version = sysInfo.SDKVersion
+    // const platform = sysInfo.platform
+    // check subscribe status
+    // do subscribe
+    if(compareVersion('2.8.3',version) >= 0){
+      // 低版本基础库2.4.4~2.8.3，仅支持传入一个 tmplId
+      subscribeOneByOne(
+        custom.longtermSubscribe.visitReminder,
+        custom.longtermSubscribe.pendingPayReminder,
+        custom.longtermSubscribe.checkReminder,
+      )
+    }else{
+      const subsRes = await TaroSubscribeService(
+        custom.longtermSubscribe.visitReminder,
+        custom.longtermSubscribe.pendingPayReminder,
+        custom.longtermSubscribe.checkReminder
+      )
+      if(!subsRes.result){
+        setShowNotice(true)
+      }else{
+        Taro.navigateTo({
+          url: '/pages/login/login'
+        })
+      }
     }
   }
   const handleAddCard = () => {
@@ -109,6 +164,7 @@ export default function HealthCards(props: {
       </View>
     )
   }else if(cards.length === 0){
+  // if(cards.length === 0){
     return (
       <View style='padding:40rpx 40rpx 0'>
         <View className='add-card' onClick={handleAddCard}>

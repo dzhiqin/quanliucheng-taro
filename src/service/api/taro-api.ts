@@ -1,16 +1,38 @@
 import * as Taro from '@tarojs/taro'
-import { modalService } from '../toast-service'
+import { modalService, toastService } from '../toast-service'
 import { custom } from '@/custom/index'
+import { compareVersion } from '@/utils/tools'
 
 type subscribeServiceRes =  {result: boolean, msg: string, data?: any }
+// export const TaroGetSubscribeSettings = (...ids) => {
+//   if(process.env.TARO_ENV === 'alipay') return {result: true}
+//   return new Promise(resolve => {
+//     Taro.getSetting({
+//       withSubscriptions: true,
+//       success: res => {
+//         const itemSettings = res.subscriptionsSetting?.itemSettings
+//         const keys = Object.keys(itemSettings)
+//         if(keys.length === 0){
+//           resolve({result:false})
+//         }
+//       }
+//   })
+// })
+// }
 export const TaroSubscribeService = (...tempIds) => {
   if(custom.isPrivate) return {result: true}
+  if(process.env.TARO_ENV === 'alipay') return {result: true}
   if(!tempIds || tempIds.length === 0) {
     return {result: false,msg: '没有订阅任何模板消息'}
   }else if(tempIds.length > 3) {
     return {result: false, msg: '一次最多订阅3条消息'}
   }
-  // console.log('tempids',tempIds)
+  const version = Taro.getSystemInfoSync().SDKVersion
+  if(compareVersion('2.8.3',version) >= 0){
+    // 低版本基础库2.4.4~2.8.3，仅支持传入一个 tmplId
+    tempIds = tempIds.splice(0,1)
+  }
+  console.log('tempids',tempIds)
   return new Promise<subscribeServiceRes>((resolve) => {
     Taro.requestSubscribeMessage({
       tmplIds: tempIds,

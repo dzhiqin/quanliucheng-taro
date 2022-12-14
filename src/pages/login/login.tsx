@@ -7,14 +7,58 @@ import { updateUserInfo, fetchHealthCards } from '@/service/api/'
 import {custom} from '@/custom/index'
 import { CardsHealper } from '@/utils/cards-healper'
 import './login.less'
-import { loadingService, modalService } from '@/service/toast-service'
+import { loadingService, modalService, toastService } from '@/service/toast-service'
+import { AtButton } from 'taro-ui'
 
 export default function Login() {
   useEffect(() => {
     Taro.canIUse('hideHomeButton') && Taro.hideHomeButton()
-  })
-  const onClick = () => {
+  },[])
+  const handleUpdateUserInfo = (data) => {
+    updateUserInfo(data).then(result => {
+      if(result.resultCode === 0){
+        Taro.setStorageSync('userInfo',result.data)
+        if(!result.data){
+          modalService({content: '用户信息为空！'})
+        }
+      }else{
+        modalService({
+          title: '更新用户信息失败',
+          content: result.message,
+        })
+      }
+      // Taro.setStorageSync('userInfo','')
+    })
+  }
+  const updateCardsAndNavigate = () => {
     loadingService(true)
+    fetchHealthCards().then(result=>{
+      loadingService(false)
+      if(result.resultCode === 0){
+        CardsHealper.saveCards(result.data).then(() => {
+          if(result.data.length === 0){
+            Taro.redirectTo({url: '/pages/card-pack/create-card/create-card'})
+          }else{
+            Taro.navigateBack()
+          }
+        })
+      }else{
+        if(custom.feat.bindCard.elecHealthCard){
+          Taro.navigateTo({
+            url: '/pages/card-pack/elec-healthcard-auth/elec-healthcard-auth'
+          })
+        }else{
+          Taro.navigateTo({
+            url: '/pages/card-pack/create-card/create-card'
+          })
+        }
+      }
+    }).catch(err => {
+      loadingService(false)
+      modalService({content: JSON.stringify(err)})
+    })
+  }
+  const onClick = () => {
     Taro.getUserProfile({
       desc: '用于完善用户资料',
       success: (res) => {
@@ -30,59 +74,33 @@ export default function Login() {
         const data = {
           nickName,gender,city,province,country,avatarUrl
         }
-
-        updateUserInfo(data).then(result => {
-          if(result.resultCode === 0){
-            Taro.setStorageSync('userInfo',result.data)
-            if(!result.data){
-              modalService({
-                content: '用户信息为空！',
-                showCancel: false
-              })
-            }
-          }else{
-            modalService({
-              content: '更新用户信息失败'+result.message,
-              showCancel: false
-            })
-          }
-          // Taro.setStorageSync('userInfo','')
-        })
-
-        fetchHealthCards().then(result=>{
-          if(result.resultCode === 0){
-            CardsHealper.saveCards(result.data).then(() => {
-              if(result.data.length === 0){
-                Taro.redirectTo({url: '/pages/card-pack/create-card/create-card'})
-              }else{
-                Taro.navigateBack()
-              }
-            })
-          }else{
-            if(custom.feat.bindCard.elecHealthCard){
-              Taro.navigateTo({
-                url: '/pages/card-pack/elec-healthcard-auth/elec-healthcard-auth'
-              })
-            }else{
-              Taro.navigateTo({
-                url: '/pages/card-pack/create-card/create-card'
-              })
-            }
-          }
-        }).finally(() => {
-          Taro.hideLoading()
-        })
+        handleUpdateUserInfo(data)
+        updateCardsAndNavigate()
       },
       fail: (res) => {
-        Taro.showToast({title: '您已拒绝授权',icon: 'none'})
+        toastService({title: '您已拒绝授权'})
       }
     })
   }
-  
+  const onGetUserInfo = (res) => {
+    const {detail: {userInfo: {nickName, city, avatarUrl, country, province}}} = res
+    const data = {
+      nickName, city, avatarUrl, country, province
+    }
+    handleUpdateUserInfo(data)
+    updateCardsAndNavigate()
+  }
+  const renderButton = () => {
+    if(Taro.canIUse('getUserProfile')){
+      return <BkButton title='授权用户信息' theme='primary' onClick={onClick}></BkButton>
+    }else{
+      return <AtButton type='primary' openType='getUserInfo' onGetUserInfo={onGetUserInfo} >授权用户信息</AtButton>
+    }
+  }
   return (
     <View className='login'>
-      <View className='login-txt'>您尚未绑定账户，请点击账户绑定</View>
-      <BkButton title='账户绑定' theme='primary' onClick={onClick}></BkButton>
+      <View className='login-txt'>请授权用户信息</View>
+      {renderButton()}
     </View>
   )
 }

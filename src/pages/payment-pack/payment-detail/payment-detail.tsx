@@ -567,7 +567,7 @@ export default function PaymentDetail() {
                     }
                     <View className='payment-detail-medicine-item'>
                       <text>数量：</text>
-                      <text>{item.account}</text>
+                      <text>{item.count}</text>
                       <text>&nbsp;&nbsp;&nbsp;&nbsp;</text>
                       <text>单位：</text>
                       <text>{item.unit}</text>

@@ -16,7 +16,9 @@ class App extends Component {
     // 单页调试时方便使用
     // const token = Taro.getStorageSync('token')
     // if(token) return
-    console.log('onLaunch')
+    // console.log('onLaunch')
+    console.log('sdk version',Taro.getSystemInfoSync().SDKVersion)
+    console.log('platform',Taro.getSystemInfoSync().platform)
     this.checkUpdate()
     if(process.env.TARO_ENV === 'weapp'){
       Taro.login({

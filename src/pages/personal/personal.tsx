@@ -45,13 +45,12 @@ export default function Personal() {
     <View className='personal'>
       <View className='header'>
         <View className='header-title'>个人中心</View>
-        <View className='header-info'>
+        {/* <View className='header-info'>
           <Image className='header-info-avatar' src={userInfo.avatarUrl}></Image>
           <View>
             <View className='header-info-name'>{userInfo.nickName}</View>
-            {/* <View className='header-info-number'>1234567</View> */}
           </View>
-        </View>
+        </View> */}
         <HealthCards cards={cards} ></HealthCards>
       </View>
       <View className='content'>
