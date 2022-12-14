@@ -32,7 +32,6 @@ export const TaroSubscribeService = (...tempIds) => {
     // 低版本基础库2.4.4~2.8.3，仅支持传入一个 tmplId
     tempIds = tempIds.splice(0,1)
   }
-  console.log('tempids',tempIds)
   return new Promise<subscribeServiceRes>((resolve) => {
     Taro.requestSubscribeMessage({
       tmplIds: tempIds,

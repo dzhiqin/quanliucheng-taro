@@ -29,12 +29,12 @@ export default function BindingCard() {
       }
     })
   }
-  Taro.useDidShow(() => {
+  const onCardChange = () => {
     getList()
-  })
+  }
   return(
     <View className='waiting-list'>
-      <HealthCards switch />
+      <HealthCards switch onCard={onCardChange} />
       {
         list.length > 0 
         ?

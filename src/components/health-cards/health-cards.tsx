@@ -16,8 +16,10 @@ import { modalService } from '@/service/toast-service'
 
 export default function HealthCards(props: {
   cards?: any,
-  switch?: boolean
+  switch?: boolean,
+  onCard?: any
 }) {
+  const onCard = props.onCard
   const [isLogin, setLoginStatus] = useState(false)
   const [showNotice,setShowNotice] = useState(false)
   const [cards,setCards] = useState(props.cards || [])
@@ -31,15 +33,18 @@ export default function HealthCards(props: {
     Taro.eventCenter.off(CARD_ACTIONS.UPDATE_ALL)
   })
   useDidShow(() => {
-    const res = Taro.getStorageSync('userInfo')
-    if(res){
-      setLoginStatus(true)
-    }
+    // const res = Taro.getStorageSync('userInfo')
+    // if(res){
+    //   setLoginStatus(true)
+    // }
     const cardsTemp = Taro.getStorageSync('cards')
     setCards(cardsTemp)
     for(let i =0;i< cardsTemp.length;i++){
       if(cardsTemp[i].isDefault){
         setCurrentIndex(i)
+        if(typeof onCard === 'function'){
+          onCard(cardsTemp[i])
+        }
         setSelected(cardsTemp[i])
         break
       }
@@ -126,7 +131,8 @@ export default function HealthCards(props: {
     }
   }
   const handleAddCard = () => {
-    Taro.navigateTo({url: '/pages/card-pack/cards-list/cards-list'})
+    handleLogin()
+    // Taro.navigateTo({url: '/pages/card-pack/cards-list/cards-list'})
   }
   const onCardChange = (e) => {
     const index = e.detail.current
@@ -150,21 +156,21 @@ export default function HealthCards(props: {
     Taro.setStorageSync('card',card)
     Taro.navigateTo({url: `/pages/card-pack/card-detail/card-detail`})
   }
-  if(!isLogin){
-    return (
-      <View style='padding:40rpx 40rpx 0'>
-        <View className='login-card' onClick={handleLogin}>
-            <Image src='https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/applets-imgs/man.png' className='login-card-avatar'></Image>
-            <View className='login-card-name'>请先登录</View>
-        </View>
-        {
-          showNotice &&
-          <SubscribeNotice show={showNotice} />
-        }
-      </View>
-    )
-  }else if(cards.length === 0){
-  // if(cards.length === 0){
+  // if(!isLogin){
+  //   return (
+  //     <View style='padding:40rpx 40rpx 0'>
+  //       <View className='login-card' onClick={handleLogin}>
+  //           <Image src='https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/applets-imgs/man.png' className='login-card-avatar'></Image>
+  //           <View className='login-card-name'>请先登录</View>
+  //       </View>
+  //       {
+  //         showNotice &&
+  //         <SubscribeNotice show={showNotice} />
+  //       }
+  //     </View>
+  //   )
+  // }else if(cards.length === 0){
+  if(cards.length === 0){
     return (
       <View style='padding:40rpx 40rpx 0'>
         <View className='add-card' onClick={handleAddCard}>

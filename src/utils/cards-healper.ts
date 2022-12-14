@@ -7,13 +7,21 @@ const updateAllCards = () => {
     fetchHealthCards().then(res => {
       if(res.resultCode === 0){
         const cards = res.data
-        Taro.setStorageSync('cards',cards)
+        refreshStorageCards(cards)
         resolve('ok')
       }else{
         reject(res.message)
       }
     })
   })
+}
+const refreshStorageCards = (cards) => {
+  const defaultCard = cards.find(i => i.isDefault)
+  if(!defaultCard){
+    cards[0].isDefault = true
+    setDefault(cards[0].id,cards)
+  }
+  Taro.setStorageSync('cards',cards)
 }
 const saveCards = (value: any) => {
   return new Promise((resolve,reject)=>{
@@ -53,8 +61,8 @@ const remove = (_card)=> {
     })
   })
 }
-const setDefault = async (cardId:string) => {
-  let cards = Taro.getStorageSync('cards')
+const setDefault = async (cardId:string,cards?:any[]) => {
+  if(!cards) cards = Taro.getStorageSync('cards')
   const newCards = cards.map(item => {
     return{
       ...item,
@@ -85,10 +93,10 @@ const getDefault = () => {
       })
     }
   }else{
-    if(token){
+    // if(token){
       // 如果未登录状态先跳过
-      showBindCardModal()
-    }
+      // showBindCardModal()
+    // }
   }
   return card
  

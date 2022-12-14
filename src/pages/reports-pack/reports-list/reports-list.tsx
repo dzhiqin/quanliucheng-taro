@@ -1,7 +1,7 @@
 import * as Taro from '@tarojs/taro'
 import * as React from 'react'
 import { View } from '@tarojs/components'
-import { useDidShow, useRouter } from '@tarojs/taro'
+import { useRouter } from '@tarojs/taro'
 import { fetchReportsList } from '@/service/api/reports-api'
 import { useState } from 'react'
 import { REPORT_TYPE_EN, REPORT_ITEM_TYPE_CN } from '@/enums/index'
@@ -10,8 +10,7 @@ import BkPanel from '@/components/bk-panel/bk-panel'
 import BkTabs from '@/components/bk-tabs/bk-tabs'
 import BkLoading from '@/components/bk-loading/bk-loading'
 import { humanDateAndTime } from '@/utils/format'
-import { modalService, toastService } from '@/service/toast-service'
-import { CardsHealper } from '@/utils/cards-healper'
+import { modalService } from '@/service/toast-service'
 import { custom } from '@/custom/index'
 import './reports-list.less'
 
@@ -55,21 +54,16 @@ export default function ReportList() {
     })
   }
 
-  useDidShow(() => {
-    const card = CardsHealper.getDefault()
-    if(!card){
-      toastService({title: '请先绑卡'})
-      return
-    }
-    getList(itemType as REPORT_ITEM_TYPE_CN)
-  })
   const onClickItem = (e) => {
     Taro.navigateTo({url: `/pages/reports-pack/reports-detail/reports-detail?pId=${e.pId}&examId=${e.id}&examDate=${e.date}&itemType=${itemType}&reportType=${reportType}`})
+  }
+  const onCardChange = (e) => {
+    getList(itemType as REPORT_ITEM_TYPE_CN)
   }
   return(
     <View className='reports-list'>
       <View className='reports-list-header'>
-        <HealthCards switch />
+        <HealthCards switch onCard={onCardChange} />
         <BkTabs current={currentTab} tabs={reportType === REPORT_TYPE_EN.clinic? clinicTabs : hospReportTabs} onTabChange={onTabChange} />
       </View>
       

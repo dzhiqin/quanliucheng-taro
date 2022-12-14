@@ -1,7 +1,6 @@
 import * as React from 'react'
 import * as Taro from '@tarojs/taro'
 import { View } from '@tarojs/components'
-import { useDidShow } from '@tarojs/taro'
 import './order-list.less'
 import { cancelAppointment, fetchRegInvoiceInfo, fetchRegOrderList,TaroNavToMiniProgram } from '@/service/api'
 import HealthCards from '@/components/health-cards/health-cards'
@@ -28,7 +27,6 @@ export default function OrderList() {
     totalFee: '',
     orderId: ''
   })
-  const card = CardsHealper.getDefault()
   const [show,setShow] = useState(false)
   const onConfirm = () => {
     setShow(false)
@@ -88,13 +86,14 @@ export default function OrderList() {
   useEffect(() => {
     getList()
   },[currentTab,getList])
-  useDidShow(() => {
+  
+  const onCardChange = () => {
     getList()
-  })
+  }
   return(
     <View className='order-list'>
       <View className='order-list-header'>
-        <HealthCards switch />
+        <HealthCards switch onCard={onCardChange} />
         <BkTabs tabs={tabs} onTabChange={onTabChange} current={currentTab}  />
       </View>
       {
@@ -119,10 +118,10 @@ export default function OrderList() {
                   <View className='order-list-card-title'>就诊人：</View>
                   <View className='order-list-card-text'>{item.patientName}</View>
                 </View>
-                <View className='order-list-card-item'>
+                {/* <View className='order-list-card-item'>
                   <View className='order-list-card-title'>诊疗卡号：</View>
                   <View className='order-list-card-text'>{card.cardNo}</View>
-                </View>
+                </View> */}
                 <View className='order-list-card-item'>
                   <View className='order-list-card-title'>已缴费：</View>
                   <View className='order-list-card-text'>￥{item.totalFee}</View>

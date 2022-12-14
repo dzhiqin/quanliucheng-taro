@@ -111,10 +111,10 @@ export default function BindingCard() {
     }
     
   }
-  Taro.useDidShow(() => {
+  const onCardChange = () => {
     getList()
     refreshDistance()
-  })
+  }
   const handleClick = (item:any) => {
     if(distance>200){
       toastService({title: '在院区200米内才可以报到'})
@@ -145,7 +145,7 @@ export default function BindingCard() {
   }
   return(
     <View className='arrival'>
-      <HealthCards switch />
+      <HealthCards switch onCard={onCardChange} />
       <View className='arrival-hosp'>
         {/* <View>
           目标经度：{hospLatLong.longitude}

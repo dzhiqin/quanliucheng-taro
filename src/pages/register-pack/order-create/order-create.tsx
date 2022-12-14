@@ -1,7 +1,6 @@
 import * as Taro from '@tarojs/taro'
 import * as React from 'react'
 import { View, Picker } from '@tarojs/components'
-import { useDidShow } from '@tarojs/taro'
 import HealthCards from '@/components/health-cards/health-cards'
 import { useState,useEffect } from 'react'
 import BkPanel from '@/components/bk-panel/bk-panel'
@@ -236,9 +235,8 @@ export default function OrderCreate() {
       }
     })
   },[])
-  useDidShow(() => {
+  const onCardChange = (card) => {
     const params = Taro.getStorageSync('orderParams')
-    const card = CardsHealper.getDefault()
     const orderParams = {
       ...params,
       cardNo: card.cardNo,
@@ -252,7 +250,8 @@ export default function OrderCreate() {
         setTreatFee(res.data.treatFee)
       }
     })
-  })
+  }
+ 
   const fetchFee = () => {
     return new Promise((resolve) => {
       fetchOrderFee(buildFeeParams()).then(res => {
@@ -274,7 +273,7 @@ export default function OrderCreate() {
     return(
       <View className='order-create'>
         <SubscribeNotice show={showNotice} />
-        <HealthCards switch />
+        <HealthCards switch onCard={onCardChange} />
         <View className='order-create-title'>挂号详情</View>
         <BkPanel style='margin: 40rpx'>
           <View className='order-create-item'>

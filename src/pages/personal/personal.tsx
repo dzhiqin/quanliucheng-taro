@@ -3,8 +3,6 @@ import * as Taro from '@tarojs/taro'
 import { View,Image } from '@tarojs/components'
 import HealthCards from '@/components/health-cards/health-cards'
 import BkPanel from '@/components/bk-panel/bk-panel'
-import { useDidShow } from '@tarojs/taro'
-import { useState } from 'react'
 import orderBluePng from '@/images/icons/order_blue.png'
 import orderYellowPng from '@/images/icons/order_yellow.png'
 import orderGreenPng from '@/images/icons/order_green.png'
@@ -15,8 +13,6 @@ import { loadingService } from '@/service/toast-service'
 import './personal.less'
 
 export default function Personal() {
-  const [cards,setCards] = useState()
-  const userInfo = Taro.getStorageSync('userInfo')
   const onClickPanel = (e) => {
     if(e){
       Taro.navigateTo({url: e})
@@ -27,14 +23,7 @@ export default function Personal() {
       })
     }
   }
-  useDidShow(() => {
-    let res = Taro.getStorageSync('cards')
-    setCards(res)
-    const user = Taro.getStorageSync('userInfo')
-    if(!user){
-      TaroRemindLoginModal()
-    }
-  })
+  
   const navToYiBao = () => {
     loadingService(true,'即将跳转……')
     TaroNavToYiBao(() => {
@@ -51,7 +40,7 @@ export default function Personal() {
             <View className='header-info-name'>{userInfo.nickName}</View>
           </View>
         </View> */}
-        <HealthCards cards={cards} ></HealthCards>
+        <HealthCards />
       </View>
       <View className='content'>
         <BkPanel arrow onClick={onClickPanel.bind(this,'/pages/register-pack/order-list/order-list')} >

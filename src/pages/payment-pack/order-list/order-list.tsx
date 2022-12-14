@@ -3,7 +3,6 @@ import * as React from 'react'
 import { View } from '@tarojs/components'
 import HealthCards from '@/components/health-cards/health-cards'
 import { useEffect, useState } from 'react'
-import { useDidShow } from '@tarojs/taro'
 import { createPaymentOrder, fetchPaymentOrderList , TaroSubscribeService , PayOrderParams, handlePayment, cancelPayment, fetchPaymentOrderStatus } from '@/service/api'
 import { loadingService, modalService, toastService } from '@/service/toast-service'
 import { PAY_TYPE_CN, ORDER_SEARCH_TYPE_EN , ORDER_STATUS_CN, ORDER_STATUS_EN, PAYMENT_FROM } from '@/enums/index'
@@ -13,7 +12,6 @@ import BkTabs from '@/components/bk-tabs/bk-tabs'
 import BkLoading from '@/components/bk-loading/bk-loading'
 import BkPrice from '@/components/bk-price/bk-price'
 import SubscribeNotice from '@/components/subscribe-notice/subscribe-notice'
-import { CardsHealper } from '@/utils/cards-healper'
 import { Card } from 'src/interfaces/card'
 import { custom } from '@/custom/index'
 import { requestTry } from '@/utils/retry'
@@ -26,10 +24,10 @@ export default function OrderList(){
   const [showNotice,setShowNotice] = useState(false)
   const [searchType, setSearchType] = useState(ORDER_SEARCH_TYPE_EN.current)
   const [card,setCard] = useState({} as Card)
-  useDidShow(() => {
-    setCard(CardsHealper.getDefault())
+  const onCardChange = (_card) => {
+    setCard(_card)
     getList(searchType)
-  })
+  }
   const getList = (type: string) => {
     setBusy(true)
     fetchPaymentOrderList({type}).then(res => {
@@ -164,7 +162,7 @@ export default function OrderList(){
   return (
     <View className='payment-order-list'>
       <View className='payment-order-list-header'>
-        <HealthCards switch />
+        <HealthCards switch onCard={onCardChange} />
         <BkTabs tabs={tabs} onTabChange={onTabChange} />
       </View>
       

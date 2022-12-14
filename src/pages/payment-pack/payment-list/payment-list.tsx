@@ -2,11 +2,10 @@ import * as Taro from '@tarojs/taro'
 import * as React from 'react'
 import { View } from '@tarojs/components'
 import HealthCards from '@/components/health-cards/health-cards'
-import { useDidShow } from '@tarojs/taro'
 import { CardsHealper } from '@/utils/cards-healper'
-import { toastService } from '@/service/toast-service'
+import { modalService } from '@/service/toast-service'
 import { fetchPaymentListFromHis } from '@/service/api'
-import { useState } from 'react'
+import { useState,useEffect } from 'react'
 import BkLoading from '@/components/bk-loading/bk-loading'
 import './payment-list.less'
 import BkPrice from '@/components/bk-price/bk-price'
@@ -15,14 +14,10 @@ import { ORDER_STATUS_EN, PAYMENT_FROM, PAY_STATUS_EN } from '@/enums/index'
 export default function PaymentList() {
   const [list, setList] = useState([])
   const [loading,setLoading] = useState(false)
-  useDidShow(() => {
+  const onCardChange = (e) => {
+    const card = e
     setLoading(true)
-    const card = CardsHealper.getDefault()
-    if(!card){
-      toastService({title: '请先绑卡'})
-      return
-    }
-    fetchPaymentListFromHis({cardId: card.id}).then(res => {
+    fetchPaymentListFromHis({cardId: card?.id}).then(res => {
       if(res.resultCode === 0){
         setList(res.data.bills)
       }else{
@@ -31,9 +26,16 @@ export default function PaymentList() {
     }).finally(() => {
       setLoading(false)
     })
-  })
+  }
+  
+  useEffect(() => {
+    const card = CardsHealper.getDefault()
+    if(!card){
+      modalService({content: '请先绑卡',success: ()=> {Taro.navigateTo({url: '/pages/card-pack/cards-list/cards-list'})}})
+      return
+    }
+  },[])
   const handleClick = (item) => {
-    // console.log('click item',item);
     // 缴费单的信息要从列表带过去
     item.payState = PAY_STATUS_EN.unpay  // 默认未支付状态
     item.orderState = ORDER_STATUS_EN.unpay // 默认未支付状态
@@ -41,7 +43,7 @@ export default function PaymentList() {
   }
   return(
     <View className='payment-list'>
-      <HealthCards switch />
+      <HealthCards switch onCard={onCardChange} />
       <View style='padding: 40rpx'>
         {
           list.length > 0 

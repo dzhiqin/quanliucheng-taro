@@ -37,7 +37,8 @@ export default function Login() {
       if(result.resultCode === 0){
         CardsHealper.saveCards(result.data).then(() => {
           if(result.data.length === 0){
-            Taro.redirectTo({url: '/pages/card-pack/create-card/create-card'})
+            // Taro.redirectTo({url: '/pages/card-pack/create-card/create-card'})
+            Taro.redirectTo({url: '/pages/card-pack/cards-list/cards-list'})
           }else{
             Taro.navigateBack()
           }
