@@ -38,7 +38,8 @@ export default function Login() {
         CardsHealper.saveCards(result.data).then(() => {
           if(result.data.length === 0){
             // Taro.redirectTo({url: '/pages/card-pack/create-card/create-card'})
-            Taro.redirectTo({url: '/pages/card-pack/cards-list/cards-list'})
+            // Taro.redirectTo({url: '/pages/card-pack/cards-list/cards-list'})
+            Taro.navigateBack()
           }else{
             Taro.navigateBack()
           }
@@ -60,28 +61,34 @@ export default function Login() {
     })
   }
   const onClick = () => {
-    Taro.getUserProfile({
-      desc: '用于完善用户资料',
-      success: (res) => {
-        let rawData =JSON.parse(res.rawData) 
-        const {
-          nickName,
-          gender,
-          city,
-          province,
-          country,
-          avatarUrl
-        } = rawData
-        const data = {
-          nickName,gender,city,province,country,avatarUrl
+    if(process.env.TARO_ENV === 'alipay'){
+      updateCardsAndNavigate()
+    }
+    if(process.env.TARO_ENV === 'weapp'){
+      Taro.getUserProfile({
+        desc: '用于完善用户资料',
+        success: (res) => {
+          let rawData =JSON.parse(res.rawData) 
+          const {
+            nickName,
+            gender,
+            city,
+            province,
+            country,
+            avatarUrl
+          } = rawData
+          const data = {
+            nickName,gender,city,province,country,avatarUrl
+          }
+          handleUpdateUserInfo(data)
+          updateCardsAndNavigate()
+        },
+        fail: (res) => {
+          toastService({title: '您已拒绝授权'})
         }
-        handleUpdateUserInfo(data)
-        updateCardsAndNavigate()
-      },
-      fail: (res) => {
-        toastService({title: '您已拒绝授权'})
-      }
-    })
+      })
+    }
+    
   }
   const onGetUserInfo = (res) => {
     const {detail: {userInfo: {nickName, city, avatarUrl, country, province}}} = res

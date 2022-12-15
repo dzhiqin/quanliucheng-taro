@@ -119,7 +119,7 @@ export default function OrderCreate() {
       })
     }).catch(taroErr => {
       if(taroErr.data.errMsg === 'requestPayment:fail cancel'){
-        toastService({title: '您已取消缴费'})
+        toastService({title: '您已取消缴费',onClose: () => loadingService(false)})
         cancelRegOrder({orderId: orderId})
       }else{
         console.log('支付失败:',taroErr.data);

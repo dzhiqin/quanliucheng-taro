@@ -4,21 +4,29 @@ import { custom } from '@/custom/index'
 import { compareVersion } from '@/utils/tools'
 
 type subscribeServiceRes =  {result: boolean, msg: string, data?: any }
-// export const TaroGetSubscribeSettings = (...ids) => {
-//   if(process.env.TARO_ENV === 'alipay') return {result: true}
-//   return new Promise(resolve => {
-//     Taro.getSetting({
-//       withSubscriptions: true,
-//       success: res => {
-//         const itemSettings = res.subscriptionsSetting?.itemSettings
-//         const keys = Object.keys(itemSettings)
-//         if(keys.length === 0){
-//           resolve({result:false})
-//         }
-//       }
-//   })
-// })
-// }
+export const TaroGetSubscribeSettings = (...ids) => {
+  if(process.env.TARO_ENV === 'alipay') return ({result: true})
+  return new Promise(resolve => {
+    Taro.getSetting({
+      withSubscriptions: true,
+      success: res => {
+        console.log(res);
+        
+        const itemSettings = res.subscriptionsSetting?.itemSettings || {}
+        const mainSwitch = res.subscriptionsSetting?.mainSwitch
+        const keys = Object.keys(itemSettings)
+        if(keys.length === 0){
+          resolve({result:true, data: {},mainSwitch})
+        }else{
+          resolve({result: true, data: itemSettings,mainSwitch})
+        }
+      },
+      fail: err => {
+        resolve({result: false, data: err})
+      }
+    })
+  })
+}
 export const TaroSubscribeService = (...tempIds) => {
   if(custom.isPrivate) return {result: true}
   if(process.env.TARO_ENV === 'alipay') return {result: true}
@@ -166,7 +174,7 @@ export const TaroNavToMiniProgram = (data:{appId: string, path: string}) => {
 export const TaroRequestAuth = (authScope: string) => {
   Taro.getSetting({
     success: res => {
-      console.log('get setting',res);
+      // console.log('get setting',res);
       if(Object.keys(res.authSetting).includes(authScope) && !res.authSetting[authScope]){
         // 第一次请求授权是首次进入页面时自动发起
         // 如果用户有拒绝过授权才进行第二次请求
@@ -196,30 +204,85 @@ export const TaroRequestAuth = (authScope: string) => {
     }
   })
 }
-const handleConfirm = async () => {
-  const subsRes = await TaroSubscribeService(
-    custom.longtermSubscribe.pendingPayReminder,
-    custom.longtermSubscribe.visitReminder,
-    custom.longtermSubscribe.checkReminder
-  )
+
+const subscribeOneByOne = async (...ids) => {
+  if(ids.length === 0) return 
+  const id = ids[0]
+  let subsRes = await TaroSubscribeService(id)
   if(subsRes.result){
-    Taro.navigateTo({url: '/pages/login/login'})
-  }else{
-    modalService({content: '由于您没有选择接受订阅消息，导致无法正常使用本小程序，请重新登录'})
-    TaroRemindLoginModal()
+    if(ids.length > 1){
+      modalService({
+        content: '需要您继续授权',
+        success: () => {
+          ids.shift()
+          subscribeOneByOne(...ids)
+        }
+      })
+    }else{
+      Taro.navigateTo({
+        url: '/pages/login/login'
+      })
+    }
   }
 }
-export const TaroRemindLoginModal = () => {
-  Taro.showModal({
-    content: '请先进行登录',
-    confirmText: '确认',
-    showCancel:false,
-    success: result => {
-      if(result.confirm){
-        handleConfirm()
-      }else{
-        Taro.switchTab({url: '/pages/index/index'})
-      }
+const handleSubscribe = async () => {
+  const sysInfo = Taro.getSystemInfoSync()
+  const version = sysInfo.SDKVersion
+  if(compareVersion('2.8.3',version) >= 0){
+    // 低版本基础库2.4.4~2.8.3，仅支持传入一个 tmplId
+    subscribeOneByOne(
+      custom.longtermSubscribe.visitReminder,
+      custom.longtermSubscribe.pendingPayReminder,
+      custom.longtermSubscribe.checkReminder,
+    )
+  }else{
+    const subsRes = await TaroSubscribeService(
+      custom.longtermSubscribe.visitReminder,
+      custom.longtermSubscribe.pendingPayReminder,
+      custom.longtermSubscribe.checkReminder
+    )
+    if(!subsRes.result){
+      // setShowNotice(true)
+    }else{
+      Taro.navigateTo({
+        url: '/pages/login/login'
+      })
     }
-  })
+  }
+}
+
+export const TaroRemindAuthModal = async() => {
+  const res:any = await TaroGetSubscribeSettings()
+  if(!res.result) return
+  const settings = res.data
+  const isAcceptAll = Object.values(settings).every(i => i !== 'reject')
+  if(!isAcceptAll || !res.mainSwitch){
+    modalService({content: '您有消息未接收，请到[通知管理]中手动开启接收',success: () => {
+      Taro.openSetting({
+        success: result => {
+        }
+      })
+    }})
+  }
+  let acceptedIds = []
+  for(let i in settings){
+    if(settings[i] === 'accept'){
+      acceptedIds.push(i)
+    }
+  }
+  console.log('acceptedIds',acceptedIds);
+  // 公立医院默认订阅3条长期消息
+  if(acceptedIds.length < 3 && !custom.isPrivate){
+    Taro.showModal({
+      content: '请先进行绑卡/授权',
+      confirmText: '确认',
+      showCancel:false,
+      success: () => {
+        handleSubscribe()
+      },
+      fail: err => {
+        modalService({title: '订阅失败',content: JSON.stringify(err), success: () => Taro.navigateTo({url: '/pages/login/login'})})
+      }
+    })
+  }
 }

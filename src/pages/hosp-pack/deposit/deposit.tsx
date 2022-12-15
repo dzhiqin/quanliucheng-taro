@@ -182,7 +182,7 @@ export default function BindingCard() {
         loadingService(false)
       })
     }).catch(err => {
-      toastService({title: '您已取消支付'})
+      toastService({title: '您已取消支付',onClose:()=>loadingService(false)})
       setBusy(false)
     })
   }

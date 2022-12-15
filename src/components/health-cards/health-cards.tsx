@@ -9,7 +9,6 @@ import { CardsHealper } from '@/utils/cards-healper'
 import { useDidShow } from '@tarojs/taro'
 import qrcodeImg from '@/images/icons/qrcode.png'
 import './health-cards.less'
-import SubscribeNotice from '../subscribe-notice/subscribe-notice'
 import { CARD_ACTIONS } from '@/enums/index'
 import { compareVersion } from '@/utils/tools'
 import { modalService } from '@/service/toast-service'
@@ -131,8 +130,12 @@ export default function HealthCards(props: {
     }
   }
   const handleAddCard = () => {
-    handleLogin()
-    // Taro.navigateTo({url: '/pages/card-pack/cards-list/cards-list'})
+    if(process.env.TARO_ENV === 'weapp'){
+      Taro.navigateTo({url: '/pages/login/login'})
+    }
+    if(process.env.TARO_ENV === 'alipay'){
+      Taro.navigateTo({url: '/pages/card-pack/cards-list-alipay/cards-list-alipay'})
+    }
   }
   const onCardChange = (e) => {
     const index = e.detail.current

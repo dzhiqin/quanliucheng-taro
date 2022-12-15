@@ -31,7 +31,8 @@ export default function PaymentList() {
   useEffect(() => {
     const card = CardsHealper.getDefault()
     if(!card){
-      modalService({content: '请先绑卡',success: ()=> {Taro.navigateTo({url: '/pages/card-pack/cards-list/cards-list'})}})
+      // modalService({content: '请先绑卡',success: ()=> {Taro.navigateTo({url: '/pages/card-pack/cards-list/cards-list'})}})
+      
       return
     }
   },[])

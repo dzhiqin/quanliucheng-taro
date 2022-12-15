@@ -55,7 +55,7 @@ export default function OrderList(){
       if(res.resultCode === 0){
         payOrderById(res.data.orderId,type)
       }else{
-        toastService({title: '创建订单失败' + res.message})
+        modalService({title: '创建订单失败',content: res.message})
       }
     })
   }
@@ -66,7 +66,7 @@ export default function OrderList(){
         loadingService(false)
         // do nothing
       }else if(res.resultCode === 0 && !res.data){
-        toastService({title: '提交订单成功，还未支付', onClose: () => {getList(searchType); setBusy(false)}})
+        toastService({title: '提交订单成功，还未支付', onClose: () => {getList(searchType);loadingService(false); setBusy(false)}})
       }else{
         const {nonceStr, paySign, signType, timeStamp, pay_appid, pay_url} = res.data
         if(payType === PAY_TYPE_CN.医保){
@@ -86,14 +86,14 @@ export default function OrderList(){
             signType: signType,
             fail: (err) => {
               // 取消缴费
-              toastService({title: '您已取消缴费', onClose: ()=> {getList(searchType); setBusy(false)}})
+              toastService({title: '您已取消缴费', onClose: ()=> {getList(searchType); loadingService(false);setBusy(false)}})
               cancelPayment({orderId:id})
             },
             success: (result) => {
               requestTry(checkOrderStatus.bind(null,id)).then(checkRes => {
-                toastService({title: '缴费成功', onClose: () => {getList(searchType); setBusy(false)}})
+                toastService({title: '缴费成功', onClose: () => {getList(searchType);loadingService(false); setBusy(false)}})
               }).catch(()=>{
-                toastService({title: '缴费失败，所缴金额将原路退回', onClose: () => {getList(searchType); setBusy(false)}})
+                toastService({title: '缴费失败，所缴金额将原路退回', onClose: () => {getList(searchType);loadingService(false); setBusy(false)}})
               })
             }
           })

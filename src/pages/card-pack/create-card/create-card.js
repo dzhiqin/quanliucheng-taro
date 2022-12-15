@@ -117,7 +117,7 @@ export default class BindCard extends React.Component {
     .then(res => {
       if(res.resultCode === 0){
         CardsHealper.updateAllCards().then(() => {
-          toastService({title: '创建成功', icon: 'success', onClose: () => Taro.navigateBack()})
+          toastService({title: '创建成功', icon: 'success', onClose: () => {Taro.navigateBack();loadingService(false)}})
         })
       }else{
         let msg = ''
@@ -310,7 +310,10 @@ export default class BindCard extends React.Component {
     return (
       <View className='create-card'>
         <SubscribeNotice show={this.state.showNotice} />
-        <ocr-scan onsuccess={this.onScanResult.bind(this)}></ocr-scan>
+        {
+          process.env.TARO_ENV === 'weapp' &&
+          <ocr-scan onsuccess={this.onScanResult.bind(this)}></ocr-scan>
+        }
         <AtForm
           onSubmit={this.onSubmit.bind(this)}
         >

@@ -6,10 +6,10 @@ import {custom} from '@/custom/index'
 import Card from './card'
 import './cards-list.less'
 import { loadingService, toastService } from '@/service/toast-service'
-import { TaroNavToYiBao } from '@/service/api'
 import { getImageSrc } from '@/utils/image-src'
 import { CardsHealper } from '@/utils/cards-healper'
 import { AtNoticebar } from 'taro-ui'
+import { TaroRemindAuthModal } from '@/service/api'
 
 export default class CardList2 extends React.Component {
   constructor(props){
@@ -27,6 +27,9 @@ export default class CardList2 extends React.Component {
   }
   componentDidShow() {
     let res = Taro.getStorageSync('cards')
+    if(res.length === 0){
+      TaroRemindAuthModal()
+    }
     this.setState({cards:res})
     if(this.state.params.action === 'jumpOut'){
       if(res){
@@ -47,15 +50,10 @@ export default class CardList2 extends React.Component {
       Taro.navigateTo({url: '/pages/card-pack/elec-healthcard-users/elec-healthcard-users'})
     }
   }
-  navToBindCard() {
+  navToCreateCard() {
     Taro.navigateTo({url: '/pages/card-pack/create-card/create-card'})
   }
-  navToYiBao() {
-    loadingService(true,'即将跳转……')
-    TaroNavToYiBao(() => {
-      loadingService(false)
-    })
-  }
+  
   handleRefresh() {
     loadingService(true)
     CardsHealper.updateAllCards().then(() => {
@@ -106,14 +104,8 @@ export default class CardList2 extends React.Component {
               </View>
             }
             {/* 特殊处理 金沙洲只用诊疗卡 */}
-            <BkButton title={custom.hospName === 'jszyy' ? '添加诊疗卡' : '添加健康卡'} theme='info' onClick={this.navToBindCard} style='width: 480rpx; margin-bottom: 20rpx' />
+            <BkButton title={custom.hospName === 'jszyy' ? '添加诊疗卡' : '添加健康卡'} theme='info' onClick={this.navToCreateCard} style='width: 480rpx; margin-bottom: 20rpx' />
             <BkButton title={custom.hospName === 'jszyy' ? '刷新诊疗卡' : '刷新健康卡'} theme='primary' onClick={this.handleRefresh.bind(this)} style='width: 480rpx; margin-bottom: 20rpx' />
-            {/* 医保小程序入口改放到个人页面 */}
-            {/* {
-              custom.feat.YiBaoCard && 
-              <BkButton title='医保卡绑定' onClick={this.navToYiBao} style='width: 480rpx;margin-bottom: 20rpx' />
-            } */}
-
           </View>
         </View>
       </View>

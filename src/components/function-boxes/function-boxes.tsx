@@ -1,4 +1,4 @@
-import { useContext,useState,useEffect } from 'react'
+import { useContext,useState } from 'react'
 import * as React from 'react'
 import * as Taro from '@tarojs/taro'
 import { MyContext } from '@/utils/my-context'
@@ -10,7 +10,6 @@ import RegisterNoticeModal from '../register-notice-modal/register-notice-modal'
 import BoxItem from './box-item'
 import './function-boxes.less'
 import { loadingService, modalService } from '@/service/toast-service'
-import { TaroRemindLoginModal } from '@/service/api'
 
 export default function FunctionBoxes(props) {
    const {functionBox} = useContext(MyContext)
@@ -32,10 +31,6 @@ export default function FunctionBoxes(props) {
       navToPage()
     }
     const navToPage = () => {
-      if(!Taro.getStorageSync('cards')){
-        TaroRemindLoginModal()
-        return
-      }
       loadingService(true)
       fetchBranchHospital().then(res => {
         if(res.resultCode === 0){

@@ -1,5 +1,5 @@
 import * as Taro from '@tarojs/taro'
-import { modalService, toastService } from '../toast-service'
+import { modalService } from '../toast-service'
 // import { login } from '@/service/api/user-api'
 // import { fetchBranchHospital } from '@/service/api'
 // import { CardsHealper } from '@/utils/cards-healper'
@@ -84,7 +84,6 @@ const Request = (
         }
       },
       fail: (err: Taro.General.CallbackResult) => {
-        // toastService({title: '请求失败：' + err})
         modalService({title: '请求失败',content: JSON.stringify(err)})
         const resp: HttpResponse = { resultCode: -1, message: err.errMsg }
         reject(resp)

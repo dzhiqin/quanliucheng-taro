@@ -1,3 +1,3 @@
 export default {
-  navigationBarTitleText: '绑定就诊卡'
+  navigationBarTitleText: '就诊卡'
 }

@@ -33,7 +33,7 @@ export default function OrderList() {
     loadingService(true,'正在取消……')
     cancelAppointment({orderId: order.orderId}).then(res => {
       if(res.resultCode === 0){
-        toastService({title: '取消成功！'})
+        toastService({title: '取消成功！',onClose: ()=>loadingService(false)})
         getList()
       }else{
         loadingService(false)

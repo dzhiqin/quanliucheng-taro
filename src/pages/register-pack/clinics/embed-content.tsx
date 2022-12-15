@@ -5,7 +5,7 @@ import { useState,useEffect } from 'react'
 import './embed-content.less'
 import { fetchClinicsByDeptId,fetchDoctorsByDept, fetchScheduleDays } from '@/service/api'
 import { AtList, AtListItem } from "taro-ui"
-import { modalService, toastService } from '@/service/toast-service'
+import { modalService } from '@/service/toast-service'
 import BkLoading from '@/components/bk-loading/bk-loading'
 
 export default function EmbedContent(props:{

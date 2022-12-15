@@ -7,7 +7,7 @@ import orderBluePng from '@/images/icons/order_blue.png'
 import orderYellowPng from '@/images/icons/order_yellow.png'
 import orderGreenPng from '@/images/icons/order_green.png'
 import healthCardPng from '@/images/icons/health_card.png'
-import { TaroRemindLoginModal , TaroNavToYiBao } from '@/service/api'
+import { TaroNavToYiBao } from '@/service/api'
 import {custom} from '@/custom/index'
 import { loadingService } from '@/service/toast-service'
 import './personal.less'
@@ -32,16 +32,17 @@ export default function Personal() {
   }
   return (
     <View className='personal'>
-      <View className='header'>
+      {/* <View className='header'>
         <View className='header-title'>个人中心</View>
-        {/* <View className='header-info'>
+        <View className='header-info'>
           <Image className='header-info-avatar' src={userInfo.avatarUrl}></Image>
           <View>
             <View className='header-info-name'>{userInfo.nickName}</View>
           </View>
-        </View> */}
+        </View>
         <HealthCards />
-      </View>
+      </View> */}
+      <HealthCards />
       <View className='content'>
         <BkPanel arrow onClick={onClickPanel.bind(this,'/pages/register-pack/order-list/order-list')} >
           <View className='panel'>
@@ -61,7 +62,7 @@ export default function Personal() {
             <View className='panel-name'>检查检验单</View>
           </View>
         </BkPanel>
-        <BkPanel arrow onClick={onClickPanel.bind(this,'/pages/card-pack/cards-list/cards-list')} style='margin-top: 20rpx'>
+        <BkPanel arrow onClick={onClickPanel.bind(this,process.env.TARO_ENV==='weapp' ? '/pages/card-pack/cards-list/cards-list': '/pages/card-pack/cards-list-alipay/cards-list-alipay')} style='margin-top: 20rpx'>
           <View className='panel'>
             <Image src={healthCardPng} className='panel-icon'></Image>
             {/* 特殊处理 jszyy只有诊疗卡 */}

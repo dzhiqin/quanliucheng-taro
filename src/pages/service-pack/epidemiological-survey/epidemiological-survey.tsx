@@ -66,7 +66,8 @@ export default function EpidemiologicalSurvey(){
       const temp = {
         id: item.id,
         answer: item.answer,
-        title: item.title
+        title: item.title,
+        subAnswers: undefined
       }
       if(item.subOptions && hasSubQuestion(item.subOptions)){
         const subTemp = initSubAnswers(item.subOptions,item.answer)
@@ -80,7 +81,7 @@ export default function EpidemiologicalSurvey(){
     let list = []
     array.forEach(item => {
       if(item.key === parentAnswer && item.subs && item.subs.length > 0){
-        const temp = initAnswers(item.subs)
+        const temp:any = initAnswers(item.subs)
         if(hasSubQuestion(item)){
           const subList = initAnswers(item.subs)
           temp.subAnswers = subList
@@ -138,7 +139,7 @@ export default function EpidemiologicalSurvey(){
         orderNo: ''
       }).then(res => {
         if(res.resultCode === 0){
-          toastService({title: '提交成功', onClose: () => {Taro.navigateBack();Taro.setStorageSync('checkEpiLogicalSurvey',true)}})
+          toastService({title: '提交成功', onClose: () => {loadingService(false);Taro.navigateBack();Taro.setStorageSync('checkEpiLogicalSurvey',true)}})
         }else{
           loadingService(false)
           modalService({content: res.message})

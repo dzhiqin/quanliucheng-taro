@@ -77,11 +77,11 @@ export default function BindingCard() {
     if(!registerId){
       loadingService(true)
       const res:any = await handleGetInHospInfo(card.cardNo)
-      loadingService(false)
       if(res.result){
+        loadingService(false)
         _registerId = res.data
       }else{
-        toastService({title: '获取registerId失败'})
+        toastService({title: '获取registerId失败',onClose:()=> loadingService(false)})
         return
       }
     }

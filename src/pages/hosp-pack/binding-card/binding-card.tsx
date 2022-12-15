@@ -25,10 +25,10 @@ export default function BindingCard() {
     if(featConfig.ZhuYuanCardName){
       bindCardByCardNameAndNo({inCardName: card.cardName, inCardNo: card.cardNo})
       .then(res => {
-        loadingService(false)
         if(res.resultCode === 0){
-          toastService({title: '绑卡成功', onClose: () => Taro.navigateBack()})
+          toastService({title: '绑卡成功', onClose: () => {Taro.navigateBack();loadingService(false)}})
         }else{
+          loadingService(false)
           modalService({title: '绑卡失败',content: res.message})
           setBusy(false)
         }
@@ -41,11 +41,11 @@ export default function BindingCard() {
     }else{
       bindCardByCardNo({inCardNo: card.cardNo})
       .then(res => {
-        loadingService(false)
         if(res.resultCode === 0 ){
-          toastService({title: '绑卡成功', onClose: () => Taro.navigateBack()})
+          toastService({title: '绑卡成功', onClose: () => {Taro.navigateBack();loadingService(false)}})
           Taro.setStorageSync('inCard',{id: '', cardNo: res.data.inpatientNo, name: res.data.name, isDefault: true})
         }else{
+          loadingService(false)
           modalService({title: '绑卡失败',content: res.message})
           setBusy(false)
         }

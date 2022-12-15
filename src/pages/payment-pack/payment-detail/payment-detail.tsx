@@ -317,7 +317,7 @@ export default function PaymentDetail() {
     handleHeSuanRefund({orderId})
     .then(res => {
       if(res.resultCode === 0){
-        toastService({title: '取消成功', onClose: () => {Taro.navigateBack()}})
+        toastService({title: '取消成功', onClose: () => {Taro.navigateBack();loadingService(false)}})
       }else{
         loadingService(false)
         modalService({title: '取消失败', content: res.message})

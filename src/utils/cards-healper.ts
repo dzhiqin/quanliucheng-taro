@@ -17,7 +17,7 @@ const updateAllCards = () => {
 }
 const refreshStorageCards = (cards) => {
   const defaultCard = cards.find(i => i.isDefault)
-  if(!defaultCard){
+  if(!defaultCard && cards.length > 0){
     cards[0].isDefault = true
     setDefault(cards[0].id,cards)
   }

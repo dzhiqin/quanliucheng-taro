@@ -10,7 +10,7 @@ import { CardsHealper } from '@/utils/cards-healper'
 import './card-detail.less'
 import { modalService } from '@/service/toast-service'
 import nrhcPng from '@/images/icons/nrhc.png'
-import drawQrcode from '@/utils/weapp.qrcode.esm'
+import QrCode from 'qrcode'
 
 export default function CardDetail(props: any) {
   const [busy,setBusy] = useState(false)
@@ -29,6 +29,7 @@ export default function CardDetail(props: any) {
     type: ''
   })
   const [currentTab,setCurrentTab] = useState(0)
+  const [qrcodeSrc,setQrcodeSrc] = useState(undefined)
   useReady(() => {
     let currentCard = Taro.getStorageSync('card')
     if(!currentCard){
@@ -36,19 +37,8 @@ export default function CardDetail(props: any) {
     }
     setIsDefault(currentCard.isDefault)
     setCard(currentCard)
-    drawQrcode({
-      width: 150,
-      height: 150,
-      canvasId: 'myQrcode',
-      text: currentCard.cardNo,
-      // 添加图片
-      // image:{
-      //   imageResource: '../../../images/icons/nrhc.png',
-      //   dx: 60,
-      //   dy: 60,
-      //   dWidth: 30,
-      //   dHeight: 30
-      // }
+    QrCode.toDataURL(currentCard.cardNo).then(url => {
+      setQrcodeSrc(url)
     })
   })
   const handleChange = (e) => {
@@ -87,7 +77,7 @@ export default function CardDetail(props: any) {
         <AtTabs animated={false} current={currentTab} tabList={[{title: '诊疗卡'},{title: '电子健康卡'}]} onClick={handleTabChange}>
           <AtTabsPane index={0} current={currentTab} className='card-detail-pane'>
             <View className='card-detail-pane-content' >
-              <Canvas className='canvas' style='width: 150px; height: 150px;' canvasId='myQrcode'></Canvas>
+              <Image style='width: 200px; height: 200px;' src={qrcodeSrc}></Image>
               <View>诊疗卡号：{card.cardNo}</View>
             </View>
           </AtTabsPane>
