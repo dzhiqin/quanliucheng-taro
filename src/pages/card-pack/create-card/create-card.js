@@ -125,7 +125,7 @@ export default class BindCard extends React.Component {
           msg = '诊疗卡创建成功'
           // msg = '健康卡创建失败，但诊疗卡创建成功且支持挂号'
           CardsHealper.updateAllCards().then(() => {
-            toastService({title: msg,onClose:()=> Taro.navigateBack()})
+            toastService({title: msg,onClose:()=> {Taro.navigateBack();loadingService(false)}})
           })
         }else{
           loadingService(false)
@@ -301,7 +301,7 @@ export default class BindCard extends React.Component {
           }
         })
       }else{
-        toastService({title: '获取位置失败'})
+        toastService({title: '获取位置失败',onClose: () => {loadingService(false)}})
         console.error(err)
       }
     })

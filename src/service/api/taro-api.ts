@@ -2,6 +2,7 @@ import * as Taro from '@tarojs/taro'
 import { modalService, toastService } from '../toast-service'
 import { custom } from '@/custom/index'
 import { compareVersion } from '@/utils/tools'
+import { MyContext } from '@/utils/my-context'
 
 type subscribeServiceRes =  {result: boolean, msg: string, data?: any }
 export const TaroGetSubscribeSettings = (...ids) => {
@@ -150,14 +151,22 @@ export const TaroNavToZhongXun = (execRoom) => {
 }
 export const TaroNavToYiBao = (callback) => {
   // 跳转到医保小程序
-  Taro.navigateToMiniProgram({
-    appId: 'wxe1022cca111d18be',
-    path: 'pages/cert/bind/bind?from=AAHTx-oeOuLWz2nBYKez06kN&cityid=440100',
-    success(res){
-      console.log(res)
-      callback()
-    }
-  })
+  if(process.env.TARO_ENV === 'weapp'){
+    Taro.navigateToMiniProgram({
+      appId: 'wxe1022cca111d18be',
+      path: 'pages/cert/bind/bind?from=AAHTx-oeOuLWz2nBYKez06kN&cityid=440100',
+      success(res){
+        console.log(res)
+        callback()
+      }
+    })
+  }
+  if(process.env.TARO_ENV === 'alipay'){
+    Taro.navigateToMiniProgram({
+      appId: '77700284',
+      path: 'pages/medical/index/'
+    })
+  }
 }
 export const TaroNavToMiniProgram = (data:{appId: string, path: string}) => {
   return new Promise((resolve,reject)=>{

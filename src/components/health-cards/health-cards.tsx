@@ -3,15 +3,11 @@ import { AtIcon } from 'taro-ui'
 import { View,Swiper,SwiperItem,Image } from '@tarojs/components'
 import { useState } from 'react'
 import * as React from 'react'
-import { TaroSubscribeService } from '@/service/api/taro-api'
-import { custom } from '@/custom/index'
 import { CardsHealper } from '@/utils/cards-healper'
 import { useDidShow } from '@tarojs/taro'
 import qrcodeImg from '@/images/icons/qrcode.png'
 import './health-cards.less'
 import { CARD_ACTIONS } from '@/enums/index'
-import { compareVersion } from '@/utils/tools'
-import { modalService } from '@/service/toast-service'
 
 export default function HealthCards(props: {
   cards?: any,
@@ -19,8 +15,6 @@ export default function HealthCards(props: {
   onCard?: any
 }) {
   const onCard = props.onCard
-  const [isLogin, setLoginStatus] = useState(false)
-  const [showNotice,setShowNotice] = useState(false)
   const [cards,setCards] = useState(props.cards || [])
   const [currentIndex,setCurrentIndex] = useState(0)
   const [selectedCard, setSelected] = useState({
@@ -32,10 +26,6 @@ export default function HealthCards(props: {
     Taro.eventCenter.off(CARD_ACTIONS.UPDATE_ALL)
   })
   useDidShow(() => {
-    // const res = Taro.getStorageSync('userInfo')
-    // if(res){
-    //   setLoginStatus(true)
-    // }
     const cardsTemp = Taro.getStorageSync('cards')
     setCards(cardsTemp)
     for(let i =0;i< cardsTemp.length;i++){
@@ -61,74 +51,7 @@ export default function HealthCards(props: {
     })
     
   })
-  // const checkSubscribe = () => {
-  //   if(process.env.TARO_ENV === 'alipay') return
-  //   const version = Taro.getSystemInfoSync().SDKVersion
-  //   if(compareVersion('2.8.3',version) >= 0){
-  //     // 低版本基础库2.4.4~2.8.3，仅支持传入一个 tmplId
-  //     // tempIds = tempIds.splice(0,1)
-  //   }
-  //   Taro.getSetting({
-  //     withSubscriptions: true,
-  //     success: res => {
-  //       const itemSettings = res.subscriptionsSetting?.itemSettings
-  //       if(Object.keys(itemSettings).length === 0){
-  //         // show 
-  //       }
-  //     }
-  //   })
-  // }
-  
-  const subscribeOneByOne = async (...ids) => {
-    if(ids.length === 0) return 
-    const id = ids[0]
-    let subsRes = await TaroSubscribeService(id)
-    if(subsRes.result){
-      if(ids.length > 1){
-        modalService({
-          content: '需要您继续授权',
-          success: () => {
-            ids.shift()
-            subscribeOneByOne(...ids)
-          }
-        })
-      }else{
-        Taro.navigateTo({
-          url: '/pages/login/login'
-        })
-      }
-    }else{
-      setShowNotice(true)
-    }
-  }
-  const handleLogin = async () =>{
-    const sysInfo = Taro.getSystemInfoSync()
-    const version = sysInfo.SDKVersion
-    // const platform = sysInfo.platform
-    // check subscribe status
-    // do subscribe
-    if(compareVersion('2.8.3',version) >= 0){
-      // 低版本基础库2.4.4~2.8.3，仅支持传入一个 tmplId
-      subscribeOneByOne(
-        custom.longtermSubscribe.visitReminder,
-        custom.longtermSubscribe.pendingPayReminder,
-        custom.longtermSubscribe.checkReminder,
-      )
-    }else{
-      const subsRes = await TaroSubscribeService(
-        custom.longtermSubscribe.visitReminder,
-        custom.longtermSubscribe.pendingPayReminder,
-        custom.longtermSubscribe.checkReminder
-      )
-      if(!subsRes.result){
-        setShowNotice(true)
-      }else{
-        Taro.navigateTo({
-          url: '/pages/login/login'
-        })
-      }
-    }
-  }
+ 
   const handleAddCard = () => {
     if(process.env.TARO_ENV === 'weapp'){
       Taro.navigateTo({url: '/pages/login/login'})
@@ -159,20 +82,7 @@ export default function HealthCards(props: {
     Taro.setStorageSync('card',card)
     Taro.navigateTo({url: `/pages/card-pack/card-detail/card-detail`})
   }
-  // if(!isLogin){
-  //   return (
-  //     <View style='padding:40rpx 40rpx 0'>
-  //       <View className='login-card' onClick={handleLogin}>
-  //           <Image src='https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/applets-imgs/man.png' className='login-card-avatar'></Image>
-  //           <View className='login-card-name'>请先登录</View>
-  //       </View>
-  //       {
-  //         showNotice &&
-  //         <SubscribeNotice show={showNotice} />
-  //       }
-  //     </View>
-  //   )
-  // }else if(cards.length === 0){
+  
   if(cards.length === 0){
     return (
       <View style='padding:40rpx 40rpx 0'>
