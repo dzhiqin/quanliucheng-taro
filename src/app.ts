@@ -7,6 +7,7 @@ import './app.less'
 import { fetchBranchHospital } from './service/api'
 import { CardsHealper } from './utils'
 import { CARD_ACTIONS } from './enums'
+import { modalService } from './service/toast-service'
 
 class App extends Component {
   props: any
@@ -47,16 +48,41 @@ class App extends Component {
       })
     }
     if(process.env.TARO_ENV === 'alipay'){
-      Taro.getUserInfo().then(res => {
-        console.log(res);
-        Taro.setStorageSync('userInfo',res)
-        fetchBranchHospital().then(resData => {
-          if(resData.data && resData.data.length === 1){
-            Taro.setStorageSync('hospitalInfo',resData.data[0])
-            CardsHealper.updateAllCards().then(() => Taro.eventCenter.trigger(CARD_ACTIONS.UPDATE_ALL))
-          }
-        })
+      Taro.login({
+        success: res => {
+          let { code } = res
+          login({code}).then((result:any) => {
+            // console.log('login res',result.data.data.openId)
+            if(result.statusCode === 200) {
+              const {data: {data}} = result
+              Taro.setStorageSync('token', data.token)
+              Taro.setStorageSync('openId', data.openId)
+              fetchBranchHospital().then(resData => {
+                if(resData.data && resData.data.length === 1){
+                  Taro.setStorageSync('hospitalInfo',resData.data[0])
+                  CardsHealper.updateAllCards().then(() => Taro.eventCenter.trigger(CARD_ACTIONS.UPDATE_ALL))
+                }
+              })
+            }
+          }).catch((err) => {
+            modalService({title: '获取token失败', content: JSON.stringify(err)})
+            // Taro.showToast({
+            //   title: '获取token失败',
+            //   icon: 'none'
+            // })
+          })
+        }
       })
+      // Taro.getUserInfo().then(res => {
+      //   console.log(res);
+      //   Taro.setStorageSync('userInfo',res)
+      //   fetchBranchHospital().then(resData => {
+      //     if(resData.data && resData.data.length === 1){
+      //       Taro.setStorageSync('hospitalInfo',resData.data[0])
+      //       CardsHealper.updateAllCards().then(() => Taro.eventCenter.trigger(CARD_ACTIONS.UPDATE_ALL))
+      //     }
+      //   })
+      // })
     }
   }
 

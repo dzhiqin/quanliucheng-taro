@@ -62,9 +62,13 @@ export default function OrderList(){
   const payOrderById = (id: string,payType: string) => {
     loadingService(true,'支付中……')
     handlePayment({orderId: id, payType: payType}).then(res => {
-      if(res.popUpCode === 3){
+      if(res.data.jumpUrl && res.data.appid){
         loadingService(false)
-        // do nothing
+        Taro.navigateToMiniProgram({
+          appId: res.data.appid,
+          path: res.data.jumpUrl
+        })
+        return
       }else if(res.resultCode === 0 && !res.data){
         toastService({title: '提交订单成功，还未支付', onClose: () => {getList(searchType);loadingService(false); setBusy(false)}})
       }else{

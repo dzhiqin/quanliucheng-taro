@@ -164,7 +164,10 @@ export const TaroNavToYiBao = (callback) => {
   if(process.env.TARO_ENV === 'alipay'){
     Taro.navigateToMiniProgram({
       appId: '77700284',
-      path: 'pages/medical/index/'
+      path: 'pages/medical/index/',
+      success: () => {
+        callback()
+      }
     })
   }
 }

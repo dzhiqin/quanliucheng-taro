@@ -232,15 +232,7 @@ export default function PaymentDetail() {
       modalService({title: '支付失败', content: JSON.stringify(err)})
     })
   }
-  const navToOtherWeapp = (content:string) => {
-    Taro.showModal({
-      content:content,
-      showCancel: false,
-      success: () => {
-        TaroNavToYiBao(() =>{})
-      }
-    })
-  }
+  
   const buildPaymentParamsQRCode = (type: PAY_TYPE_CN) => {
     const paymentParams = {
       ...orderInfo,

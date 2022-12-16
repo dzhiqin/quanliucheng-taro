@@ -25,7 +25,7 @@ export default function Personal() {
   }
   
   const navToYiBao = () => {
-    loadingService(true,'即将跳转……')
+    loadingService(true,'即将跳转')
     TaroNavToYiBao(() => {
       loadingService(false)
     })
