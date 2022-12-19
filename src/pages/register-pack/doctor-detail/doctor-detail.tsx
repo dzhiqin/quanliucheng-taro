@@ -134,7 +134,7 @@ export default function DoctorDefault() {
       deptId: options.deptId, 
       regDate: date, 
       doctorId: options.doctorId,
-      regType: options.sourceType//regtype和sourceType值相同，字段未统一
+      regType: options.sourceType || doctorInfo.sourceType//regtype和sourceType值相同，字段未统一
     }).then(res => {
       loadingService(false)
       if(res.resultCode === 0){
