@@ -19,11 +19,6 @@ export default function CardList(){
       loadingService(false)
       if(res.resultCode === 0){
         setList(res.data)
-        // if(!res.data){
-        //   // 测试时用，非必要勿用
-        //   const inCard = Taro.getStorageSync('inCard')
-        //   setList([inCard])
-        // }
       }else{
         modalService({content: res.message})
       }
@@ -44,8 +39,13 @@ export default function CardList(){
     loadingService(true)
     setDefaultInHospCard({id: card.id}).then(res => {
       if(res.resultCode === 0){
-        Taro.setStorageSync('inCard',{...card,isDefault: true})
-        toastService({title: '设置成功',onClose: () => {Taro.navigateBack();loadingService(false)}, duration: 1500})
+        const _cards = Taro.getStorageSync('patientCards')
+        Taro.setStorageSync('patientCards',_cards.map(item => {return {...item,isDefault: item.id == card.id}}))
+        toastService({title: '设置成功',duration: 1500,
+        onClose: () => {
+          Taro.navigateBack();
+          loadingService(false)
+        }, })
       }else{
         loadingService(false)
         modalService({title: '操作失败', content: res.message})

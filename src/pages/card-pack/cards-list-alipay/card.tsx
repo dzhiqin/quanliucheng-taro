@@ -41,7 +41,7 @@ export default function Card(props: {
       if(res.resultCode === 0){
         toastService({title: '升级成功', onClose: () => {
           CardsHealper.updateAllCards().then(() => {
-            Taro.redirectTo({url: '/pages/card-pack/cards-list/cards-list'})
+            Taro.redirectTo({url: '/pages/card-pack/cards-list-alipay/cards-list-alipay'})
           })
         }})
       }else{

@@ -22,7 +22,7 @@ export default function ChecklistDetail() {
   const [currentTab,setCurrentTab] = useState(0)
   const [categories,setCategories] = useState([])
   const [busy,setBusy] = useState(false)
-  const card = Taro.getStorageSync('inCard')
+  const card = Taro.getStorageSync('patientCard')
   const Row = React.memo(({id,index,style,data}) => {
     return (
       <BkPanel >

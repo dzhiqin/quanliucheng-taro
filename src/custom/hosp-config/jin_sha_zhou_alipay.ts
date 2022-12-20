@@ -44,7 +44,7 @@ const config = {
               icon: imgUrl.new_home_icon7,
               name: '电子诊疗卡',
               event: 'navigate',
-              url: '/pages/card-pack/cards-list/cards-list'
+              url: '/pages/card-pack/cards-list-alipay/cards-list-alipay'
             }
           ]
         },

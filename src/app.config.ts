@@ -3,8 +3,7 @@ const config = {
     'pages/index/index',
     'pages/login/login',
     'pages/official/official',
-    'pages/personal/personal',
-    'pages/web-view-page/web-view-page'
+    'pages/personal/personal'
   ],
   subpackages: undefined,
   subPackages: undefined,

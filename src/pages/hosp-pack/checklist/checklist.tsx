@@ -1,48 +1,21 @@
 import * as React from 'react'
 import * as Taro from '@tarojs/taro'
 import { View, Image } from '@tarojs/components'
-import SimpleModal from '@/components/simple-modal/simple-modal'
 import { useState } from 'react'
-import { getInHospBillList, fetchInHospCards, getInHospInfo } from '@/service/api'
+import { getInHospBillList, getInHospInfo } from '@/service/api'
 import { loadingService, modalService, toastService } from '@/service/toast-service'
 import BkPanel from '@/components/bk-panel/bk-panel'
 import calanderPng from '@/images/icons/calendar.png'
 import MoneyPng from '@/images/icons/money_circle.png'
 import './checklist.less'
 import BkLoading from '@/components/bk-loading/bk-loading'
-import { AtList,AtListItem } from 'taro-ui'
-import { custom } from '@/custom/index'
+import PatientCard from '../components/patient-card/patient-card'
 
 export default function BindingCard() {
-  const [showModal,setShowModal] = useState(false)
   const [list,setList] = useState([])
-  const [card,setCard] = useState(null)
+  const [card,setCard] = useState(undefined)
   const [registerId, setRegisterId]= useState('')
   const [busy,setBusy] = useState(false)
-  Taro.useReady(() => {
-    fetchInHospCards().then(res => {
-      if(res.resultCode ===0){
-        if(res.data && res.data.length > 0){
-          setShowModal(false)
-          const hospCard = res.data.find(i => i.isDefault)
-          Taro.setStorageSync('inCard',hospCard)
-          setCard(hospCard)
-          getList(hospCard.cardNo)
-          handleGetInHospInfo(hospCard.cardNo)
-        }else{
-          setShowModal(true)
-        }
-      }
-    })
-  })
-  Taro.useDidShow(() => {
-    const currentCard = Taro.getStorageSync('inCard')
-    if(card && currentCard.id !== card.id) {
-      setCard(currentCard)
-      getList(currentCard.cardNo)
-      handleGetInHospInfo(currentCard.cardNo)
-    }
-  })
   const handleGetInHospInfo = (_cardNo: string) => {
     return new Promise((resolve,reject) => {
       getInHospInfo({inCardNo: _cardNo})
@@ -87,27 +60,14 @@ export default function BindingCard() {
     }
     Taro.navigateTo({url: `/pages/hosp-pack/checklist-detail/checklist-detail?billDate=${item.billDate}&registerId=${registerId? registerId : _registerId}`})
   }
-  const handleConfirm = () => {
-    Taro.navigateTo({url: '/pages/hosp-pack/binding-card/binding-card'})
-    // Taro.navigateBack()
+  const onPatientCard = (patientCard) => {
+    setCard(patientCard)
+    getList(patientCard.cardNo)
+    handleGetInHospInfo(patientCard.cardNo)
   }
   return(
     <View className='checklist'>
-      <SimpleModal msg='请先绑卡' show={showModal} onCancel={() => setShowModal(false)} onConfirm={handleConfirm} />
-      {
-        // 特殊处理 金沙洲医院门诊卡和住院卡默认已关联，所以没有住院卡管理
-        card && custom.hospName !== 'jszyy' &&
-        <AtList>
-          <AtListItem
-            arrow='right'
-            note={card.cardNo}
-            title={card.name}
-            iconInfo={{ size: 25, color: '#FF4949', value: 'credit-card', }}
-            onClick={() => Taro.navigateTo({url: '/pages/hosp-pack/card-list/card-list'})}
-          />
-        </AtList>
-      }
-      
+      <PatientCard onCard={onPatientCard} />
       <View className='checklist-content'>
         {
           list.length > 0 

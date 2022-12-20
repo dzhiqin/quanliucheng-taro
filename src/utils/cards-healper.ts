@@ -108,7 +108,7 @@ const showBindCardModal = () => {
     success: res => {
       if(res.confirm){
         // Taro.navigateTo({url: '/pages/card-pack/create-card/create-card'})
-        Taro.navigateTo({url: '/pages/card-pack/cards-list/cards-list'})
+        Taro.navigateTo({url: process.env.TARO_ENV === 'weapp' ? '/pages/card-pack/cards-list/cards-list' : '/pages/card-pack/cards-list-alipay/cards-list-alipay'})
       }else{
         showBindCardModal()
       }
