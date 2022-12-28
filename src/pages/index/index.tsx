@@ -19,7 +19,6 @@ export default function Index() {
   const [indexPage] = useState(custom.indexPage)
   const [clinicNotice,setClinicNotice] = useState(undefined)
   const [show,setShow] = useState(false)
-  
   useEffect(() => {
     Taro.setNavigationBarTitle({title: custom.hospitalName})
     Taro.removeStorageSync('isReg')
@@ -38,17 +37,16 @@ export default function Index() {
           })
         }
       })
-      // setShow(true)
     }
   }, [])
   const onConfirm = () => {
     setShow(false)
   }
-  const NoticeItem = (props) => {
-    return(
-      <View className='notice-item'>{props.children}</View>
-    )
-  }
+  // const NoticeItem = (props) => {
+  //   return(
+  //     <View className='notice-item'>{props.children}</View>
+  //   )
+  // }
   // const NoticeContent = () => {
   //   return(
   //     <View className='notice'>

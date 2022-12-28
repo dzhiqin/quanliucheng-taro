@@ -31,14 +31,13 @@ export default function OrderList(){
   const getList = (type: string) => {
     setBusy(true)
     fetchPaymentOrderList({type}).then(res => {
+      setBusy(false)
       if(res.resultCode === 0){
         setList(res.data)
       }else{
         setList([])
         modalService({content: res.message})
       }
-    }).finally(() => {
-      setBusy(false)
     })
   }
   const onTabChange = (e,value) => {
@@ -135,13 +134,12 @@ export default function OrderList(){
   useEffect(() => {
     setBusy(true)
     fetchPaymentOrderList({type: searchType}).then(res => {
+      setBusy(false)
       if(res.resultCode === 0){
         setList(res.data)
       }else{
         modalService({content: res.message})
       }
-    }).finally(() => {
-      setBusy(false)
     })
   },[searchType])
   const onClickItem = (item) => {

@@ -133,10 +133,9 @@ export default function BindingCard() {
       requestTry(checkOrderStatus.bind(null,response.data.orderNo)).then(checkRes => {
         getAccountBalance(card)
         handlePaySuccess()
+        loadingService(false)
       }).catch(() => {
         setBusy(false);setResultVisible(true);setPayResult(PAY_RESULT.FAIL)
-
-      }).finally(() => {
         loadingService(false)
       })
     }).catch(err => {

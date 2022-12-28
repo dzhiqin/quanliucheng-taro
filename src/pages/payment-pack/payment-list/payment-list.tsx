@@ -23,7 +23,6 @@ export default function PaymentList() {
       }else{
         setList([])
       }
-    }).finally(() => {
       setLoading(false)
     })
   }

@@ -107,6 +107,10 @@ export default function Clinics() {
       <View className='header' id='header'>
         <Image src={locationPng} className='header-icon' />
         <View className='header-title'>{hospitalInfo.hospitalName}</View>
+        {
+          Taro.getStorageSync('branches')?.length > 1 &&
+          <View style='margin-left: 40rpx;' className='tag tag-primary' onClick={() => Taro.redirectTo({url: '/pages/register-pack/branch-hospitals/branch-hospitals'})}>切换院区</View>
+        }
       </View>
       <View className='search'>
         <AtSearchBar

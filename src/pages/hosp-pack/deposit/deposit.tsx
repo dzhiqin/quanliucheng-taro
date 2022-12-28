@@ -1,5 +1,4 @@
 import * as React from 'react'
-import * as Taro from '@tarojs/taro'
 import { Input, View } from '@tarojs/components'
 import { useState } from 'react'
 import { getInHospInfo, getDepositOrderList,
@@ -138,14 +137,14 @@ export default function BindingCard() {
       requestTry(checkOrderStatus.bind(null,response.data.orderNo)).then(checkRes => {
         getData(patientCard)
         handlePaySuccess()
+        loadingService(false)
       }).catch((err) => {
         console.error('retry err',err);
+        loadingService(false)
         setBusy(false);setResultVisible(true);setPayResult(PAY_RESULT.FAIL)
         if(err.data === 5){
           setErrMsg('缴费失败，所缴金额将自动退回')
         }
-      }).finally(() => {
-        loadingService(false)
       })
     }).catch(err => {
       toastService({title: '您已取消支付',onClose:()=>loadingService(false)})

@@ -10,6 +10,7 @@ import locationPng from '@/images/icons/location.png'
 import {custom} from '@/custom/index'
 import parse from 'mini-html-parser2';
 import './official.less'
+import { loadingService, modalService } from '@/service/toast-service'
 
 export default function Official() {
   const [hospInfo,setHospInfo] = useState({
@@ -35,6 +36,7 @@ export default function Official() {
   useEffect(() => {
     Taro.showLoading({title: '加载中……'})
     fetchOfficialContent().then(res => {
+      loadingService(false)
       if(res.resultCode === 0 && res.data){
         setHospInfo(res.data.hospInfo)
         if(res.data.banners.length > 0){
@@ -47,8 +49,9 @@ export default function Official() {
         })
         
       }
-    }).finally(() => {
-      Taro.hideLoading()
+    }).catch(err => {
+      loadingService(false)
+      modalService({content: JSON.stringify(err)})
     })
   }, [])
   const handleOpenLocation = () => {

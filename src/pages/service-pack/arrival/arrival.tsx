@@ -1,5 +1,4 @@
 import * as React from 'react'
-import * as Taro from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import HealthCards from '@/components/health-cards/health-cards'
 import { AtButton } from 'taro-ui'
@@ -32,17 +31,17 @@ export default function BindingCard() {
     if(loading) return
     refreshDistance()
   }
-  const startTimer = () => {
+  const startTimer = React.useCallback(() => {
     setTimeout(() => {
       if(count > 0){
         setCount(--count)
         startTimer()
       }
     },1100)
-  }
+  },[count])
   React.useEffect(() => {
     startTimer()
-  }, [count])
+  }, [count,startTimer])
   const renderCountdownBtn = () => {
     return(
       <View className='arrival-btns'>
@@ -66,7 +65,6 @@ export default function BindingCard() {
         //   }
         // ])
       }
-    }).finally(() => {
       setLoading(false)
     })
   }
@@ -79,8 +77,7 @@ export default function BindingCard() {
       computeDistance(latitude,longitude,hospLatLong.latitude,hospLatLong.longitude)
     }).catch(err => {
       modalService({content: JSON.stringify(err)})
-    }).finally(() => {
-    }) 
+    })
   }
   const renderBkLoading = () => {
     return(<BkLoading loading={loading} msg='暂无报到内容' />)

@@ -1,8 +1,5 @@
 import * as Taro from '@tarojs/taro'
 import { modalService } from '../toast-service'
-// import { login } from '@/service/api/user-api'
-// import { fetchBranchHospital } from '@/service/api'
-// import { CardsHealper } from '@/utils/cards-healper'
 
 interface Response {
   resultCode: number

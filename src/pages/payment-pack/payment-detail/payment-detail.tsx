@@ -16,7 +16,6 @@ import {
   fetchPaymentOrderDetail,
   TaroNavToZhongXun,
   handleHeSuanRefund,
-  TaroNavToYiBao,
   createPaymentOrderByQRCode,
   TaroNavToMiniProgram,
   fetchMedicineGuideList,
@@ -217,8 +216,6 @@ export default function PaymentDetail() {
                 setPayResult(resultEnum.fail)
                 setPayResultMsg('缴费失败，所缴金额将原路退回')
                 setBusy(false)
-              })
-              .finally(() => {
                 loadingService(false)
               })
             }
@@ -308,15 +305,13 @@ export default function PaymentDetail() {
     const orderId = orderInfo.orderId || orderInfoFromList.orderId
     handleHeSuanRefund({orderId})
     .then(res => {
+      setBusy(false)
       if(res.resultCode === 0){
         toastService({title: '取消成功', onClose: () => {Taro.navigateBack();loadingService(false)}})
       }else{
         loadingService(false)
         modalService({title: '取消失败', content: res.message})
       }
-    })
-    .finally(() => {
-      setBusy(false)
     })
   }
   const ListItem = (props) => {
@@ -351,13 +346,13 @@ export default function PaymentDetail() {
       .then(checkRes => {
         setPayResult(resultEnum.success)
         setPayResultMsg('缴费成功')
+        setOrderId('');
+        loadingService(false)
       })
       .catch(()=>{
         setPayResult(resultEnum.fail)
         setPayResultMsg('缴费失败，所缴金额将原路退回')
         setBusy(false)
-      })
-      .finally(() => { 
         setOrderId('');
         loadingService(false)
       })
@@ -593,7 +588,7 @@ export default function PaymentDetail() {
               <BkButton title='微信支付' icon='icons/wechat.png' theme='info' disabled={busy} onClick={dealWithPay.bind(null,PAY_TYPE_CN.微信)} />
             }
             {
-              orderInfo.payState === PAY_STATUS_EN.unpay && orderInfo.orderType === ORDER_TYPE_CN.医保单 &&
+              orderInfo.payState === PAY_STATUS_EN.unpay && orderInfo.orderType === ORDER_TYPE_CN.医保单 && custom.feat.YiBaoCard &&
               <BkButton title='医保支付' icon='icons/card.png' theme='primary' disabled={busy} onClick={dealWithPay.bind(null,PAY_TYPE_CN.医保)} />
             }
           </View>
@@ -606,7 +601,7 @@ export default function PaymentDetail() {
               <BkButton title='微信支付' icon='icons/wechat.png' theme='info' disabled={busy} onClick={dealWithPay.bind(null,PAY_TYPE_CN.微信)} />
             }
             {
-              orderInfoFromList.payState === PAY_STATUS_EN.unpay && orderInfoFromList.orderType === ORDER_TYPE_CN.医保单 &&
+              orderInfoFromList.payState === PAY_STATUS_EN.unpay && orderInfoFromList.orderType === ORDER_TYPE_CN.医保单 && custom.feat.YiBaoCard &&
               <BkButton title='医保支付' icon='icons/card.png' theme='primary' disabled={busy} onClick={dealWithPay.bind(null,PAY_TYPE_CN.医保)} />
             }
           </View>

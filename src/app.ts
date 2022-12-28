@@ -11,81 +11,88 @@ import { modalService } from './service/toast-service'
 
 class App extends Component {
   props: any
+  buildTarget: string
+  // eslint-disable-next-line @typescript-eslint/no-useless-constructor
+  constructor(props) {
+    super(props)
+    this.buildTarget = process.env.TARO_ENV
+  }
   componentDidMount () {}
 
-  onLaunch () {
+  async onLaunch () {
     // 单页调试时方便使用
     // const token = Taro.getStorageSync('token')
     // if(token) return
     // console.log('onLaunch')
-    console.log('sdk version',Taro.getSystemInfoSync().SDKVersion)
-    console.log('platform',Taro.getSystemInfoSync().platform)
-    this.checkUpdate()
-    if(process.env.TARO_ENV === 'weapp'){
-      Taro.login({
+    if(this.buildTarget === 'weapp'){
+      console.log('sdk version',Taro.getSystemInfoSync().SDKVersion)
+      console.log('platform',Taro.getSystemInfoSync().platform)
+    }
+    if(this.buildTarget === 'alipay'){
+      my.getRunScene({
         success: res => {
-          let { code } = res
-          login({code}).then((result:any) => {
-            // console.log('login res',result.data.data.openId)
-            if(result.statusCode === 200) {
-              const {data: {data}} = result
-              Taro.setStorageSync('token', data.token)
-              Taro.setStorageSync('openId', data.openId)
-              fetchBranchHospital().then(resData => {
-                if(resData.data && resData.data.length === 1){
-                  Taro.setStorageSync('hospitalInfo',resData.data[0])
-                  CardsHealper.updateAllCards().then(() => Taro.eventCenter.trigger(CARD_ACTIONS.UPDATE_ALL))
-                }
-              })
-            }
-          }).catch(() => {
-            Taro.showToast({
-              title: '获取token失败',
-              icon: 'none'
+          if(res.envVersion !== 'release'){
+            modalService({
+              content: 'SDKVersion:'+my.SDKVersion+' platform:'+Taro.getSystemInfoSync().platform
             })
-          })
+          }
         }
       })
     }
-    if(process.env.TARO_ENV === 'alipay'){
-      Taro.login({
-        success: res => {
-          let { code } = res
-          login({code}).then((result:any) => {
-            // console.log('login res',result.data.data.openId)
-            if(result.statusCode === 200) {
-              const {data: {data}} = result
-              Taro.setStorageSync('token', data.token)
-              Taro.setStorageSync('openId', data.openId)
-              fetchBranchHospital().then(resData => {
-                if(resData.data && resData.data.length === 1){
-                  Taro.setStorageSync('hospitalInfo',resData.data[0])
-                  CardsHealper.updateAllCards().then(() => Taro.eventCenter.trigger(CARD_ACTIONS.UPDATE_ALL))
-                }
-              })
+    
+    this.checkUpdate()
+    const res:any = await this.handleGetCode()
+    if(res.success){
+      login({code: res.data}).then((result:any) => {
+        // console.log('login res',result)
+        if(result.statusCode === 200) {
+          if(result.data.resultCode !== 0){
+            throw result.data.message
+          }
+          const {data: {data}} = result
+          Taro.setStorageSync('token', data.token)
+          Taro.setStorageSync('openId', data.openId)
+          fetchBranchHospital(true).then(resData => {
+            if(resData.resultCode !== 0){
+              modalService({title: '获取分院信息出错',content: resData.message})
             }
-          }).catch((err) => {
-            modalService({title: '获取token失败', content: JSON.stringify(err)})
-            // Taro.showToast({
-            //   title: '获取token失败',
-            //   icon: 'none'
-            // })
+            if(resData.data && resData.data.length === 1){
+              Taro.setStorageSync('hospitalInfo',resData.data[0])
+            }
+            Taro.setStorageSync('branches',resData.data)
+            CardsHealper.updateAllCards().then(() => Taro.eventCenter.trigger(CARD_ACTIONS.UPDATE_ALL))
           })
         }
+      }).catch((err) => {
+        modalService({
+          title: '获取token失败',
+          content: JSON.stringify(err)
+        })
       })
-      // Taro.getUserInfo().then(res => {
-      //   console.log(res);
-      //   Taro.setStorageSync('userInfo',res)
-      //   fetchBranchHospital().then(resData => {
-      //     if(resData.data && resData.data.length === 1){
-      //       Taro.setStorageSync('hospitalInfo',resData.data[0])
-      //       CardsHealper.updateAllCards().then(() => Taro.eventCenter.trigger(CARD_ACTIONS.UPDATE_ALL))
-      //     }
-      //   })
-      // })
     }
   }
-
+  handleGetCode() {
+    return new Promise((resolve) => {
+      if(process.env.TARO_ENV === 'weapp'){
+        Taro.login({
+          success: res => {
+            const {code} = res
+            resolve({success: true,data: code})
+          }
+        })
+      }
+      if(process.env.TARO_ENV === 'alipay'){
+        my.getAuthCode({
+          success: res => {
+            const {authCode} = res
+            resolve({success: true, data: authCode})
+          }
+        })
+      }
+    })
+    
+  }
+  
   componentDidHide () {}
 
   componentDidCatchError () {}

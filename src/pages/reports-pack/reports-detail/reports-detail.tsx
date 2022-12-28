@@ -1,11 +1,10 @@
-import * as Taro from '@tarojs/taro'
 import * as React from 'react'
 import { useRouter } from '@tarojs/taro'
 import { useEffect,useState } from 'react'
 import { fetchReportsDetail } from '@/service/api/reports-api'
 import { REPORT_ITEM_TYPE_CN,REPORT_TYPE_EN } from '@/enums/index'
 import './reports-detail.less'
-import { modalService } from '@/service/toast-service'
+import { loadingService, modalService } from '@/service/toast-service'
 import BkLoading from '@/components/bk-loading/bk-loading'
 import TestReport from './test-report'
 import AltraSoundReport from './ultrasound-report'
@@ -27,10 +26,9 @@ export default function ReportsDetail() {
         setBusy(false)
         modalService({content: res.message})
       }
-    }).finally(() => {
-      Taro.hideLoading()
+      loadingService(false)
     })
-  },[examDate,examId,itemType,reportType])
+  },[examDate,examId,itemType,reportType,pId])
 
 
   if(checkItems.length === 0){

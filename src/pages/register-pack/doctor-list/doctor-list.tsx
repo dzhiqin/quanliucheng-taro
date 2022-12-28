@@ -39,7 +39,6 @@ export default function DoctorList() {
         setDoctors(res.data.timeSlices)
         res.data.defaultSelectedDay !== '无剩余号源' && setDefaultDay(res.data.defaultSelectedDay)
       }
-    }).finally(() => {
       setBusy(false)
     })
   },[router.params.deptId])

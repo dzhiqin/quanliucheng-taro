@@ -3,13 +3,12 @@ import * as React from 'react'
 import * as Taro from '@tarojs/taro'
 import { MyContext } from '@/utils/my-context'
 import { View } from '@tarojs/components'
-import { fetchBranchHospital } from '@/service/api/register-api'
 import {custom} from '@/custom/index'
 
 import RegisterNoticeModal from '../register-notice-modal/register-notice-modal'
 import BoxItem from './box-item'
 import './function-boxes.less'
-import { loadingService, modalService } from '@/service/toast-service'
+import { modalService } from '@/service/toast-service'
 
 export default function FunctionBoxes(props) {
    const {functionBox} = useContext(MyContext)
@@ -31,29 +30,26 @@ export default function FunctionBoxes(props) {
       navToPage()
     }
     const navToPage = () => {
-      loadingService(true)
-      fetchBranchHospital().then(res => {
-        if(res.resultCode === 0){
-          loadingService(false)
-          const hospitalCount = res.data.length
-          if(hospitalCount === 1){
-            let url = ''
-            if(custom.feat.register.intradayAndAppointment){
-              url = `/pages/register-pack/notice/notice`
-            }else{
-              url = `/pages/register-pack/clinics/clinics`
-            }
-            Taro.navigateTo({url})
-          }else{
-            Taro.navigateTo({
-              url: '/pages/register-pack/branch-hospitals/branch-hospitals'
-            })
-          }
+      const branches = Taro.getStorageSync('branches')
+      const hospInfo = Taro.getStorageSync('hospitalInfo')
+      let url = ''
+      if(!branches || branches.length === 0){
+        modalService({content: '医院信息为空'})
+        return
+      }
+
+      if(hospInfo){
+        // 已选择了院区
+        if(custom.feat.register.intradayAndAppointment){
+          url = `/pages/register-pack/notice/notice` // 区分当天挂号和预约挂号的先跳转到挂号须知页面
         }else{
-          loadingService(false)
-          modalService({title: '获取分院出错',content: res.message})
+          url = `/pages/register-pack/clinics/clinics`// 不区分当天挂号和预约挂号的，直接跳转的选择科室页面
         }
-      })
+      }else{
+        // 未选择院区的，进入选择院区页面
+        url = '/pages/register-pack/branch-hospitals/branch-hospitals'
+      }
+      Taro.navigateTo({url})
     } 
     return (
       <View className='function-box-container'>

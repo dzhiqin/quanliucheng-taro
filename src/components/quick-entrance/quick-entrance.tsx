@@ -31,6 +31,19 @@ export default function QuickEntrance(props: {
         console.log('跳转小程序成功');
       })
     }
+    if(item.event === 'subscribe'){
+      my.requestSubscribeMessage({
+        entityIds: [item.tempId],
+        success: res => {
+          console.log(res);
+          
+        },
+        fail: err => {
+          console.log(err);
+          
+        }
+      })
+    }
   }
   
   return(

@@ -2,7 +2,6 @@ import * as Taro from '@tarojs/taro'
 import { modalService, toastService } from '../toast-service'
 import { custom } from '@/custom/index'
 import { compareVersion } from '@/utils/tools'
-import { MyContext } from '@/utils/my-context'
 
 type subscribeServiceRes =  {result: boolean, msg: string, data?: any }
 export const TaroGetSubscribeSettings = (...ids) => {
@@ -284,7 +283,7 @@ export const TaroRemindAuthModal = async() => {
   }
   console.log('acceptedIds',acceptedIds);
   // 公立医院默认订阅3条长期消息
-  if(acceptedIds.length < 3 && !custom.isPrivate){
+  if(acceptedIds.length <= 0 && !custom.isPrivate){
     Taro.showModal({
       content: '请先进行绑卡/授权',
       confirmText: '确认',

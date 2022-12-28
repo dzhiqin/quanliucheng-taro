@@ -1,8 +1,8 @@
 import { getBranchId, getRegType } from "@/utils/tools";
 import { fullUrl, Get, Post } from "../http";
 
-export const fetchBranchHospital = () => {
-  return Post(fullUrl('api/applet/appt/SignalSource/GetHospitalAll'),{branchId: getBranchId()})
+export const fetchBranchHospital = (all?: boolean) => {
+  return Post(fullUrl('api/applet/appt/SignalSource/GetHospitalAll'),{branchId: all ? '' : getBranchId()})
 }
 export const fetchDepatmentList = () => {
   return Post(fullUrl('api/applet/appt/SignalSource/GetAllDeptInfo'),{branchId: getBranchId()})
