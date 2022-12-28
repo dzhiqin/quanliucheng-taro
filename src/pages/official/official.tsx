@@ -1,7 +1,7 @@
 import * as React from 'react'
 import * as Taro from '@tarojs/taro'
 import { useEffect,useState } from 'react'
-import { View, Image, RichText } from '@tarojs/components'
+import { View, Image, RichText,Swiper,SwiperItem } from '@tarojs/components'
 import BkTitle from '@/components/bk-title/bk-title'
 import { fetchOfficialContent } from '@/service/api/official-api'
 import phonePng from '@/images/icons/phone.png'
@@ -21,7 +21,7 @@ export default function Official() {
     addr: '',
     natures:''
   })
-  const [banner,setBanner] = useState('https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/applets-imgs/banner2.png')
+  const [banners,setBanners] = useState(['https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/applets-imgs/banner2.png'])
   const [desc,setDesc] = useState(undefined)
   const navToClinicList = () => {
     Taro.navigateTo({
@@ -40,7 +40,8 @@ export default function Official() {
       if(res.resultCode === 0 && res.data){
         setHospInfo(res.data.hospInfo)
         if(res.data.banners.length > 0){
-          setBanner(res.data.banners[0].imgPath)
+          const list = res.data.banners.map(i => i.imgPath)
+          setBanners(list)
         }
         parse(res.data.introduce,(err,nodes) => {
           if(!err){
@@ -67,8 +68,22 @@ export default function Official() {
   return (
     <View className='official'>
       <View className='official-banner'>
-        <Image src={banner || custom.banner} />
-        {/* <Image src={banner} /> */}
+        <Swiper
+          className='test-h'
+          indicatorColor='#999'
+          indicatorActiveColor='#333'
+          circular
+          indicatorDots
+          autoplay
+        >  
+            {
+              banners.map((item,index) => 
+                <SwiperItem key={index}>
+                  <Image src={item} style='width: 100%' />
+                </SwiperItem>
+              )
+            }
+        </Swiper>
       </View>
       <View className='official-header'>
         <Image src={custom.logo} className='official-header-logo' />

@@ -37,10 +37,6 @@ const getHeaderAuth = () => {
   }
   return headerAuth
 }
-let version = 'develop'
-if(process.env.TARO_ENV === 'weapp'){
-  version = __wxConfig.envVersion  // 开发版develop；体验版trial；正式版release
-}
 
 const Request = (
   method:
@@ -66,11 +62,11 @@ const Request = (
       success: (res: Taro.request.SuccessCallbackResult) => {
         // const endTime = new Date().valueOf()
         resolve(res.data as HttpResponse)
-        if(res.data.resultCode === 1 && res.data.message === '请先登录授权'){
-          // handleLogin()
-        }
+        // if(res.data.resultCode === 1 && res.data.message === '请先登录授权'){
+        //   handleLogin()
+        // }
         
-        if(version !== 'release'){
+        if(Taro.getStorageSync('envVersion') !== 'release'){
           const api = url.split('/').pop()
           console.log(`============${api}=============`)
           // console.log('request spent: ',endTime - startTime);

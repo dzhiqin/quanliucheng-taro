@@ -27,10 +27,14 @@ class App extends Component {
     if(this.buildTarget === 'weapp'){
       console.log('sdk version',Taro.getSystemInfoSync().SDKVersion)
       console.log('platform',Taro.getSystemInfoSync().platform)
+      // 开发版develop；体验版trial；正式版release
+      Taro.setStorageSync('envVersion',__wxConfig.envVersion)
     }
     if(this.buildTarget === 'alipay'){
       my.getRunScene({
         success: res => {
+          Taro.setStorageSync('envVersion',res.envVersion)
+          // 开发版develop；体验版trial；正式版release;灰度版gray
           if(res.envVersion !== 'release'){
             modalService({
               content: 'SDKVersion:'+my.SDKVersion+' platform:'+Taro.getSystemInfoSync().platform
