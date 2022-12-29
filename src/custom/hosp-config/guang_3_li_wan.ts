@@ -67,12 +67,10 @@ const config = {
     },
     hospitalNavigation: true,  // 院内导航
   },
-  longtermSubscribe: {
-    checkReminder: 'M8e0Dbtb87M8DUXYPwTQdOxnz8sddpCkc_r7_VMd2Jc', // 审方提醒
-    pendingPayReminder: 'z5DIZhdEj9DCvfKRheU06kKod6r55bx1LC8p2VsB_O4',// 待缴费提醒
-    visitReminder: 'A8GTcQvlKDqEDSi1u19RFwKqRjrPJwW4feHMuvpZNso' // 就诊提醒
-  },
-  onetimeSubscribe: {
+  subscribes: {
+    checkReminder: 'M8e0Dbtb87M8DUXYPwTQdOxnz8sddpCkc_r7_VMd2Jc', // 审方提醒 长期订阅
+    pendingPayReminder: 'z5DIZhdEj9DCvfKRheU06kKod6r55bx1LC8p2VsB_O4',// 待缴费提醒 长期订阅
+    visitReminder: 'A8GTcQvlKDqEDSi1u19RFwKqRjrPJwW4feHMuvpZNso', // 就诊提醒 长期订阅
     closeNotice: 'AcXeVD04Z9NegbFhak1We0UI4jG_Zb8Uj3Bfvzf_8jM',// 医生停诊通知
     satisfactionSurveyNotice: 'sET4fH6WMDnX2V88JkFay_sPBaCcFtv1ax5NXicdWwA',// 患者满意度调查提醒
     appointmentNotice: 'KB2AIUyjvp209JGNy-7EtKDSK4N2fgwfpbaMazZsclA', //挂号成功通知

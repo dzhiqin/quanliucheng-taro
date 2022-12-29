@@ -26,20 +26,20 @@ export interface HospConfig {
   baseUrl: string,
   subUrl: string,
   isPrivate: boolean,//是否是私人医院，私人医院无法使用公立医院的订阅模板
-  longtermSubscribe: {
+  subscribes: {
     checkReminder: string,
     pendingPayReminder: string,
-    visitReminder: string
-  },
-  onetimeSubscribe:{
+    visitReminder: string,
     closeNotice: string,
     satisfactionSurveyNotice: string,
     appointmentNotice: string,
     paySuccessNotice: string,
     appointmentCancelNotice: string,
     refundNotice: string,
-    bindCardNotice: string
-  }
+    bindCardNotice: string,
+    orderCancelReminder?: string,
+    visitCancelReminder?: string
+  },
   indexPage: {
     banner: {
       enable: boolean,

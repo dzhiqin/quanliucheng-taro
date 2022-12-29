@@ -5,7 +5,7 @@ import * as React from 'react'
 import { AtInput, AtForm, AtButton } from 'taro-ui'
 import { useState } from 'react';
 import { idCardValidator, validateMessages } from '@/utils/validators';
-import { createCard, TaroSubscribeService } from '@/service/api';
+import { AlipaySubscribeService, createCard, TaroSubscribeService } from '@/service/api';
 import { custom } from '@/custom/index'
 import { loadingService, modalService, toastService } from '@/service/toast-service';
 import { CardsHealper } from '@/utils/cards-healper';
@@ -47,7 +47,13 @@ export default function BindCard(){
   const onSubmit = async () => {
     const {result,msg} = formValidator()
     if(result){
-      const subRes = await TaroSubscribeService(custom.onetimeSubscribe.bindCardNotice)
+      let subRes
+      if(process.env.TARO_ENV === 'weapp'){
+        subRes = await TaroSubscribeService(custom.subscribes.bindCardNotice)
+      }
+      if(process.env.TARO_ENV === 'alipay'){
+        subRes = await AlipaySubscribeService(custom.subscribes.bindCardNotice)
+      }
       if(subRes.result) {
         handleBindCard()
       }else{

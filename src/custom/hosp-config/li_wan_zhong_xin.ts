@@ -72,12 +72,10 @@ const config = {
       {title: '检查', value: REPORT_ITEM_TYPE_CN.检查}
     ]
   },
-  longtermSubscribe: {
-    checkReminder: '51HqQTe4hEx0mY3D3DxkHx9YkiO0xUnNzDEIogqQsEE', // 审方提醒
-    pendingPayReminder: 'q91PmGG25Wntxih_QZmSV1BRO9b3AOgHZNf9OSgWhzQ',// 待缴费提醒
-    visitReminder: 'QWpDDp5cCt801lr5M1pQT4Zt51iO4c_bHBM6RH5O23E' // 就诊提醒
-  },
-  onetimeSubscribe: {
+  subscribes: {
+    checkReminder: '51HqQTe4hEx0mY3D3DxkHx9YkiO0xUnNzDEIogqQsEE', // 审方提醒 长期订阅
+    pendingPayReminder: 'q91PmGG25Wntxih_QZmSV1BRO9b3AOgHZNf9OSgWhzQ',// 待缴费提醒 长期订阅
+    visitReminder: 'QWpDDp5cCt801lr5M1pQT4Zt51iO4c_bHBM6RH5O23E', // 就诊提醒 长期订阅
     closeNotice: 'k6_TACbOnbjr9G88wsE_hwdmK5W0HawsgC2W-P1Wms0',// 医生停诊通知
     satisfactionSurveyNotice: 'dk9p6tiJtC3bllS_84rCd2G6oNHIdb4VbGs1dfgvcKc',// 患者满意度调查提醒
     appointmentNotice: '8Ol1ijKw1cFEuJ7jGyXdTcNhegJ8WETLltAljy9eQpc', //挂号成功通知

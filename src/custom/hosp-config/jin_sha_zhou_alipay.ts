@@ -112,12 +112,10 @@ const config = {
       {title: '检查', value: REPORT_ITEM_TYPE_CN.检查},
     ],
   },
-  longtermSubscribe: {
+  subscribes: {
     checkReminder: '', // 审方提醒
     pendingPayReminder: '',// 待缴费提醒
-    visitReminder: '' // 就诊提醒
-  },
-  onetimeSubscribe: {
+    visitReminder: '', // 就诊提醒
     closeNotice: '',// 医生停诊通知
     satisfactionSurveyNotice: '',// 患者满意度调查提醒
     appointmentNotice: '', //挂号成功通知
@@ -125,7 +123,7 @@ const config = {
     appointmentCancelNotice: '',//挂号取消通知
     refundNotice: '',//退费通知
     bindCardNotice: '',//绑卡成功提醒
-  }
+  },
 }
 const mergedConfig = mergeRecursive(DefaultConfig,config)
 export default mergedConfig

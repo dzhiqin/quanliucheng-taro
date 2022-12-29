@@ -20,7 +20,8 @@ import {
   TaroNavToMiniProgram,
   fetchMedicineGuideList,
   handleLogin,
-  TaroAliPayment
+  TaroAliPayment,
+  AlipaySubscribeService
 } from '@/service/api'
 import { CardsHealper } from '@/utils/cards-healper'
 import './payment-detail.less'
@@ -113,10 +114,20 @@ export default function PaymentDetail() {
   const [showNotice,setShowNotice] = useState(false)
   const [medicineList,setMedicineList] = useState([])
   const dealWithPay = async(type) => {
-    const subsRes = await TaroSubscribeService(custom.onetimeSubscribe.paySuccessNotice,custom.onetimeSubscribe.refundNotice)
-    if(!subsRes.result){
-      setShowNotice(true)
-      return
+    let subRes
+    if(process.env.TARO_ENV === 'weapp'){
+      subRes = await TaroSubscribeService(custom.subscribes.paySuccessNotice,custom.subscribes.refundNotice)
+      if(!subRes.result){
+        setShowNotice(true)
+        return
+      }
+    }
+    if(process.env.TARO_ENV === 'alipay'){
+      subRes = await AlipaySubscribeService(custom.subscribes.paySuccessNotice,custom.subscribes.orderCancelReminder)
+      if(!subRes.result){
+        modalService({content: subRes.msg})
+        return
+      }
     }
     setBusy(true)
     if(from === PAYMENT_FROM.orderList){

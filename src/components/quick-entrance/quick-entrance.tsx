@@ -33,7 +33,7 @@ export default function QuickEntrance(props: {
     }
     if(item.event === 'subscribe'){
       my.requestSubscribeMessage({
-        entityIds: [item.tempId],
+        entityIds: item.tempId.split(','),
         success: res => {
           console.log(res);
           

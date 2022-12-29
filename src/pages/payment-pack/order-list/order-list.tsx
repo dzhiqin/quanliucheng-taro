@@ -3,7 +3,7 @@ import * as React from 'react'
 import { View } from '@tarojs/components'
 import HealthCards from '@/components/health-cards/health-cards'
 import { useEffect, useState } from 'react'
-import { createPaymentOrder, fetchPaymentOrderList , TaroSubscribeService , PayOrderParams, handlePayment, cancelPayment, fetchPaymentOrderStatus, TaroAliPayment } from '@/service/api'
+import { createPaymentOrder, fetchPaymentOrderList , TaroSubscribeService , PayOrderParams, handlePayment, cancelPayment, fetchPaymentOrderStatus, TaroAliPayment, AlipaySubscribeService } from '@/service/api'
 import { loadingService, modalService, toastService } from '@/service/toast-service'
 import { PAY_TYPE_CN, ORDER_SEARCH_TYPE_EN , ORDER_STATUS_CN, ORDER_STATUS_EN, PAYMENT_FROM } from '@/enums/index'
 import BkPanel from '@/components/bk-panel/bk-panel'
@@ -45,10 +45,20 @@ export default function OrderList(){
     setSearchType(value)
   }
   const dealWithPay = async (type,orderInfo) => {
-    const subsRes = await TaroSubscribeService(custom.onetimeSubscribe.paySuccessNotice,custom.onetimeSubscribe.refundNotice)
-    if(!subsRes.result){
-      setShowNotice(true)
-      return
+    let subRes
+    if(process.env.TARO_ENV === 'weapp'){
+      subRes = await TaroSubscribeService(custom.subscribes.paySuccessNotice,custom.subscribes.refundNotice)
+      if(!subRes.result){
+        setShowNotice(true)
+        return
+      }
+    }
+    if(process.env.TARO_ENV === 'alipay'){
+      subRes = await AlipaySubscribeService(custom.subscribes.paySuccessNotice,custom.subscribes.orderCancelReminder)
+      if(!subRes.result){
+        modalService({content: subRes.msg})
+        return
+      }
     }
     setBusy(true)
     createPaymentOrder(buildPaymentParams(type,orderInfo)).then(res => {

@@ -18,16 +18,16 @@ const config = {
         {
           title: "其他",
           entrances:[
+            // {
+            //   name: "自助核酸缴费",
+            //   icon: imgUrl.new_home_icon10,
+            //   event: "toAcidSelfPayment"
+            // },
             {
-              name: "自助核酸缴费",
-              icon: imgUrl.new_home_icon10,
-              event: "toAcidSelfPayment"
-            },
-            {
-              name: "订单取消通知",
+              name: "消息订阅",
               icon: imgUrl.new_home_icon10,
               event: "subscribe",
-              tempId: 'e54a3ccf52c24be29ceade4123a803ad'
+              tempId: 'e54a3ccf52c24be29ceade4123a803ad,20997d0c2cba48b48dfb217a0f77408d'
             },
             {
               name: "退诊提醒",
@@ -70,6 +70,14 @@ const config = {
       {title: '检验', value: REPORT_ITEM_TYPE_CN.化验},
       {title: '检查', value: REPORT_ITEM_TYPE_CN.检查},
     ],
+  },
+  subscribes: {
+    pendingPayReminder: 'a08e5467b1a647aa9e2e4dcbac23d56f', // 缴费提醒 一次性订阅
+    visitReminder: '1fa3df2fd6d04ec387c8142aaf6a40c4', // 就诊提醒 once
+    visitCancelReminder: '20997d0c2cba48b48dfb217a0f77408d', // 订单退诊提醒 once
+    paySuccessNotice: '7cdcc8528ce443d795ae20eb8ad0ad43', // 缴费成功通知 once
+    orderCancelNotice: 'e54a3ccf52c24be29ceade4123a803ad', // 订单取消通知 once
+    bindCardNotice: 'da0d433aca304bf1b51cb5a7db18a744', // 绑卡成功通知 once
   }
 }
 const mergedConfig = mergeRecursive(DefaultConfig,config)

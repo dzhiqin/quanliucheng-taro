@@ -27,6 +27,31 @@ export const TaroGetSubscribeSettings = (...ids) => {
     })
   })
 }
+export const AlipaySubscribeService = (...tempIds) =>{
+  if(process.env.TARO_ENV === 'weapp') return {result: true}
+  if(custom.isPrivate) return {result: true}
+  if(!tempIds || tempIds.length === 0) {
+    return {result: false,msg: '没有订阅任何模板消息'}
+  }else if(tempIds.length > 3) {
+    return {result: false, msg: '一次最多订阅3条消息'}
+  }
+  return new Promise((resolve) => {
+    my.requestSubscribeMessage({
+      entityIds: tempIds,
+      success: res => {
+        if(res.success){
+          if(res.result.subscribedEntityIds.length){
+            resolve({result: false, msg:'没有全部订阅',data: {subscribedEntityIds: res.result.subscribedEntityIds}})
+          }else{
+            resolve({result: true, msg: '订阅成功'})
+          }
+        }else{
+          resolve({result: false, msg: '您已取消'})
+        }
+      }
+    })
+  })
+}
 export const TaroSubscribeService = (...tempIds) => {
   if(custom.isPrivate) return {result: true}
   if(process.env.TARO_ENV === 'alipay') return {result: true}
@@ -256,15 +281,15 @@ const handleSubscribe = async () => {
   if(compareVersion('2.8.3',version) >= 0){
     // 低版本基础库2.4.4~2.8.3，仅支持传入一个 tmplId
     subscribeOneByOne(
-      custom.longtermSubscribe.visitReminder,
-      custom.longtermSubscribe.pendingPayReminder,
-      custom.longtermSubscribe.checkReminder,
+      custom.subscribes.visitReminder,
+      custom.subscribes.pendingPayReminder,
+      custom.subscribes.checkReminder,
     )
   }else{
     const subsRes = await TaroSubscribeService(
-      custom.longtermSubscribe.visitReminder,
-      custom.longtermSubscribe.pendingPayReminder,
-      custom.longtermSubscribe.checkReminder
+      custom.subscribes.visitReminder,
+      custom.subscribes.pendingPayReminder,
+      custom.subscribes.checkReminder
     )
     if(!subsRes.result){
       // setShowNotice(true)

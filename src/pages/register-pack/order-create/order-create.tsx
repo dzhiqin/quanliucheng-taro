@@ -15,7 +15,8 @@ import {
   getEpidemiologicalSurveyState, 
   TaroSubscribeService, 
   TaroAliPayment,
-  TaroRequestPayment } from '@/service/api'
+  TaroRequestPayment, 
+  AlipaySubscribeService} from '@/service/api'
 import { CardsHealper } from '@/utils/cards-healper'
 import { loadingService, modalService, toastService } from '@/service/toast-service'
 import { requestTry } from '@/utils/retry'
@@ -177,15 +178,31 @@ export default function OrderCreate() {
   const handleSubmit = async() => {
     if(busy) return
     setBusy(true)
-    const subsRes = await TaroSubscribeService(
-      custom.onetimeSubscribe.appointmentNotice,
-      custom.onetimeSubscribe.appointmentCancelNotice,
-      custom.onetimeSubscribe.refundNotice
-    )
-    if(!subsRes.result){
-      setShowNotice(true)
-      return
+    let subRes
+    if(process.env.TARO_ENV === 'weapp'){
+      subRes = await TaroSubscribeService(
+        custom.subscribes.appointmentNotice,
+        custom.subscribes.appointmentCancelNotice,
+        custom.subscribes.refundNotice
+      )
+      if(!subRes.result){
+        setShowNotice(true)
+        return
+      }
     }
+    if(process.env.TARO_ENV === 'alipay'){
+      subRes = await AlipaySubscribeService(
+        custom.subscribes.visitReminder,
+        custom.subscribes.visitCancelReminder,
+        custom.subscribes.orderCancelReminder
+      )
+      if(!subRes.result){
+        setBusy(false)
+        modalService({content: subRes.msg})
+        return
+      }
+    }
+    
     if(custom.feat.register.checkEpiLogicalSurvey){
       try {
         const checkSurveyRes:any = await checkEpiLogicalSurvey()

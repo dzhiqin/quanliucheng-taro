@@ -7,7 +7,7 @@ import {
   idCardValidator, getBirthdayByIdCard, getGenderByIdCard, validateMessages, phoneValidator, birthdayValidator,
   idenTypeOptions, privacyID, privacyPhone
 } from '@/utils'
-import { TaroSubscribeService } from '@/service/api/taro-api'
+import { AlipaySubscribeService, TaroSubscribeService } from '@/service/api/taro-api'
 import SubscribeNotice from '@/components/subscribe-notice/subscribe-notice'
 import { createCard, fetchUserInfoByHealthCode, TaroGetLocation } from '@/service/api'
 import { CardsHealper } from '@/utils/cards-healper'
@@ -98,12 +98,25 @@ export default class BindCard extends React.Component {
     this.setState({busy: true})
     const {result,msg}= this.formValidator()
     if(result){
-      const subRes = await TaroSubscribeService(custom.onetimeSubscribe.bindCardNotice)
-      if(subRes.result){
-        this.handleCreateCard()
-      }else{
-        this.setState({showNotice: true})
+      let subRes
+      if(process.env.TARO_ENV === 'weapp'){
+        subRes = await TaroSubscribeService(custom.subscribes.bindCardNotice)
+        if(subRes.result){
+          this.handleCreateCard()
+        }else{
+          this.setState({showNotice: true})
+        }
       }
+      if(process.env.TARO_ENV === 'alipay'){
+        subRes = await AlipaySubscribeService(custom.subscribes.bindCardNotice)
+        if(subRes.result){
+          this.handleCreateCard()
+        }else{
+          modalService({content: subRes.msg})
+        }
+      }
+
+      
     }else{
       this.setState({busy: false})
       Taro.showToast({
