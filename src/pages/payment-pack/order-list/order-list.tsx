@@ -3,7 +3,7 @@ import * as React from 'react'
 import { View } from '@tarojs/components'
 import HealthCards from '@/components/health-cards/health-cards'
 import { useEffect, useState } from 'react'
-import { createPaymentOrder, fetchPaymentOrderList , TaroSubscribeService , PayOrderParams, handlePayment, cancelPayment, fetchPaymentOrderStatus } from '@/service/api'
+import { createPaymentOrder, fetchPaymentOrderList , TaroSubscribeService , PayOrderParams, handlePayment, cancelPayment, fetchPaymentOrderStatus, TaroAliPayment } from '@/service/api'
 import { loadingService, modalService, toastService } from '@/service/toast-service'
 import { PAY_TYPE_CN, ORDER_SEARCH_TYPE_EN , ORDER_STATUS_CN, ORDER_STATUS_EN, PAYMENT_FROM } from '@/enums/index'
 import BkPanel from '@/components/bk-panel/bk-panel'
@@ -16,6 +16,7 @@ import { Card } from 'src/interfaces/card'
 import { custom } from '@/custom/index'
 import { requestTry } from '@/utils/retry'
 import './order-list.less'
+import { getQueryValue } from '@/utils/index'
 
 const tabs = [{title: '15日内订单',value: 'current'},{title: '历史订单',value: 'history'}]
 export default function OrderList(){
@@ -63,44 +64,78 @@ export default function OrderList(){
     handlePayment({orderId: id, payType: payType}).then(res => {
       if(res.data.jumpUrl && res.data.appid){
         loadingService(false)
-        Taro.navigateToMiniProgram({
-          appId: res.data.appid,
-          path: res.data.jumpUrl
-        })
+        if(process.env.TARO_ENV === 'weapp'){
+          Taro.navigateToMiniProgram({
+            appId: res.data.appid,
+            path: res.data.jumpUrl
+          })
+        }else{
+          modalService({content: '请手动跳转到外部小程序'})
+        }
+        
         return
       }else if(res.resultCode === 0 && !res.data){
         toastService({title: '提交订单成功，还未支付', onClose: () => {getList(searchType);loadingService(false); setBusy(false)}})
       }else{
         const {nonceStr, paySign, signType, timeStamp, pay_appid, pay_url} = res.data
         if(payType === PAY_TYPE_CN.医保){
-          Taro.showLoading({title: '正在打开医保小程序'})
-          Taro.navigateToMiniProgram({
-            appId: pay_appid,
-            path: pay_url,
-            success: () => Taro.hideLoading()
-          })
+          if(process.env.TARO_ENV === 'weapp'){
+            Taro.showLoading({title: '正在打开医保小程序'})
+            Taro.navigateToMiniProgram({
+              appId: pay_appid,
+              path: pay_url,
+              success: () => Taro.hideLoading()
+            })
+          }else{
+            modalService({content: '请手动跳转到医保小程序'})
+          }
           loadingService(false)
         }else{
-          Taro.requestPayment({
-            nonceStr,
-            paySign,
-            timeStamp,
-            package: res.data.package,
-            signType: signType,
-            fail: (err) => {
-              // 取消缴费
-              toastService({title: '您已取消缴费', onClose: ()=> {getList(searchType); loadingService(false);setBusy(false)}})
-              cancelPayment({orderId:id})
-            },
-            success: (result) => {
-              requestTry(checkOrderStatus.bind(null,id)).then(checkRes => {
-                toastService({title: '缴费成功', onClose: () => {getList(searchType);loadingService(false); setBusy(false)}})
-              }).catch(()=>{
-                toastService({title: '缴费失败，所缴金额将原路退回', onClose: () => {getList(searchType);loadingService(false); setBusy(false)}})
-              })
-            }
-          })
+          if(process.env.TARO_ENV === 'weapp'){
+            handleWeappPay({nonceStr,paySign,timeStamp,package: res.data.package,signType,orderId:id})
+          }
+          if(process.env.TARO_ENV === 'alipay'){
+            const tradeNo = getQueryValue(res.data.package, 'trade_no')
+            handleAliPay({tradeNo, orderId: id})
+          }
+          
         }
+      }
+    })
+  }
+  const handleAliPay = (options: {tradeNo: string, orderId: string}) => {
+    TaroAliPayment({tradeNo: options.tradeNo}).then(payRes => {
+      const data = JSON.parse(payRes.data)
+      if(data.resultCode === '9000'){
+        requestTry(checkOrderStatus.bind(null,options.orderId)).then(() => {
+          toastService({title: '缴费成功',onClose: () => {getList(searchType);loadingService(false);setBusy(false)}})
+        }).catch(() => {
+          toastService({title: '缴费失败，所缴金额将原路退回', onClose: () => {getList(searchType);loadingService(false); setBusy(false)}})
+        })
+      }else{
+        modalService({title: '支付失败',content: '错误码：'+data.resultCode+data.memo})
+        loadingService(false);setBusy(false)
+      }
+    }) 
+  }
+  const handleWeappPay = (options: {nonceStr: string, paySign: string, timeStamp: string, package: string, signType:'HMAC-SHA256' | 'MD5',orderId: string }) => {
+    Taro.requestPayment({
+      nonceStr: options.nonceStr,
+      paySign: options.paySign,
+      timeStamp: options.timeStamp,
+      package: options.package,
+      signType: options.signType,
+      fail: (err) => {
+        // 取消缴费
+        toastService({title: '您已取消缴费', onClose: ()=> {getList(searchType); loadingService(false);setBusy(false)}})
+        cancelPayment({orderId:options.orderId})
+      },
+      success: (result) => {
+        requestTry(checkOrderStatus.bind(null,options.orderId)).then(checkRes => {
+          toastService({title: '缴费成功', onClose: () => {getList(searchType);loadingService(false); setBusy(false)}})
+        }).catch(()=>{
+          toastService({title: '缴费失败，所缴金额将原路退回', onClose: () => {getList(searchType);loadingService(false); setBusy(false)}})
+        })
       }
     })
   }
@@ -206,8 +241,12 @@ export default function OrderList(){
                 </View>
                 <View className='flex-around'>
                   {
-                    item.orderState === ORDER_STATUS_EN.unpay &&
+                    item.orderState === ORDER_STATUS_EN.unpay && process.env.TARO_ENV === 'weapp' &&
                     <BkButton theme='info' icon='icons/wechat.png' title='微信支付' disabled={busy} onClick={dealWithPay.bind(null,PAY_TYPE_CN.微信,item)} />
+                  }
+                                    {
+                    item.orderState === ORDER_STATUS_EN.unpay && process.env.TARO_ENV === 'alipay' &&
+                    <BkButton theme='primary' icon='icons/alipay.png' title='支付宝支付' disabled={busy} onClick={dealWithPay.bind(null,PAY_TYPE_CN.支付宝,item)} />
                   }
                   {
                     item.orderState === ORDER_STATUS_EN.unpay && item.orderType === PAY_TYPE_CN.医保 &&

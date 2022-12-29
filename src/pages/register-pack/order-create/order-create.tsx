@@ -14,6 +14,7 @@ import {
   fetchRegOrderStatus, 
   getEpidemiologicalSurveyState, 
   TaroSubscribeService, 
+  TaroAliPayment,
   TaroRequestPayment } from '@/service/api'
 import { CardsHealper } from '@/utils/cards-healper'
 import { loadingService, modalService, toastService } from '@/service/toast-service'
@@ -23,6 +24,7 @@ import SubscribeNotice from '@/components/subscribe-notice/subscribe-notice'
 import './order-create.less'
 import {custom} from '@/custom/index'
 import RegisterNotice from './notice'
+import { getQueryValue } from '@/utils/tools'
 
 export default function OrderCreate() {
   const [order,setOrder] = useState({
@@ -105,6 +107,33 @@ export default function OrderCreate() {
       }).catch(err => {
         reject(err)
       })
+    })
+  }
+  const handleAliPayment = (params: {tradeNo: string,orderId: string}) => {
+    TaroAliPayment({tradeNo: params.tradeNo}).then(payRes => {
+      console.log(payRes);
+      const data = JSON.parse(payRes.data)
+      if(data.resultCode === '9000'){
+        requestTry(checkOrderStatus.bind(null,params.orderId)).then(() => {
+          setResult(resultEnum.success)
+          loadingService(false)
+        }).catch(()=>{
+          setResult(resultEnum.fail)
+          loadingService(false)
+        })
+      }else{
+        modalService({title: '支付失败',content: '错误码：'+data.resultCode +data.memo})
+        loadingService(false)
+        cancelRegOrder({orderId: params.orderId})
+        setBusy(false)
+        setResult(resultEnum.fail)
+      }
+    }).catch(err => {
+      modalService({title: '调用支付失败',content: JSON.stringify(err)})
+      loadingService(false)
+      cancelRegOrder({orderId: params.orderId})
+      setResult(resultEnum.fail)
+      setBusy(false)
     })
   }
   const handleTaroPayment = (params:{nonceStr: string, paySign: string,timeStamp: string,package: string, signType: 'HMAC-SHA256' | 'MD5'},orderId: string) => {
@@ -194,14 +223,21 @@ export default function OrderCreate() {
       if(res.resultCode === 0){
         const {nonceStr, orderId, paySign, signType, payString, timeStamp} = res.data
         if(payString){
-          const payParams = {
-            nonceStr,
-            paySign,
-            timeStamp,
-            package: payString,
-            signType  
+          if(process.env.TARO_ENV === 'weapp'){
+            const payParams = {
+              nonceStr,
+              paySign,
+              timeStamp,
+              package: payString,
+              signType  
+            }
+            handleTaroPayment(payParams,orderId)
           }
-          handleTaroPayment(payParams,orderId)
+          if(process.env.TARO_ENV === 'alipay'){
+            const tradeNo = getQueryValue(payString,'trade_no')
+            handleAliPayment({tradeNo,orderId})
+          }
+          
         }else{
           loadingService(true, '查询状态中')
           requestTry(checkOrderStatus.bind(null,orderId)).then(() => {

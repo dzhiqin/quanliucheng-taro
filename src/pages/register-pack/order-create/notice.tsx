@@ -4,6 +4,7 @@ import * as React from 'react'
 import { AtIcon } from 'taro-ui'
 
 export default function RegisterNotice () {
+  const payButtonText = process.env.TARO_ENV === 'weapp' ? '微信支付' : '支付宝支付'
   if(custom.hospName === 'gy3ylw'){
     return(
       <View>
@@ -31,7 +32,7 @@ export default function RegisterNotice () {
         <View className='order-create-notice'>
           <View className='flex-center'>
             <AtIcon value='alert-circle' size='15' color='#999'></AtIcon>
-            <text>缴费提供微信支付</text>
+            <text>缴费提供{payButtonText}</text>
           </View>
           <View className='flex-center'>
             <AtIcon value='alert-circle' size='15' color='#999'></AtIcon>
@@ -42,7 +43,7 @@ export default function RegisterNotice () {
             custom.hospName !== 'gy3yhp' &&
             <View className='flex-center'>
               <AtIcon value='alert-circle' size='15' color='#FF7C25'></AtIcon>
-              <text className='price-color'>目前微信支付仅自费缴费{custom.feat.YiBaoCard ? '和广州医保' : ''}，如省直、市直、公费记账请移步到窗口人工缴纳</text>
+              <text className='price-color'>目前{payButtonText}仅自费缴费{custom.feat.YiBaoCard ? '和广州医保' : ''}，如省直、市直、公费记账请移步到窗口人工缴纳</text>
             </View>
           }
           <View className='flex-center'>

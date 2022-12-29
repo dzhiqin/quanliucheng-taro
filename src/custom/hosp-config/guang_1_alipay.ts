@@ -46,6 +46,12 @@ const config = {
               icon: imgUrl.new_home_icon10,
               event: "subscribe",
               tempId: 'd765d8cd77694bc39694787780be185e'
+            },
+            {
+              name: "绑卡成功提醒",
+              icon: imgUrl.new_home_icon10,
+              event: "subscribe",
+              tempId: 'da0d433aca304bf1b51cb5a7db18a744'
             }
           ]
         }

@@ -90,14 +90,10 @@ export default function DefaultReport(props:{
   return(
     <View className='reports-detail' style='padding: 40rpx;'>
       {
-        setting.showImageDetail && 
+        checkItems[0].url && 
         <View className='reports-detail-content'>
           <Image src={checkItems[0]? checkItems[0].url : ''} />
           <View className='reports-detail-footer'>
-            {/* {
-              checkItems[0] && checkItems[0].url &&
-              <BkButton title='查看图片' onClick={onClick.bind(null,checkItems[0]? checkItems[0].url : '')} />
-            } */}
             {
               urls.length > 0 && 
               <BkButton title='查看图片' onClick={showImages.bind(null,urls)} />
@@ -106,7 +102,7 @@ export default function DefaultReport(props:{
         </View>
       }
       {
-        !setting.showImageDetail && checkItems.map((item,index) => 
+        !checkItems[0].url && checkItems.map((item,index) => 
           <BkPanel key={index}>
             <CardItem title='编号' text={item.No} />
             <CardItem title='名称' text={item.examItemName} />
@@ -115,6 +111,29 @@ export default function DefaultReport(props:{
           </BkPanel>
         )
       }
+      {/* {
+        setting.showImageDetail && 
+        <View className='reports-detail-content'>
+          <Image src={checkItems[0]? checkItems[0].url : ''} />
+          <View className='reports-detail-footer'>
+           
+            {
+              urls.length > 0 && 
+              <BkButton title='查看图片' onClick={showImages.bind(null,urls)} />
+            }
+          </View>
+        </View>
+      } */}
+      {/* {
+        !setting.showImageDetail && checkItems.map((item,index) => 
+          <BkPanel key={index}>
+            <CardItem title='编号' text={item.No} />
+            <CardItem title='名称' text={item.examItemName} />
+            <CardItem title='结果' text={item.content} />
+            <CardItem title='描述' text={item.prompt} />
+          </BkPanel>
+        )
+      } */}
       {
         // 特殊处理 广三黄埔院区返回的是base64格式的报告，后端处理成url资源
         custom.hospName === 'gy3yhp' &&

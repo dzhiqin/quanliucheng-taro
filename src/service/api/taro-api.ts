@@ -65,6 +65,20 @@ export const getSetting = () => {
     }
   })
 }
+export const TaroAliPayment = (data:{tradeNo: string}) => {
+  return new Promise((resolve) => {
+    my.tradePay({
+      tradeNO: data.tradeNo,
+      success: res => {
+        resolve({success: true,data: JSON.stringify(res)})
+      },
+      fail: err => {
+        resolve({success: false,data: JSON.stringify(err)})
+      }
+    })
+  })
+  
+}
 interface paymentParams {
   nonceStr: string,
   package: string,

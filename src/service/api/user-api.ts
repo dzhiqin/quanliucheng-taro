@@ -47,3 +47,6 @@ export const login = (data:{code: string}) => {
 export const updateUserInfo = (data:any={}) => {
   return Post(fullUrl('api/applet/patient/Authorized/GetUserInfo'),data)
 }
+// export const getUserInfo = (data: {nickName?: string,gender?: string, }) => {
+
+// }

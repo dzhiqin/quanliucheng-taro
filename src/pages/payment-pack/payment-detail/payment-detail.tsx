@@ -19,7 +19,8 @@ import {
   createPaymentOrderByQRCode,
   TaroNavToMiniProgram,
   fetchMedicineGuideList,
-  handleLogin
+  handleLogin,
+  TaroAliPayment
 } from '@/service/api'
 import { CardsHealper } from '@/utils/cards-healper'
 import './payment-detail.less'
@@ -69,6 +70,7 @@ interface OrderInfoParams {
 // 注意进入页面场景有3：
 // 1-从缴费列表进入；2-从订单列表进入；3-扫码进入
 export default function PaymentDetail() {
+  const payButtonText = process.env.TARO_ENV === 'weapp' ? '微信支付' : '支付宝支付'
   const featConfig = custom.feat
   const router = useRouter()
   const params = router.params
@@ -181,6 +183,10 @@ export default function PaymentDetail() {
       }else{
         const {nonceStr, paySign, signType, timeStamp, pay_appid, pay_url} = res.data
         if(payType === PAY_TYPE_CN.医保 && pay_url){
+          if(process.env.TARO_ENV === 'alipay') {
+            modalService({content: '跳转支付宝医保小程序联调中'})
+            return
+          }
           loadingService(true,'正在跳转')
           Taro.navigateToMiniProgram({
             appId: pay_appid,
@@ -188,38 +194,13 @@ export default function PaymentDetail() {
             success: () => Taro.hideLoading()
           })
         }else{
-
-          Taro.requestPayment({
-            nonceStr,
-            paySign,
-            timeStamp,
-            package: res.data.package,
-            signType: signType,
-            fail: (err) => {
-              // console.log('request payment fail',err);
-              setPayResult(resultEnum.fail)
-              setPayResultMsg('您已取消缴费')
-              // 取消缴费
-              cancelPayment({orderId:id})
-              setBusy(false)
-              loadingService(false)
-            },
-            success: (result) => {
-              loadingService(false)
-              loadingService(true,'正在查询')
-              requestTry(checkOrderStatus.bind(null,id))
-              .then(checkRes => {
-                setPayResult(resultEnum.success)
-                setPayResultMsg('缴费成功')
-              })
-              .catch(()=>{
-                setPayResult(resultEnum.fail)
-                setPayResultMsg('缴费失败，所缴金额将原路退回')
-                setBusy(false)
-                loadingService(false)
-              })
-            }
-          })
+          if(process.env.TARO_ENV === 'weapp'){
+            handleWeappPay({nonceStr,paySign,timeStamp,package: res.data.package,signType,id})
+          }
+          if(process.env.TARO_ENV === 'alipay'){
+            const tradeNo = getQueryValue(res.data.package, 'trade_no')
+            handleAliPay({tradeNo, orderId: id})
+          }
         }
         
       }
@@ -229,7 +210,71 @@ export default function PaymentDetail() {
       modalService({title: '支付失败', content: JSON.stringify(err)})
     })
   }
-  
+  const handleWeappPay = (options: {nonceStr: string,paySign:string, timeStamp: string, package: string,signType:'HMAC-SHA256' | 'MD5', id: string }) => {
+    Taro.requestPayment({
+      nonceStr: options.nonceStr,
+      paySign: options.paySign,
+      timeStamp: options.timeStamp,
+      package: options.package,
+      signType: options.signType,
+      fail: (err) => {
+        // console.log('request payment fail',err);
+        setPayResult(resultEnum.fail)
+        setPayResultMsg('您已取消缴费')
+        // 取消缴费
+        cancelPayment({orderId:options.id})
+        setBusy(false)
+        loadingService(false)
+      },
+      success: (result) => {
+        loadingService(false)
+        loadingService(true,'正在查询')
+        requestTry(checkOrderStatus.bind(null,options.id))
+        .then(checkRes => {
+          setPayResult(resultEnum.success)
+          setPayResultMsg('缴费成功')
+        })
+        .catch(()=>{
+          setPayResult(resultEnum.fail)
+          setPayResultMsg('缴费失败，所缴金额将原路退回')
+          setBusy(false)
+          loadingService(false)
+        })
+      }
+    })
+  }
+  const handleAliPay = (options: {tradeNo: string, orderId: string}) => {
+    TaroAliPayment({tradeNo: options.tradeNo}).then(payRes => {
+      console.log(payRes);
+      const data = JSON.parse(payRes.data)
+      if(data.resultCode === '9000'){
+        // loadingService(false)
+        loadingService(true,'正在查询')
+        requestTry(checkOrderStatus.bind(null,options.orderId)).then(() => {
+          setPayResult(resultEnum.success)
+          setPayResultMsg('缴费成功')
+          loadingService(false)
+        }).catch(() => {
+          setPayResult(resultEnum.fail)
+          setPayResultMsg('缴费失败，所缴金额将原路退回')
+          setBusy(false)
+          loadingService(false)
+        })
+      }else{
+        modalService({title: '支付失败',content: '错误码：'+data.resultCode +data.memo})
+        loadingService(false)
+        setPayResult(resultEnum.fail)
+        cancelPayment({orderId:options.orderId})
+        setBusy(false)
+      }
+    }).catch(err => {
+      modalService({title: '调用支付失败',content: JSON.stringify(err)})
+      loadingService(false)
+      cancelPayment({orderId:options.orderId})
+      setPayResult(resultEnum.fail)
+      setBusy(false)
+    })
+  }
   const buildPaymentParamsQRCode = (type: PAY_TYPE_CN) => {
     const paymentParams = {
       ...orderInfo,
@@ -584,8 +629,12 @@ export default function PaymentDetail() {
           Object.keys(orderInfo).length > 0 && 
           <View className='flex-around' style='padding: 40rpx'>
             {
-              orderInfo.payState === PAY_STATUS_EN.unpay &&
+              orderInfo.payState === PAY_STATUS_EN.unpay && process.env.TARO_ENV === 'weapp' &&
               <BkButton title='微信支付' icon='icons/wechat.png' theme='info' disabled={busy} onClick={dealWithPay.bind(null,PAY_TYPE_CN.微信)} />
+            }
+            {
+              orderInfo.payState === PAY_STATUS_EN.unpay && process.env.TARO_ENV === 'alipay' &&
+              <BkButton title='支付宝支付' icon='icons/alipay.png' theme='primary' disabled={busy} onClick={dealWithPay.bind(null,PAY_TYPE_CN.支付宝)} />
             }
             {
               orderInfo.payState === PAY_STATUS_EN.unpay && orderInfo.orderType === ORDER_TYPE_CN.医保单 && custom.feat.YiBaoCard &&
@@ -597,8 +646,12 @@ export default function PaymentDetail() {
           orderInfoFromList && orderInfoFromList.orderState === ORDER_STATUS_EN.unpay &&
           <View className='flex-around' style='padding: 40rpx'>
             {
-              orderInfoFromList.payState === PAY_STATUS_EN.unpay &&
+              orderInfoFromList.payState === PAY_STATUS_EN.unpay && process.env.TARO_ENV === 'weapp' &&
               <BkButton title='微信支付' icon='icons/wechat.png' theme='info' disabled={busy} onClick={dealWithPay.bind(null,PAY_TYPE_CN.微信)} />
+            }
+            {
+              orderInfoFromList.payState === PAY_STATUS_EN.unpay && process.env.TARO_ENV === 'alipay' &&
+              <BkButton title='支付宝支付' icon='icons/alipay.png' theme='primary' disabled={busy} onClick={dealWithPay.bind(null,PAY_TYPE_CN.支付宝)} />
             }
             {
               orderInfoFromList.payState === PAY_STATUS_EN.unpay && orderInfoFromList.orderType === ORDER_TYPE_CN.医保单 && custom.feat.YiBaoCard &&
@@ -609,7 +662,7 @@ export default function PaymentDetail() {
         <View className='payment-detail-tips'>
           <View className='payment-detail-tips-item'>
             <Image src={sighPng} />
-            <text>1、缴费提供微信支付 </text>
+            <text>1、缴费提供{payButtonText} </text>
           </View>
           <View className='payment-detail-tips-item'>
             <Image src={sighPng} />
@@ -617,7 +670,7 @@ export default function PaymentDetail() {
           </View>
           <View className='payment-detail-tips-item'>
             <Image src={sighPng} />
-            <text>3、目前微信支付只提供自费缴费，如需医保、公费记 账请移步到各楼层人工缴费窗口缴纳</text>
+            <text>3、目前{payButtonText}只提供自费缴费，如需医保、公费记 账请移步到各楼层人工缴费窗口缴纳</text>
           </View>
           <View className='payment-detail-tips-item'>
             <Image src={sighPng} />

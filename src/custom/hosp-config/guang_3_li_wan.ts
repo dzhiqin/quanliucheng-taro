@@ -57,7 +57,7 @@ const config = {
   },
   feat: {
     bindCard: {
-      updateNotice: true
+      updateNotice: true,
     },
     register: {
       popupNotice: false,

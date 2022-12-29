@@ -5,7 +5,7 @@ import { AtInput, AtForm, AtButton,AtIcon, AtList, AtListItem } from 'taro-ui'
 import {custom} from '@/custom/index'
 import { 
   idCardValidator, getBirthdayByIdCard, getGenderByIdCard, validateMessages, phoneValidator, birthdayValidator,
-  idenTypeOptions 
+  idenTypeOptions, privacyID, privacyPhone
 } from '@/utils'
 import { TaroSubscribeService } from '@/service/api/taro-api'
 import SubscribeNotice from '@/components/subscribe-notice/subscribe-notice'
@@ -19,6 +19,7 @@ export default class BindCard extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
+      alipay: Taro.getCurrentInstance().router.params.alipay || '',
       busy: false,
       showNotice: false,
       currentIdenTypeIndex: 0,
@@ -317,10 +318,10 @@ export default class BindCard extends React.Component {
         <AtForm
           onSubmit={this.onSubmit.bind(this)}
         >
-          <BkInput name='patientName' title='姓名' type='text' placeholder='请输入姓名' value={this.state.card.patientName} maxLength={15}
+          <BkInput name='patientName' title='姓名' type='text' placeholder='请输入姓名' value={this.state.card.patientName} maxLength={15} disabled={this.state.alipay ? true : false}
             onChange={this.handleCardChange.bind(this,'patientName')}
           ></BkInput>
-          <Picker mode='selector' range={this.state.idenTypeNames} onChange={this.onIdenTypeChange.bind(this)} value={this.state.currentIdenTypeIndex}>
+          <Picker mode='selector' range={this.state.idenTypeNames} onChange={this.onIdenTypeChange.bind(this)} value={this.state.currentIdenTypeIndex} disabled={this.state.alipay ? true : false}>
             <AtList>
               <AtListItem
                 title='证件类型'
@@ -337,7 +338,8 @@ export default class BindCard extends React.Component {
               title='证件号码' 
               type='text' 
               placeholder='请输入证件号码' 
-              value={this.state.card.idenNo} 
+              value={this.state.alipay ? privacyID(this.state.card.idenNo) : this.state.card.idenNo} 
+              disabled={this.state.alipay ? true : false}
               onChange={this.handleCardChange.bind(this,'idenNo')} 
             >
             </AtInput> 
@@ -345,7 +347,7 @@ export default class BindCard extends React.Component {
         
           {
             this.state.currentIdenTypeValue !== '门诊卡' &&
-            <Picker mode='selector' range={this.state.genders} onChange={this.onGenderChange.bind(this)} value={this.state.currentGenderIndex}>
+            <Picker mode='selector' range={this.state.genders} onChange={this.onGenderChange.bind(this)} value={this.state.currentGenderIndex} disabled={this.state.alipay ? true : false} >
               <AtList>
                 <AtListItem
                   title='性别'
@@ -358,7 +360,7 @@ export default class BindCard extends React.Component {
           
           {
             this.state.currentIdenTypeValue !== '门诊卡' &&
-            <Picker mode='date' onChange={this.onDateChange.bind(this)} value={this.state.selectedDate}>
+            <Picker mode='date' onChange={this.onDateChange.bind(this)} value={this.state.selectedDate} disabled={this.state.alipay ? true : false}>
               <AtList>
                 <AtListItem
                   title='出生日期'
@@ -383,7 +385,8 @@ export default class BindCard extends React.Component {
             type='number' 
             placeholder='请输入电话号码' 
             maxLength={11}
-            value={this.state.card.phone} 
+            value={this.state.alipay ? privacyPhone(this.state.card.phone) : this.state.card.phone} 
+            disabled={this.state.alipay ? true : false}
             onChange={this.handleCardChange.bind(this,'phone')} 
           />
           <BkInput 

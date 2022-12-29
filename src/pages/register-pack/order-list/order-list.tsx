@@ -13,7 +13,6 @@ import { checkOverTime } from '@/utils/tools'
 import BaseModal from '@/components/base-modal/base-modal'
 import { custom } from '@/custom/index'
 import {REGISTER_ORDER_STATUS} from '@/enums/index'
-import { CardsHealper } from '@/utils/cards-healper'
 
 const tabs = [{title: '15日内订单',value: 'current'},{title: '历史订单',value: 'history'}]
 const registerConfig = custom.feat.register

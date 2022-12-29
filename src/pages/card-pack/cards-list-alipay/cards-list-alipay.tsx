@@ -25,25 +25,25 @@ export default function CardsListAlipay (props: {
   })
   const navToCreateCard = () => {
     my.getAuthCode({
-      scopes: 'auth_user',
+      scopes: ['auth_user','hospital_order'],
       success: res => {
         console.log(res);
-        const code = res.authCode
-        modalService({
-          content: code,
-          confirmText: '复制',
-          showCancel: true,
-          success: data => {
-            if(data.confirm){
-              my.setClipboard({
-                text: code,
-                success: () => {
-                  Taro.showToast({title: 'copy success'})
-                }
-              })
-            }
-          }
-        })
+        // const code = res.authCode
+        // modalService({
+        //   content: code,
+        //   confirmText: '复制',
+        //   showCancel: true,
+        //   success: data => {
+        //     if(data.confirm){
+        //       my.setClipboard({
+        //         text: code,
+        //         success: () => {
+        //           Taro.showToast({title: 'copy success'})
+        //         }
+        //       })
+        //     }
+        //   }
+        // })
       },
       fail: err => {
         console.log(err);
