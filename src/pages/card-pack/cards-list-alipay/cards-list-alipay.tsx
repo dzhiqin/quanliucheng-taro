@@ -11,6 +11,7 @@ import BkButton from '@/components/bk-button/bk-button'
 import Card from './card'
 import { loadingService, modalService } from '@/service/toast-service'
 import { CardsHealper } from '@/utils/cards-healper'
+import { authCode, getUserInfo, login } from '@/service/api'
 
 export default function CardsListAlipay (props: {
   children?: any,
@@ -24,32 +25,28 @@ export default function CardsListAlipay (props: {
     }
   })
   const navToCreateCard = () => {
+    loadingService(true)
     my.getAuthCode({
       scopes: ['auth_user','hospital_order'],
       success: res => {
-        console.log(res);
-        // const code = res.authCode
-        // modalService({
-        //   content: code,
-        //   confirmText: '复制',
-        //   showCancel: true,
-        //   success: data => {
-        //     if(data.confirm){
-        //       my.setClipboard({
-        //         text: code,
-        //         success: () => {
-        //           Taro.showToast({title: 'copy success'})
-        //         }
-        //       })
-        //     }
-        //   }
-        // })
+        const code = res.authCode
+        authCode({code}).then(() => {
+          getUserInfo().then((info:any) => {
+            const {realName,mobile,idCard} = info.data
+            const authInfo = {realName,mobile,idCard}
+            loadingService(false)
+            Taro.navigateTo({url: `/pages/card-pack/create-card/create-card?authInfo=${JSON.stringify(authInfo)}`})
+          })
+        }).catch(err => {
+          modalService({content: JSON.stringify(err)})
+          loadingService(false)
+        })
       },
       fail: err => {
-        console.log(err);
+        loadingService(false)
+        modalService({title: '授权失败',content: JSON.stringify(err)})
       }
     })
-    Taro.navigateTo({url: '/pages/card-pack/create-card/create-card'})
   }
   const handleRefresh = () => {
     loadingService(true)

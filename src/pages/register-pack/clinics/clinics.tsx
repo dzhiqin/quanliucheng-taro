@@ -67,6 +67,10 @@ export default function Clinics() {
     
   }
   const onTabChange = (item,index) => {
+    if(!hospitalInfo){
+      const branches = Taro.getStorageSync('branches')
+      Taro.setStorageSync('hospitalInfo',branches[0])
+    }
     if(custom.hospName === 'gy3ylw' && item.deptName === '生殖助孕'){
       // 特殊处理广三老院区荔湾的生殖助孕门诊
       Taro.navigateTo({url: '/pages/card-pack/cards-list/cards-list?action=jumpOut'})
@@ -106,7 +110,7 @@ export default function Clinics() {
     <View className='clinics'>
       <View className='header' id='header'>
         <Image src={locationPng} className='header-icon' />
-        <View className='header-title'>{hospitalInfo.hospitalName}</View>
+        <View className='header-title'>{hospitalInfo?.hospitalName}</View>
         {
           Taro.getStorageSync('branches')?.length > 1 &&
           <View style='margin-left: 40rpx;' className='tag tag-primary' onClick={() => Taro.redirectTo({url: '/pages/register-pack/branch-hospitals/branch-hospitals'})}>切换院区</View>

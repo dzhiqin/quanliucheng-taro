@@ -19,7 +19,7 @@ export default class BindCard extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      alipay: Taro.getCurrentInstance().router.params.alipay || '',
+      alipay: process.env.TARO_ENV === 'alipay',
       busy: false,
       showNotice: false,
       currentIdenTypeIndex: 0,
@@ -90,6 +90,26 @@ export default class BindCard extends React.Component {
         card: {
           ...this.state.card,
           idenType: idenTypeOptions[0].id
+        }
+      })
+    }
+    const authInfoStr = Taro.getCurrentInstance().router.params.authInfo
+    if(authInfoStr){
+      const authInfo = JSON.parse(authInfoStr)
+      const {realName, mobile, idCard} = authInfo
+      const birthday = getBirthdayByIdCard(idCard)
+      const gender = getGenderByIdCard(idCard)
+      // console.log('get auth info',authInfo);
+      this.setState({
+        currentGenderValue: gender,
+        selectedDate: birthday,
+        card:{
+          ...this.state.card,
+          patientName: realName,
+          phone: mobile,
+          birthday,
+          gender,
+          idenNo: idCard
         }
       })
     }
