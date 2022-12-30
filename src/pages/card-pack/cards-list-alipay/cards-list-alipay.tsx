@@ -11,7 +11,7 @@ import BkButton from '@/components/bk-button/bk-button'
 import Card from './card'
 import { loadingService, modalService } from '@/service/toast-service'
 import { CardsHealper } from '@/utils/cards-healper'
-import { authCode, getUserInfo, login } from '@/service/api'
+import { authCode, getUserInfo } from '@/service/api'
 
 export default function CardsListAlipay (props: {
   children?: any,

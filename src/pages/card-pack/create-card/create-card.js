@@ -5,7 +5,7 @@ import { AtInput, AtForm, AtButton,AtIcon, AtList, AtListItem } from 'taro-ui'
 import {custom} from '@/custom/index'
 import { 
   idCardValidator, getBirthdayByIdCard, getGenderByIdCard, validateMessages, phoneValidator, birthdayValidator,
-  idenTypeOptions, privacyID, privacyPhone
+  idenTypeOptions, getPrivacyID, getPrivacyPhone, getPrivacyName
 } from '@/utils'
 import { AlipaySubscribeService, TaroSubscribeService } from '@/service/api/taro-api'
 import SubscribeNotice from '@/components/subscribe-notice/subscribe-notice'
@@ -19,7 +19,6 @@ export default class BindCard extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      alipay: process.env.TARO_ENV === 'alipay',
       busy: false,
       showNotice: false,
       currentIdenTypeIndex: 0,
@@ -30,9 +29,12 @@ export default class BindCard extends React.Component {
       currentGenderValue: '请选择性别',
       selectedDate: '请选择出生日期',
       bindCardConfig: '',
+      realName: '',
+      realPhone: '',
+      realId: '',
       card: {
         patientName: '',
-        idenType: '',
+        idenType: 0,
         idenNo: '',
         gender: '',
         birthday: '',
@@ -103,13 +105,16 @@ export default class BindCard extends React.Component {
       this.setState({
         currentGenderValue: gender,
         selectedDate: birthday,
+        realName,
+        realId: idCard,
+        realPhone: mobile,
         card:{
           ...this.state.card,
-          patientName: realName,
-          phone: mobile,
+          patientName: getPrivacyName(realName),
+          phone: getPrivacyPhone(mobile),
           birthday,
           gender,
-          idenNo: idCard
+          idenNo: getPrivacyID(idCard)
         }
       })
     }
@@ -161,6 +166,18 @@ export default class BindCard extends React.Component {
           CardsHealper.updateAllCards().then(() => {
             toastService({title: msg,onClose:()=> {Taro.navigateBack();loadingService(false)}})
           })
+        }else if(/已办理/.test(res.message)){
+          const cardNo = res.message.replace(/[^0-9]/ig,"")
+          this.setState({
+            card:{
+              ...this.state.card,
+              cardNo,
+              isHaveCard: true
+            }
+          })
+          modalService({content: '已有诊疗卡，已为您更新诊疗卡信息，请重新提交'})
+          loadingService(false)
+          this.setState({busy: false})
         }else{
           loadingService(false)
           msg = res.message ? res.message : JSON.stringify(res)
@@ -176,7 +193,17 @@ export default class BindCard extends React.Component {
     })
   }
   buildCardParams() {
-    const card = this.state.card
+    let card
+    if(process.env.TARO_ENV === 'weapp'){
+      card = this.state.card
+    }else{
+      card = {
+        ...this.state.card,
+        patientName: this.state.realName,
+        idenNo: this.state.realId,
+        phone: this.state.realPhone
+      }
+    }
     let params = {
       ...card,
       isHaveCard: card.isHaveCard,
@@ -185,8 +212,20 @@ export default class BindCard extends React.Component {
     return params
   }
   formValidator() {
-    const keys = Object.keys(this.state.card)
-    const card = this.state.card
+    let keys,card
+    if(process.env.TARO_ENV === 'alipay'){
+      card = {
+        ...this.state.card,
+        patientName: this.state.realName,
+        idenNo: this.state.realId,
+        phone: this.state.realPhone
+      }
+      keys = Object.keys(card)
+    }else{
+      keys = Object.keys(this.state.card)
+      card = this.state.card
+    }
+    
     let result = true
     let msg = ''
     for(let i =0 ;i<keys.length;i++){
@@ -247,7 +286,48 @@ export default class BindCard extends React.Component {
     }
     
   }
-
+  handlePatientNameChange(value){
+    value = value.trim()
+    this.setState({
+      realName: value,
+      card: {
+        ...this.state.card,
+        ['patientName']: getPrivacyName(value)
+      }
+    })
+  }
+  handleIdChange(value){
+    const birthday = getBirthdayByIdCard(value)
+    const gender = getGenderByIdCard(value)
+    value = value.trim()
+    this.setState({
+      realId: value,
+      card: {
+        ...this.state.card,
+        birthday,
+        gender,
+        ['idenNo']: getPrivacyID(value)
+      }
+    })
+  }
+  handlePhoneChange(value){
+    this.setState({
+      realPhone: value,
+      card: {
+        ...this.state.card,
+        ['phone']: getPrivacyPhone(value)
+      }
+    })
+  }
+  handleOnFocus(stateName,realValue){
+    // console.log(`stateName:${stateName},realValue:${realValue}`);
+    this.setState({
+      card: {
+        ...this.state.card,
+        [stateName]: realValue
+      }
+    })
+  }
   onIdenTypeChange(e) {
     const index = e.detail.value
     const name =this.state.idenTypeNames[index]
@@ -351,10 +431,23 @@ export default class BindCard extends React.Component {
         <AtForm
           onSubmit={this.onSubmit.bind(this)}
         >
-          <BkInput name='patientName' title='姓名' type='text' placeholder='请输入姓名' value={this.state.card.patientName} maxLength={15} disabled={this.state.alipay ? true : false}
+          {/* <BkInput name='patientName' title='姓名' type='text' placeholder='请输入姓名' value={this.state.card.patientName} maxLength={15} 
             onChange={this.handleCardChange.bind(this,'patientName')}
-          ></BkInput>
-          <Picker mode='selector' range={this.state.idenTypeNames} onChange={this.onIdenTypeChange.bind(this)} value={this.state.currentIdenTypeIndex} disabled={this.state.alipay ? true : false}>
+          ></BkInput> */}
+          {
+            process.env.TARO_ENV === 'weapp' &&
+            <BkInput name='patientName' title='姓名' type='text' placeholder='请输入姓名' value={this.state.card.patientName} maxLength={15} 
+              onChange={this.handleCardChange.bind(this,'patientName')}
+            ></BkInput>
+          }
+          {
+            process.env.TARO_ENV === 'alipay' &&
+            <BkInput name='patientName' title='姓名' type='text' placeholder='请输入姓名' value={this.state.card.patientName} maxLength={15} 
+              onBlur={this.handlePatientNameChange.bind(this)}
+              onFocus={this.handleOnFocus.bind(this,'patientName',this.state.realName)}
+            ></BkInput>
+          }
+          <Picker mode='selector' range={this.state.idenTypeNames} onChange={this.onIdenTypeChange.bind(this)} value={this.state.currentIdenTypeIndex} >
             <AtList>
               <AtListItem
                 title='证件类型'
@@ -365,22 +458,34 @@ export default class BindCard extends React.Component {
           </Picker>
 
           {
-            this.state.currentIdenTypeValue !== '儿童(无证件)' &&
+            this.state.currentIdenTypeValue !== '儿童(无证件)' && process.env.TARO_ENV === 'weapp' &&
             <AtInput 
               name='idenNo' 
               title='证件号码' 
               type='text' 
               placeholder='请输入证件号码' 
-              value={this.state.alipay ? privacyID(this.state.card.idenNo) : this.state.card.idenNo} 
-              disabled={this.state.alipay ? true : false}
+              value={this.state.card.idenNo} 
               onChange={this.handleCardChange.bind(this,'idenNo')} 
+            >
+            </AtInput> 
+          }
+          {
+            this.state.currentIdenTypeValue !== '儿童(无证件)' && process.env.TARO_ENV === 'alipay' &&
+            <AtInput 
+              name='idenNo' 
+              title='证件号码' 
+              type='text' 
+              placeholder='请输入证件号码' 
+              value={this.state.card.idenNo} 
+              onBlur={this.handleIdChange.bind(this)} 
+              onFocus={this.handleOnFocus.bind(this,'idenNo',this.state.realId)}
             >
             </AtInput> 
           }
         
           {
-            this.state.currentIdenTypeValue !== '门诊卡' &&
-            <Picker mode='selector' range={this.state.genders} onChange={this.onGenderChange.bind(this)} value={this.state.currentGenderIndex} disabled={this.state.alipay ? true : false} >
+            this.state.currentIdenTypeValue !== '门诊卡' && process.env.TARO_ENV === 'weapp' &&
+            <Picker mode='selector' range={this.state.genders} onChange={this.onGenderChange.bind(this)} value={this.state.currentGenderIndex}  >
               <AtList>
                 <AtListItem
                   title='性别'
@@ -392,8 +497,8 @@ export default class BindCard extends React.Component {
           }
           
           {
-            this.state.currentIdenTypeValue !== '门诊卡' &&
-            <Picker mode='date' onChange={this.onDateChange.bind(this)} value={this.state.selectedDate} disabled={this.state.alipay ? true : false}>
+            this.state.currentIdenTypeValue !== '门诊卡' && process.env.TARO_ENV === 'weapp' &&
+            <Picker mode='date' onChange={this.onDateChange.bind(this)} value={this.state.selectedDate} >
               <AtList>
                 <AtListItem
                   title='出生日期'
@@ -404,24 +509,32 @@ export default class BindCard extends React.Component {
             </Picker> 
           }
 
-          {/* <AtInput 
-            name='phone' 
-            title='电话号码' 
-            type='number' 
-            placeholder='请输入电话号码' 
-            value={this.state.card.phone} 
-            onChange={this.handleCardChange.bind(this,'phone')} 
-          /> */}
-          <BkInput 
-            name='phone' 
-            title='电话号码' 
-            type='number' 
-            placeholder='请输入电话号码' 
-            maxLength={11}
-            value={this.state.alipay ? privacyPhone(this.state.card.phone) : this.state.card.phone} 
-            disabled={this.state.alipay ? true : false}
-            onChange={this.handleCardChange.bind(this,'phone')} 
-          />
+          {
+            process.env.TARO_ENV === 'weapp' &&
+            <BkInput 
+              name='phone' 
+              title='电话号码' 
+              type='number' 
+              placeholder='请输入电话号码' 
+              maxLength={11}
+              value={this.state.card.phone} 
+              onChange={this.handleCardChange.bind(this,'phone')} 
+            />
+          }
+          {
+            process.env.TARO_ENV === 'alipay' && 
+            <BkInput 
+              name='phone' 
+              title='电话号码' 
+              type='number' 
+              placeholder='请输入电话号码' 
+              maxLength={11}
+              value={this.state.card.phone} 
+              onBlur={this.handlePhoneChange.bind(this)} 
+              onFocus={this.handleOnFocus.bind(this,'phone',this.state.realPhone)}
+            />
+          }
+          
           <BkInput 
             name='address' 
             title='详细地址' 

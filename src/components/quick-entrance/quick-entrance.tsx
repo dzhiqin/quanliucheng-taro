@@ -5,6 +5,7 @@ import * as Taro from '@tarojs/taro'
 import BkTabs from '../bk-tabs/bk-tabs'
 import './quick-entrance.less'
 import { TaroNavToMiniProgram } from '@/service/api'
+import { modalService } from '@/service/toast-service'
 
 export default function QuickEntrance(props: {
   quickEntrance?:any
@@ -40,6 +41,18 @@ export default function QuickEntrance(props: {
         },
         fail: err => {
           console.log(err);
+          
+        }
+      })
+    }
+    if(item.event === 'auth'){
+      my.getAuthCode({
+        scopes: ['mfrstre'],
+        success: res => {
+          const {authCode} = res
+          modalService({content: authCode,confirmText: 'copy',success: () => {
+            my.setClipboard({text: authCode})
+          }})
           
         }
       })

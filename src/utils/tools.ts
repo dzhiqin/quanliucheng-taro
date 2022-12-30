@@ -117,11 +117,14 @@ export function mergeRecursive(obj1,obj2) {
   }
   return obj1;
 }
-export const privacyID = (ID) => {
-  return ID.replace(/(\d{4})\d*([0-9a-zA-Z]{4})/, "$1******$2" )
+export const getPrivacyID = (ID) => {
+  return ID.replace(/(\d{1})\d*([0-9a-zA-Z]{1})/, "$1**********$2" )
 }
-export const privacyPhone = (phone) => {
-  return phone.replace(/(\d{3})\d*([0-9a-zA-Z]{4})/, "$1****$2" )
+export const getPrivacyPhone = (phone) => {
+  return phone.replace(/(\d{3})\d*([0-9a-zA-Z]{2})/, "$1******$2" )
+}
+export const getPrivacyName = (name) => {
+  return new Array(name.length).join('*') + name.substr(-1);
 }
 export const compareVersion = (v1,v2) => {
   // v1和v2比较，v1>v2返回1,v1=v2返回0,v1<v2返回-1

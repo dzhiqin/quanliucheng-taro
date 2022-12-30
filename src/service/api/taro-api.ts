@@ -40,8 +40,8 @@ export const AlipaySubscribeService = (...tempIds) =>{
       entityIds: tempIds,
       success: res => {
         if(res.success){
-          if(res.result.subscribedEntityIds.length){
-            resolve({result: false, msg:'没有全部订阅',data: {subscribedEntityIds: res.result.subscribedEntityIds}})
+          if(res.result.unsubscribedEntityIds.length){
+            resolve({result: false, msg:'没有全部订阅',data: {subscribedEntityIds: res.result.unsubscribedEntityIds}})
           }else{
             resolve({result: true, msg: '订阅成功'})
           }

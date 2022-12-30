@@ -15,7 +15,7 @@ export default function ClinicIntro() {
   const router = Taro.useRouter()
   const params = router.params
   const [busy,setBusy] = useState(false)
-  const [current,setCurrent] = useState(0)
+  const [current,setCurrent] = useState(Number(router.params.tab) || 0)
   const [doctorList,setDoctorList] = useState([])
   const [clinicInfo,setClinicInfo] = useState({desc: '暂无描述'})
   useEffect(() => {

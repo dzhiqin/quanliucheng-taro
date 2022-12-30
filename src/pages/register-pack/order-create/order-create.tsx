@@ -194,7 +194,7 @@ export default function OrderCreate() {
       subRes = await AlipaySubscribeService(
         custom.subscribes.visitReminder,
         custom.subscribes.visitCancelReminder,
-        custom.subscribes.orderCancelReminder
+        custom.subscribes.paySuccessNotice
       )
       if(!subRes.result){
         setBusy(false)

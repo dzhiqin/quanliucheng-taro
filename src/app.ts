@@ -36,9 +36,9 @@ class App extends Component {
           Taro.setStorageSync('envVersion',res.envVersion)
           // 开发版develop；体验版trial；正式版release;灰度版gray
           if(res.envVersion !== 'release'){
-            modalService({
-              content: 'SDKVersion:'+my.SDKVersion+' platform:'+Taro.getSystemInfoSync().platform
-            })
+            // modalService({
+            //   content: 'SDKVersion:'+my.SDKVersion+' platform:'+Taro.getSystemInfoSync().platform
+            // })
           }
         }
       })
