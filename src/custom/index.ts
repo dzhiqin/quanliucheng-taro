@@ -64,6 +64,7 @@ export interface HospConfig {
     }
   },
   feat: {
+    greenTree: boolean, // 蚂蚁森林接入
     bindCard: {
       elecHealthCard: boolean,
       parentInfo: boolean,

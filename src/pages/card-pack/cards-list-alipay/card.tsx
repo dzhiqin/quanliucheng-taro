@@ -4,14 +4,12 @@ import { View, Image } from '@tarojs/components'
 import crossPng from '@/images/icons/cross.png'
 import { CardsHealper } from '@/utils/cards-healper'
 import '../cards-list/cards-list.less'
-import { encryptByDES, getBranchId } from '@/utils/tools'
 import { loadingService, modalService, toastService } from '@/service/toast-service'
-import { TaroNavToMiniProgram, bindHealthCard } from '@/service/api'
+import { bindHealthCard } from '@/service/api'
 import nrhcPng from '@/images/icons/nrhc.png'
 import { HEALTH_CARD_RES_CODE, HEALTH_CARD_TYPE_EN } from '@/enums/index'
 import { useState } from 'react'
 import { custom } from '@/custom/index'
-import { getImageSrc } from '@/utils/image-src'
 
 export default function Card(props: {
   action?: string,
@@ -19,10 +17,7 @@ export default function Card(props: {
   style?: string
 }) {
   const [upgrading,setUpgrading] = useState(false)
-  const onClickIcon = (e) => {
-    // console.log('click icon',e);
-    e.stopPropagation()
-  }
+  
   const onClickCard = async (e) => {
     if(props.action === 'switchCard'){
       await CardsHealper.setDefault(props.card.id)

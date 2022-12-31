@@ -32,7 +32,8 @@ const config:HospConfig = {
           icon: imgUrl.new_home_icon3,
           title: '预约挂号',
           event: 'register',
-          desc: '专家名医提前约'
+          desc: '专家名医提前约',
+          tag: 'green'
         },
         {
           icon: imgUrl.new_home_icon4,
@@ -46,7 +47,8 @@ const config:HospConfig = {
           title: '查看报告',
           event: 'navigate',
           desc: '检查检验随时查',
-          url: '/pages/reports-pack/reports-type/reports-type'
+          url: '/pages/reports-pack/reports-type/reports-type',
+          tag: 'green'
         }
       ]
     },
@@ -141,6 +143,7 @@ const config:HospConfig = {
     }
   },
   feat:{
+    greenTree: false,// 蚂蚁森林接入
     bindCard: { // 绑卡/建卡相关配置
       elecHealthCard: true, // 是否电子健康卡
       parentInfo: true,     // 是否需要监护人信息(儿童无证件)

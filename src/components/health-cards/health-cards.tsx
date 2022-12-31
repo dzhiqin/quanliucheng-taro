@@ -74,9 +74,17 @@ export default function HealthCards(props: {
     // })
   }
   const onSwitch = () => {
-    Taro.navigateTo({
-      url: '/pages/card-pack/cards-list/cards-list?action=switchCard'
-    })
+    if(process.env.TARO_ENV === 'weapp'){
+      Taro.navigateTo({
+        url: '/pages/card-pack/cards-list/cards-list?action=switchCard'
+      })
+    }
+    if(process.env.TARO_ENV === 'alipay'){
+      Taro.navigateTo({
+        url: '/pages/card-pack/cards-list-alipay/cards-list-alipay?action=switchCard'
+      })
+    }
+    
   }
   const navToCardDetail = (card) => {
     Taro.setStorageSync('card',card)

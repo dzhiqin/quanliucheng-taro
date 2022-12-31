@@ -1,6 +1,6 @@
 import * as Taro from '@tarojs/taro'
 import * as React from 'react'
-import { View, Picker } from '@tarojs/components'
+import { View, Picker, Image } from '@tarojs/components'
 import HealthCards from '@/components/health-cards/health-cards'
 import { useState,useEffect } from 'react'
 import BkPanel from '@/components/bk-panel/bk-panel'
@@ -16,7 +16,9 @@ import {
   TaroSubscribeService, 
   TaroAliPayment,
   TaroRequestPayment, 
-  AlipaySubscribeService} from '@/service/api'
+  handleAuthCode,
+  AlipaySubscribeService,
+  handleGrantEnergy} from '@/service/api'
 import { CardsHealper } from '@/utils/cards-healper'
 import { loadingService, modalService, toastService } from '@/service/toast-service'
 import { requestTry } from '@/utils/retry'
@@ -26,6 +28,9 @@ import './order-create.less'
 import {custom} from '@/custom/index'
 import RegisterNotice from './notice'
 import { getQueryValue } from '@/utils/tools'
+import GreenEnergyBubble  from '@/images/icons/green-energy-bubble.png'
+import GreenEnergyToast from '../../../components/green-energy-toast/green-energy-toast'
+import GreenEnergyModal from './green-energy-modal'
 
 export default function OrderCreate() {
   const [order,setOrder] = useState({
@@ -61,6 +66,9 @@ export default function OrderCreate() {
   const [result,setResult] = useState(resultEnum.default)
   const [feeOptions,setFeeOptions] = useState([])
   const [showNotice,setShowNotice] = useState(false)
+  const [showGreenToast,setShowGreenToast] = useState(true)
+  const [showGreenModal,setShowGreenModal] = useState(false)
+  const [energy,setEnergy] = useState(0)
   const buildOrderParams = (_regFee?,_treatFee?) => {
     const orderParams = Taro.getStorageSync('orderParams')
     const card = CardsHealper.getDefault()
@@ -110,13 +118,16 @@ export default function OrderCreate() {
       })
     })
   }
-  const handleAliPayment = (params: {tradeNo: string,orderId: string}) => {
+  const handleAliPayment = (params: {tradeNo: string,orderId: string, orderNo: string}) => {
     TaroAliPayment({tradeNo: params.tradeNo}).then(payRes => {
       console.log(payRes);
       const data = JSON.parse(payRes.data)
       if(data.resultCode === '9000'){
         requestTry(checkOrderStatus.bind(null,params.orderId)).then(() => {
           setResult(resultEnum.success)
+          if(custom.feat.greenTree){
+            handleGetGreenEnergy(params.orderNo.toString())
+          }
           loadingService(false)
         }).catch(()=>{
           setResult(resultEnum.fail)
@@ -158,6 +169,15 @@ export default function OrderCreate() {
       setBusy(false)
     })
   }
+  const handleGetGreenEnergy = (orderId) => {
+    handleGrantEnergy({scene: 'horegister',outerNo: orderId}).then(res => {
+      if(res.resultCode === 0){
+        const {totalEnergy} = res.data
+        setEnergy(totalEnergy)
+        setShowGreenToast(true)
+      }
+    })
+  }
   const checkEpiLogicalSurvey = () => {
     return new Promise((resolve,reject) => {
       getEpidemiologicalSurveyState()
@@ -191,6 +211,41 @@ export default function OrderCreate() {
       }
     }
     if(process.env.TARO_ENV === 'alipay'){
+      my.getAuthCode({
+        scopes: ['auth_user','hospital_order'],
+        success: res => {
+          const code = res.authCode
+          handleAuthCode({code,authType: ''}).then(() => {
+            // do nothing
+          }).catch(err => {
+            modalService({content: JSON.stringify(err)})
+            loadingService(false)
+          })
+        },
+        fail: err => {
+          loadingService(false)
+          modalService({title: '授权失败',content: JSON.stringify(err)})
+        }
+      })
+      if(custom.feat.greenTree){
+        my.getAuthCode({
+          scopes: ['mfrstre'],
+          success: res => {
+            const code = res.authCode
+            handleAuthCode({code,authType: 'ant'}).then(() => {
+              // do nothing
+            }).catch(err => {
+              modalService({content: JSON.stringify(err)})
+              loadingService(false)
+            })
+          },
+          fail: err => {
+            loadingService(false)
+            modalService({title: '授权失败',content: JSON.stringify(err)})
+          }
+        })
+      }
+      
       subRes = await AlipaySubscribeService(
         custom.subscribes.visitReminder,
         custom.subscribes.visitCancelReminder,
@@ -238,7 +293,7 @@ export default function OrderCreate() {
     }
     createRegOrder(orderParams).then(res => {
       if(res.resultCode === 0){
-        const {nonceStr, orderId, paySign, signType, payString, timeStamp} = res.data
+        const {nonceStr, orderId, paySign, signType, payString, timeStamp, orderNo} = res.data
         if(payString){
           if(process.env.TARO_ENV === 'weapp'){
             const payParams = {
@@ -252,7 +307,7 @@ export default function OrderCreate() {
           }
           if(process.env.TARO_ENV === 'alipay'){
             const tradeNo = getQueryValue(payString,'trade_no')
-            handleAliPayment({tradeNo,orderId})
+            handleAliPayment({tradeNo,orderId,orderNo})
           }
           
         }else{
@@ -325,6 +380,7 @@ export default function OrderCreate() {
   if(result === ''){
     return(
       <View className='order-create'>
+        <GreenEnergyModal show={showGreenModal} onCancel={() => setShowGreenModal(false)} />
         <SubscribeNotice show={showNotice} />
         <HealthCards switch onCard={onCardChange} />
         <View className='order-create-title'>挂号详情</View>
@@ -368,16 +424,28 @@ export default function OrderCreate() {
             </View>
           }
         </BkPanel>
+        {
+          process.env.TARO_ENV === 'alipay' && custom.feat.greenTree &&
+          <View className='order-create-tips flex-justify-center' onClick={() => setShowGreenModal(true)}>
+            <Image src={GreenEnergyBubble} className='order-create-tips-icon'></Image>
+            <View>预约挂号预计得蚂蚁森林能量</View>
+            <View className='order-create-tips-energy'>277g</View>
+            <AtIcon value='alert-circle' size='15' color='#999'></AtIcon>
+          </View>
+        }
         <View style='padding: 0 40rpx'>
           <BkButton title='确认挂号' disabled={busy} onClick={handleSubmit} />
         </View>
         <RegisterNotice />
-        
       </View>
     )
   }else{
     return(
       <ResultPage type={result} visible={!!result}>
+        {
+          custom.feat.greenTree &&
+          <GreenEnergyToast show={showGreenToast} energy={energy} text='本次预约获得绿色能量' />
+        }
         <View className='order-result'>
           <BkPanel>
             <View className='order-result-item'>

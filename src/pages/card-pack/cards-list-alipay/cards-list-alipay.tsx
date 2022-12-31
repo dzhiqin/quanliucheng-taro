@@ -11,12 +11,11 @@ import BkButton from '@/components/bk-button/bk-button'
 import Card from './card'
 import { loadingService, modalService } from '@/service/toast-service'
 import { CardsHealper } from '@/utils/cards-healper'
-import { authCode, getUserInfo } from '@/service/api'
+import { handleAuthCode, getUserInfo } from '@/service/api'
 
-export default function CardsListAlipay (props: {
-  children?: any,
-  action: string
-}) {
+export default function CardsListAlipay () {
+  const router = Taro.useRouter()
+  const params = router.params
   const [cards,setCards] = useState([])
   useDidShow(() => {
     const temp = Taro.getStorageSync('cards')
@@ -30,7 +29,7 @@ export default function CardsListAlipay (props: {
       scopes: ['auth_user','hospital_order'],
       success: res => {
         const code = res.authCode
-        authCode({code}).then(() => {
+        handleAuthCode({code,authType: ''}).then(() => {
           getUserInfo().then((info:any) => {
             const {realName,mobile,idCard} = info.data
             const authInfo = {realName,mobile,idCard}
@@ -65,7 +64,7 @@ export default function CardsListAlipay (props: {
         {
           cards.length > 0 
           ?
-          cards.map(item => <Card card={item} key={item.id} style='margin-bottom: 40rpx;' action={props.action} />)
+          cards.map(item => <Card card={item} key={item.id} style='margin-bottom: 40rpx;' action={params.action} />)
           :
           <View className='empty'>
             <Image src={getImageSrc('no_card.png')} className='empty-icon'></Image>

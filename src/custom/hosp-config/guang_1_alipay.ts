@@ -64,7 +64,9 @@ const config = {
       ]
     }
   },
-  
+  feat: {
+    greenTree: true
+  },
   reportsPage:{
     hideInHosp: false, // 隐藏住院报告入口
     showImageDetail: false, // 图片展示检验报告详情

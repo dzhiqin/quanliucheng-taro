@@ -21,60 +21,16 @@ const config = {
         {
           title: '门诊',
           entrances: [
-            // {
-            //   icon: imgUrl.new_home_icon6,
-            //   name: '报到候诊',
-            //   event: 'navigate',
-            //   url: '/pages/service-pack/arrival-service/arrival-service'
-            // }, 
             {
-              icon: imgUrl.new_home_icon10,
-              name: '挂号充值',
-              event: 'navigate',
-              url: '/pages/service-pack/deposit/deposit'
+              icon: imgUrl.new_home_icon6,
+              name: '登陆授权',
+              event: 'auth',
+              scope: ''
             }, 
-            {
-              icon: imgUrl.new_home_icon9,
-              name: '健康申报',
-              event: 'jump',
-              appId: 'wx42f62e0e1c6d9ff0',
-              path: 'subpackages/hz_xier_yss/pages/jksbk/index'
-            },
-            {
-              icon: imgUrl.new_home_icon7,
-              name: '电子诊疗卡',
-              event: 'navigate',
-              url: '/pages/card-pack/cards-list-alipay/cards-list-alipay'
-            }
+            
           ]
         },
-        {
-          title: '住院',
-          entrances: [
-            // {
-            //   icon: imgUrl.new_home_icon9,
-            //   name: '住院登记',
-            //   event: 'navigate',
-            // }, 
-            // {
-            //   icon: imgUrl.zybk,
-            //   name: '住院绑卡',
-            //   event: 'navigate',
-            // }, 
-            // {
-            //   icon: imgUrl.new_home_icon10,
-            //   name: '住院押金',
-            //   event: 'navigate',
-            //   url: '/pages/hosp-pack/deposit/deposit'
-            // }, 
-            {
-              icon: imgUrl.new_home_icon11,
-              name: '每日清单',
-              event: 'navigate',
-              url: '/pages/hosp-pack/checklist/checklist',
-            }
-          ]
-        }
+        
       ]
     },
   },

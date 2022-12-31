@@ -48,6 +48,9 @@ export const AlipaySubscribeService = (...tempIds) =>{
         }else{
           resolve({result: false, msg: '您已取消'})
         }
+      },
+      fail: err => {
+        resolve({result: false, msg: err.errorMessage})
       }
     })
   })

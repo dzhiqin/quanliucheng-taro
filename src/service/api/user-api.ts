@@ -47,7 +47,7 @@ export const login = (data:{code: string}) => {
 export const updateUserInfo = (data:any={}) => {
   return Post(fullUrl('api/applet/patient/Authorized/GetUserInfo'),data)
 }
-export const authCode = (data: {code: string}) => {
+export const handleAuthCode = (data: {code: string,authType: 'basic' | 'ant' | '',}) => {
   return Post(fullUrl('api/applet/patient/Authorized/OauthCode'),data)
 }
 export const getUserInfo = () => {

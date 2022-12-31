@@ -10,9 +10,10 @@ import BkPanel from '@/components/bk-panel/bk-panel'
 import BkTabs from '@/components/bk-tabs/bk-tabs'
 import BkLoading from '@/components/bk-loading/bk-loading'
 import { humanDateAndTime } from '@/utils/format'
-import { modalService } from '@/service/toast-service'
+import { loadingService, modalService } from '@/service/toast-service'
 import { custom } from '@/custom/index'
 import './reports-list.less'
+import { handleAuthCode } from '@/service/api'
 
 export default function ReportList() {
   const [busy,setBusy] = useState(false)
@@ -33,6 +34,7 @@ export default function ReportList() {
   const [currentTab] = useState(Number(params.tab) || 0)
   const clinicTabs = custom.reportsPage.clinicReportTabs
   const hospReportTabs = custom.reportsPage.hospReportTabs
+ 
   const onTabChange = (index,value) => {
     if(value !== itemType){
       setItemType(value)
@@ -55,6 +57,32 @@ export default function ReportList() {
   }
 
   const onClickItem = (e) => {
+    if(process.env.TARO_ENV === 'alipay' && custom.feat.greenTree){
+      my.getAuthCode({
+        scopes: ['mfrstre'],
+        success: res => {
+          const {authCode} = res
+          loadingService(true)
+          handleAuthCode({code: authCode,authType: 'ant'}).then(authRes => {
+            loadingService(false)
+            // Taro.navigateTo({url: `/pages/reports-pack/reports-detail/reports-detail?pId=${e.pId}&examId=${e.id}&examDate=${e.date}&itemType=${itemType}&reportType=${reportType}`})
+            navToReportDetail(e)
+          }).catch(err => {
+            loadingService(false)
+            modalService({content: JSON.stringify(err)})
+          })
+        },
+        fail: err => {
+          modalService({title: '授权失败',content: JSON.stringify(err)})
+        }
+      })
+    }else{
+      // Taro.navigateTo({url: `/pages/reports-pack/reports-detail/reports-detail?pId=${e.pId}&examId=${e.id}&examDate=${e.date}&itemType=${itemType}&reportType=${reportType}`})
+      navToReportDetail(e)
+    }
+    
+  }
+  const navToReportDetail = (e) => {
     Taro.navigateTo({url: `/pages/reports-pack/reports-detail/reports-detail?pId=${e.pId}&examId=${e.id}&examDate=${e.date}&itemType=${itemType}&reportType=${reportType}`})
   }
   const onCardChange = (e) => {

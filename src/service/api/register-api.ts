@@ -93,3 +93,6 @@ export const getDoctorsByFirstDeptId = (data: {departId: string}) => {
 export const fetchClinicNotice = () => {
   return Post(fullUrl('api/applet/content/SysNotice/GetClinicNotice'))
 }
+export const handleGrantEnergy = (data: {scene: 'horegister' | 'hoinquire', outerNo: string}) => {
+   return Post(fullUrl('api/applet/patient/Authorized/GrantEnergy'),data)
+}
