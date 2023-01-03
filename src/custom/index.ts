@@ -38,7 +38,8 @@ export interface HospConfig {
     refundNotice: string,
     bindCardNotice: string,
     orderCancelReminder?: string,
-    visitCancelReminder?: string
+    visitCancelReminder?: string,
+    visitProgressReminder?: string
   },
   indexPage: {
     banner: {

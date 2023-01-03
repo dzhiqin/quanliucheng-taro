@@ -11,7 +11,7 @@ import BkButton from '@/components/bk-button/bk-button'
 import Card from './card'
 import { loadingService, modalService } from '@/service/toast-service'
 import { CardsHealper } from '@/utils/cards-healper'
-import { handleAuthCode, getUserInfo } from '@/service/api'
+import { handleAuthCode, getUserInfo, AlipaySubscribeService } from '@/service/api'
 
 export default function CardsListAlipay () {
   const router = Taro.useRouter()
@@ -23,7 +23,14 @@ export default function CardsListAlipay () {
       setCards(temp)
     }
   })
-  const navToCreateCard = () => {
+  const navToCreateCard = async () => {
+    if(cards?.length == 0){
+      const subRes:any = await AlipaySubscribeService(custom.subscribes.visitProgressReminder)
+      if(!subRes.result){
+        modalService({content: subRes.msg})
+        return
+      }
+    }
     loadingService(true)
     my.getAuthCode({
       scopes: ['auth_user','hospital_order'],

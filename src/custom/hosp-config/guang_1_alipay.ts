@@ -86,7 +86,8 @@ const config = {
     paySuccessNotice: '7cdcc8528ce443d795ae20eb8ad0ad43', // 缴费成功通知 once
     orderCancelNotice: 'e54a3ccf52c24be29ceade4123a803ad', // 订单取消通知 once
     bindCardNotice: 'da0d433aca304bf1b51cb5a7db18a744', // 绑卡成功通知 once
-  }
+    visitProgressReminder: 'b4a62590bd96472cbcb9f5730d5fb022', // 问诊进度提醒 longterm
+   }
 }
 const mergedConfig = mergeRecursive(DefaultConfig,config)
 export default mergedConfig

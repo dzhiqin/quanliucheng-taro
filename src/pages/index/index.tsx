@@ -14,7 +14,6 @@ import { fetchClinicNotice } from '@/service/api'
 import parse from 'mini-html-parser2';
 import './index.less'
 import { toastService } from '@/service/toast-service'
-import GreenEnergyToast from '../../components/green-energy-toast/green-energy-toast'
 
 export default function Index() {
   const [indexPage] = useState(custom.indexPage)

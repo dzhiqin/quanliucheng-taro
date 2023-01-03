@@ -67,6 +67,7 @@ export default function OrderCreate() {
   const [feeOptions,setFeeOptions] = useState([])
   const [showNotice,setShowNotice] = useState(false)
   const [showGreenToast,setShowGreenToast] = useState(true)
+  const [isShow,setIsShow] = useState(false)
   const [showGreenModal,setShowGreenModal] = useState(false)
   const [energy,setEnergy] = useState(0)
   const buildOrderParams = (_regFee?,_treatFee?) => {
@@ -174,7 +175,8 @@ export default function OrderCreate() {
       if(res.resultCode === 0){
         const {totalEnergy} = res.data
         setEnergy(totalEnergy)
-        setShowGreenToast(true)
+        // setShowGreenToast(true)
+        setIsShow(true)
       }
     })
   }
@@ -249,7 +251,7 @@ export default function OrderCreate() {
       subRes = await AlipaySubscribeService(
         custom.subscribes.visitReminder,
         custom.subscribes.visitCancelReminder,
-        custom.subscribes.paySuccessNotice
+        custom.subscribes.orderCancelReminder
       )
       if(!subRes.result){
         setBusy(false)
@@ -343,6 +345,12 @@ export default function OrderCreate() {
       }
     })
   },[])
+  Taro.useDidShow(() => {
+    if(isShow){
+      setShowGreenToast(true)
+      setIsShow(false)
+    }
+  })
   const onCardChange = (card) => {
     const params = Taro.getStorageSync('orderParams')
     const orderParams = {
