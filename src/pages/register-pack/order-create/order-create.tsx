@@ -122,7 +122,6 @@ export default function OrderCreate() {
   }
   const handleAliPayment = (params: {tradeNo: string,orderId: string, orderNo: string}) => {
     TaroAliPayment({tradeNo: params.tradeNo}).then(payRes => {
-      console.log(payRes);
       const data = JSON.parse(payRes.data)
       if(data.resultCode === '9000'){
         requestTry(checkOrderStatus.bind(null,params.orderId)).then(() => {
@@ -136,7 +135,9 @@ export default function OrderCreate() {
           loadingService(false)
         })
       }else{
-        modalService({title: '支付失败',content: '错误码：'+data.resultCode +data.memo})
+        let msg = ''+data.memo
+        if(data.resultCode === '6001') msg = '您已取消支付'
+        modalService({title: '支付失败',content: msg})
         loadingService(false)
         cancelRegOrder({orderId: params.orderId})
         setBusy(false)
@@ -165,7 +166,7 @@ export default function OrderCreate() {
         toastService({title: '您已取消缴费',onClose: () => loadingService(false)})
         cancelRegOrder({orderId: orderId})
       }else{
-        console.log('支付失败:',taroErr.data);
+        // console.log('支付失败:',taroErr.data);
         loadingService(false)
       }
       setBusy(false)
@@ -185,7 +186,7 @@ export default function OrderCreate() {
     return new Promise((resolve,reject) => {
       getEpidemiologicalSurveyState()
       .then(res => {
-        console.log('checkEpiLogicalSurvey',res);
+        // console.log('checkEpiLogicalSurvey',res);
         if(res.resultCode === 0){
           resolve({result: true, message:'success'})
         }else{
@@ -193,7 +194,6 @@ export default function OrderCreate() {
         }
       })
       .catch(err => {
-        console.error(err);
         reject({result: false, message:'fail'+err})
       })
     })

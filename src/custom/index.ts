@@ -8,7 +8,7 @@ type HospName =
   'li_wan_zhong_xin' | 
   'jin_sha_zhou_alipay' |
   'guang_1_alipay'
-const hospName:HospName = 'guang_1_alipay'
+const hospName:HospName = 'li_wan_zhong_xin'
 const hospConfig = require(`./hosp-config/${hospName}.ts`)
 
 export const custom = hospConfig.default as HospConfig
@@ -65,6 +65,8 @@ export interface HospConfig {
     }
   },
   feat: {
+    hc_title: string,
+    invoice: boolean,
     guangHuaMonitor: boolean, // 光华监控平台
     greenTree: boolean, // 蚂蚁森林接入
     bindCard: {

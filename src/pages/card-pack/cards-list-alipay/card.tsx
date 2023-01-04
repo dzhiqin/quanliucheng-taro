@@ -10,6 +10,7 @@ import nrhcPng from '@/images/icons/nrhc.png'
 import { HEALTH_CARD_RES_CODE, HEALTH_CARD_TYPE_EN } from '@/enums/index'
 import { useState } from 'react'
 import { custom } from '@/custom/index'
+import { getPrivacyName } from '@/utils/tools'
 
 export default function Card(props: {
   action?: string,
@@ -98,8 +99,7 @@ export default function Card(props: {
   return (
     <View className='card' style={props.style? props.style : ''} onClick={onClickCard} >
       <View className='card-header'>
-        {/* 特殊处理 */}
-        <View className='card-header-organ'>{custom.hospName === 'jszyy' ? '广州市卫生健康委员会' : '广东省卫生健康委员会'}</View>
+        <View className='card-header-organ'>{custom.feat.hc_title}</View>
         <View className='card-header-wrap'>
           <Image className='card-header-icon' src={crossPng}></Image>
           <View className='card-header-title'>电子健康卡</View>
@@ -108,7 +108,7 @@ export default function Card(props: {
       </View>
       <View className='card-content'>
         <View className='card-content-info'>
-          <View className='card-content-name'>{props.card.name}</View>
+          <View className='card-content-name'>{getPrivacyName(props.card.name)}</View>
           <View className='card-content-id'>{props.card.idNOHide}</View>
         </View>
         <View className='card-content-image'>

@@ -79,6 +79,7 @@ const config = {
     },
   },
   feat:{
+    hc_title: '广州市卫生健康委员会',
     bindCard: {
       elecHealthCard: false,
       oneClickAuth: false,    // 一键授权，直接绑定健康卡

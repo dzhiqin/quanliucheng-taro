@@ -124,7 +124,9 @@ export default function OrderList(){
           toastService({title: '缴费失败，所缴金额将原路退回', onClose: () => {getList(searchType);loadingService(false); setBusy(false)}})
         })
       }else{
-        modalService({title: '支付失败',content: '错误码：'+data.resultCode+data.memo})
+        let msg = data.memo
+        if(data.resultCode === '6001') msg = '您已取消支付'
+        modalService({title: '支付失败',content: msg})
         loadingService(false);setBusy(false)
       }
     }) 

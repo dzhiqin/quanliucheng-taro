@@ -20,7 +20,8 @@ export default function Official() {
     phone: '',
     website: '',
     addr: '',
-    natures:''
+    natures:'',
+    logo: ''
   })
   const [banners,setBanners] = useState(['https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/applets-imgs/banner2.png'])
   const [desc,setDesc] = useState(undefined)
@@ -92,7 +93,7 @@ export default function Official() {
         </Swiper>
       </View>
       <View className='official-header'>
-        <Image src={custom.logo} className='official-header-logo' />
+        <Image src={hospInfo.logo || custom.logo} className='official-header-logo' />
         <View className='official-header-wrap'>
           <View className='official-header-title'>{hospInfo.hospitalName}</View>
           <View className='official-header-tabs'>

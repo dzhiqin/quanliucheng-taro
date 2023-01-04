@@ -13,7 +13,7 @@ const config = {
   logo: 'https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/common/guang1.jpeg',
   indexPage: {
     quickEntrance: {
-      enable: true,
+      enable: false,
       tabList: [
         {
           title: "其他",
@@ -23,12 +23,12 @@ const config = {
             //   icon: imgUrl.new_home_icon10,
             //   event: "toAcidSelfPayment"
             // },
-            {
-              name: "蚂蚁授权",
-              icon: imgUrl.new_home_icon10,
-              event: "auth",
-              scope: 'mfrstre'
-            },
+            // {
+            //   name: "蚂蚁授权",
+            //   icon: imgUrl.new_home_icon10,
+            //   event: "auth",
+            //   scope: 'mfrstre'
+            // },
             // {
             //   name: "消息订阅",
             //   icon: imgUrl.new_home_icon10,

@@ -61,6 +61,9 @@ const config = {
       ]
     }
   },
+  feat: {
+    hc_title: '广州市卫生健康委员会'
+  },
   reportsPage:{
     showImageDetail: false,
     clinicReportTabs: [  // 门诊报告分类

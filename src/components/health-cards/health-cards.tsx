@@ -8,6 +8,7 @@ import { useDidShow } from '@tarojs/taro'
 import qrcodeImg from '@/images/icons/qrcode.png'
 import './health-cards.less'
 import { CARD_ACTIONS } from '@/enums/index'
+import { getPrivacyName } from '@/utils/tools'
 
 export default function HealthCards(props: {
   cards?: any,
@@ -68,10 +69,6 @@ export default function HealthCards(props: {
       const cardsTemp = cards.map(item => ({...item, isDefault: item.id === cardId}))
       setCards(cardsTemp)
     })
-    // Taro.showToast({
-    //   title: '您已切换默认卡',
-    //   icon: 'none'
-    // })
   }
   const onSwitch = () => {
     if(process.env.TARO_ENV === 'weapp'){
@@ -106,9 +103,9 @@ export default function HealthCards(props: {
     return (
       <View style='padding:20rpx 40rpx 0'>
         <View className='add-card single-card'>
-            <View className='single-card-content' onClick={navToCardDetail.bind(null,cards[0])}>
+            <View className='single-card-content' onClick={navToCardDetail.bind(null,cards[0])} >
               <View>
-                <View style='color: white'>您好，{cards[0].name}</View>
+                <View style='color: white'>您好，{process.env.TARO_ENV === 'alipay' ? getPrivacyName(cards[0].name) : cards[0].name}</View>
                 <View className='single-card-txt'>诊疗卡号{cards[0].cardNo}</View>
               </View>
               <Image className='single-card-icon' src={qrcodeImg} ></Image>
@@ -123,7 +120,7 @@ export default function HealthCards(props: {
           <View className='add-card single-card'>
               <View className='single-card-content'>
                 <View>
-                  <View style='color: white'>您好，{selectedCard.name}</View>
+                  <View style='color: white'>您好，{process.env.TARO_ENV === 'alipay'? getPrivacyName(selectedCard.name) : selectedCard.name}</View>
                   <View className='single-card-txt'>诊疗卡号{selectedCard.cardNo}</View>
                 </View>
                 {
@@ -152,10 +149,10 @@ export default function HealthCards(props: {
           >
             {
               cards && cards.map((item,index) => 
-                <SwiperItem key={index} className='swiper-item-wrap'>
-                  <View className='swiper-item' onClick={navToCardDetail.bind(null,item)}>
+                <SwiperItem key={index} className={process.env.TARO_ENV === 'weapp' ? 'swiper-item-wrap' : 'swiper-item-wrap-ali'}>
+                  <View className='swiper-item' onClick={navToCardDetail.bind(null,item)} style={process.env.TARO_ENV === 'weapp' ? '' : 'padding-top: 60rpx;'}>
                     <View className='swiper-item-info'>
-                      <View className='swiper-item-name'>您好，{item.name}</View>
+                      <View className='swiper-item-name'>您好，{process.env.TARO_ENV === 'alipay' ? getPrivacyName(item.name) : item.name}</View>
                       <View className='swiper-item-card'>诊疗卡号{item.cardNo}</View>
                     </View>
                     {
