@@ -6,6 +6,8 @@ import { fetchGuideList } from '@/service/api'
 import { loadingService, modalService } from '@/service/toast-service'
 import BkLoading from '@/components/bk-loading/bk-loading'
 import {AtList,AtListItem} from 'taro-ui'
+import { custom } from '@/custom/index'
+import { reportCmPV_YL } from '@/utils/cloudMonitorHelper'
 
 export default function GuideList() {
   const [list,setList] = useState([])
@@ -20,6 +22,11 @@ export default function GuideList() {
       }
     })
   }, [])
+  Taro.useReady(() => {
+    if(custom.feat.guangHuaMonitor){
+      reportCmPV_YL({title: '就医指南'})
+    }
+  })
   const onClickItem = (item) => {
     Taro.setStorageSync('content',JSON.stringify(item.content))
     Taro.navigateTo({url: '/pages/official-pack/guide-detail/guide-detail'})

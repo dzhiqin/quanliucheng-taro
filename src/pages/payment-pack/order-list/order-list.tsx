@@ -17,6 +17,7 @@ import { custom } from '@/custom/index'
 import { requestTry } from '@/utils/retry'
 import './order-list.less'
 import { getQueryValue } from '@/utils/index'
+import { reportCmPV_YL } from '@/utils/cloudMonitorHelper'
 
 const tabs = [{title: '15日内订单',value: 'current'},{title: '历史订单',value: 'history'}]
 export default function OrderList(){
@@ -176,6 +177,11 @@ export default function OrderList(){
     }
     return paymentParams
   }
+  Taro.useReady(() => {
+    if(custom.feat.guangHuaMonitor){
+      reportCmPV_YL({title: '缴费记录查询'})
+    }
+  })
   useEffect(() => {
     setBusy(true)
     fetchPaymentOrderList({type: searchType}).then(res => {

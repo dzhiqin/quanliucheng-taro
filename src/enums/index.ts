@@ -110,3 +110,12 @@ export enum CARD_ACTIONS {
   SET_DEFAULT_CARD = 'SET_DEFAULT_CARD',
   REMOVE_CARD = 'REMOVE_CARD'
 }
+export enum GH_REPORT_APIS {
+  CreateCardWX,
+  GetCreateRegOrder,
+  GetBillStatus,
+  GetRegStatus,
+  GetCheckDetail,
+  GetOrderList, 
+  GetBillOrderRecord
+}

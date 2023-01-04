@@ -143,6 +143,7 @@ const config:HospConfig = {
     }
   },
   feat:{
+    guangHuaMonitor: false, // 光华监控平台
     greenTree: false,// 蚂蚁森林接入
     bindCard: { // 绑卡/建卡相关配置
       elecHealthCard: true, // 是否电子健康卡

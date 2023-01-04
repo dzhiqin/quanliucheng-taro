@@ -8,6 +8,8 @@ import { fetchBranchHospital } from './service/api'
 import { CardsHealper } from './utils'
 import { CARD_ACTIONS } from './enums'
 import { modalService } from './service/toast-service'
+import monitor from '@/utils/alipayLogger'
+import { custom } from './custom'
 
 class App extends Component {
   props: any
@@ -19,7 +21,7 @@ class App extends Component {
   }
   componentDidMount () {}
 
-  async onLaunch () {
+  async onLaunch (options) {
     // 单页调试时方便使用
     // const token = Taro.getStorageSync('token')
     // if(token) return
@@ -42,6 +44,24 @@ class App extends Component {
           }
         }
       })
+      // 接入光华平台监控
+      if(custom.feat.guangHuaMonitor){
+        monitor.init({
+          pid: "v4pddp3bpwr2fvl3ttp6xa==",      // TODO,
+          options: options,
+          sample: 1,
+          autoReportApi: true,
+          // autoReportApi: false,
+          autoReportPage: false,
+          // autoReportPage: false,
+          // Http请求返回数据中状态码字段名称
+          code: ["code"],
+          // Http返回数据中的error message字段名称
+          msg: ["msg"],
+          miniVersion: '0.0.20'
+        });
+      }
+      
     }
     
     this.checkUpdate()

@@ -31,6 +31,7 @@ import { getQueryValue } from '@/utils/tools'
 import GreenEnergyBubble  from '@/images/icons/green-energy-bubble.png'
 import GreenEnergyToast from '../../../components/green-energy-toast/green-energy-toast'
 import GreenEnergyModal from './green-energy-modal'
+import { reportCmPV_YL } from '@/utils/cloudMonitorHelper'
 
 export default function OrderCreate() {
   const [order,setOrder] = useState({
@@ -349,6 +350,11 @@ export default function OrderCreate() {
     if(isShow){
       setShowGreenToast(true)
       setIsShow(false)
+    }
+  })
+  Taro.useReady(() => {
+    if(custom.feat.guangHuaMonitor){
+      reportCmPV_YL({title: '预约挂号'})
     }
   })
   const onCardChange = (card) => {

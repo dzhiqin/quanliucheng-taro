@@ -14,6 +14,7 @@ import { CardsHealper } from '@/utils/cards-healper'
 import { loadingService, modalService, toastService } from '@/service/toast-service'
 import BkInput from '@/components/bk-input/bk-input'
 import './create-card.less'
+import { reportCmPV_YL } from '@/utils/cloudMonitorHelper'
 
 export default class BindCard extends React.Component {
   constructor (props) {
@@ -54,6 +55,9 @@ export default class BindCard extends React.Component {
   }
   
   componentDidMount() {
+    if(custom.feat.guangHuaMonitor){
+      reportCmPV_YL({title: '在线建档'})
+    }
     idenTypeOptions.forEach(item => this.state.idenTypeNames.push(item.name))
     this.setState({
       bindCardConfig: custom.feat.bindCard,

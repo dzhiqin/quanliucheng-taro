@@ -34,7 +34,7 @@ export default function ReportList() {
   const [currentTab] = useState(Number(params.tab) || 0)
   const clinicTabs = custom.reportsPage.clinicReportTabs
   const hospReportTabs = custom.reportsPage.hospReportTabs
- 
+  
   const onTabChange = (index,value) => {
     if(value !== itemType){
       setItemType(value)

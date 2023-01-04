@@ -65,6 +65,7 @@ export interface HospConfig {
     }
   },
   feat: {
+    guangHuaMonitor: boolean, // 光华监控平台
     greenTree: boolean, // 蚂蚁森林接入
     bindCard: {
       elecHealthCard: boolean,

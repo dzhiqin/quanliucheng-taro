@@ -13,6 +13,7 @@ import DefaultReport from './default-report'
 import { custom } from '@/custom/index'
 import GreenEnergyToast from '@/components/green-energy-toast/green-energy-toast'
 import { handleGrantEnergy } from '@/service/api'
+import { reportCmPV_YL } from '@/utils/cloudMonitorHelper'
 
 export default function ReportsDetail() {
   const router = useRouter()
@@ -35,6 +36,11 @@ export default function ReportsDetail() {
       loadingService(false)
     })
   },[examDate,examId,itemType,reportType,pId])
+  Taro.useReady(() => {
+    if(custom.feat.guangHuaMonitor){
+      reportCmPV_YL({title: '检查检验报告查询',params})
+    }
+  })
   useDidShow(() => {
     if(custom.feat.greenTree){
       handleGrantEnergy({scene: 'hoinquire', outerNo: examId}).then(res => {

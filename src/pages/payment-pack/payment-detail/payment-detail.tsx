@@ -36,6 +36,7 @@ import { requestTry } from '@/utils/retry'
 import ResultPage from '@/components/result-page/result-page'
 import {custom} from '@/custom/index'
 import { getQueryValue } from '@/utils/tools'
+import { reportCmPV_YL } from '@/utils/cloudMonitorHelper'
 
 enum resultEnum {
   default = '',
@@ -483,6 +484,9 @@ export default function PaymentDetail() {
     
   }
   useReady(async () => {
+    if(custom.feat.guangHuaMonitor){
+      reportCmPV_YL({title: '门诊缴费',params})
+    }
     if(from === PAYMENT_FROM.scanQRCode){
       loadingService(true)
       const openId = Taro.getStorageSync('openId')

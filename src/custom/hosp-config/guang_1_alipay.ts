@@ -65,7 +65,8 @@ const config = {
     }
   },
   feat: {
-    greenTree: true
+    greenTree: true,
+    guangHuaMonitor: true
   },
   reportsPage:{
     hideInHosp: false, // 隐藏住院报告入口

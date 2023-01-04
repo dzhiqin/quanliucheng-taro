@@ -7,6 +7,8 @@ import { modalService } from '@/service/toast-service'
 import BkLoading from '@/components/bk-loading/bk-loading'
 import { AtListItem } from 'taro-ui'
 import VirtualList from '@tarojs/components/virtual-list'
+import { custom } from '@/custom/index'
+import { reportCmPV_YL } from '@/utils/cloudMonitorHelper'
 
 export default function ClinicList() {
   const [list,setList] = useState([])
@@ -18,6 +20,11 @@ export default function ClinicList() {
     return (
       <AtListItem key={index} title={data[index].deptName} arrow='right' onClick={onClickItem.bind(null,data[index])} thumb='https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/applets-imgs/intro_icon8.png' />
     )
+  })
+  Taro.useReady(() => {
+    if(custom.feat.guangHuaMonitor){
+      reportCmPV_YL({title: '医院介绍'})
+    }
   })
   useEffect(() => {
     setBusy(true)

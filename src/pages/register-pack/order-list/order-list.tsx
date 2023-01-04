@@ -13,6 +13,7 @@ import { checkOverTime } from '@/utils/tools'
 import BaseModal from '@/components/base-modal/base-modal'
 import { custom } from '@/custom/index'
 import {REGISTER_ORDER_STATUS} from '@/enums/index'
+import { reportCmPV_YL } from '@/utils/cloudMonitorHelper'
 
 const tabs = [{title: '15日内订单',value: 'current'},{title: '历史订单',value: 'history'}]
 const registerConfig = custom.feat.register
@@ -85,7 +86,11 @@ export default function OrderList() {
   useEffect(() => {
     getList()
   },[currentTab,getList])
-  
+  Taro.useReady(() => {
+    if(custom.feat.guangHuaMonitor){
+      reportCmPV_YL({title: '挂号记录查询'})
+    }
+  })
   const onCardChange = () => {
     getList()
   }

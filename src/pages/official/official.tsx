@@ -11,6 +11,7 @@ import {custom} from '@/custom/index'
 import parse from 'mini-html-parser2';
 import './official.less'
 import { loadingService, modalService } from '@/service/toast-service'
+import { reportCmPV_YL } from '@/utils/cloudMonitorHelper'
 
 export default function Official() {
   const [hospInfo,setHospInfo] = useState({
@@ -33,6 +34,11 @@ export default function Official() {
       url: '/pages/official-pack/guide-list/guide-list'
     })
   }
+  Taro.useReady(() => {
+    if(custom.feat.guangHuaMonitor){
+      reportCmPV_YL({title: '医院介绍'})
+    }
+  })
   useEffect(() => {
     Taro.showLoading({title: '加载中……'})
     fetchOfficialContent().then(res => {

@@ -1,5 +1,8 @@
+import { custom } from '@/custom/index'
 import * as Taro from '@tarojs/taro'
 import { modalService } from '../toast-service'
+import monitor from '@/utils/alipayLogger'
+import { ORDER_STATUS_EN } from '@/enums/index'
 
 interface Response {
   resultCode: number
@@ -18,6 +21,7 @@ export interface DownloadResponse extends Response {
 export interface UploadResponse extends Response {
   data?: object | string
 }
+const monitorApis = ['CreateCardWX','GetCreateRegOrder','GetCheckDetail','GetOrderList','GetBillOrderRecord']
 const getHeaderAuth = () => {
   // let auth = Taro.getStorageSync('auth')
   // let headerAuth = {}
@@ -53,14 +57,14 @@ const Request = (
   header?: { 'Content-Type': 'application/x-www-form-urlencoded' }
 ): Promise<HttpResponse> => {
   return new Promise((resolve, reject) => {
-    // const startTime = new Date().valueOf()
+    const startTime = new Date().valueOf()
     Taro.request({
       method,
       url,
       data,
       header: Object.assign({},header,getHeaderAuth()),
       success: (res: Taro.request.SuccessCallbackResult) => {
-        // const endTime = new Date().valueOf()
+        const endTime = new Date().valueOf()
         resolve(res.data as HttpResponse)
         // if(res.data.resultCode === 1 && res.data.message === '请先登录授权'){
         //   handleLogin()
@@ -69,11 +73,27 @@ const Request = (
         if(Taro.getStorageSync('envVersion') !== 'release'){
           const api = url.split('/').pop()
           console.log(`============${api}=============`)
-          // console.log('request spent: ',endTime - startTime);
           console.log('【请求】',url)
+          console.log('【耗时】: ',endTime - startTime);
           console.log(`【入参】${ data ? JSON.stringify(data) : '无'}`);
           console.log(`【token】${getHeaderAuth().token}`)
           console.log(`【返回】`,res.data)
+        }
+        if(custom.feat.guangHuaMonitor){
+          if(res.data.resultCode === 1) return
+          if(url === 'GetBillStatus' && res.data.data === ORDER_STATUS_EN.paySuccess_and_His_success){
+            handleGHApiReport(url,endTime-startTime)
+            return
+          }
+          if(url === 'GetRegStatus' && res.data.data.isSuccess ){
+            handleGHApiReport(url,endTime-startTime)
+            return
+          }
+          
+          if(monitorApis.indexOf(url) !== -1){
+            handleGHApiReport(url,endTime-startTime)
+            return
+          }
         }
       },
       fail: (err: Taro.General.CallbackResult) => {
@@ -84,7 +104,9 @@ const Request = (
     })
   })
 }
-
+const handleGHApiReport = (api,time) => {
+  monitor.api({api:api,success:true,c1:"taSR_YL",time:time})
+}
 const Get = (url: string, data?: string | object) => Request('GET', url, data)
 
 const Post = (url: string, data?: string | object) => Request('POST', url, data)

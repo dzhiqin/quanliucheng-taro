@@ -9,7 +9,8 @@ import './clinic-intro.less'
 import BkPanel from '@/components/bk-panel/bk-panel'
 import BkLoading from '@/components/bk-loading/bk-loading'
 import { getImageSrc } from '@/utils/image-src'
-
+import { custom } from '@/custom/index'
+import { reportCmPV_YL } from '@/utils/cloudMonitorHelper'
 
 export default function ClinicIntro() {
   const router = Taro.useRouter()
@@ -18,6 +19,11 @@ export default function ClinicIntro() {
   const [current,setCurrent] = useState(Number(router.params.tab) || 0)
   const [doctorList,setDoctorList] = useState([])
   const [clinicInfo,setClinicInfo] = useState({desc: '暂无描述'})
+  Taro.useReady(() => {
+    if(custom.feat.guangHuaMonitor){
+      reportCmPV_YL({title: '科室介绍'})
+    }
+  })
   useEffect(() => {
     setBusy(true)
     fetchClinicIntro({deptId: params.deptId}).then(res => {

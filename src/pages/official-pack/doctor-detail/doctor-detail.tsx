@@ -7,6 +7,8 @@ import { useState } from 'react'
 import BkTitle from '@/components/bk-title/bk-title'
 import './doctor-detail.less'
 import { getImageSrc } from '@/utils/image-src'
+import { custom } from '@/custom/index'
+import { reportCmPV_YL } from '@/utils/cloudMonitorHelper'
 
 export default function DoctorDetail() {
   const router = Taro.useRouter()
@@ -32,6 +34,11 @@ export default function DoctorDetail() {
       }
     })
   })
+  Taro.useReady(() => {
+    if(custom.feat.guangHuaMonitor){
+      reportCmPV_YL({title: '专家介绍'})
+    }
+  })
   return(
     <View className='doctor-detail'>
       <View className='doctor-detail-header'>
@@ -40,9 +47,9 @@ export default function DoctorDetail() {
         <View className='doctor-detail-title'>{doctorInfo.title} {doctorInfo.specializedSubject}</View>
       </View>
       <BkTitle title='擅长领域' />
-      <View className='doctor-detail-text'>{doctorInfo.specialty.replace(/<br>|<Br>/g, ' ') || '未填写'}</View>
+      <View className='doctor-detail-text'>{doctorInfo?.specialty?.replace(/<br>|<Br>/g, ' ') || '未填写'}</View>
       <BkTitle title='详细介绍' />
-      <View className='doctor-detail-text'>{doctorInfo.desc.replace(/<br>|<Br>/g, ' ') || '未填写'}</View>
+      <View className='doctor-detail-text'>{doctorInfo?.desc?.replace(/<br>|<Br>/g, ' ') || '未填写'}</View>
     </View>
   )
 }
