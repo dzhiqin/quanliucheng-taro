@@ -35,7 +35,7 @@ import { loadingService, modalService, toastService } from '@/service/toast-serv
 import { requestTry } from '@/utils/retry'
 import ResultPage from '@/components/result-page/result-page'
 import {custom} from '@/custom/index'
-import { getQueryValue } from '@/utils/tools'
+import { getPrivacyName, getQueryValue } from '@/utils/tools'
 import { reportCmPV_YL } from '@/utils/cloudMonitorHelper'
 
 enum resultEnum {
@@ -518,6 +518,18 @@ export default function PaymentDetail() {
       getOrderDetailFromData(param)
     }
   })
+  const renderName = () => {
+    let name = ''
+    if(orderInfoFromList){
+      name = card?.name
+    }else(
+      name = orderInfo.patientName
+    )
+    if(process.env.TARO_ENV === 'alipay'){
+      name = getPrivacyName(name)
+    }
+    return name
+  }
   if(payResult === resultEnum.default){
     return(
       <View className='payment-detail'>
@@ -533,7 +545,7 @@ export default function PaymentDetail() {
           </View>
           <View className='flex'>
             <View className='flat-title'>姓名</View>
-            <View className='payment-detail-item-text'>{orderInfoFromList ? card?.name : orderInfo.patientName}</View>
+            <View className='payment-detail-item-text'>{renderName()}</View>
           </View>
           <View className='flex'>
             <View className='flat-title'>开单科室</View>

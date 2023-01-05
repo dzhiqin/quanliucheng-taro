@@ -9,7 +9,7 @@ import { loadingService, modalService, toastService } from '@/service/toast-serv
 import BkButton from '@/components/bk-button/bk-button'
 import BkTabs from '@/components/bk-tabs/bk-tabs'
 import BkLoading from '@/components/bk-loading/bk-loading'
-import { checkOverTime } from '@/utils/tools'
+import { checkOverTime, getPrivacyName } from '@/utils/tools'
 import BaseModal from '@/components/base-modal/base-modal'
 import { custom } from '@/custom/index'
 import {REGISTER_ORDER_STATUS} from '@/enums/index'
@@ -120,7 +120,7 @@ export default function OrderList() {
                 </View>
                 <View className='order-list-card-item'>
                   <View className='order-list-card-title'>就诊人：</View>
-                  <View className='order-list-card-text'>{item.patientName}</View>
+                  <View className='order-list-card-text'>{process.env.TARO_ENV === 'alipay' ? getPrivacyName(item.patientName) : item.patientName}</View>
                 </View>
                 {/* <View className='order-list-card-item'>
                   <View className='order-list-card-title'>诊疗卡号：</View>

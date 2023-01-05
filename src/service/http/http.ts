@@ -21,7 +21,7 @@ export interface DownloadResponse extends Response {
 export interface UploadResponse extends Response {
   data?: object | string
 }
-const monitorApis = ['CreateCardWX','GetCreateRegOrder','GetCheckDetail','GetOrderList','GetBillOrderRecord']
+// const monitorApis = ['CreateCardWX','GetCreateRegOrder','GetCheckDetail','GetOrderList','GetBillOrderRecord']
 const getHeaderAuth = () => {
   // let auth = Taro.getStorageSync('auth')
   // let headerAuth = {}
@@ -74,7 +74,7 @@ const Request = (
           const api = url.split('/').pop()
           console.log(`============${api}=============`)
           console.log('【请求】',url)
-          console.log('【耗时】: ',endTime - startTime);
+          console.log('【耗时】: ',endTime - startTime,'ms');
           console.log(`【入参】${ data ? JSON.stringify(data) : '无'}`);
           console.log(`【token】${getHeaderAuth().token}`)
           console.log(`【返回】`,res.data)
@@ -82,16 +82,19 @@ const Request = (
         if(custom.feat.guangHuaMonitor){
           if(res.data.resultCode === 1) return
           if(url === 'GetBillStatus' && res.data.data === ORDER_STATUS_EN.paySuccess_and_His_success){
-            handleGHApiReport(url,endTime-startTime)
+            handleGHApiReport('门诊缴费',endTime-startTime)
             return
           }
           if(url === 'GetRegStatus' && res.data.data.isSuccess ){
-            handleGHApiReport(url,endTime-startTime)
+            handleGHApiReport('挂号缴费',endTime-startTime)
             return
           }
-          
-          if(monitorApis.indexOf(url) !== -1){
-            handleGHApiReport(url,endTime-startTime)
+          if(url === 'GetCreateRegOrder'){
+            handleGHApiReport('预约挂号',endTime-startTime)
+            return
+          }
+          if(url === 'GetCheckDetail'){
+            handleGHApiReport('报告查询',endTime-startTime)
             return
           }
         }

@@ -27,7 +27,7 @@ import SubscribeNotice from '@/components/subscribe-notice/subscribe-notice'
 import './order-create.less'
 import {custom} from '@/custom/index'
 import RegisterNotice from './notice'
-import { getQueryValue } from '@/utils/tools'
+import { getPrivacyName, getQueryValue } from '@/utils/tools'
 import GreenEnergyBubble  from '@/images/icons/green-energy-bubble.png'
 import GreenEnergyToast from '../../../components/green-energy-toast/green-energy-toast'
 import GreenEnergyModal from './green-energy-modal'
@@ -401,7 +401,7 @@ export default function OrderCreate() {
         <BkPanel style='margin: 40rpx'>
           <View className='order-create-item'>
             <View className='order-create-item-title'>就诊人</View>
-            <View className='order-create-item-value'>{order.patientName}</View>
+            <View className='order-create-item-value'>{process.env.TARO_ENV === 'alipay' ? getPrivacyName(order.patientName) : order.patientName}</View>
           </View>
           <View className='order-create-item'>
             <View className='order-create-item-title'>就诊科室</View>
