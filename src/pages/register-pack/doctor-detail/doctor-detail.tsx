@@ -88,7 +88,13 @@ export default function DoctorDefault() {
     const userInfo = Taro.getStorageSync('userInfo')
     const card = CardsHealper.getDefault()
     if(!card) {
-      toastService({title: '找不到就诊卡'})
+      // toastService({title: '找不到就诊卡'})
+      modalService({content:'找不到就诊卡',showCancel:true,confirmText: '去建卡',success:(res) => {
+        if(res.confirm){
+          let url = process.env.TARO_ENV === 'alipay' ? '/pages/card-pack/cards-list-alipay/cards-list-alipay' : '/pages/card-pack/cards-list/cards-list'
+          Taro.navigateTo({url})
+        }
+      }})
       return
     }
     if(item.leaveCount <= 0) {

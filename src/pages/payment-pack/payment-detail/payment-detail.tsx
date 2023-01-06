@@ -115,11 +115,13 @@ export default function PaymentDetail() {
   const [showNotice,setShowNotice] = useState(false)
   const [medicineList,setMedicineList] = useState([])
   const dealWithPay = async(type) => {
+    setBusy(true)
     let subRes
     if(process.env.TARO_ENV === 'weapp'){
       subRes = await TaroSubscribeService(custom.subscribes.paySuccessNotice,custom.subscribes.refundNotice)
       if(!subRes.result){
         setShowNotice(true)
+        setBusy(false)
         return
       }
     }
@@ -127,10 +129,10 @@ export default function PaymentDetail() {
       subRes = await AlipaySubscribeService(custom.subscribes.paySuccessNotice,custom.subscribes.orderCancelReminder)
       if(!subRes.result){
         modalService({content: subRes.msg})
+        setBusy(false)
         return
       }
     }
-    setBusy(true)
     if(from === PAYMENT_FROM.orderList){
       // 从订单列表进入的，直接用orderId支付，不需再创建订单
       payOrderById(orderInfoFromList.orderId,type)

@@ -70,8 +70,8 @@ const Request = (
         //   handleLogin()
         // }
         
+        const api = url.split('/').pop()
         if(Taro.getStorageSync('envVersion') !== 'release'){
-          const api = url.split('/').pop()
           console.log(`============${api}=============`)
           console.log('【请求】',url)
           console.log('【耗时】: ',endTime - startTime,'ms');
@@ -81,19 +81,19 @@ const Request = (
         }
         if(custom.feat.guangHuaMonitor){
           if(res.data.resultCode === 1) return
-          if(url === 'GetBillStatus' && res.data.data === ORDER_STATUS_EN.paySuccess_and_His_success){
+          if(api === 'GetBillStatus' && res.data.data === ORDER_STATUS_EN.paySuccess_and_His_success){
             handleGHApiReport('门诊缴费',endTime-startTime)
             return
           }
-          if(url === 'GetRegStatus' && res.data.data.isSuccess ){
+          if(api === 'GetRegStatus' && res.data.data.isSuccess ){
             handleGHApiReport('挂号缴费',endTime-startTime)
             return
           }
-          if(url === 'GetCreateRegOrder'){
+          if(api === 'GetCreateRegOrder'){
             handleGHApiReport('预约挂号',endTime-startTime)
             return
           }
-          if(url === 'GetCheckDetail'){
+          if(api === 'GetCheckDetail'){
             handleGHApiReport('报告查询',endTime-startTime)
             return
           }

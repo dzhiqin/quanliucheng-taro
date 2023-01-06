@@ -9,6 +9,7 @@ import { toastService } from '@/service/toast-service';
 import BkPanel from '@/components/bk-panel/bk-panel';
 import BkTitle from '@/components/bk-title/bk-title';
 import './search-result.less'
+import BkLoading from '@/components/bk-loading/bk-loading';
 
 export default function SearchResult() {
   const router = useRouter()
@@ -25,6 +26,8 @@ export default function SearchResult() {
     })
   }
   const handleSearch = () => {
+    setDoctors([])
+    setDepts([])
     if(!searchText){
       toastService({title: '请输入医生或科室'})
       return
@@ -59,6 +62,10 @@ export default function SearchResult() {
         />
       </View>
       <View className='search-result-content'>
+        {
+          doctors.length === 0 && depts.length === 0 && 
+          <BkLoading msg='搜索不到医生或科室' />
+        }
         {
           doctors.length > 0 &&
           <View>

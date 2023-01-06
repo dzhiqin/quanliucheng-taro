@@ -96,6 +96,7 @@ const subPackages = [
     pages: [
       'clinic-list/clinic-list',
       'guide-list/guide-list',
+      'guide-detail/guide-detail',
       'clinic-intro/clinic-intro',
       'doctor-detail/doctor-detail'
     ]

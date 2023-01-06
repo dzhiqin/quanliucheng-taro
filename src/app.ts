@@ -58,7 +58,7 @@ class App extends Component {
           code: ["code"],
           // Http返回数据中的error message字段名称
           msg: ["msg"],
-          miniVersion: '0.0.20'
+          miniVersion: '0.0.23'
         });
       }
       

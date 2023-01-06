@@ -198,7 +198,7 @@ export default function OrderList() {
       }
       <BaseModal show={show} closeOutside={false} confirm={onConfirm} cancel={onCancel} title='是否取消预约?' >
         <View className='order-list-modal'>
-          <View>患者姓名：{order.patientName}</View>
+          <View>患者姓名：{process.env.TARO_ENV === 'alipay' ? getPrivacyName(order.patientName) : order.patientName}</View>
           <View>退款金额：{order.totalFee}元</View>
         </View>
       </BaseModal>

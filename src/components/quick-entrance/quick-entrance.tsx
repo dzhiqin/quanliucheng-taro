@@ -6,7 +6,6 @@ import BkTabs from '../bk-tabs/bk-tabs'
 import './quick-entrance.less'
 import { TaroNavToMiniProgram,handleAuthCode } from '@/service/api'
 import { modalService } from '@/service/toast-service'
-import GreenEnergyModal from '@/pages/register-pack/order-create/green-energy-modal'
 
 export default function QuickEntrance(props: {
   quickEntrance?:any
