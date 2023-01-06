@@ -70,7 +70,8 @@ export default function HealthCards(props: {
       setCards(cardsTemp)
     })
   }
-  const onSwitch = () => {
+  const onSwitch = (e) => {
+    e.stopPropagation()
     if(process.env.TARO_ENV === 'weapp'){
       Taro.navigateTo({
         url: '/pages/card-pack/cards-list/cards-list?action=switchCard'
@@ -108,7 +109,11 @@ export default function HealthCards(props: {
                 <View style='color: white'>您好，{process.env.TARO_ENV === 'alipay' ? getPrivacyName(cards[0].name) : cards[0].name}</View>
                 <View className='single-card-txt'>诊疗卡号{cards[0].cardNo}</View>
               </View>
-              <Image className='single-card-icon' src={qrcodeImg} ></Image>
+              {/* <Image className='single-card-icon' src={qrcodeImg} ></Image> */}
+              <View className='single-card-switch' onClick={onSwitch}>
+                切换就诊人
+                <AtIcon value='chevron-right' size='20' color='#0A3A6E'></AtIcon>
+              </View>
             </View>
         </View>
       </View>

@@ -1,3 +1,4 @@
+import { custom } from "@/custom/index";
 import { fullUrl, Post, Get } from "../http";
 
 export const getWaitingList = (data:{queueDate: string}) => {
@@ -45,4 +46,15 @@ export const fetchRecoveryFee = () => {
 }
 export const fetchRecoveryPayParams = () => {
   return Post(fullUrl('api/applet/paybill/SupplementaryPay/PayBill'))
+}
+export const sendSmsByFeiGe = (data: {mobile: string, content: number}) => {
+  const {apikey,secret,sign_id,template_id} = custom.feat.bindCard.smsVerify
+  return Post('https://api.4321.sh/sms/template',{
+    apikey,
+    secret,
+    mobile: data.mobile,
+    content: data.content,
+    sign_id,
+    template_id
+  })
 }

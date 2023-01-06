@@ -148,6 +148,13 @@ const config:HospConfig = {
     guangHuaMonitor: false, // 光华监控平台
     greenTree: false,// 蚂蚁森林接入
     bindCard: { // 绑卡/建卡相关配置
+      smsVerify: {
+        enable: true,
+        apikey: 'N68313eb24',
+        secret: '683135068234a327',
+        sign_id: 168951,
+        template_id: 133435
+      },
       elecHealthCard: true, // 是否电子健康卡
       parentInfo: true,     // 是否需要监护人信息(儿童无证件)
       nationality: true,    // 是否需要国籍

@@ -72,6 +72,9 @@ export const computeDistanceFromLatLong = (lat1,lon1,lat2,lon2) => {
 function deg2rad(deg) {
   return deg * (Math.PI/180)
 }
+export const getRandomNumber = () => {
+  return Math.floor(Math.random()*(9999-1000))+1000;
+}
 export const encryptByDES = (message) => {
   const encrypted = CryptoJS.DES.encrypt(message, UTF8.parse(key), {
     iv: UTF8.parse(iv),

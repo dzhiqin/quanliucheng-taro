@@ -9,12 +9,13 @@ import {
 } from '@/utils'
 import { AlipaySubscribeService, TaroSubscribeService } from '@/service/api/taro-api'
 import SubscribeNotice from '@/components/subscribe-notice/subscribe-notice'
-import { createCard, fetchUserInfoByHealthCode, TaroGetLocation } from '@/service/api'
+import { createCard, fetchUserInfoByHealthCode, sendSmsByFeiGe, TaroGetLocation } from '@/service/api'
 import { CardsHealper } from '@/utils/cards-healper'
 import { loadingService, modalService, toastService } from '@/service/toast-service'
 import BkInput from '@/components/bk-input/bk-input'
 import './create-card.less'
 import { reportCmPV_YL } from '@/utils/cloudMonitorHelper'
+import { getRandomNumber } from '@/utils/tools'
 
 export default class BindCard extends React.Component {
   constructor (props) {
@@ -33,6 +34,9 @@ export default class BindCard extends React.Component {
       realName: '',
       realPhone: '',
       realId: '',
+      smsCode: '',
+      smsCodeValid: '',
+      count: 0,
       card: {
         patientName: '',
         idenType: 0,
@@ -51,7 +55,7 @@ export default class BindCard extends React.Component {
         wechatCode: Taro.getCurrentInstance().router.params.wechatCode || ''
       }
     }
-    
+    this.handleSendSms = this.handleSendSms.bind(this)
   }
   
   componentDidMount() {
@@ -126,33 +130,37 @@ export default class BindCard extends React.Component {
   async onSubmit() {
     this.setState({busy: true})
     const {result,msg}= this.formValidator()
-    if(result){
-      let subRes
-      if(process.env.TARO_ENV === 'weapp'){
-        subRes = await TaroSubscribeService(custom.subscribes.bindCardNotice)
-        if(subRes.result){
-          this.handleCreateCard()
-        }else{
-          this.setState({showNotice: true})
-        }
-      }
-      if(process.env.TARO_ENV === 'alipay'){
-        subRes = await AlipaySubscribeService(custom.subscribes.bindCardNotice)
-        if(subRes.result){
-          this.handleCreateCard()
-        }else{
-          modalService({content: subRes.msg})
-        }
-      }
-
-      
-    }else{
+    if(!result){
       this.setState({busy: false})
       Taro.showToast({
         title: msg,
         icon: 'none'
       })
+      return
     }
+    if(custom.feat.bindCard.smsVerify && this.state.smsCode != this.state.smsCodeValid){
+      toastService({title: '验证码错误'})
+      this.setState({busy: false})
+      return
+    }
+    let subRes
+    if(process.env.TARO_ENV === 'weapp'){
+      subRes = await TaroSubscribeService(custom.subscribes.bindCardNotice)
+      if(subRes.result){
+        this.handleCreateCard()
+      }else{
+        this.setState({showNotice: true})
+      }
+    }
+    if(process.env.TARO_ENV === 'alipay'){
+      subRes = await AlipaySubscribeService(custom.subscribes.bindCardNotice)
+      if(subRes.result){
+        this.handleCreateCard()
+      }else{
+        modalService({content: subRes.msg})
+      }
+    }
+  
   }
   handleCreateCard() {
     loadingService(true)
@@ -424,6 +432,37 @@ export default class BindCard extends React.Component {
       }
     })
   }
+  handleSendSms() {
+    if(this.state.count > 0) return
+    if(!this.state.card.phone) {
+      toastService({title: '请先填写手机号'})
+      return
+    }
+    if(!phoneValidator(this.state.card.phone)){
+      toastService({title: '请填写正确的手机号'})
+      return
+    }
+    this.countDown(60)
+    const code = getRandomNumber()
+    this.setState({smsCodeValid: code})
+    sendSmsByFeiGe({content: code, mobile: this.state.card.phone}).then(res => {
+      if(res.code === 0){
+        toastService({title: '验证码发送成功'})
+      }else{
+        modalService({title: '发送短信失败',title: res.msg})
+      }
+    })
+  }
+  countDown(value){
+    return setTimeout(() => {
+      value--
+      this.setState({count: value})
+      if(value > 0){
+        this.countDown(value)
+      }
+    },1000)
+    
+  }
   render() {
     return (
       <View className='create-card'>
@@ -469,7 +508,7 @@ export default class BindCard extends React.Component {
               type='text' 
               placeholder='请输入证件号码' 
               value={this.state.card.idenNo} 
-              onChange={this.handleCardChange.bind(this,'idenNo')} 
+              onBlur={this.handleCardChange.bind(this,'idenNo')} 
             >
             </AtInput> 
           }
@@ -524,6 +563,20 @@ export default class BindCard extends React.Component {
               value={this.state.card.phone} 
               onChange={this.handleCardChange.bind(this,'phone')} 
             />
+          }
+          {
+            process.env.TARO_ENV === 'weapp' && custom.feat.bindCard.smsVerify.enable &&
+            <BkInput 
+              name='smsCode' 
+              title='验证码' 
+              type='number' 
+              placeholder='请输入短信验证码' 
+              maxLength={4}
+              value={this.state.smsCode} 
+              onChange={(e) => {this.setState({smsCode: e});}} 
+            >
+              <View style={this.state.count >0 ? 'color: #aaa' : ''} onClick={this.handleSendSms}>发送验证码{this.state.count === 0 ? '' : this.state.count}</View>
+            </BkInput>
           }
           {
             process.env.TARO_ENV === 'alipay' && 

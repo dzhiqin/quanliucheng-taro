@@ -98,6 +98,10 @@ export default function WeekSchedule(props:{
                 schedule.disable && 
                 <Image src={nonePng} className='days-item-icon' />
               }
+              {
+                !schedule.fullSchedule && !schedule.disable &&
+                <View>有号</View>
+              }
             </View>
           )
         }

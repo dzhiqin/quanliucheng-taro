@@ -62,7 +62,16 @@ const config = {
     }
   },
   feat: {
-    hc_title: '广州市卫生健康委员会'
+    hc_title: '广州市卫生健康委员会',
+    bindCard: {
+      smsVerify: {
+        enable: true,
+        apiKey: 'N68313eb24',
+        secret: '683135068234a327',
+        sign_id: 168951,
+        template_id: 133435
+      }
+    }
   },
   reportsPage:{
     showImageDetail: false,
