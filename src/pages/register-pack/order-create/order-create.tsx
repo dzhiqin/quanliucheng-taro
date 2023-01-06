@@ -353,7 +353,7 @@ export default function OrderCreate() {
     }
   })
   Taro.useReady(() => {
-    if(custom.feat.guangHuaMonitor){
+    if(custom.feat.guangHuaMonitor.enable){
       reportCmPV_YL({title: '预约挂号'})
     }
   })

@@ -12,11 +12,11 @@ const config = {
   logo: "http://www.jsz120.com/uploads/allimg/200512/2-200512092512328.jpg",
   hospitalName: "广州中医药大学金沙洲医院",
   // baseUrl: "https://applets.gdbkyz.com", // 倍康测试
-  baseUrl: "https://jszyy-applets.wedoublecare.com",  // 正式环境
+  baseUrl: "https://jszyy-zfb.wedoublecare.com",  // 正式环境
   // subUrl: 'https://gysycustomize.wedoublecare.com', // 测试环境
   indexPage: {
     quickEntrance: {
-      enable: true,
+      enable: false,
       tabList: [
         {
           title: '门诊',
@@ -35,6 +35,12 @@ const config = {
     },
   },
   feat:{
+    hc_title: '广州市卫生健康委员会',
+    guangHuaMonitor: {
+      enable: true,
+      pid: 'gawxs1+8lx2b1/htdsyxjg==',
+      miniVersion: '0.0.3'
+    },
     bindCard: {
       elecHealthCard: false,
       oneClickAuth: false,    // 一键授权，直接绑定健康卡
@@ -69,16 +75,13 @@ const config = {
     ],
   },
   subscribes: {
-    checkReminder: '', // 审方提醒
-    pendingPayReminder: '',// 待缴费提醒
-    visitReminder: '', // 就诊提醒
-    closeNotice: '',// 医生停诊通知
-    satisfactionSurveyNotice: '',// 患者满意度调查提醒
-    appointmentNotice: '', //挂号成功通知
-    paySuccessNotice: '', //缴费成功通知
-    appointmentCancelNotice: '',//挂号取消通知
-    refundNotice: '',//退费通知
-    bindCardNotice: '',//绑卡成功提醒
+    pendingPayReminder: 'a08e5467b1a647aa9e2e4dcbac23d56f', // 缴费提醒 once
+    visitReminder: '45388b80155f427e91c702bd309b178b', // 就诊提醒 once
+    visitCancelReminder: '96d91c3620d04c35a779525b8eadc453', // 订单退诊提醒 once
+    paySuccessNotice: '78babfd34cf24325b619d936aa378b1f', // 缴费成功通知 once
+    orderCancelNotice: '', // 订单取消通知 once notyet
+    bindCardNotice: 'd730066b4c2a48db96d02c704b02be33', // 绑卡成功通知 once
+    visitProgressReminder: '', // 问诊进度提醒 longterm notyet
   },
 }
 const mergedConfig = mergeRecursive(DefaultConfig,config)

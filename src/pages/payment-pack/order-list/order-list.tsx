@@ -180,7 +180,7 @@ export default function OrderList(){
     return paymentParams
   }
   Taro.useReady(() => {
-    if(custom.feat.guangHuaMonitor){
+    if(custom.feat.guangHuaMonitor.enable){
       reportCmPV_YL({title: '缴费记录查询'})
     }
   })

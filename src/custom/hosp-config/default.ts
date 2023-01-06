@@ -145,7 +145,11 @@ const config:HospConfig = {
   feat:{
     hc_title: '广东省卫生健康委员会',
     invoice: true, // 电子发票
-    guangHuaMonitor: false, // 光华监控平台
+    guangHuaMonitor: {
+      enable: false,
+      pid: '',
+      miniVersion: ''
+    }, // 光华监控平台
     greenTree: false,// 蚂蚁森林接入
     bindCard: { // 绑卡/建卡相关配置
       smsVerify: {

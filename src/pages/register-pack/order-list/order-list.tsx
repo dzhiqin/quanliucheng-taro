@@ -87,7 +87,7 @@ export default function OrderList() {
     getList()
   },[currentTab,getList])
   Taro.useReady(() => {
-    if(custom.feat.guangHuaMonitor){
+    if(custom.feat.guangHuaMonitor.enable){
       reportCmPV_YL({title: '挂号记录查询'})
     }
   })

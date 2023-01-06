@@ -38,7 +38,7 @@ export default function ReportsDetail() {
     })
   },[examDate,examId,itemType,reportType,pId])
   Taro.useReady(() => {
-    if(custom.feat.guangHuaMonitor){
+    if(custom.feat.guangHuaMonitor.enable){
       reportCmPV_YL({title: '检查检验报告查询',params})
     }
   })

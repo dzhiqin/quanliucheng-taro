@@ -22,7 +22,7 @@ export default function ClinicList() {
     )
   })
   Taro.useReady(() => {
-    if(custom.feat.guangHuaMonitor){
+    if(custom.feat.guangHuaMonitor.enable){
       reportCmPV_YL({title: '医院介绍'})
     }
   })

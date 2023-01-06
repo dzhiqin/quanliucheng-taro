@@ -23,7 +23,7 @@ export default function GuideList() {
     })
   }, [])
   Taro.useReady(() => {
-    if(custom.feat.guangHuaMonitor){
+    if(custom.feat.guangHuaMonitor.enable){
       reportCmPV_YL({title: '就医指南'})
     }
   })

@@ -59,7 +59,7 @@ export default class BindCard extends React.Component {
   }
   
   componentDidMount() {
-    if(custom.feat.guangHuaMonitor){
+    if(custom.feat.guangHuaMonitor.enable){
       reportCmPV_YL({title: '在线建档'})
     }
     idenTypeOptions.forEach(item => this.state.idenTypeNames.push(item.name))

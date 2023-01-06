@@ -4,7 +4,7 @@ import { custom } from '@/custom/index'
 import { compareVersion } from '@/utils/tools'
 
 type subscribeServiceRes =  {result: boolean, msg: string, data?: any }
-export const TaroGetSubscribeSettings = (...ids) => {
+export const TaroGetSubscribeSettings = (...ids) => {  
   if(process.env.TARO_ENV === 'alipay') return ({result: true})
   return new Promise(resolve => {
     Taro.getSetting({
@@ -29,8 +29,8 @@ export const TaroGetSubscribeSettings = (...ids) => {
 }
 export const AlipaySubscribeService = (...tempIds) =>{
   if(process.env.TARO_ENV === 'weapp') return {result: true}
-  if(custom.isPrivate) return {result: true}
-  if(!tempIds || tempIds.length === 0) {
+  tempIds = tempIds.filter(i => i && i.trim())
+  if(tempIds.length === 0) {
     return {result: false,msg: '没有订阅任何模板消息'}
   }else if(tempIds.length > 3) {
     return {result: false, msg: '一次最多订阅3条消息'}

@@ -488,7 +488,7 @@ export default function PaymentDetail() {
     
   }
   useReady(async () => {
-    if(custom.feat.guangHuaMonitor){
+    if(custom.feat.guangHuaMonitor.enable){
       reportCmPV_YL({title: '门诊缴费',params})
     }
     if(from === PAYMENT_FROM.scanQRCode){

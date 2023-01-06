@@ -66,7 +66,11 @@ const config = {
   },
   feat: {
     greenTree: true,
-    guangHuaMonitor: true
+    guangHuaMonitor: {
+      enable: true,
+      pid: 'v4pddp3bpwr2fvl3ttp6xa==',
+      miniVersion: '0.0.23'
+    }
   },
   reportsPage:{
     hideInHosp: false, // 隐藏住院报告入口

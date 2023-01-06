@@ -24,7 +24,8 @@ export default function CardsListAlipay () {
     }
   })
   const navToCreateCard = async () => {
-    if(cards?.length == 0){
+    if(cards?.length == 0 && custom.hospName !== 'jszyy'){
+      // 特殊处理 金沙洲还没有长期订阅的模板，先跳过
       const subRes:any = await AlipaySubscribeService(custom.subscribes.visitProgressReminder)
       if(!subRes.result){
         modalService({content: subRes.msg})

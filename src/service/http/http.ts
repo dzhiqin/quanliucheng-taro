@@ -79,21 +79,21 @@ const Request = (
           console.log(`【token】${getHeaderAuth().token}`)
           console.log(`【返回】`,res.data)
         }
-        if(custom.feat.guangHuaMonitor){
+        if(custom.feat.guangHuaMonitor.enable){
           if(res.data.resultCode === 1) return
-          if(api === 'GetBillStatus' && res.data.data === ORDER_STATUS_EN.paySuccess_and_His_success){
+          if(/GetBillStatus/.test(api) && res.data.data === ORDER_STATUS_EN.paySuccess_and_His_success){
             handleGHApiReport('门诊缴费',endTime-startTime)
             return
           }
-          if(api === 'GetRegStatus' && res.data.data.isSuccess ){
+          if(/GetRegStatus/.test(api) && res.data.data.isSuccess ){
             handleGHApiReport('挂号缴费',endTime-startTime)
             return
           }
-          if(api === 'GetCreateRegOrder'){
+          if(/GetCreateRegOrder/.test(api)){
             handleGHApiReport('预约挂号',endTime-startTime)
             return
           }
-          if(api === 'GetCheckDetail'){
+          if(/GetCheckDetail/.test(api)){
             handleGHApiReport('报告查询',endTime-startTime)
             return
           }

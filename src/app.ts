@@ -36,18 +36,16 @@ class App extends Component {
       my.getRunScene({
         success: res => {
           Taro.setStorageSync('envVersion',res.envVersion)
+          // modalService({
+          //   content: 'SDKVersion:'+my.SDKVersion+' platform:'+Taro.getSystemInfoSync().platform+' envVersion:'+res.envVersion
+          // })
           // 开发版develop；体验版trial；正式版release;灰度版gray
-          if(res.envVersion !== 'release'){
-            // modalService({
-            //   content: 'SDKVersion:'+my.SDKVersion+' platform:'+Taro.getSystemInfoSync().platform
-            // })
-          }
         }
       })
       // 接入光华平台监控
-      if(custom.feat.guangHuaMonitor){
+      if(custom.feat.guangHuaMonitor.enable){
         monitor.init({
-          pid: "v4pddp3bpwr2fvl3ttp6xa==",      // TODO,
+          pid: custom.feat.guangHuaMonitor.pid,      // TODO,
           options: options,
           sample: 1,
           autoReportApi: true,
@@ -58,7 +56,7 @@ class App extends Component {
           code: ["code"],
           // Http返回数据中的error message字段名称
           msg: ["msg"],
-          miniVersion: '0.0.23'
+          miniVersion: custom.feat.guangHuaMonitor.miniVersion
         });
       }
       

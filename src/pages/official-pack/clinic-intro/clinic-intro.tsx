@@ -20,7 +20,7 @@ export default function ClinicIntro() {
   const [doctorList,setDoctorList] = useState([])
   const [clinicInfo,setClinicInfo] = useState({desc: '暂无描述'})
   Taro.useReady(() => {
-    if(custom.feat.guangHuaMonitor){
+    if(custom.feat.guangHuaMonitor.enable){
       reportCmPV_YL({title: '科室介绍'})
     }
   })

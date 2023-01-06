@@ -36,7 +36,7 @@ export default function Official() {
     })
   }
   Taro.useReady(() => {
-    if(custom.feat.guangHuaMonitor){
+    if(custom.feat.guangHuaMonitor.enable){
       reportCmPV_YL({title: '医院介绍'})
     }
   })

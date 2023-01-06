@@ -35,7 +35,7 @@ export default function DoctorDetail() {
     })
   })
   Taro.useReady(() => {
-    if(custom.feat.guangHuaMonitor){
+    if(custom.feat.guangHuaMonitor.enable){
       reportCmPV_YL({title: '专家介绍'})
     }
   })
