@@ -23,7 +23,7 @@ export default function ReportsDetail() {
   const {examId, examDate, itemType, reportType,pId} = params
   const [busy,setBusy] = useState(false)
   const [energy,setEnergy] = useState(0)
-  const [showGreenToast,setShowGreenToast] = useState(true)
+  const [showGreenToast,setShowGreenToast] = useState(false)
   useEffect(() => {
     setBusy(true)
     fetchReportsDetail({examId,examDate,itemType,reportType,pId}).then(res => {
@@ -56,15 +56,6 @@ export default function ReportsDetail() {
     }
   })
 
-  // if(checkItems.length === 0){
-  //   return <BkLoading loading={busy} ></BkLoading>
-  // }else if( itemType === REPORT_ITEM_TYPE_CN.化验) {
-  //   return <TestReport checkItems={checkItems} examId={examId} itemType={itemType} /> 
-  // }else if( itemType === REPORT_ITEM_TYPE_CN.产前超声) {
-  //   return <AltraSoundReport checkItems={checkItems} examId={examId} itemType={itemType} />
-  // }else {
-  //   return <DefaultReport checkItems={checkItems} examId={examId} itemType={itemType} />
-  // }
   if(checkItems.length === 0){
     return <BkLoading loading={busy} ></BkLoading>
   }else{

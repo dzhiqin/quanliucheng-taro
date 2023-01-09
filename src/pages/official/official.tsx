@@ -1,14 +1,13 @@
 import * as React from 'react'
 import * as Taro from '@tarojs/taro'
 import { useEffect,useState } from 'react'
-import { View, Image, RichText,Swiper,SwiperItem } from '@tarojs/components'
+import { View, Image,Swiper,SwiperItem } from '@tarojs/components'
 import BkTitle from '@/components/bk-title/bk-title'
 import { fetchOfficialContent } from '@/service/api/official-api'
 import phonePng from '@/images/icons/phone.png'
 import globalPng from '@/images/icons/global.png'
 import locationPng from '@/images/icons/location.png'
 import {custom} from '@/custom/index'
-import parse from 'mini-html-parser2';
 import './official.less'
 import { loadingService, modalService } from '@/service/toast-service'
 import { reportCmPV_YL } from '@/utils/cloudMonitorHelper'
@@ -50,12 +49,7 @@ export default function Official() {
           const list = res.data.banners.map(i => i.imgPath)
           setBanners(list)
         }
-        parse(res.data.introduce,(err,nodes) => {
-          if(!err){
-            setDesc(nodes)
-          }
-        })
-        
+        setDesc(res.data.introduce)
       }
     }).catch(err => {
       loadingService(false)
@@ -134,23 +128,31 @@ export default function Official() {
           }
           
         </View>
-        <BkTitle title='医疗服务' style='margin: 40rpx 0 20rpx' />
-        <View className='official-service'>
-          <View className='official-service-item' onClick={navToClinicList.bind(this)}>
-            <Image className='official-service-item-icon' src='https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/applets-imgs/website_icon7.png'></Image>
-            <View className='official-service-item-name'>科室介绍</View>
+        {/* 临时方案，金沙洲支付宝小程序隐藏医疗服务模块 */}
+        {
+          (process.env.TARO_ENV !== 'alipay' || custom.hospName !== 'jszyy') &&
+          <BkTitle title='医疗服务' style='margin: 40rpx 0 20rpx' />
+        }
+        {
+          (process.env.TARO_ENV !== 'alipay' || custom.hospName !== 'jszyy') &&
+          <View className='official-service'>
+            <View className='official-service-item' onClick={navToClinicList.bind(this)}>
+              <Image className='official-service-item-icon' src='https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/applets-imgs/website_icon7.png'></Image>
+              <View className='official-service-item-name'>科室介绍</View>
+            </View>
+            <View className='official-service-item' onClick={navToGuideList.bind(this)}>
+              <Image className='official-service-item-icon' src='https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/applets-imgs/website_icon8.png'></Image>
+              <View className='official-service-item-name'>就诊指南</View>
+            </View>
           </View>
-          <View className='official-service-item' onClick={navToGuideList.bind(this)}>
-            <Image className='official-service-item-icon' src='https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/applets-imgs/website_icon8.png'></Image>
-            <View className='official-service-item-name'>就诊指南</View>
-          </View>
-        </View>
+        }
+
         {
           desc &&
           <View>
             <BkTitle title='医院介绍' style='margin: 40rpx 0 20rpx' />
             <View className='official-richtext'>
-              <RichText nodes={desc} />
+              <View dangerouslySetInnerHTML={{__html: desc}}></View>
             </View>
           </View>
         }

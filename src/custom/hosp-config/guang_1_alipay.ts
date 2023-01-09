@@ -65,6 +65,7 @@ const config = {
     }
   },
   feat: {
+    YiBaoCard: false,
     greenTree: true,
     guangHuaMonitor: {
       enable: true,

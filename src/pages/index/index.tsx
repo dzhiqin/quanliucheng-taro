@@ -1,6 +1,6 @@
 import * as Taro from '@tarojs/taro'
 import { useEffect, useState } from 'react'
-import { View, Image, RichText } from '@tarojs/components'
+import { View, Image } from '@tarojs/components'
 import * as React from 'react'
 import {custom} from '@/custom/index'
 import FunctionBoxes from '@/components/function-boxes/function-boxes'
@@ -11,9 +11,7 @@ import HospBlog from '@/components/hosp-blog/hosp-blog'
 import { MyContext } from '@/utils/my-context'
 import BaseModal from '@/components/base-modal/base-modal'
 import { fetchClinicNotice } from '@/service/api'
-import parse from 'mini-html-parser2';
 import './index.less'
-import { toastService } from '@/service/toast-service'
 
 export default function Index() {
   const [indexPage] = useState(custom.indexPage)
@@ -25,16 +23,9 @@ export default function Index() {
     if(custom.hospName === 'lwzxyy'){
       // 特殊处理
       fetchClinicNotice().then(res => {
-        console.log(res);
         if(res.resultCode ===0){
           setShow(true)
-          parse(res.data,(err,nodes) => {
-            if(!err){
-              setClinicNotice(nodes)
-            }else{
-              toastService({title: 'parse错误'})
-            }
-          })
+          setClinicNotice(res.data)
         }
       })
     }
@@ -65,7 +56,7 @@ export default function Index() {
     <View className='index'>
       <BaseModal show={show} hideCancel confirm={onConfirm} title='门诊就诊须知'>
         {/* <NoticeContent /> */}
-        <RichText nodes={clinicNotice} />
+        <View dangerouslySetInnerHTML={{__html: clinicNotice}}></View>
       </BaseModal>
       <MyContext.Provider value={indexPage}>
         {indexPage.banner.enable && <Image src={indexPage.banner.url} className='banner'></Image>}

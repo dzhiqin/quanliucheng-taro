@@ -5,7 +5,7 @@ import {
   getEpidemiologicalSurveyQuestions,
   handleSubmitEpidemiologicalSurvey
  } from '@/service/api';
-import { View, RichText } from '@tarojs/components'
+import { View } from '@tarojs/components'
 import { useState } from 'react';
 import { loadingService, modalService, toastService } from '@/service/toast-service';
 import { AtInput,AtCheckbox } from 'taro-ui';
@@ -14,12 +14,11 @@ import QuestionItem from './question-item';
 import BkButton from '@/components/bk-button/bk-button';
 import HealthCards from '@/components/health-cards/health-cards';
 import { CardsHealper } from '@/utils/cards-healper';
-import parse from 'mini-html-parser2'
 import { QUES_TYPE } from './enums';
 
 export default function EpidemiologicalSurvey(){
   const [surveyInfo,setSurveyInfo] = useState(null)
-  const [richTextNodes,setNodes] = useState(undefined)
+  const [description,setDescription] = useState('')
   const [basicInfo,setBasicInfo] = useState(null)
   const [questions,setQuestions] = useState([])
   const [busy,setBusy] = useState(false)
@@ -29,12 +28,7 @@ export default function EpidemiologicalSurvey(){
     getEpidemiologicalSurveyInfo().then(res => {
       if(res.resultCode === 0){
         setSurveyInfo(res.data[0])
-        const richTextStr = res.data[0].description
-        parse(richTextStr,(err,nodes) => {
-          if(!err){
-            setNodes(nodes)
-          }
-        })
+        setDescription(res.data[0].description)
         getEpidemiologicalSurveyQuestions({typeId: res.data[0].questionnaireTypeId}).then(data => {
           if(data.resultCode === 0){
             setBasicInfo(data.data.basic)
@@ -246,7 +240,7 @@ export default function EpidemiologicalSurvey(){
         surveyInfo && 
         <View style='padding: 40rpx'>
           <View className='survey-title'>{surveyInfo.title}</View>
-          <RichText nodes={richTextNodes} />
+          <View dangerouslySetInnerHTML={{__html: description}}></View>
         </View>
       }
       <BkTitle title='一、基本信息' style='margin-left: 40rpx' />

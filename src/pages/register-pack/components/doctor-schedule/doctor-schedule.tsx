@@ -20,12 +20,14 @@ export default function DoctorSchedule(props) {
   const renderStatusView = () => {
     if(props.doctor.isHalt){
       return(<View className='doctor-btn unable'>停诊</View>)
+    }
+    if(!props.doctor.isTimePoint){
+      return(<View className='doctor-btn unable'>无号</View>) 
+    }
+    if(props.doctor.leaveTotalCount > 0 ){
+      return(<View className='doctor-btn enable'>有号</View>)
     }else{
-      if(props.doctor.leaveTotalCount > 0 && props.doctor.isTimePoint){
-        return(<View className='doctor-btn enable'>有号</View>)
-      }else{
-        return(<View className='doctor-btn unable'>无号</View>) 
-      }
+      return(<View className='doctor-btn unable'>满号</View>) 
     }
   }
   return (

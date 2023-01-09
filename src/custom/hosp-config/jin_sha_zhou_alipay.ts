@@ -9,7 +9,7 @@ const config = {
   hospName: "jszyy",
   isPrivate: true,
   banner: 'https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/common/jinshazhou-banner.png',
-  logo: "http://www.jsz120.com/uploads/allimg/200512/2-200512092512328.jpg",
+  logo: "https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/common/jszyy.png",
   hospitalName: "广州中医药大学金沙洲医院",
   // baseUrl: "https://applets.gdbkyz.com", // 倍康测试
   baseUrl: "https://jszyy-zfb.wedoublecare.com",  // 正式环境
@@ -46,7 +46,7 @@ const config = {
       oneClickAuth: false,    // 一键授权，直接绑定健康卡
       updateNotice: false, // 绑卡和解绑发送消息通知
     },
-    YiBaoCard: true, // 医保卡
+    YiBaoCard: false, // 医保卡
     register: {
       cancelReservedTime: 0, // 取消挂号预留时间
       popupNotice: true,// 挂号提示弹窗
@@ -63,7 +63,7 @@ const config = {
     }
   },
   reportsPage:{
-    hideInHosp: false, // 隐藏住院报告入口
+    hideInHosp: true, // 隐藏住院报告入口
     showImageDetail: false, // 图片展示检验报告详情
     clinicReportTabs: [
       {title: '检验', value: REPORT_ITEM_TYPE_CN.化验},

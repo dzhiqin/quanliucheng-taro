@@ -9,7 +9,7 @@ const config = {
   hospName: "jszyy",
   isPrivate: true,
   banner: 'https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/common/jinshazhou-banner.png',
-  logo: "http://www.jsz120.com/uploads/allimg/200512/2-200512092512328.jpg",
+  logo: "https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/common/jszyy.png",
   hospitalName: "广州中医药大学金沙洲医院",
   // baseUrl: "https://applets.gdbkyz.com", // 倍康测试
   baseUrl: "https://jszyy-applets.wedoublecare.com",  // 正式环境

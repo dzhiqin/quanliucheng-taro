@@ -80,7 +80,15 @@ export const custom = hospConfig.default
 
 **外部跳转进入**
 外部跳转进入的页面有：
-卡包页、待缴费列表、挂号记录、门诊缴费记录、化验报告列表、检查报告列表
+* 卡包页:
+  * 支付宝小程序：pages/card-pack/cards-list-alipay/cards-list-alipay
+  *  微信小程序：pages/card-pack/cards-list/cards-list;
+* 待缴费列表:pages/payment-pack/payment-list/payment-list
+* 挂号记录:pages/register-pack/order-list/order-list
+* 门诊缴费记录:pages/payment-pack/order-list/order-list
+* 门诊化验报告列表:pages/reports-pack/reports-list/reports-list?reportType=0&tab=0 
+* 门诊检查报告列表:pages/reports-pack/reports-list/reports-list?reportType=0&tab=1  
+**注意**：tab的值和配置文件中的顺序有关，如果clinicReportTabs第一项是检验报告，则门诊化验报告列表链接的tab=0
 
 **关于接口书写：** 
 * 与后端约定如果是post请求，那传参就放在body里，如果是get请求，传参就放在url里；

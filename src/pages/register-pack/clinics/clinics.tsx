@@ -98,12 +98,12 @@ export default function Clinics() {
 
   const onClickClinicItem = (e) => {
     Taro.navigateTo({
-      url: `/pages/register-pack/classify-doctor-list/classify-doctor-list?deptId=${deptId}&clinic=${e.specializedSubject}`
+      url: `/pages/register-pack/clinic-doctors/clinic-doctors?deptId=${deptId}&clinic=${e.specializedSubject}`
     })
   }
   const onClickDate = (date:string) => {
     Taro.navigateTo({
-      url: `/pages/register-pack/classify-doctor-list/classify-doctor-list?deptId=${deptId}&date=${date}`
+      url: `/pages/register-pack/clinic-doctors/clinic-doctors?deptId=${deptId}&date=${date}`
     })
   }
   return(

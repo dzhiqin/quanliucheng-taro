@@ -215,7 +215,7 @@ export default function DoctorDefault() {
     if(isNaN(parseInt(item.leaveCount))) return item.leaveCount
     if(item.leaveCount > 9999) return '不限号' // 特殊处理
     if(item.leaveCount > 0) return `剩余:${item.leaveCount}`
-    return '无号'
+    return '满号'
   }
   const currentTime = new Date().getTime()
   const timeValid = (date,time) => {

@@ -7,10 +7,10 @@ import { useRouter } from '@tarojs/taro'
 import BkLoading from '@/components/bk-loading/bk-loading'
 import {  modalService, toastService } from '@/service/toast-service'
 import { AtList, AtListItem } from "taro-ui"
-import './classify-doctor-list.less'
+import './clinic-doctors.less'
 import crossFlagPng from '@/images/icons/cross_flag.png'
 
-export default function ClassifyDoctorList(props) {
+export default function ClinicDoctors(props) {
   const router = useRouter()
   const deptId = router.params.deptId
   const deptInfo = Taro.getStorageSync('deptInfo')
@@ -61,8 +61,17 @@ export default function ClassifyDoctorList(props) {
       setBusy(false)
     })
   },[deptId,regDate])
+  const renderTickets = (item) => {
+    if(item.isHalt) return '停诊'
+    if(!item.isTimePoint) return '停诊'
+    // eslint-disable-next-line no-restricted-globals
+    if(isNaN(parseInt(item.leaveCount))) return item.leaveCount
+    if(item.leaveCount > 9999) return '不限号' // 特殊处理
+    if(item.leaveCount > 0) return `剩余:${item.leaveCount}`
+    return '满号'
+  }
   return(
-    <View className='classify-doctor-list'>
+    <View className='clinic-doctors'>
       <View className='dept'>
         <Image src={crossFlagPng} className='dept-icon' />
         <View className='dept-name'>{deptInfo ? deptInfo.deptName : ''}</View>
@@ -87,7 +96,7 @@ export default function ClassifyDoctorList(props) {
                   note={item.address} 
                   thumb={item.faceUrl} 
                   onClick={onClick.bind(null,item)} 
-                  extraText={item.isHalt ? '停诊': !item.isTimePoint ? '无号' : item.leaveTotalCount >0 ? '有号' : '无号'} 
+                  extraText={renderTickets(item)} 
                   className={item.isHalt || !item.isTimePoint ? 'ticket-btn-unactive' : item.leaveTotalCount > 0 ? 'ticket-btn-active' : 'ticket-btn-unactive'}
                 />
               )

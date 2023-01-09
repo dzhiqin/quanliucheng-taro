@@ -1,14 +1,11 @@
 import * as Taro from '@tarojs/taro'
 import * as React from 'react'
-import { View, RichText } from '@tarojs/components'
+import { View } from '@tarojs/components'
 import { AtSegmentedControl } from 'taro-ui'
 import { useState, useEffect } from 'react'
 import { REG_TYPE } from '@/enums/index'
 import { fetchRegisterNotice } from '@/service/api/card-api'
 import BkButton from '@/components/bk-button/bk-button'
-// import IntrodayRegNotice from './introday-reg-notice'
-// import PreRegNotice from './pre-reg-notice'
-import parse from 'mini-html-parser2'
 import './notice.less'
 
 export default function Notice() {
@@ -32,17 +29,8 @@ export default function Notice() {
         const notices = res.data
         const appointmentRTStr = notices.find(item => item.typeStr === '预约挂号须知').content
         const introdayRTStr = notices.find(item => item.typeStr === '当天挂号须知').content
-        parse(appointmentRTStr,(err,nodes) => {
-          if(!err){
-            setAppointmentNoticeHtml(nodes)
-          }
-        })
-        parse(introdayRTStr,(err,nodes) => {
-          if(!err){
-            setIntrodayNoticeHtml(nodes)
-          }
-        })
-        
+        setAppointmentNoticeHtml(appointmentRTStr)
+        setIntrodayNoticeHtml(introdayRTStr)
       }
     }) 
   })
@@ -56,16 +44,10 @@ export default function Notice() {
           values={['当天挂号', '预约挂号']}
         />
       </View>
-      
-      {/* {
-        current === 0 
-        ? <IntrodayRegNotice />
-        : <PreRegNotice />
-      } */}
       {
-        current === 0 
-        ? <RichText nodes={introdayNoticeHtml} />
-        : <RichText nodes={appointmentNoticeHtml} />
+        current === 0 ? 
+        <View dangerouslySetInnerHTML={{__html: introdayNoticeHtml}}></View> :
+        <View dangerouslySetInnerHTML={{__html: appointmentNoticeHtml}}></View>
       }
       <View style='padding: 40rpx'>
         <BkButton title='立即挂号' onClick={onClick} />
