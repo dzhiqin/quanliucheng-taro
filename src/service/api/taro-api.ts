@@ -339,3 +339,30 @@ export const TaroRemindAuthModal = async() => {
     })
   }
 }
+export const TaroNavigateService = (pack: string,page?: string,env?:boolean) => {
+  let busy
+  return () => {
+    if(busy) return
+    let url
+    if(pack && !page){
+      url = pack
+    }else{
+      if(pack === 'main'){
+        pack = ''
+      }
+      if(env){
+        const envVersion = process.env.TARO_ENV
+        if(envVersion !== 'weapp'){
+          page = page + '-' +envVersion
+        }
+      }
+      url = ['/pages',pack,page,page].filter(i => i).join('/')
+    }
+    Taro.navigateTo({
+      url,
+      complete: () => {
+        busy = false
+      }
+    })
+  }
+}

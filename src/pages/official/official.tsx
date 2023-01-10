@@ -128,25 +128,21 @@ export default function Official() {
           }
           
         </View>
-        {/* 临时方案，金沙洲支付宝小程序隐藏医疗服务模块 */}
-        {
-          (process.env.TARO_ENV !== 'alipay' || custom.hospName !== 'jszyy') &&
-          <BkTitle title='医疗服务' style='margin: 40rpx 0 20rpx' />
-        }
-        {
-          (process.env.TARO_ENV !== 'alipay' || custom.hospName !== 'jszyy') &&
-          <View className='official-service'>
+        <BkTitle title='医疗服务' style='margin: 40rpx 0 20rpx' />
+        <View className='official-service'>
+          {
+            (process.env.TARO_ENV !== 'alipay' || custom.hospName !== 'jszyy') &&
             <View className='official-service-item' onClick={navToClinicList.bind(this)}>
               <Image className='official-service-item-icon' src='https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/applets-imgs/website_icon7.png'></Image>
               <View className='official-service-item-name'>科室介绍</View>
             </View>
-            <View className='official-service-item' onClick={navToGuideList.bind(this)}>
-              <Image className='official-service-item-icon' src='https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/applets-imgs/website_icon8.png'></Image>
-              <View className='official-service-item-name'>就诊指南</View>
-            </View>
+          }
+          
+          <View className='official-service-item' onClick={navToGuideList.bind(this)}>
+            <Image className='official-service-item-icon' src='https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/applets-imgs/website_icon8.png'></Image>
+            <View className='official-service-item-name'>就诊指南</View>
           </View>
-        }
-
+        </View>
         {
           desc &&
           <View>

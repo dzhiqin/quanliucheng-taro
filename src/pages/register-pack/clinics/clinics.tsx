@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { View, Image, ScrollView } from '@tarojs/components'
 import * as Taro from '@tarojs/taro'
-import { useState,useEffect } from 'react'
+import { useState } from 'react'
 import locationPng from '@/images/icons/location2.png'
 import { AtSearchBar } from 'taro-ui'
 import { fetchDepatmentList, fetchPreviousVisits } from '@/service/api'
@@ -12,6 +12,8 @@ import ClinicList from './clinic-list'
 import EmbedContent from './embed-content'
 import DoctorCard from './doctor-card'
 import './clinics.less'
+import { getRegType } from '@/utils/tools'
+import { CARD_ACTIONS } from '@/enums/index'
 
 export default function Clinics() {
   const registerConfig = custom.feat.register
@@ -24,20 +26,33 @@ export default function Clinics() {
   const hospitalInfo = Taro.getStorageSync('hospitalInfo')
   
   Taro.useReady(() => {
-    const isReg = Taro.getStorageSync('isReg')
-    if(isReg === '0'){
+    if(getRegType() === '0'){
       Taro.setNavigationBarTitle({title: '预约挂号'})
-    }
-    if(isReg === '1'){
+    }else{
       Taro.setNavigationBarTitle({title: '当天挂号'})
     }
+    if(!Taro.getStorageSync('token')) return
+    getVisitHistory()
+    getDepartments()
   })
-  useEffect(() => {
+  Taro.useDidShow(() => {
+    if(Taro.getStorageSync('token')) return
+    Taro.eventCenter.on(CARD_ACTIONS.UPDATE_ALL, () => {
+      getDepartments()
+      getVisitHistory()
+    })
+  })
+  Taro.useDidHide(() => {
+    Taro.eventCenter.off(CARD_ACTIONS.UPDATE_ALL)
+  })
+  const getVisitHistory = () => {
     fetchPreviousVisits().then(result => {
       if(result.resultCode === 0){
         setDoctors(result.data)
       }
     })
+  }
+  const getDepartments = () => {
     fetchDepatmentList().then(result => {
       if(result.resultCode === 0){
         const deptListData = result.data.firstDeptInfos
@@ -53,7 +68,8 @@ export default function Clinics() {
         modalService({title: '获取科室失败',content: result.message})
       }
     })
-  },[])
+  }
+
   const onChange = (e) => {
     setValue(e)
   }

@@ -5,7 +5,7 @@
 推荐使用vscode
 ### 启动
 * `npm install`安装依赖
-* `npm run dev:weapp`已开发环境启动项目，待命令跑完后打开小程序开发工具，创建或导入项目，目录地址定位到项目根目录。
+* `npm run dev:weapp`已开发环境启动项目，待命令跑完后打开微信小程序开发工具，导入项目，目录地址定位到项目根目录下的dist/weapp文件夹。
 * `npm run prod:build`，这个指令会在生产环境下构建项目，构建出来的代码体积更小
 * 如果执行安装过慢，可以切换npm源`npm config set registry https://registry.npm.taobao.org`
 
@@ -78,7 +78,7 @@ export const custom = hospConfig.default
 **关于分包：** 
 小程序目前的规则是总代码体积不大于20M,单个分包和主包的体积不大于2M，属于一个模块的都放在一个分包里面，可以复用的组件放在主包里，不会复用的组件可以放在分包里。
 
-**外部跳转进入**
+**外部跳转进入的场景**
 外部跳转进入的页面有：
 * 卡包页:
   * 支付宝小程序：pages/card-pack/cards-list-alipay/cards-list-alipay
@@ -86,9 +86,16 @@ export const custom = hospConfig.default
 * 待缴费列表:pages/payment-pack/payment-list/payment-list
 * 挂号记录:pages/register-pack/order-list/order-list
 * 门诊缴费记录:pages/payment-pack/order-list/order-list
-* 门诊化验报告列表:pages/reports-pack/reports-list/reports-list?reportType=0&tab=0 
+* 门诊检验报告列表:pages/reports-pack/reports-list/reports-list?reportType=0&tab=0 
 * 门诊检查报告列表:pages/reports-pack/reports-list/reports-list?reportType=0&tab=1  
-**注意**：tab的值和配置文件中的顺序有关，如果clinicReportTabs第一项是检验报告，则门诊化验报告列表链接的tab=0
+**注意**：tab的值和配置文件中的顺序有关，如果clinicReportTabs第一项是检验报告，则门诊检验报告列表链接的tab=0
+* 科室医生排班表: pages/register-pack/doctor-list/doctor-list?deptId=xxx&deptName=xxx
+* 缴费详情页: pages/payment-pack/payment-detail/payment-detail?scene=${encodeURIComponent({prepayid: xxx})},扫小程序码进入缴费详情页，获取参数用decodeURIComponent
+* 医生详情页: 
+  * 小程序码：pages/register-pack/doctor-detail/doctor-detail?scene=${encodeURIComponent({slices: branchId_deptId_doctorId})}
+  * 二维码：pages/register-pack/doctor-detail/doctor-detail?slices=${JSON.stringfy({branchId: xx,deptId: xx,doctorId: xx,regDate: xx})}
+
+* 预约挂号： pages/register-pack/clinics/clinics
 
 **关于接口书写：** 
 * 与后端约定如果是post请求，那传参就放在body里，如果是get请求，传参就放在url里；

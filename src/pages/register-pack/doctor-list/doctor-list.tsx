@@ -1,8 +1,8 @@
 import * as React from 'react'
 import * as Taro from '@tarojs/taro'
 import { View, Image } from '@tarojs/components'
-import { useState,useEffect } from 'react'
-import { useRouter } from '@tarojs/taro'
+import { useState } from 'react'
+import { useRouter, useDidShow, useDidHide, useReady } from '@tarojs/taro'
 import { fetchDoctorsByDefault, fetchDoctorsByDate } from '@/service/api'
 import ScheduleDays from '@/pages/register-pack/components/schedule-days/schedule-days'
 import DoctorSchedule from '@/pages/register-pack/components/doctor-schedule/doctor-schedule'
@@ -10,6 +10,7 @@ import crossFlagPng from '@/images/icons/cross_flag.png'
 import './doctor-list.less'
 import BkLoading from '@/components/bk-loading/bk-loading'
 import BaseModal from '@/components/base-modal/base-modal'
+import { CARD_ACTIONS } from '@/enums/index'
 
 export default function DoctorList() {
   const router = useRouter()
@@ -17,7 +18,7 @@ export default function DoctorList() {
   const [week,setWeek] = useState()
   const [doctors,setDoctors] = useState([])
   const [defaultDay,setDefaultDay] = useState()
-  const [deptId, setDeptId] = useState(params.deptId || '')
+  const deptId = params.deptId
   const [busy,setBusy] = useState(false)
   const [show,setShow] = useState(false)
   const [doctorInfo,setDoctorInfo] = useState({
@@ -28,31 +29,46 @@ export default function DoctorList() {
   const deptName = params.deptName || ''
   const onDateChange = (e) => {
     setDefaultDay(e)
+    getDoctorsBySelectedDate(e)
   }
-  useEffect(() => {
-    const _deptId = router.params.deptId
-    setDeptId(_deptId)
+  useReady(() => {
+    if(!Taro.getStorageSync('token')) return
+    getScheduleDays()
+  })
+  useDidShow(() => {
+    if(Taro.getStorageSync('token')) return
+    Taro.eventCenter.on(CARD_ACTIONS.UPDATE_ALL, () => {
+      !week &&getScheduleDays()
+    })
+  })
+  useDidHide(() => {
+    Taro.eventCenter.off(CARD_ACTIONS.UPDATE_ALL)
+  })
+  const getScheduleDays = () => {
     setBusy(true)
-    fetchDoctorsByDefault({deptId: _deptId}).then(res => {
+    fetchDoctorsByDefault({deptId}).then(res => {
       if(res.resultCode === 0){
         setWeek(res.data.regDays)
         setDoctors(res.data.timeSlices)
-        res.data.defaultSelectedDay !== '无剩余号源' && setDefaultDay(res.data.defaultSelectedDay)
+        if(res.data.defaultSelectedDay !== '无剩余号源'){
+          setDefaultDay(res.data.defaultSelectedDay)
+          getDoctorsBySelectedDate(res.data.defaultSelectedDay)
+        }
       }
       setBusy(false)
     })
-  },[router.params.deptId])
-  useEffect(() => {
-    if(!deptId || !defaultDay) return
+  }
+  const getDoctorsBySelectedDate = (date) => {
     setBusy(true)
     setDoctors([])
-    fetchDoctorsByDate({deptId, regDate: defaultDay}).then(res => {
-      if(res.resultCode === 0){
+    fetchDoctorsByDate({deptId, regDate: date}).then(res => {
+      if(res.resultCode ===0){
         setDoctors(res.data)
       }
       setBusy(false)
     })
-  }, [defaultDay,deptId])
+  }
+  
   const handleClickDoctor = (e) => {
     const obj = {
       doctorId: e.doctorId,
