@@ -13,7 +13,7 @@ import { humanDateAndTime } from '@/utils/format'
 import { loadingService, modalService } from '@/service/toast-service'
 import { custom } from '@/custom/index'
 import './reports-list.less'
-import { handleAuthCode } from '@/service/api'
+import { handleAuthCode, TaroNavigateService } from '@/service/api'
 
 export default function ReportList() {
   const [busy,setBusy] = useState(false)
@@ -65,7 +65,6 @@ export default function ReportList() {
           loadingService(true)
           handleAuthCode({code: authCode,authType: 'ant'}).then(authRes => {
             loadingService(false)
-            // Taro.navigateTo({url: `/pages/reports-pack/reports-detail/reports-detail?pId=${e.pId}&examId=${e.id}&examDate=${e.date}&itemType=${itemType}&reportType=${reportType}`})
             navToReportDetail(e)
           }).catch(err => {
             loadingService(false)
@@ -77,13 +76,12 @@ export default function ReportList() {
         }
       })
     }else{
-      // Taro.navigateTo({url: `/pages/reports-pack/reports-detail/reports-detail?pId=${e.pId}&examId=${e.id}&examDate=${e.date}&itemType=${itemType}&reportType=${reportType}`})
       navToReportDetail(e)
     }
     
   }
   const navToReportDetail = (e) => {
-    Taro.navigateTo({url: `/pages/reports-pack/reports-detail/reports-detail?pId=${e.pId}&examId=${e.id}&examDate=${e.date}&itemType=${itemType}&reportType=${reportType}`})
+    TaroNavigateService('reports-pack','reports-detail',`pId=${e.pId}&examId=${e.id}&examDate=${e.date}&itemType=${itemType}&reportType=${reportType}`)
   }
   const onCardChange = (e) => {
     getList(itemType as REPORT_ITEM_TYPE_CN)

@@ -7,7 +7,7 @@ import orderBluePng from '@/images/icons/order_blue.png'
 import orderYellowPng from '@/images/icons/order_yellow.png'
 import orderGreenPng from '@/images/icons/order_green.png'
 import healthCardPng from '@/images/icons/health_card.png'
-import { TaroNavToYiBao } from '@/service/api'
+import { TaroNavigateService, TaroNavToYiBao } from '@/service/api'
 import {custom} from '@/custom/index'
 import { loadingService } from '@/service/toast-service'
 import './personal.less'
@@ -15,7 +15,7 @@ import './personal.less'
 export default function Personal() {
   const onClickPanel = (e) => {
     if(e){
-      Taro.navigateTo({url: e})
+      TaroNavigateService(e)
     }else{
       Taro.showToast({
         title: '开发中……',

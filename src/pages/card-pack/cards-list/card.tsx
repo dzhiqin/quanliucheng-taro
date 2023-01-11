@@ -4,9 +4,9 @@ import { View, Image } from '@tarojs/components'
 import crossPng from '@/images/icons/cross.png'
 import { CardsHealper } from '@/utils/cards-healper'
 import './cards-list.less'
-import { encryptByDES, getBranchId } from '@/utils/tools'
+import { encryptByDES } from '@/utils/tools'
 import { loadingService, modalService, toastService } from '@/service/toast-service'
-import { TaroNavToMiniProgram, bindHealthCard } from '@/service/api'
+import { TaroNavToMiniProgram, bindHealthCard, TaroNavigateService } from '@/service/api'
 import nrhcPng from '@/images/icons/nrhc.png'
 import cardUpgradePng from '@/images/icons/card_upgrade.png'
 import { HEALTH_CARD_RES_CODE, HEALTH_CARD_TYPE_EN } from '@/enums/index'
@@ -51,7 +51,7 @@ export default function Card(props: {
       })
     }else{
       Taro.setStorageSync('card',props.card)
-      Taro.navigateTo({url: `/pages/card-pack/card-detail/card-detail`})
+      TaroNavigateService('card-pack','card-detail')
     }
   }
   const handleBindHealthCard = (cardParams) => {
@@ -103,7 +103,7 @@ export default function Card(props: {
     if(result.type === HEALTH_CARD_RES_CODE.no_auth_before){
       setUpgrading(false)
       loadingService(false)
-      Taro.navigateTo({url: `/pages/card-pack/elec-healthcard-auth/elec-healthcard-auth?nextPage=cardList&cardId=${props.card.id}`})
+      TaroNavigateService('card-pack','elec-healthcard-auth',`nextPage=cardList&cardId=${props.card.id}`)
     }else{
       handleBindHealthCard(buildCardParams({wechatCode: result.wechatCode}))
     }

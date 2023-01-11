@@ -2,7 +2,7 @@ import * as React from 'react'
 import * as Taro from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import { useEffect,useState } from 'react'
-import { fetchClinicDoctors, fetchClinicIntro } from '@/service/api'
+import { fetchClinicDoctors, fetchClinicIntro, TaroNavigateService } from '@/service/api'
 import { modalService } from '@/service/toast-service'
 import { AtTabs, AtAvatar } from 'taro-ui'
 import './clinic-intro.less'
@@ -45,7 +45,7 @@ export default function ClinicIntro() {
     setCurrent(e)
   }
   const onClickItem = (item) => {
-    Taro.navigateTo({url: `/pages/official-pack/doctor-detail/doctor-detail?deptId=${params.deptId}&doctorId=${item.doctorId}`})
+    TaroNavigateService('official-pack','doctor-detail',`deptId=${params.deptId}&doctorId=${item.doctorId}`)
   }
   return (
     <View className='clinic-intro'>

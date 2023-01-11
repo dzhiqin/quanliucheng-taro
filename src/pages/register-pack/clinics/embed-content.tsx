@@ -3,7 +3,7 @@ import * as Taro from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import { useState,useEffect } from 'react'
 import './embed-content.less'
-import { fetchClinicsByDeptId,fetchDoctorsByDept, fetchScheduleDays } from '@/service/api'
+import { fetchClinicsByDeptId,fetchDoctorsByDept, fetchScheduleDays, TaroNavigateService } from '@/service/api'
 import { AtList, AtListItem } from "taro-ui"
 import { modalService } from '@/service/toast-service'
 import BkLoading from '@/components/bk-loading/bk-loading'
@@ -32,7 +32,7 @@ export default function EmbedContent(props:{
       deptName,
       doctorId
     }
-    Taro.navigateTo({url: `/pages/register-pack/doctor-detail/doctor-detail?options=${JSON.stringify(obj)}`})
+    TaroNavigateService('register-pack','doctor-detail',`options=${JSON.stringify(obj)}`)
   }
   const onClickDateItem = (date) => {
     if(typeof onClickDate === 'function'){

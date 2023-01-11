@@ -5,7 +5,7 @@ import { useState } from 'react'
 import BkLoading from '@/components/bk-loading/bk-loading'
 import BkButton from '@/components/bk-button/bk-button'
 import { AtList, AtListItem } from 'taro-ui'
-import { fetchInHospCards,setDefaultInHospCard } from '@/service/api'
+import { fetchInHospCards,setDefaultInHospCard, TaroNavigateService } from '@/service/api'
 import { loadingService, modalService, toastService } from '@/service/toast-service'
 
 export default function CardList(){
@@ -80,7 +80,7 @@ export default function CardList(){
         <BkLoading msg='暂未绑定住院卡' />
       }
       <View style='padding: 60rpx'>
-        <BkButton title='绑卡' onClick={() => Taro.navigateTo({url: '/pages/hosp-pack/binding-card/binding-card'})} />
+        <BkButton title='绑卡' onClick={() => TaroNavigateService('hosp-pack', 'binding-card')} />
       </View>
     </View>
   )

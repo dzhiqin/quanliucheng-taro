@@ -3,7 +3,7 @@ import { View } from '@tarojs/components'
 import BkButton from '@/components/bk-button/bk-button'
 import * as Taro from '@tarojs/taro'
 import { useEffect } from 'react'
-import { updateUserInfo, fetchHealthCards } from '@/service/api/'
+import { updateUserInfo, fetchHealthCards, TaroNavigateService } from '@/service/api/'
 import {custom} from '@/custom/index'
 import { CardsHealper } from '@/utils/cards-healper'
 import './login.less'
@@ -45,13 +45,9 @@ export default function Login() {
         })
       }else{
         if(custom.feat.bindCard.elecHealthCard){
-          Taro.navigateTo({
-            url: '/pages/card-pack/elec-healthcard-auth/elec-healthcard-auth'
-          })
+          TaroNavigateService('card-pack','elec-healthcard-auth')
         }else{
-          Taro.navigateTo({
-            url: '/pages/card-pack/create-card/create-card'
-          })
+          TaroNavigateService('card-pack','create-card')
         }
       }
     }).catch(err => {

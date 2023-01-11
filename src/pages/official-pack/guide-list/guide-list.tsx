@@ -2,7 +2,7 @@ import * as Taro from '@tarojs/taro'
 import * as React from 'react'
 import { View } from '@tarojs/components'
 import { useEffect,useState } from 'react'
-import { fetchGuideList } from '@/service/api'
+import { fetchGuideList, TaroNavigateService } from '@/service/api'
 import { loadingService, modalService } from '@/service/toast-service'
 import BkLoading from '@/components/bk-loading/bk-loading'
 import {AtList,AtListItem} from 'taro-ui'
@@ -29,7 +29,7 @@ export default function GuideList() {
   })
   const onClickItem = (item) => {
     Taro.setStorageSync('content',JSON.stringify(item.content))
-    Taro.navigateTo({url: '/pages/official-pack/guide-detail/guide-detail'})
+    TaroNavigateService('official-pack','guide-detail')
   }
   return (
     <View className='guide-list'>

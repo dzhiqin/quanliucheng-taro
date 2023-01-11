@@ -71,7 +71,10 @@ const config = {
         sign_id: 168951,
         template_id: 133435
       }
-    }
+    },
+    register:{
+      popupNotice:false
+    },
   },
   reportsPage:{
     showImageDetail: false,

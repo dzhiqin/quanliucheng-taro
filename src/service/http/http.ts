@@ -157,30 +157,5 @@ const UploadFile = (
     })
   })
 }
-// const handleLogin = () => {
-//   Taro.login({
-//     success: res => {
-//       let { code } = res
-//       login({code}).then((result:any) => {
-//         if(result.statusCode === 200) {
-//           const {data: {data}} = result
-//           Taro.setStorageSync('token', data.token)
-//           Taro.setStorageSync('openId', data.openId)
-//           fetchBranchHospital().then(resData => {
-//             if(resData.data && resData.data.length === 1){
-//               Taro.setStorageSync('hospitalInfo',resData.data[0])
-//               CardsHealper.updateAllCards()
-//               // Taro.navigateTo({url: '/pages/login/login'})
-//             }
-//           })
-//         }
-//       }).catch(() => {
-//         Taro.showToast({
-//           title: '获取token失败',
-//           icon: 'none'
-//         })
-//       })
-//     }
-//   })
-// }
+
 export { Request, Get, Post, DownloadFile, UploadFile }

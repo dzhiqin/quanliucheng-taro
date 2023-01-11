@@ -4,7 +4,7 @@ import * as React from 'react'
 import * as Taro from '@tarojs/taro'
 import BkTabs from '../bk-tabs/bk-tabs'
 import './quick-entrance.less'
-import { TaroNavToMiniProgram,handleAuthCode } from '@/service/api'
+import { TaroNavToMiniProgram,handleAuthCode, TaroNavigateService } from '@/service/api'
 import { modalService } from '@/service/toast-service'
 
 export default function QuickEntrance(props: {
@@ -25,7 +25,7 @@ export default function QuickEntrance(props: {
   }
   const onClickItem = (item) => {
     if(item.event==='navigate'){
-      Taro.navigateTo({url: item.url})
+      TaroNavigateService(item.url)
     }
     if(item.event === 'jump'){
       TaroNavToMiniProgram({appId: item.appId, path: item.path}).then(() => {

@@ -18,7 +18,8 @@ import {
   TaroRequestPayment, 
   handleAuthCode,
   AlipaySubscribeService,
-  handleGrantEnergy} from '@/service/api'
+  handleGrantEnergy,
+  TaroNavigateService} from '@/service/api'
 import { CardsHealper } from '@/utils/cards-healper'
 import { loadingService, modalService, toastService } from '@/service/toast-service'
 import { requestTry } from '@/utils/retry'
@@ -266,7 +267,7 @@ export default function OrderCreate() {
         const checkSurveyRes:any = await checkEpiLogicalSurvey()
         const checkTempRes = Taro.getStorageSync('checkEpiLogicalSurvey')
         if(!checkTempRes && !checkSurveyRes.result){
-          toastService({title: checkSurveyRes.message, onClose: () => {Taro.navigateTo({url: '/pages/service-pack/epidemiological-survey/epidemiological-survey'});setBusy(false)}})
+          toastService({title: checkSurveyRes.message, onClose: () => {TaroNavigateService('service-pack','epidemiological-survey');setBusy(false)}})
           return
         }
         if(checkTempRes){

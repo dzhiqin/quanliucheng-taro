@@ -6,7 +6,7 @@ import { useState } from 'react'
 import { useDidShow } from '@tarojs/taro'
 import { custom } from '@/custom/index'
 import { CardsHealper } from '@/utils/cards-healper'
-import { fetchInHospCards } from '@/service/api'
+import { fetchInHospCards, TaroNavigateService } from '@/service/api'
 import { modalService } from '@/service/toast-service'
 
 export default function PatientCard (props:{onCard: Function}) {
@@ -22,7 +22,7 @@ export default function PatientCard (props:{onCard: Function}) {
           confirmText: '去绑卡',
           success: re => {
             if(re.confirm){
-              Taro.navigateTo({url: process.env.TARO_ENV === 'weapp' ?'/pages/card-pack/cards-list/cards-list':'/pages/card-pack/cards-list-alipay/cards-list-alipay'})
+              TaroNavigateService('card-pack','cards-list',null,true)
             }
           }
         })
@@ -49,7 +49,7 @@ export default function PatientCard (props:{onCard: Function}) {
               confirmText: '去绑卡', 
               success: re => {
                 if(re.confirm){
-                  Taro.navigateTo({url: '/pages/hosp-pack/binding-card/binding-card'})
+                  TaroNavigateService('hosp-pack','binding-card')
                 }
               }})
           }
@@ -66,9 +66,9 @@ export default function PatientCard (props:{onCard: Function}) {
   }
   const navToCardList = () => {
     if(custom.hospName === 'jszyy'){
-      Taro.navigateTo({url: '/pages/card-pack/cards-list/cards-list'})
+      TaroNavigateService('card-pack','cards-list')
     }else{
-      Taro.navigateTo({url: '/pages/hosp-pack/card-list/card-list'})
+      TaroNavigateService('hosp-pack','card-list')
     }
   }
   return(

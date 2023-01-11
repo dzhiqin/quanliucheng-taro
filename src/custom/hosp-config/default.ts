@@ -153,7 +153,7 @@ const config:HospConfig = {
     greenTree: false,// 蚂蚁森林接入
     bindCard: { // 绑卡/建卡相关配置
       smsVerify: {
-        enable: true,
+        enable: false,
         apikey: 'N68313eb24',
         secret: '683135068234a327',
         sign_id: 168951,

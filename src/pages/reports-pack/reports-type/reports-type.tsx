@@ -1,17 +1,16 @@
-import * as Taro from '@tarojs/taro'
 import * as React from 'react'
 import { View } from '@tarojs/components'
 import BkPanel from '@/components/bk-panel/bk-panel'
 import { REPORT_TYPE_EN } from '@/enums/index'
 import { custom } from '@/custom/index'
+import { TaroNavigateService } from '@/service/api'
 
 export default function ReportsType() {
   const onClickClinic = () => {
-    Taro.navigateTo({url: '/pages/reports-pack/reports-list/reports-list?reportType='+ REPORT_TYPE_EN.clinic})
+    TaroNavigateService('reports-pack','reports-list',`reportType=${REPORT_TYPE_EN.clinic}`)
   }
   const onClickHospitalization = () => {
-    Taro.navigateTo({url: '/pages/reports-pack/reports-list/reports-list?reportType='+ REPORT_TYPE_EN.hospitalization})
-    
+    TaroNavigateService('reports-pack','reports-list',`reportType=${REPORT_TYPE_EN.hospitalization}`)
   }
   return(
     <View className='reports-type' style='padding: 40rpx'>

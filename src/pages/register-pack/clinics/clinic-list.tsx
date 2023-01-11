@@ -1,12 +1,13 @@
 import * as React from 'react'
 import * as Taro from '@tarojs/taro'
 import { AtList, AtListItem } from 'taro-ui'
+import { TaroNavigateService } from '@/service/api'
 
 export default function ClinicList(props:{
   clinics: any[],
 }) {
   const onClickItem = (clinic) => {
-    Taro.navigateTo({url: `/pages/register-pack/doctor-list/doctor-list?deptId=${clinic.deptId}&deptName=${clinic.deptName}`})
+    TaroNavigateService('register-pack','doctor-list',`deptId=${clinic.deptId}&deptName=${clinic.deptName}`)
   }
   return (
     <AtList className='clinic-list' >

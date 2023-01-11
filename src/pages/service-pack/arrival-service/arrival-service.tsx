@@ -5,6 +5,7 @@ import manWaitingPng from '@/images/icons/man_time.png'
 import arrivalPng from '@/images/icons/note_tick.png'
 import { custom } from '@/custom/index'
 import './arrival-service.less'
+import { TaroNavigateService } from '@/service/api'
 
 export default function BindingCard() {
   return(
@@ -12,7 +13,7 @@ export default function BindingCard() {
       <View className='flex-between'>
         {
           custom.feat.arrivalService.arrival && 
-          <View className='arrival-service-item info-bg' onClick={() => {Taro.navigateTo({url: '/pages/service-pack/arrival/arrival'})}}>
+          <View className='arrival-service-item info-bg' onClick={() => {TaroNavigateService('service-pack','arrival') }}>
             <Image src={arrivalPng} className='arrival-service-image' />
             <View className='arrival-service-title'>
               自助报到
@@ -21,7 +22,7 @@ export default function BindingCard() {
         }
         {
           custom.feat.arrivalService.waitingList && 
-          <View className='arrival-service-item primary-bg' onClick={() => {Taro.navigateTo({url: '/pages/service-pack/waiting-list/waiting-list'})}}>
+          <View className='arrival-service-item primary-bg' onClick={() => {TaroNavigateService('service-pack','waiting-list')}}>
             <Image src={manWaitingPng} className='arrival-service-image' />
             <View className='arrival-service-title'>
               候诊队列

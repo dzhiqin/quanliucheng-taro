@@ -3,7 +3,7 @@ import * as Taro from '@tarojs/taro'
 import { View, Image } from '@tarojs/components'
 import { useState } from 'react'
 import { useRouter, useDidShow, useDidHide, useReady } from '@tarojs/taro'
-import { fetchDoctorsByDefault, fetchDoctorsByDate } from '@/service/api'
+import { fetchDoctorsByDefault, fetchDoctorsByDate, TaroNavigateService } from '@/service/api'
 import ScheduleDays from '@/pages/register-pack/components/schedule-days/schedule-days'
 import DoctorSchedule from '@/pages/register-pack/components/doctor-schedule/doctor-schedule'
 import crossFlagPng from '@/images/icons/cross_flag.png'
@@ -77,7 +77,7 @@ export default function DoctorList() {
       deptName: deptName,
       sourceType: e.sourceType
     }
-    Taro.navigateTo({url: `/pages/register-pack/doctor-detail/doctor-detail?options=${JSON.stringify(obj)}`})
+    TaroNavigateService(`/pages/register-pack/doctor-detail/doctor-detail?options=${JSON.stringify(obj)}`)
   }
   const handleShowSpecialty = (info) => {
     setShow(true)

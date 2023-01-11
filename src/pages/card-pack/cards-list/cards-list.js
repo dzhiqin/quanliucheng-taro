@@ -9,7 +9,7 @@ import { loadingService, toastService } from '@/service/toast-service'
 import { getImageSrc } from '@/utils/image-src'
 import { CardsHealper } from '@/utils/cards-healper'
 import { AtNoticebar } from 'taro-ui'
-import { TaroRemindAuthModal } from '@/service/api'
+import { TaroNavigateService, TaroRemindAuthModal } from '@/service/api'
 
 export default class CardList2 extends React.Component {
   constructor(props){
@@ -44,14 +44,14 @@ export default class CardList2 extends React.Component {
     const result = e.detail.result
     if(result.type === 3) {
       // 用户还未授权
-      Taro.navigateTo({url: '/pages/card-pack/elec-healthcard-auth/elec-healthcard-auth'})
+      TaroNavigateService('card-pack','elec-healthcard-auth')
     }else{
       // 用户已经授权过
-      Taro.navigateTo({url: '/pages/card-pack/elec-healthcard-users/elec-healthcard-users'})
+      TaroNavigateService('card-pack','elec-healthcard-users')
     }
   }
   navToCreateCard() {
-    Taro.navigateTo({url: '/pages/card-pack/create-card/create-card'})
+    TaroNavigateService('card-pack','create-card')
   }
   
   handleRefresh() {
@@ -98,7 +98,7 @@ export default class CardList2 extends React.Component {
             }
             {
               !custom.feat.bindCard.elecHealthCard && 
-              <View className='btn' onClick={()=> Taro.navigateTo({url: '/pages/card-pack/bind-card/bind-card'})}>
+              <View className='btn' onClick={()=> TaroNavigateService('card-pack','bind-card')}>
                 <View className='btn-title'>绑卡</View>
                 <View className='btn-subtitle'>已有就诊卡用户直接绑定</View>
               </View>

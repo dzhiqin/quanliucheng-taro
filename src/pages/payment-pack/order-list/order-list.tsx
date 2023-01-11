@@ -3,7 +3,7 @@ import * as React from 'react'
 import { View } from '@tarojs/components'
 import HealthCards from '@/components/health-cards/health-cards'
 import { useEffect, useState } from 'react'
-import { createPaymentOrder, fetchPaymentOrderList , TaroSubscribeService , PayOrderParams, handlePayment, cancelPayment, fetchPaymentOrderStatus, TaroAliPayment, AlipaySubscribeService } from '@/service/api'
+import { createPaymentOrder, fetchPaymentOrderList , TaroSubscribeService , PayOrderParams, handlePayment, cancelPayment, fetchPaymentOrderStatus, TaroAliPayment, AlipaySubscribeService, TaroNavigateService } from '@/service/api'
 import { loadingService, modalService, toastService } from '@/service/toast-service'
 import { PAY_TYPE_CN, ORDER_SEARCH_TYPE_EN , ORDER_STATUS_CN, ORDER_STATUS_EN, PAYMENT_FROM } from '@/enums/index'
 import BkPanel from '@/components/bk-panel/bk-panel'
@@ -212,7 +212,7 @@ export default function OrderList(){
       // orderType: orderType === '0' ? 'ZiFei' : 'YiBao'  // 订单列表接口后端返回的ordertype为'0'/'1',但缴费列表接口返回的ordertype字段为‘ZiFei’/'YiBao',就╮(╯▽╰)╭……
       orderType
     }
-    Taro.navigateTo({url: `/pages/payment-pack/payment-detail/payment-detail?orderInfo=${JSON.stringify(params)}&from=${PAYMENT_FROM.orderList}`})
+    TaroNavigateService('payment-pack','payment-detail',`orderInfo=${JSON.stringify(params)}&from=${PAYMENT_FROM.orderList}`)
   }
   return (
     <View className='payment-order-list'>

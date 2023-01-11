@@ -4,6 +4,7 @@ import * as Taro from '@tarojs/taro'
 import { View, Image } from '@tarojs/components'
 import './clinics.less'
 import { getImageSrc } from '@/utils/image-src'
+import { TaroNavigateService } from '@/service/api'
 
 export default function DoctorCard(props) {
   const {doctor: {deptId, deptName, doctorId}} = props
@@ -13,7 +14,7 @@ export default function DoctorCard(props) {
       deptId,
       deptName
     }
-    Taro.navigateTo({url: `/pages/register-pack/doctor-detail/doctor-detail?options=${JSON.stringify(obj)}`})
+    TaroNavigateService('register-pack','doctor-detail',`options=${JSON.stringify(obj)}`)
   }
   return(
     <View className='doctor-card' onClick={onClick}>

@@ -11,7 +11,7 @@ import BkButton from '@/components/bk-button/bk-button'
 import Card from './card'
 import { loadingService, modalService } from '@/service/toast-service'
 import { CardsHealper } from '@/utils/cards-healper'
-import { handleAuthCode, getUserInfo, AlipaySubscribeService } from '@/service/api'
+import { handleAuthCode, getUserInfo, AlipaySubscribeService, TaroNavigateService } from '@/service/api'
 
 export default function CardsListAlipay () {
   const router = Taro.useRouter()
@@ -42,7 +42,7 @@ export default function CardsListAlipay () {
             const {realName,mobile,idCard} = info.data
             const authInfo = {realName,mobile,idCard}
             loadingService(false)
-            Taro.navigateTo({url: `/pages/card-pack/create-card/create-card?authInfo=${JSON.stringify(authInfo)}`})
+            TaroNavigateService('card-pack','create-card',`authInfo=${JSON.stringify(authInfo)}`)
           })
         }).catch(err => {
           modalService({content: JSON.stringify(err)})
@@ -87,7 +87,7 @@ export default function CardsListAlipay () {
           }
           {
             !custom.feat.bindCard.elecHealthCard && 
-            <View className='btn' onClick={()=> Taro.navigateTo({url: '/pages/card-pack/bind-card/bind-card'})}>
+            <View className='btn' onClick={()=> TaroNavigateService('card-pack','bind-card')}>
               <View className='btn-title'>绑卡</View>
               <View className='btn-subtitle'>已有就诊卡用户直接绑定</View>
             </View>

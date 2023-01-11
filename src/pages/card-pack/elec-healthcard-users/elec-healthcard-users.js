@@ -29,25 +29,4 @@ Page({
       })
     })
   }
-  // pageChange (wechatCode) {
-  //   let pages = getCurrentPages()
-  //   let routeArr = []
-  //   pages.map(item => {
-  //     routeArr.push(item.route)
-  //   })
-  //   if (routeArr[routeArr.length - 1] !== 'pages/personal/personal') {
-  //     let loginRouteIndex = routeArr.indexOf('pages/login/login') > 0 ? routeArr.indexOf('pages/login/login') : routeArr.indexOf('pages/login/healthCardAuth')
-  //     if (loginRouteIndex >= 0) {
-  //       let cardsRoute = routeArr.indexOf('pages/cardsPackage/healthCard/healthCard')
-  //       cardsRoute = cardsRoute < 0 ? routeArr.indexOf('pages/cardsPackage/bindCard/bindCard') : cardsRoute
-  //       Taro.navigateTo({
-  //         url: '../bindCard/bindCard?fromPage=' +(routeArr.length-cardsRoute)+ '&wechatCode=' + wechatCode,
-  //       })
-  //     } else {
-  //       Taro.navigateTo({
-  //         url: '../bindCard/bindCard?fromPage=3&wechatCode=' + wechatCode,
-  //       })
-  //     }
-  //   }
-  // },
 })

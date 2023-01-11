@@ -1,5 +1,5 @@
 import * as Taro from '@tarojs/taro'
-import { setDefaultCard, deleteCard, fetchHealthCards } from '@/service/api'
+import { setDefaultCard, deleteCard, fetchHealthCards, TaroNavigateService } from '@/service/api'
 import {Card} from '../interfaces/card'
 
 const updateAllCards = () => {
@@ -107,8 +107,7 @@ const showBindCardModal = () => {
     showCancel: false,
     success: res => {
       if(res.confirm){
-        // Taro.navigateTo({url: '/pages/card-pack/create-card/create-card'})
-        Taro.navigateTo({url: process.env.TARO_ENV === 'weapp' ? '/pages/card-pack/cards-list/cards-list' : '/pages/card-pack/cards-list-alipay/cards-list-alipay'})
+        TaroNavigateService('card-pack','cards-list',null,true)
       }else{
         showBindCardModal()
       }

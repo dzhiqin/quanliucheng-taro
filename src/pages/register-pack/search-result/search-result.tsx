@@ -3,7 +3,7 @@ import * as React from 'react'
 import { View } from '@tarojs/components'
 import { useDidShow, useRouter } from '@tarojs/taro';
 import { useState } from 'react';
-import { fetchDeptsOrDoctors } from '@/service/api';
+import { fetchDeptsOrDoctors, TaroNavigateService } from '@/service/api';
 import { AtSearchBar } from 'taro-ui';
 import { toastService } from '@/service/toast-service';
 import BkPanel from '@/components/bk-panel/bk-panel';
@@ -38,7 +38,7 @@ export default function SearchResult() {
     getList()
   })
   const onClickDept = (dept) => {
-    Taro.navigateTo({url: `/pages/register-pack/doctor-list/doctor-list?deptId=${dept.deptId}&deptName=${dept.deptName}`})
+    TaroNavigateService('register-pack','doctor-list',`deptId=${dept.deptId}&deptName=${dept.deptName}`)
   }
   const onClickDoctor = (doctor) => {
     const obj = {
@@ -47,8 +47,7 @@ export default function SearchResult() {
       deptId: doctor.deptId,
       deptName: doctor.deptName
     }
-
-    Taro.navigateTo({url: `/pages/register-pack/doctor-detail/doctor-detail?options=${JSON.stringify(obj)}`})
+    TaroNavigateService('register-pack','doctor-detail',`options=${JSON.stringify(obj)}`)
   }
   return(
     <View className='search-result'>

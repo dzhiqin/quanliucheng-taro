@@ -21,7 +21,8 @@ import {
   fetchMedicineGuideList,
   handleLogin,
   TaroAliPayment,
-  AlipaySubscribeService
+  AlipaySubscribeService,
+  TaroNavigateService
 } from '@/service/api'
 import { CardsHealper } from '@/utils/cards-healper'
 import './payment-detail.less'
@@ -722,7 +723,7 @@ export default function PaymentDetail() {
             payResult === resultEnum.success &&
             <View>
               <BkButton theme='primary' title='返回首页' onClick={() => Taro.switchTab({url: '/pages/index/index'})} style='margin-bottom: 40rpx' />
-              <BkButton theme='info' title='查看订单' onClick={() => Taro.navigateTo({url: '/pages/payment-pack/order-list/order-list'})} />
+              <BkButton theme='info' title='查看订单' onClick={() => TaroNavigateService('payment-pack', 'order-list')} />
             </View>
           }
         </View>

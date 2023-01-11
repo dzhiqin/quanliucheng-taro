@@ -4,7 +4,7 @@ import * as Taro from '@tarojs/taro'
 import { useState } from 'react'
 import locationPng from '@/images/icons/location2.png'
 import { AtSearchBar } from 'taro-ui'
-import { fetchDepatmentList, fetchPreviousVisits } from '@/service/api'
+import { fetchDepatmentList, fetchPreviousVisits, TaroNavigateService } from '@/service/api'
 import { modalService, toastService } from '@/service/toast-service'
 import {custom} from '@/custom/index'
 import BkVerticalTab from '@/components/bk-vertical-tab/bk-vertical-tab'
@@ -76,7 +76,7 @@ export default function Clinics() {
   const onActionClick = () => {
     const searchValue = value.trim()
     if(searchValue){
-      Taro.navigateTo({url: '/pages/register-pack/search-result/search-result?value='+searchValue})
+      TaroNavigateService('register-pack','search-result',`value=${searchValue}`)
     }else{
       toastService({title: '请输入医生或科室'})
     }
@@ -89,7 +89,7 @@ export default function Clinics() {
     }
     if(custom.hospName === 'gy3ylw' && item.deptName === '生殖助孕'){
       // 特殊处理广三老院区荔湾的生殖助孕门诊
-      Taro.navigateTo({url: '/pages/card-pack/cards-list/cards-list?action=jumpOut'})
+      TaroNavigateService('card-pack','cards-list','action=jumpOut')
       return
     }
     setCurrentDept(index)
@@ -105,7 +105,7 @@ export default function Clinics() {
     }else{
       if(registerConfig.type === 'byDept'){
         // 没有二级科室，直接跳转到医生列表
-        Taro.navigateTo({url: `/pages/register-pack/doctor-list/doctor-list?deptId=${item.deptId}&deptName=${item.deptName}`})
+        TaroNavigateService('register-pack','doctor-list',`deptId=${item.deptId}&deptName=${item.deptName}`)
         setClinicList([])
       }
       
@@ -113,14 +113,10 @@ export default function Clinics() {
   }
 
   const onClickClinicItem = (e) => {
-    Taro.navigateTo({
-      url: `/pages/register-pack/clinic-doctors/clinic-doctors?deptId=${deptId}&clinic=${e.specializedSubject}`
-    })
+    TaroNavigateService('register-pack','clinic-doctors',`deptId=${deptId}&clinic=${e.specializedSubject}`)
   }
   const onClickDate = (date:string) => {
-    Taro.navigateTo({
-      url: `/pages/register-pack/clinic-doctors/clinic-doctors?deptId=${deptId}&date=${date}`
-    })
+    TaroNavigateService('register-pack','clinic-doctors',`deptId=${deptId}&date=${date}`)
   }
   return(
     <View className='clinics'>

@@ -4,7 +4,7 @@ import { View } from '@tarojs/components'
 import HealthCards from '@/components/health-cards/health-cards'
 import { CardsHealper } from '@/utils/cards-healper'
 import { modalService } from '@/service/toast-service'
-import { fetchPaymentListFromHis } from '@/service/api'
+import { fetchPaymentListFromHis, TaroNavigateService } from '@/service/api'
 import { useState,useEffect } from 'react'
 import BkLoading from '@/components/bk-loading/bk-loading'
 import './payment-list.less'
@@ -30,7 +30,7 @@ export default function PaymentList() {
   useEffect(() => {
     const card = CardsHealper.getDefault()
     if(!card){
-      modalService({content: '请先绑卡',success: ()=> {Taro.navigateTo({url: process.env.TARO_ENV === 'weapp' ? '/pages/card-pack/cards-list/cards-list' : '/pages/card-pack/cards-list-alipay/cards-list-alipay'})}})
+      modalService({content: '请先绑卡',success: ()=> {TaroNavigateService('card-pack','cards-list',null,true) }})
       return
     }
   },[])
@@ -38,7 +38,7 @@ export default function PaymentList() {
     // 缴费单的信息要从列表带过去
     item.payState = PAY_STATUS_EN.unpay  // 默认未支付状态
     item.orderState = ORDER_STATUS_EN.unpay // 默认未支付状态
-    Taro.navigateTo({url: `/pages/payment-pack/payment-detail/payment-detail?orderInfo=${JSON.stringify(item)}&from=${PAYMENT_FROM.paymentList}`})
+    TaroNavigateService('payment-pack','payment-detail',`orderInfo=${JSON.stringify(item)}&from=${PAYMENT_FROM.paymentList}`)
   }
   return(
     <View className='payment-list'>

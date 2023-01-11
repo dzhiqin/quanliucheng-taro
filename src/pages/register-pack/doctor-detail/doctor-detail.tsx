@@ -1,7 +1,7 @@
 import * as Taro from '@tarojs/taro'
 import * as React from 'react'
 import { View, Image } from '@tarojs/components'
-import { fetchDoctorSchedules, fetchTimeListByDate, fetchDoctorDetail } from '@/service/api'
+import { fetchDoctorSchedules, fetchTimeListByDate, fetchDoctorDetail, TaroNavigateService } from '@/service/api'
 import { useEffect, useState } from 'react'
 import { useRouter } from '@tarojs/taro'
 import { loadingService, modalService, toastService } from '@/service/toast-service'
@@ -92,7 +92,7 @@ export default function DoctorDefault() {
       modalService({content:'找不到就诊卡',showCancel:true,confirmText: '去建卡',success:(res) => {
         if(res.confirm){
           let url = process.env.TARO_ENV === 'alipay' ? '/pages/card-pack/cards-list-alipay/cards-list-alipay' : '/pages/card-pack/cards-list/cards-list'
-          Taro.navigateTo({url})
+          TaroNavigateService(url)
         }
       }})
       return
@@ -129,7 +129,7 @@ export default function DoctorDefault() {
       timeInterval: item.timeInterval // 广三黄埔新增字段
     }
     Taro.setStorageSync('orderParams',orderParams)
-    Taro.navigateTo({url: '/pages/register-pack/order-create/order-create'})
+    TaroNavigateService('/pages/register-pack/order-create/order-create')
     
   } 
   const onDateChange = (date) => {

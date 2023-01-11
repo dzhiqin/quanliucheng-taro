@@ -9,6 +9,7 @@ import RegisterNoticeModal from '../register-notice-modal/register-notice-modal'
 import BoxItem from './box-item'
 import './function-boxes.less'
 import { modalService } from '@/service/toast-service'
+import { TaroNavigateService } from '@/service/api'
 
 export default function FunctionBoxes(props) {
    const {functionBox} = useContext(MyContext)
@@ -21,7 +22,7 @@ export default function FunctionBoxes(props) {
           navToPage()
         }
       }else{
-        Taro.navigateTo({url: item.url})
+        TaroNavigateService(item.url)
       }
    }
  
@@ -49,7 +50,7 @@ export default function FunctionBoxes(props) {
         // 未选择院区的，进入选择院区页面
         url = '/pages/register-pack/branch-hospitals/branch-hospitals'
       }
-      Taro.navigateTo({url})
+      TaroNavigateService(url)
     } 
     return (
       <View className='function-box-container'>

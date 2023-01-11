@@ -11,6 +11,7 @@ import {custom} from '@/custom/index'
 import './official.less'
 import { loadingService, modalService } from '@/service/toast-service'
 import { reportCmPV_YL } from '@/utils/cloudMonitorHelper'
+import { TaroNavigateService } from '@/service/api'
 
 export default function Official() {
   const [hospInfo,setHospInfo] = useState({
@@ -25,14 +26,10 @@ export default function Official() {
   const [banners,setBanners] = useState(['https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/applets-imgs/banner2.png'])
   const [desc,setDesc] = useState(undefined)
   const navToClinicList = () => {
-    Taro.navigateTo({
-      url: '/pages/official-pack/clinic-list/clinic-list'
-    })
+    TaroNavigateService('official-pack','clinic-list')
   }
   const navToGuideList = () => {
-    Taro.navigateTo({
-      url: '/pages/official-pack/guide-list/guide-list'
-    })
+    TaroNavigateService('official-pack','guide-list')
   }
   Taro.useReady(() => {
     if(custom.feat.guangHuaMonitor.enable){

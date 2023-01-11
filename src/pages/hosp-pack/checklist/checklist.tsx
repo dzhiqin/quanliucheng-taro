@@ -2,7 +2,7 @@ import * as React from 'react'
 import * as Taro from '@tarojs/taro'
 import { View, Image } from '@tarojs/components'
 import { useState } from 'react'
-import { getInHospBillList, getInHospInfo } from '@/service/api'
+import { getInHospBillList, getInHospInfo, TaroNavigateService } from '@/service/api'
 import { loadingService, modalService, toastService } from '@/service/toast-service'
 import BkPanel from '@/components/bk-panel/bk-panel'
 import calanderPng from '@/images/icons/calendar.png'
@@ -58,7 +58,7 @@ export default function BindingCard() {
         return
       }
     }
-    Taro.navigateTo({url: `/pages/hosp-pack/checklist-detail/checklist-detail?billDate=${item.billDate}&registerId=${registerId? registerId : _registerId}`})
+    TaroNavigateService('hosp-pack','checklist-detail',`billDate=${item.billDate}&registerId=${registerId? registerId : _registerId}`)
   }
   const onPatientCard = (patientCard) => {
     setCard(patientCard)

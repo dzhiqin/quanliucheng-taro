@@ -339,9 +339,9 @@ export const TaroRemindAuthModal = async() => {
     })
   }
 }
-export const TaroNavigateService = (pack: string,page?: string,env?:boolean) => {
+export const TaroNavigateService = (pack: string,page?: string,params?: string,env?:boolean,) => {
   let busy
-  return () => {
+  return (() => {
     if(busy) return
     let url
     if(pack && !page){
@@ -357,6 +357,7 @@ export const TaroNavigateService = (pack: string,page?: string,env?:boolean) => 
         }
       }
       url = ['/pages',pack,page,page].filter(i => i).join('/')
+      params && (url = url + '?'+params)
     }
     Taro.navigateTo({
       url,
@@ -364,5 +365,5 @@ export const TaroNavigateService = (pack: string,page?: string,env?:boolean) => 
         busy = false
       }
     })
-  }
+  })()
 }

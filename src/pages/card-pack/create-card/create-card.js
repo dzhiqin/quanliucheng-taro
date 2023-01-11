@@ -138,7 +138,7 @@ export default class BindCard extends React.Component {
       })
       return
     }
-    if(custom.feat.bindCard.smsVerify && this.state.smsCode != this.state.smsCodeValid){
+    if(custom.feat.bindCard.smsVerify.enable && this.state.smsCode != this.state.smsCodeValid){
       toastService({title: '验证码错误'})
       this.setState({busy: false})
       return
@@ -479,13 +479,13 @@ export default class BindCard extends React.Component {
           ></BkInput> */}
           {
             process.env.TARO_ENV === 'weapp' &&
-            <BkInput name='patientName' title='姓名' type='text' placeholder='请输入姓名' value={this.state.card.patientName} maxLength={15} 
+            <BkInput name='patientName' title='姓名' type='text' placeholder='请输入姓名' value={this.state.card.patientName} maxLength={30} 
               onChange={this.handleCardChange.bind(this,'patientName')}
             ></BkInput>
           }
           {
             process.env.TARO_ENV === 'alipay' &&
-            <BkInput name='patientName' title='姓名' type='text' placeholder='请输入姓名' value={this.state.card.patientName} maxLength={15} 
+            <BkInput name='patientName' title='姓名' type='text' placeholder='请输入姓名' value={this.state.card.patientName} maxLength={30} 
               onBlur={this.handlePatientNameChange.bind(this)}
               onFocus={this.handleOnFocus.bind(this,'patientName',this.state.realName)}
             ></BkInput>

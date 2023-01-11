@@ -1,7 +1,7 @@
 import * as React from 'react'
 import * as Taro from '@tarojs/taro'
 import { View, Image } from '@tarojs/components'
-import { fetchDoctorsBySubject, fetchDoctorsByDate } from '@/service/api'
+import { fetchDoctorsBySubject, fetchDoctorsByDate, TaroNavigateService } from '@/service/api'
 import { useEffect, useState } from 'react'
 import { useRouter } from '@tarojs/taro'
 import BkLoading from '@/components/bk-loading/bk-loading'
@@ -33,7 +33,7 @@ export default function ClinicDoctors(props) {
       deptId: deptId,
       deptName: deptInfo.deptName
     }
-    Taro.navigateTo({url: `/pages/register-pack/doctor-detail/doctor-detail?options=${JSON.stringify(obj)}`})
+    TaroNavigateService('register-pack','doctor-detail',`options=${JSON.stringify(obj)}`)
   }
   
   useEffect(() => {
@@ -63,7 +63,7 @@ export default function ClinicDoctors(props) {
   },[deptId,regDate])
   const renderTickets = (item) => {
     if(item.isHalt) return '停诊'
-    if(!item.isTimePoint) return '停诊'
+    if(!item.isTimePoint) return '无号'
     // eslint-disable-next-line no-restricted-globals
     if(isNaN(parseInt(item.leaveCount))) return item.leaveCount
     if(item.leaveCount > 9999) return '不限号' // 特殊处理

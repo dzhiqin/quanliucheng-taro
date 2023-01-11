@@ -9,6 +9,7 @@ import qrcodeImg from '@/images/icons/qrcode.png'
 import './health-cards.less'
 import { CARD_ACTIONS } from '@/enums/index'
 import { getPrivacyName } from '@/utils/tools'
+import { TaroNavigateService } from '@/service/api'
 
 export default function HealthCards(props: {
   cards?: any,
@@ -55,10 +56,10 @@ export default function HealthCards(props: {
  
   const handleAddCard = () => {
     if(process.env.TARO_ENV === 'weapp'){
-      Taro.navigateTo({url: '/pages/login/login'})
+      TaroNavigateService('main','login')
     }
     if(process.env.TARO_ENV === 'alipay'){
-      Taro.navigateTo({url: '/pages/card-pack/cards-list-alipay/cards-list-alipay'})
+      TaroNavigateService('/pages/card-pack/cards-list-alipay/cards-list-alipay')
     }
   }
   const onCardChange = (e) => {
@@ -72,21 +73,11 @@ export default function HealthCards(props: {
   }
   const onSwitch = (e) => {
     e.stopPropagation()
-    if(process.env.TARO_ENV === 'weapp'){
-      Taro.navigateTo({
-        url: '/pages/card-pack/cards-list/cards-list?action=switchCard'
-      })
-    }
-    if(process.env.TARO_ENV === 'alipay'){
-      Taro.navigateTo({
-        url: '/pages/card-pack/cards-list-alipay/cards-list-alipay?action=switchCard'
-      })
-    }
-    
+    TaroNavigateService('card-pack','cards-list','action=switchCard',true)
   }
   const navToCardDetail = (card) => {
     Taro.setStorageSync('card',card)
-    Taro.navigateTo({url: `/pages/card-pack/card-detail/card-detail`})
+    TaroNavigateService('card-pack','card-detail')
   }
   
   if(cards.length === 0){
@@ -123,7 +114,7 @@ export default function HealthCards(props: {
       return (
         <View style='padding:40rpx 40rpx 0'>
           <View className='add-card single-card'>
-              <View className='single-card-content'>
+              <View className='single-card-content' onClick={navToCardDetail.bind(null,selectedCard)}>
                 <View>
                   <View style='color: white'>您好，{process.env.TARO_ENV === 'alipay'? getPrivacyName(selectedCard.name) : selectedCard.name}</View>
                   <View className='single-card-txt'>诊疗卡号{selectedCard.cardNo}</View>
