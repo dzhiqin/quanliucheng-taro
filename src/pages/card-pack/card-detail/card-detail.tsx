@@ -11,6 +11,7 @@ import './card-detail.less'
 import { modalService } from '@/service/toast-service'
 import nrhcPng from '@/images/icons/nrhc.png'
 import QrCode from 'qrcode'
+import { TaroNavigateService } from '@/service/api'
 
 export default function CardDetail(props: any) {
   const [busy,setBusy] = useState(false)
@@ -26,7 +27,7 @@ export default function CardDetail(props: any) {
     isDefault: false,
     qrCode: '',
     qrCodeText: '',
-    type: ''
+    address: ''
   })
   const [currentTab,setCurrentTab] = useState(0)
   const [qrcodeSrc,setQrcodeSrc] = useState(undefined)
@@ -70,6 +71,18 @@ export default function CardDetail(props: any) {
   }
   const handleTabChange = (value) => {
     setCurrentTab(value)
+  }
+  const navToEditPage = () => {
+    const params = {
+      name: card.name,
+      id:card.id,
+      cardNo: card.cardNo,
+      cellphone: card.cellphone,
+      idenNo: card.idenNo,
+      isDefault: card.isDefault,
+      address: card.address
+    }
+    TaroNavigateService('card-pack','edit-card',`card=${JSON.stringify(params)}`)
   }
   return(
     <View className='card-detail'>
@@ -131,6 +144,7 @@ export default function CardDetail(props: any) {
       
       <View className='btns'>
         <BkButton title='解除绑定' onClick={handleUnBind} loading={busy} />
+        {/* <BkButton style='margin-top: 30rpx;' theme='info' title='修改信息' onClick={navToEditPage}/> */}
       </View>
     </View>
   )

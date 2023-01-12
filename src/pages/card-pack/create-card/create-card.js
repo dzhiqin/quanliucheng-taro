@@ -597,7 +597,7 @@ export default class BindCard extends React.Component {
             title='详细地址' 
             type='text' 
             placeholder='请输入详细地址' 
-            maxLength={30}
+            maxLength={34}
             value={this.state.card.address} 
             onChange={this.handleCardChange.bind(this,'address')}
           >

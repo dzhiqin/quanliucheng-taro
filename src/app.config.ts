@@ -64,7 +64,8 @@ const subPackages = [
       'card-detail/card-detail',
       'elec-healthcard-auth/elec-healthcard-auth',
       'elec-healthcard-users/elec-healthcard-users',
-      'bind-card/bind-card'
+      'bind-card/bind-card',
+      'edit-card/edit-card'
     ] 
     :
     [

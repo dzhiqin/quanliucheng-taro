@@ -4,7 +4,7 @@ import { AtInput } from 'taro-ui'
 
 export default function BkInput(props: {
   name: string,
-  type: 'text',
+  type: 'text' | 'number',
   value: string,
   placeholder: string,
   placeholderStyle?: string,
@@ -25,7 +25,7 @@ export default function BkInput(props: {
   autoFocus?: false,
   focus?: false,
   required?: false,
-  onChange: any,
+  onChange?: any,
   onFocus?: any,
   onBlur?: any,
   onConfirm?: any,
