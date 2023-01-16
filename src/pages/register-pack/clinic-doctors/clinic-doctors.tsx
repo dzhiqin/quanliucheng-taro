@@ -23,7 +23,7 @@ export default function ClinicDoctors(props) {
       toastService({title: '已停诊'})
       return
     }
-    if(doctor.leaveTotalCount === 0){
+    if(doctor.isTimePoint === false){
       toastService({title: '没号了~请重新选择'})
       return
     }

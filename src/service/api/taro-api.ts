@@ -316,6 +316,7 @@ export const TaroRemindAuthModal = async() => {
         }
       })
     }})
+    return
   }
   let acceptedIds = []
   for(let i in settings){

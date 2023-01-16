@@ -39,7 +39,7 @@ export default function WeekSchedule(props:{
   }
   const onClickItem = (e) => {
     if(e.disable) return
-    if(e.scheduleStatusDescription === '已约满') return
+    // if(e.scheduleStatusDescription === '已约满') return
     const date = e.date
     if(typeof onChange !== 'undefined'){
       onChange(date)

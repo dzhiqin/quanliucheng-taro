@@ -66,6 +66,9 @@ const config = {
     arrivalService: {
       arrival: true,
       waitingList: false
+    },
+    bindCard:{
+      rebind: true
     }
   },
   reportsPage:{

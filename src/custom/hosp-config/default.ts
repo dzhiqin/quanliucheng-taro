@@ -152,6 +152,7 @@ const config:HospConfig = {
     }, // 光华监控平台
     greenTree: false,// 蚂蚁森林接入
     bindCard: { // 绑卡/建卡相关配置
+      rebind: false,
       smsVerify: {
         enable: false,
         apikey: 'N68313eb24',

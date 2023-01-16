@@ -97,7 +97,7 @@ export default class CardList2 extends React.Component {
               </health-card-btn>
             }
             {
-              !custom.feat.bindCard.elecHealthCard && 
+              custom.feat.bindCard.rebind && 
               <View className='btn' onClick={()=> TaroNavigateService('card-pack','bind-card')}>
                 <View className='btn-title'>绑卡</View>
                 <View className='btn-subtitle'>已有就诊卡用户直接绑定</View>
@@ -105,7 +105,7 @@ export default class CardList2 extends React.Component {
             }
             {/* 特殊处理 金沙洲只用诊疗卡 */}
             <BkButton title={custom.hospName === 'jszyy' ? '添加诊疗卡' : '添加健康卡'} theme='info' onClick={this.navToCreateCard} style='width: 480rpx; margin-bottom: 20rpx' />
-            <BkButton title={custom.hospName === 'jszyy' ? '刷新诊疗卡' : '刷新健康卡'} theme='primary' onClick={this.handleRefresh.bind(this)} style='width: 480rpx; margin-bottom: 20rpx' />
+            {/* <BkButton title={custom.hospName === 'jszyy' ? '刷新诊疗卡' : '刷新健康卡'} theme='primary' onClick={this.handleRefresh.bind(this)} style='width: 480rpx; margin-bottom: 20rpx' /> */}
           </View>
         </View>
       </View>

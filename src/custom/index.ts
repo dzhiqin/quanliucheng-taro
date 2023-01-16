@@ -74,6 +74,7 @@ export interface HospConfig {
     }
     greenTree: boolean, // 蚂蚁森林接入
     bindCard: {
+      rebind: boolean,
       smsVerify: {
         enable: boolean,
         apikey: string,

@@ -56,7 +56,11 @@ export default function HealthCards(props: {
  
   const handleAddCard = () => {
     if(process.env.TARO_ENV === 'weapp'){
-      TaroNavigateService('main','login')
+      if(cards.length === 0){
+        TaroNavigateService('main','login')
+      }else{
+        TaroNavigateService('card-pack','cards-list')
+      }
     }
     if(process.env.TARO_ENV === 'alipay'){
       TaroNavigateService('/pages/card-pack/cards-list-alipay/cards-list-alipay')
@@ -64,8 +68,9 @@ export default function HealthCards(props: {
   }
   const onCardChange = (e) => {
     const index = e.detail.current
-    const cardId = cards[index].id
+    const cardId = cards[index]?.id
     setCurrentIndex(index)
+    if(!cardId) return
     CardsHealper.setDefault(cardId).then(() => {
       const cardsTemp = cards.map(item => ({...item, isDefault: item.id === cardId}))
       setCards(cardsTemp)
@@ -79,28 +84,47 @@ export default function HealthCards(props: {
     Taro.setStorageSync('card',card)
     TaroNavigateService('card-pack','card-detail')
   }
-  
-  if(cards.length === 0){
+  const RenderAdd = () => {
     return (
       <View style='padding:40rpx 40rpx 0'>
         <View className='add-card' onClick={handleAddCard}>
             <View style='margin-left: 40rpx'>
               <AtIcon value='add-circle' size='30' color='#FFF'></AtIcon>
             </View>
-            <View className='login-card-txt'>添加就诊人</View>
+            <View className='add-card-txt'>添加就诊人</View>
         </View>
       </View>
     )
-  }else if(cards.length === 1){
+  }
+  const RenderCard = ({item,index}) =>{
     return (
-      <View style='padding:20rpx 40rpx 0'>
+      <View className='swiper-item' onClick={navToCardDetail.bind(null,item)} style={process.env.TARO_ENV === 'weapp' ? '' : 'padding-top: 60rpx;'}>
+        <View className='swiper-item-info'>
+          <View className='swiper-item-name'>您好，{process.env.TARO_ENV === 'alipay' ? getPrivacyName(item.name) : item.name}</View>
+          <View className='swiper-item-card'>诊疗卡号{item.cardNo}</View>
+        </View>
+        {
+          item.isDefault &&
+          <view className='card-tag'>默认</view>
+        }
+        <Image className='swiper-item-icon' src={qrcodeImg} ></Image>
+      </View> 
+    )
+  }
+
+  const RenderSwitch = () => {
+    return(
+      <View style='padding:40rpx 40rpx 0'>
         <View className='add-card single-card'>
-            <View className='single-card-content' onClick={navToCardDetail.bind(null,cards[0])} >
+            <View className='single-card-content' onClick={navToCardDetail.bind(null,selectedCard)}>
               <View>
-                <View style='color: white'>您好，{process.env.TARO_ENV === 'alipay' ? getPrivacyName(cards[0].name) : cards[0].name}</View>
-                <View className='single-card-txt'>诊疗卡号{cards[0].cardNo}</View>
+                <View style='color: white'>您好，{process.env.TARO_ENV === 'alipay'? getPrivacyName(selectedCard.name) : selectedCard.name}</View>
+                <View className='single-card-txt'>诊疗卡号{selectedCard.cardNo}</View>
               </View>
-              {/* <Image className='single-card-icon' src={qrcodeImg} ></Image> */}
+              {
+                selectedCard.isDefault &&
+                <view className='card-tag'>默认</view>
+              }
               <View className='single-card-switch' onClick={onSwitch}>
                 切换就诊人
                 <AtIcon value='chevron-right' size='20' color='#0A3A6E'></AtIcon>
@@ -109,30 +133,14 @@ export default function HealthCards(props: {
         </View>
       </View>
     )
+  }
+  if(cards.length === 0){
+    return <RenderAdd />
   }else{
     if(props.switch){
-      return (
-        <View style='padding:40rpx 40rpx 0'>
-          <View className='add-card single-card'>
-              <View className='single-card-content' onClick={navToCardDetail.bind(null,selectedCard)}>
-                <View>
-                  <View style='color: white'>您好，{process.env.TARO_ENV === 'alipay'? getPrivacyName(selectedCard.name) : selectedCard.name}</View>
-                  <View className='single-card-txt'>诊疗卡号{selectedCard.cardNo}</View>
-                </View>
-                {
-                  selectedCard.isDefault &&
-                  <view className='card-tab'>默认</view>
-                }
-                <View className='single-card-switch' onClick={onSwitch}>
-                  切换就诊人
-                  <AtIcon value='chevron-right' size='20' color='#0A3A6E'></AtIcon>
-                </View>
-              </View>
-          </View>
-        </View>
-      )
+      return <RenderSwitch />
     }else{
-      return (
+      return(
         <View className='health-cards'>
           <Swiper
             className='swiper'
@@ -146,25 +154,22 @@ export default function HealthCards(props: {
             {
               cards && cards.map((item,index) => 
                 <SwiperItem key={index} className={process.env.TARO_ENV === 'weapp' ? 'swiper-item-wrap' : 'swiper-item-wrap-ali'}>
-                  <View className='swiper-item' onClick={navToCardDetail.bind(null,item)} style={process.env.TARO_ENV === 'weapp' ? '' : 'padding-top: 60rpx;'}>
-                    <View className='swiper-item-info'>
-                      <View className='swiper-item-name'>您好，{process.env.TARO_ENV === 'alipay' ? getPrivacyName(item.name) : item.name}</View>
-                      <View className='swiper-item-card'>诊疗卡号{item.cardNo}</View>
-                    </View>
-                    {
-                      item.isDefault &&
-                      <view className='card-tab'>默认</view>
-                    }
-                    <Image className='swiper-item-icon' src={qrcodeImg} ></Image>
-                  </View>
+                  <RenderCard item={item} index={index} />
                 </SwiperItem>  
               )
             }
+            <SwiperItem  className={process.env.TARO_ENV === 'weapp' ? 'swiper-item-wrap' : 'swiper-item-wrap-ali'}>
+              <View className='swiper-item' onClick={handleAddCard} style={process.env.TARO_ENV === 'weapp' ? '' : 'padding-top: 60rpx;'}>
+                <View style='display:flex'>
+                  <AtIcon value='add-circle' size='22' color='#FFF'></AtIcon>
+                  <View style='marin-left:30rpx;'>添加就诊人</View>
+                </View>
+              </View>
+            </SwiperItem>
           </Swiper>
         </View>
       )
     }
-    
   }
   
 }

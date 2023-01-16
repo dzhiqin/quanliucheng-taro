@@ -56,6 +56,9 @@ export default class BindCard extends React.Component {
       }
     }
     this.handleSendSms = this.handleSendSms.bind(this)
+    this.onScanResult = this.onScanResult.bind(this)
+    this.onSubmit = this.onSubmit.bind(this)
+    // this.handleCardChange = this.handleCardChange.bind(this)
   }
   
   componentDidMount() {
@@ -272,6 +275,7 @@ export default class BindCard extends React.Component {
     return {result, msg}
   }
   handleCardChange (stateName,value) {
+    console.log(`statename=${stateName};value=${value}`);
     if(typeof value === 'string'){
       value = value.trim()
     }
@@ -469,10 +473,10 @@ export default class BindCard extends React.Component {
         <SubscribeNotice show={this.state.showNotice} />
         {
           process.env.TARO_ENV === 'weapp' &&
-          <ocr-scan onsuccess={this.onScanResult.bind(this)}></ocr-scan>
+          <ocr-scan onsuccess={this.onScanResult}></ocr-scan>
         }
         <AtForm
-          onSubmit={this.onSubmit.bind(this)}
+          onSubmit={this.onSubmit}
         >
           {/* <BkInput name='patientName' title='姓名' type='text' placeholder='请输入姓名' value={this.state.card.patientName} maxLength={15} 
             onChange={this.handleCardChange.bind(this,'patientName')}
@@ -687,7 +691,7 @@ export default class BindCard extends React.Component {
           }
         </AtForm>
         <View style='padding: 60rpx;'>
-          <AtButton type='primary' loading={this.state.busy} circle onClick={this.onSubmit.bind(this)}>立即绑定</AtButton>
+          <AtButton type='primary' loading={this.state.busy} circle onClick={this.onSubmit}>立即绑定</AtButton>
         </View>
       </View>
     )
