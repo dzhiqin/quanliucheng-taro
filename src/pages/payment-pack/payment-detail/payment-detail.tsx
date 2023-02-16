@@ -259,7 +259,7 @@ export default function PaymentDetail() {
     })
   }
   const handleAliPay = (options: {tradeNo: string, orderId: string}) => {
-    TaroAliPayment({tradeNo: options.tradeNo}).then(payRes => {
+    TaroAliPayment({tradeNo: options.tradeNo}).then((payRes:any) => {
       console.log(payRes);
       const data = JSON.parse(payRes.data)
       if(data.resultCode === '9000'){
@@ -702,7 +702,14 @@ export default function PaymentDetail() {
           </View>
           <View className='payment-detail-tips-item'>
             <Image src={sighPng} />
-            <text>3、目前{payButtonText}只提供自费缴费，如需医保、公费记 账请移步到各楼层人工缴费窗口缴纳</text>
+            {
+              custom.hospName === 'gy3ylw' && 
+              <text>3、目前{payButtonText}支持自费缴费、市医保及市直医保和省直医保，其他参保类型人员请移步到各楼层人工缴费窗口缴纳</text>
+            }
+            {
+             custom.hospName !== 'gy3ylw' && 
+              <text>3、目前{payButtonText}只提供自费缴费{custom.feat.YiBaoCard ? '和市医保' : ''}，其他参保类型人员请移步到各楼层人工缴费窗口缴纳</text>
+            }
           </View>
           <View className='payment-detail-tips-item'>
             <Image src={sighPng} />

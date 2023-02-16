@@ -1,6 +1,6 @@
 import * as Taro from '@tarojs/taro'
 import * as React from 'react'
-import { View } from '@tarojs/components'
+import { View,Image } from '@tarojs/components'
 import { AtList,AtListItem } from 'taro-ui'
 import { useState } from 'react'
 import { useDidShow } from '@tarojs/taro'
@@ -8,9 +8,14 @@ import { custom } from '@/custom/index'
 import { CardsHealper } from '@/utils/cards-healper'
 import { fetchInHospCards, TaroNavigateService } from '@/service/api'
 import { modalService } from '@/service/toast-service'
+import QrCode from 'qrcode'
+import BaseModal from '@/components/base-modal/base-modal'
 
 export default function PatientCard (props:{onCard: Function}) {
   const [card,setCard] = useState(undefined)
+  const [show,setShow] = useState(false)
+  const [qrcodeSrc,setQrcodeSrc] = useState(undefined)
+
   useDidShow(() => {
     let _card
     if(custom.hospName === 'jszyy'){
@@ -60,28 +65,43 @@ export default function PatientCard (props:{onCard: Function}) {
   })
   const triggerEvent = (_card) => {
     setCard(_card)
+    QrCode.toDataURL(_card.cardNo).then(url => {
+      setQrcodeSrc(url)
+    })
     if(typeof props.onCard === 'function'){
       props.onCard(_card)
     }
   }
   const navToCardList = () => {
+    setShow(false)
     if(custom.hospName === 'jszyy'){
       TaroNavigateService('card-pack','cards-list')
     }else{
       TaroNavigateService('hosp-pack','card-list')
     }
   }
+  
   return(
     <View>
       <AtList>
         <AtListItem
           arrow='right'
-          note={card?.cardNo}
+          note={"住院号：" + card?.cardNo}
           title={card?.name}
           iconInfo={{ size: 25, color: '#FF4949', value: 'credit-card', }}
-          onClick={navToCardList}
+          onClick={() => setShow(true)}
         />
       </AtList>
+      <BaseModal show={show} cancel={navToCardList} confirm={() => setShow(false)} cancelText='切换卡' title='住院号'>
+        <View className=''>
+          {
+            qrcodeSrc &&
+            <Image style='width: 250px; height: 250px;' src={qrcodeSrc}></Image>
+          }
+          <View>姓名：{card?.name}</View>
+          <View>住院号：{card?.cardNo}</View>
+        </View>
+      </BaseModal>
     </View>
   )
 }

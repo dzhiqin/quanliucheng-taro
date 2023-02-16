@@ -7,6 +7,8 @@ interface ModalParams {
   show: boolean,
   confirm?:Function,
   cancel?: Function,
+  confirmText?: string,
+  cancelText?: string,
   children?: any,
   closeOutside?: boolean,
   custom?: boolean,
@@ -27,14 +29,12 @@ export default function BaseModal(props: ModalParams) {
     if(typeof cancel === 'function'){
       cancel()
     }
-    cancel()
   }
   const handleConfirm = () => {
     setOpened(false)
-    if(typeof cancel === 'function'){
-      cancel()
+    if(typeof confirm === 'function'){
+      confirm()
     }
-    confirm()
   }
   useEffect(() => {
     setOpened(props.show)
@@ -61,10 +61,10 @@ export default function BaseModal(props: ModalParams) {
         <AtModalAction> 
           {
             !props.hideCancel && 
-            <Button onClick={handleCancel}>取消</Button> 
+            <Button onClick={handleCancel}>{props.cancelText || '取消'}</Button> 
           }
           
-          <Button onClick={handleConfirm}>确定</Button> 
+          <Button onClick={handleConfirm}>{props.confirmText || '确定'}</Button> 
         </AtModalAction>
       }
     </AtModal>

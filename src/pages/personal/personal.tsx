@@ -78,6 +78,15 @@ export default function Personal() {
             </View>
           </BkPanel>
         }
+        {
+          custom.feat.inHospCard &&
+          <BkPanel arrow onClick={onClickPanel.bind(this,'/pages/hosp-pack/card-list/card-list')} style='margin-top: 20rpx'>
+            <View className='panel'>
+              <Image src={healthCardPng} className='panel-icon'></Image>
+              <View className='panel-name'>住院卡</View>
+            </View>
+          </BkPanel>
+        }
       </View>
     </View>
   )

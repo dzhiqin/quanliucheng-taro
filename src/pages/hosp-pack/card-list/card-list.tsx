@@ -1,15 +1,21 @@
 import * as React from 'react'
 import * as Taro from '@tarojs/taro'
-import { View } from '@tarojs/components'
+import { View,Image } from '@tarojs/components'
 import { useState } from 'react'
 import BkLoading from '@/components/bk-loading/bk-loading'
 import BkButton from '@/components/bk-button/bk-button'
 import { AtList, AtListItem } from 'taro-ui'
 import { fetchInHospCards,setDefaultInHospCard, TaroNavigateService } from '@/service/api'
 import { loadingService, modalService, toastService } from '@/service/toast-service'
+import QrCode from 'qrcode'
+import BaseModal from '@/components/base-modal/base-modal'
 
 export default function CardList(){
   const [list,setList] = useState([])
+  const [show,setShow] = useState(false)
+  const [qrcodeSrc,setQrcodeSrc] = useState(undefined)
+  const [currentCard,setCard] = useState(undefined)
+
   Taro.useDidShow(() => {
     getList()
   })
@@ -24,13 +30,21 @@ export default function CardList(){
       }
     })
   }
-  const handleClickItem = (card) => {
-    if(card.isDefault) return
+  const handleClickItem = (_card) => {
+    setShow(true)
+    setCard(_card)
+    QrCode.toDataURL(_card.cardNo).then(url => {
+      setQrcodeSrc(url)
+    })
+  }
+
+  const handleSetDefault = () => {
+    if(currentCard.isDefault) return
     Taro.showModal({
       content: '是否设置为默认卡？',
       success: result => {
         if(result.confirm){
-          setDefaultCard(card)
+          setDefaultCard(currentCard)
         }
       }
     })
@@ -82,6 +96,16 @@ export default function CardList(){
       <View style='padding: 60rpx'>
         <BkButton title='绑卡' onClick={() => TaroNavigateService('hosp-pack', 'binding-card')} />
       </View>
+      <BaseModal show={show} cancel={() => setShow(false)} confirm={() => {setShow(false);handleSetDefault()}} title='住院号' confirmText='设为默认'>
+        <View className=''>
+          {
+            qrcodeSrc &&
+            <Image style='width: 250px; height: 250px;' src={qrcodeSrc}></Image>
+          }
+          <View>姓名：{currentCard?.name}</View>
+          <View>住院号：{currentCard?.cardNo}</View>
+        </View>
+      </BaseModal>
     </View>
   )
 }

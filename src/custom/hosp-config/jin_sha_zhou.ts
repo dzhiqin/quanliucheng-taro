@@ -96,7 +96,7 @@ const config = {
       checkEpiLogicalSurvey: false, // 是否要先填流调表才可以挂号
     },
     hospitalNavigation: true,  // 院内导航
-    ZhuYuanCardName: false, // 住院绑卡是否需要姓名
+    inHospCard: false,
     arrivalService: {
       arrival: true,
       waitingList: true

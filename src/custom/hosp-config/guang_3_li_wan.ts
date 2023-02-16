@@ -12,7 +12,7 @@ const config = {
   hospitalName: "广州医科大学附属第三医院",
   // baseUrl: "https://applets.gdbkyz.com", // 倍康测试
   baseUrl: "https://gysy.wedoublecare.com",  // 旧正式环境
-  // baseUrl: "https://weixin2.gy3y.com", // 新正式环境
+  // baseUrl: "https://weixin2.gy3y.com", // 新正式环境(未启用)
   // subUrl: 'https://gysycustomize.wedoublecare.com', // 测试环境
   indexPage: {
     quickEntrance: {
@@ -57,6 +57,7 @@ const config = {
   },
   feat: {
     bindCard: {
+      rebind: true,
       updateNotice: true,
     },
     register: {
