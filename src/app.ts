@@ -4,7 +4,7 @@ import { login } from '@/service/api/user-api'
 import * as Taro from '@tarojs/taro'
 import "taro-ui/dist/style/index.scss"  // 全局引入样式
 import './app.less'
-import { fetchBranchHospital } from './service/api'
+import { fetchBranchHospital, fetchInHospCards } from './service/api'
 import { CardsHealper } from './utils'
 import { CARD_ACTIONS } from './enums'
 import { modalService } from './service/toast-service'
@@ -82,7 +82,23 @@ class App extends Component {
               Taro.setStorageSync('hospitalInfo',resData.data[0])
             }
             Taro.setStorageSync('branches',resData.data)
-            CardsHealper.updateAllCards().then(() => Taro.eventCenter.trigger(CARD_ACTIONS.UPDATE_ALL))
+            if(custom.feat.inHospCard){
+              fetchInHospCards().then(cardsRes => {
+                if(cardsRes.resultCode === 0){
+                  Taro.setStorageSync('hospCard',cardsRes.data.find(i => i.isDefault))
+                  CardsHealper.updateAllCards().then(() => Taro.eventCenter.trigger(CARD_ACTIONS.UPDATE_ALL))  
+                }else{
+                  if(cardsRes.message === '暂无数据') {
+                    CardsHealper.updateAllCards().then(() => Taro.eventCenter.trigger(CARD_ACTIONS.UPDATE_ALL))  
+                  }else{
+                    modalService({content: cardsRes.message})
+                  }
+                }
+                
+              })
+            }else{
+              CardsHealper.updateAllCards().then(() => Taro.eventCenter.trigger(CARD_ACTIONS.UPDATE_ALL))
+            }
           })
         }
       }).catch((err) => {

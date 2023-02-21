@@ -62,13 +62,13 @@ export default function RegisterNotice () {
             <AtIcon value='alert-circle' size='15' color='#FF7C25'></AtIcon>
             <text className='price-color'>需要打印发票和费用清单的请到一楼大厅自助机自行打印</text>
           </View>
-          {
+          {/* {
             custom.hospName === 'jszyy' &&
             <View className='flex-center'>
               <AtIcon value='alert-circle' size='15' color='#FF7C25'></AtIcon>
               <text className='price-color'>备注：六岁（含）以下儿童的诊查费上浮30%，先预收上浮后的金额，若是六岁以上儿童，就诊时会退还上浮30%的金额至患者的诊疗卡内。</text>
             </View>
-          }
+          } */}
         </View>
       </View>
     )

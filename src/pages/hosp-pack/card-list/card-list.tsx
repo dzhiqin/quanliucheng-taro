@@ -4,8 +4,8 @@ import { View,Image } from '@tarojs/components'
 import { useState } from 'react'
 import BkLoading from '@/components/bk-loading/bk-loading'
 import BkButton from '@/components/bk-button/bk-button'
-import { AtList, AtListItem } from 'taro-ui'
-import { fetchInHospCards,setDefaultInHospCard, TaroNavigateService } from '@/service/api'
+import { AtList, AtListItem, AtButton } from 'taro-ui'
+import { fetchInHospCards,setDefaultInHospCard, TaroNavigateService, unbindHospCard } from '@/service/api'
 import { loadingService, modalService, toastService } from '@/service/toast-service'
 import QrCode from 'qrcode'
 import BaseModal from '@/components/base-modal/base-modal'
@@ -15,7 +15,6 @@ export default function CardList(){
   const [show,setShow] = useState(false)
   const [qrcodeSrc,setQrcodeSrc] = useState(undefined)
   const [currentCard,setCard] = useState(undefined)
-
   Taro.useDidShow(() => {
     getList()
   })
@@ -25,6 +24,7 @@ export default function CardList(){
       loadingService(false)
       if(res.resultCode === 0){
         setList(res.data)
+        Taro.setStorageSync('hospCard',res.data.find(i => i.isDefault))
       }else{
         modalService({content: res.message})
       }
@@ -53,8 +53,8 @@ export default function CardList(){
     loadingService(true)
     setDefaultInHospCard({id: card.id}).then(res => {
       if(res.resultCode === 0){
-        const _cards = Taro.getStorageSync('patientCards')
-        Taro.setStorageSync('patientCards',_cards.map(item => {return {...item,isDefault: item.id == card.id}}))
+        setList(list.map(item => {return {...item,isDefault: item.id == card.id}}))
+        Taro.setStorageSync('hospCard',card)
         toastService({title: '设置成功',duration: 1500,
         onClose: () => {
           Taro.navigateBack();
@@ -68,6 +68,48 @@ export default function CardList(){
       loadingService(false)
       modalService({content: JSON.stringify(err)})
     })
+  }
+  const handleUnbind = (_card) => {
+    modalService({content: '是否要解绑此住院卡', success: (res) => {
+      if(res.confirm){
+        unbindHospCard({id: _card.id}).then(cardRes => {
+          if(cardRes.resultCode === 0){
+            handleUnbindSuccess(_card)
+          }else{
+            modalService({title: '解绑失败',content: cardRes.message,showCancel: false})
+          }
+        }).catch(err => {
+          modalService({title: '解绑失败',content: err+'',showCancel: false})
+        })
+      }
+    }})
+  }
+  const resetDefaultCard = (newList) => {
+    const defaultId = newList[0].id
+    setDefaultInHospCard({id: defaultId}).then(res => {
+      if(res.resultCode === 0){
+        Taro.setStorageSync('hospCard',newList[0])
+        setList(newList.map(i => {return {...i,isDefault: i.id === defaultId}}))
+      }else{
+        modalService({content: res.message,title: '自动默认卡失败'})
+      }
+    })
+  }
+  const handleUnbindSuccess = (_card) => {
+    setShow(false)
+    const newList = list.filter(i => i.id !== _card.id)
+    console.log('unbind success new list',newList);
+    
+    if(newList.length === 0) {
+      setList([])
+      Taro.removeStorageSync('hospCard')
+      return
+    }
+    if(_card.isDefault){
+      resetDefaultCard(newList)
+    }else{
+      setList(newList)
+    }
   }
   return(
     <View>
@@ -104,6 +146,9 @@ export default function CardList(){
           }
           <View>姓名：{currentCard?.name}</View>
           <View>住院号：{currentCard?.cardNo}</View>
+          <View style='padding: 20rpx'>
+            <AtButton onClick={handleUnbind.bind(null,currentCard)} size='small' type='primary' full={false}>解除绑定</AtButton>
+          </View>
         </View>
       </BaseModal>
     </View>

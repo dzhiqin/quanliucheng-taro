@@ -18,7 +18,7 @@ import { requestTry } from '@/utils/retry'
 import DepositListItem from './deposit-list-item'
 import BaseModal from '@/components/base-modal/base-modal'
 import ResultPage from '@/components/result-page/result-page'
-import PatientCard from '../components/patient-card/patient-card'
+import HospCards from '@/components/hosp-cards/hosp-cards'
 
 const inHospStatusObj = {
   1: '在院',
@@ -28,7 +28,7 @@ const inHospStatusObj = {
 export default function BindingCard() {
   const [resultVisible,setResultVisible] = useState(false)
   const [payResult,setPayResult] = useState(PAY_RESULT.SUCCESS)
-  const [patientCard,setPatientCard] = useState(null)
+  const [hospCard,setHospCard] = useState(null)
   const [tabValue,setTabValue] = useState('deposit')
   const [money,setMoney] = useState(null)
   const [busy,setBusy] = useState(false)
@@ -102,7 +102,7 @@ export default function BindingCard() {
   const onTabChange = (e,value) => {
     setTabValue(value)
     if(value === 'record'){
-      patientCard && getList(patientCard)
+      hospCard && getList(hospCard)
     }
   }
   const onMoneyChange = (e,value) => {
@@ -120,7 +120,7 @@ export default function BindingCard() {
       toastService({title: '请输入金额'})
       return
     }
-    if(!patientCard){
+    if(!hospCard){
       toastService({title: '您还未绑卡'})
       return
     }
@@ -135,7 +135,7 @@ export default function BindingCard() {
     }
     TaroRequestPayment(response.data.unifiedOrderResponse).then(res => {
       requestTry(checkOrderStatus.bind(null,response.data.orderNo)).then(checkRes => {
-        getData(patientCard)
+        getData(hospCard)
         handlePaySuccess()
         loadingService(false)
       }).catch((err) => {
@@ -170,7 +170,7 @@ export default function BindingCard() {
   const getDepositPayParams = () => {
     return new Promise((resolve,reject) => {
       fetchDepositPayParams({
-        inCardNo: patientCard.cardNo,
+        inCardNo: hospCard.cardNo,
         money: money,
         registerId: info.registerId
       }).then(res => {
@@ -197,8 +197,8 @@ export default function BindingCard() {
   const onConfirm = () => {
     setShowDetail(false)
   }
-  const onPatientCard = (_card) => {
-    setPatientCard(_card)
+  const onHospCard = (_card) => {
+    setHospCard(_card)
     getData(_card)
   }
   return(
@@ -210,7 +210,7 @@ export default function BindingCard() {
         }
         <BkButton title='返回' style='margin: 40rpx;' onClick={() => {setResultVisible(false)}} />
       </ResultPage>
-      <PatientCard onCard={onPatientCard} />
+      <HospCards onCard={onHospCard} />
       <BaseModal show={showDetail} confirm={onConfirm} cancel={() => setShowDetail(false)} title='订单详情'>
         <View className='flex-between'>
           <text>订单号</text>

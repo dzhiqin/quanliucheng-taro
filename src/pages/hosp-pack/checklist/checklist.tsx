@@ -9,7 +9,7 @@ import calanderPng from '@/images/icons/calendar.png'
 import MoneyPng from '@/images/icons/money_circle.png'
 import './checklist.less'
 import BkLoading from '@/components/bk-loading/bk-loading'
-import PatientCard from '../components/patient-card/patient-card'
+import HospCards from '@/components/hosp-cards/hosp-cards'
 
 export default function BindingCard() {
   const [list,setList] = useState([])
@@ -60,14 +60,14 @@ export default function BindingCard() {
     }
     TaroNavigateService('hosp-pack','checklist-detail',`billDate=${item.billDate}&registerId=${registerId? registerId : _registerId}`)
   }
-  const onPatientCard = (patientCard) => {
-    setCard(patientCard)
-    getList(patientCard.cardNo)
-    handleGetInHospInfo(patientCard.cardNo)
+  const onHospCard = (hospCard) => {
+    setCard(hospCard)
+    getList(hospCard.cardNo)
+    handleGetInHospInfo(hospCard.cardNo)
   }
   return(
     <View className='checklist'>
-      <PatientCard onCard={onPatientCard} />
+      <HospCards onCard={onHospCard} />
       <View className='checklist-content'>
         {
           list.length > 0 

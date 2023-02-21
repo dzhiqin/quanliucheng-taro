@@ -17,7 +17,8 @@ export default function Recovery() {
     patientName: '',
     cardNo: '',
     totalFee: '',
-    relatedOrderNo: ''
+    relatedOrderNo: '',
+    orderDate: ''
   })
   const [showNotice,setShowNotice] = useState(false)
   const [busy,setBusy] = useState(false)
@@ -113,7 +114,7 @@ export default function Recovery() {
     return(
       <View className='recovery'>
         <SubscribeNotice show={showNotice}></SubscribeNotice>
-        <View className='recovery-title'>&#12288;&#12288;尊敬的用户您好，2022年10月24日因发票系统故障导致您的缴费订单自动退费，为不影响您后续到广医三院就诊，请您进行手工补缴，谢谢。</View>
+        <View className='recovery-title'>&#12288;&#12288;尊敬的用户您好，{data.orderDate}因发票系统故障导致您的缴费订单自动退费，为不影响您后续到广医三院就诊，请您进行手工补缴，谢谢。</View>
         <BkPanel>
           <View className='flex'>
             <View className='flat-title'>姓名：</View>

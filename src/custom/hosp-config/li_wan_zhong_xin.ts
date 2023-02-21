@@ -18,43 +18,49 @@ const config = {
     quickEntrance: {
       enable: false,
       tabList: [
-        {
-          title: '门诊',
-          entrances: [
-            {
-              icon: imgUrl.new_home_icon6,
-              name: '报到候诊',
-              event: 'navigate',
-              url: '/pages/service-pack/arrival-service/arrival-service'
-            }
-          ]
-        },
-        {
-          title: '住院',
-          entrances: [
-            {
-              icon: imgUrl.new_home_icon10,
-              name: '住院押金',
-              event: 'navigate',
-              url: '/pages/hosp-pack/deposit/deposit',
-            }, 
-            {
-              icon: imgUrl.new_home_icon11,
-              name: '每日清单',
-              event: 'navigate',
-              url: '/pages/hosp-pack/checklist/checklist',
-            }
-          ]
-        },
+        // {
+        //   title: '门诊',
+        //   entrances: [
+        //     {
+        //       icon: imgUrl.new_home_icon6,
+        //       name: '报到候诊',
+        //       event: 'navigate',
+        //       url: '/pages/service-pack/arrival-service/arrival-service'
+        //     }
+        //   ]
+        // },
+        // {
+        //   title: '住院',
+        //   entrances: [
+        //     {
+        //       icon: imgUrl.new_home_icon10,
+        //       name: '住院押金',
+        //       event: 'navigate',
+        //       url: '/pages/hosp-pack/deposit/deposit',
+        //     }, 
+        //     {
+        //       icon: imgUrl.new_home_icon11,
+        //       name: '每日清单',
+        //       event: 'navigate',
+        //       url: '/pages/hosp-pack/checklist/checklist',
+        //     }
+        //   ]
+        // },
         {
           title: "其他",
           entrances:[
+            // {
+            //   name: "电子票夹",
+            //   icon: imgUrl.new_home_icon10,
+            //   event: "jump",
+            //   appId: 'wx8e0b79a7f627ca18',
+            //   path: `pages/invoiceDisplayDWDZ/invoiceDisplayDWDZ?q=${encodeURIComponent("https://www.chinaebill.cn/d?t=501&a=89AMy0Cj6&d=44060122_8040675619_3f7484_20221118&s=B62B74A4D1")}`
+            // },
             {
-              name: "电子票夹",
+              name: "云胶片",
               icon: imgUrl.new_home_icon10,
-              event: "jump",
-              appId: 'wx8e0b79a7f627ca18',
-              path: `pages/invoiceDisplayDWDZ/invoiceDisplayDWDZ?q=${encodeURIComponent("https://www.chinaebill.cn/d?t=501&a=89AMy0Cj6&d=44060122_8040675619_3f7484_20221118&s=B62B74A4D1")}`
+              event: "navigate",
+              url: `/pages/service-pack/web-view-page/web-view-page?pageType=cloudFilm`
             },
           ]
         }
