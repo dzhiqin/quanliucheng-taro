@@ -70,7 +70,7 @@ export default function CardList(){
     })
   }
   const handleUnbind = (_card) => {
-    modalService({content: '是否要解绑此住院卡', success: (res) => {
+    modalService({content: '是否要解绑此住院卡', showCancel: true, success: (res) => {
       if(res.confirm){
         unbindHospCard({id: _card.id}).then(cardRes => {
           if(cardRes.resultCode === 0){

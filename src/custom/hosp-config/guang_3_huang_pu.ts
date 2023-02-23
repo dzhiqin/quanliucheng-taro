@@ -11,8 +11,8 @@ const config = {
   logo: "https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/lwgk/20220309-basic/gysy.png",
   hospitalName: "广州医科大学附属第三医院黄埔院区",
   // baseUrl: "https://applets.gdbkyz.com", // 倍康测试
-  // baseUrl: "https://gysy-applets.wedoublecare.com",// 正式环境 43.139.42.75:30091
-  baseUrl: "http://43.139.42.75:30091", // 测试
+  baseUrl: "https://gysy-applets.wedoublecare.com",// 正式环境 43.139.42.75:30091
+  // baseUrl: "http://43.139.42.75:30091", // 测试
   // baseUrl: "http://192.168.4.83:5002",
   // subUrl: 'https://gysycustomize.wedoublecare.com', // 附加功能环境
   indexPage: {

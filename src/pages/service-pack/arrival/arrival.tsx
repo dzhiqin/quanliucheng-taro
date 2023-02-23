@@ -6,7 +6,6 @@ import { useState } from 'react'
 import { fetchCheckInInfo, TaroGetLocation,handleCheckIn } from '@/service/api'
 import BkPanel from '@/components/bk-panel/bk-panel'
 import BkButton from '@/components/bk-button/bk-button'
-import BkTitle from '@/components/bk-title/bk-title'
 import BkLoading from '@/components/bk-loading/bk-loading'
 import { computeDistanceFromLatLong } from '@/utils/tools'
 import { loadingService, modalService, toastService } from '@/service/toast-service'
@@ -16,7 +15,6 @@ import './arrival.less'
 export default function BindingCard() {
   let [count,setCount] = useState(10)
   const [loading,setLoading] = useState(false)
-  const [showBtn,setShowBtn] = useState(true)
   const [list,setList] = useState([])
   const [hospLatLong,setHospLatLong] = useState({
     latitude: null,
@@ -125,9 +123,9 @@ export default function BindingCard() {
       if(res.resultCode === 0){
         modalService({
           content: "报到成功!",
-          showCancel: false
+          showCancel: false,
+          success: () => {getList()}
         })
-        setShowBtn(false)
       }else{
         modalService({
           title: '报到失败',
@@ -162,10 +160,6 @@ export default function BindingCard() {
           ?
           <View>
             {
-              !showBtn && 
-              <BkTitle title='您已报到成功' />
-            }
-            {
               list.map((item,index) => 
                 <BkPanel key={index}>
                   <View className='arrival-content-item'>
@@ -197,8 +191,12 @@ export default function BindingCard() {
                   </View>
                   <View className='arrival-content-action'>
                     {
-                      showBtn &&
+                      item.state == 0 &&
                       <BkButton title='报到' theme={`${distance <= 200 ? 'primary' : 'cancel'}`} onClick={handleClick.bind(null,item)} />
+                    }
+                    {
+                      item.state == 1 && 
+                      <BkButton title='已报到' theme='cancel' />
                     }
                   </View>
                 </BkPanel>

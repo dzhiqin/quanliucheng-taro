@@ -21,20 +21,20 @@ const config = {
     "list": [
       {
         "pagePath": "pages/index/index",
-        "iconPath": "./images/icons/home_gray.png",
+        "iconPath": "./images/icons/home_unactive.png",
         "selectedIconPath": "./images/icons/home.png",
         "text": "首页"
       },
       {
         "pagePath": "pages/official/official",
-        "iconPath": "./images/icons/website_gray.png",
+        "iconPath": "./images/icons/website_unactive.png",
         "selectedIconPath": "./images/icons/website.png",
         "text": "微官网"
       },
       {
         "pagePath": "pages/personal/personal",
-        "iconPath": "./images/icons/man_gray.png",
-        "selectedIconPath": "./images/icons/man.png",
+        "iconPath": "./images/icons/mine_unactive.png",
+        "selectedIconPath": "./images/icons/mine.png",
         "text": "个人中心"
       }
     ]

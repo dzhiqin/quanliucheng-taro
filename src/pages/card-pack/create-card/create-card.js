@@ -529,32 +529,6 @@ export default class BindCard extends React.Component {
             >
             </AtInput> 
           }
-        
-          {
-            this.state.currentIdenTypeValue !== '门诊卡' && process.env.TARO_ENV === 'weapp' &&
-            <Picker mode='selector' range={this.state.genders} onChange={this.onGenderChange.bind(this)} value={this.state.currentGenderIndex}  >
-              <AtList>
-                <AtListItem
-                  title='性别'
-                  extraText={this.state.currentGenderValue}
-                >
-                </AtListItem>
-              </AtList>
-            </Picker> 
-          }
-          
-          {
-            this.state.currentIdenTypeValue !== '门诊卡' && process.env.TARO_ENV === 'weapp' &&
-            <Picker mode='date' onChange={this.onDateChange.bind(this)} value={this.state.selectedDate} >
-              <AtList>
-                <AtListItem
-                  title='出生日期'
-                  extraText={this.state.selectedDate}
-                >
-                </AtListItem>
-              </AtList>
-            </Picker> 
-          }
 
           {
             process.env.TARO_ENV === 'weapp' &&
@@ -595,7 +569,31 @@ export default class BindCard extends React.Component {
               onFocus={this.handleOnFocus.bind(this,'phone',this.state.realPhone)}
             />
           }
+          {
+            this.state.currentIdenTypeValue !== '门诊卡' && process.env.TARO_ENV === 'weapp' &&
+            <Picker mode='selector' range={this.state.genders} onChange={this.onGenderChange.bind(this)} value={this.state.currentGenderIndex}  >
+              <AtList>
+                <AtListItem
+                  title='性别'
+                  extraText={this.state.currentGenderValue}
+                >
+                </AtListItem>
+              </AtList>
+            </Picker> 
+          }
           
+          {
+            this.state.currentIdenTypeValue !== '门诊卡' && process.env.TARO_ENV === 'weapp' &&
+            <Picker mode='date' onChange={this.onDateChange.bind(this)} value={this.state.selectedDate} >
+              <AtList>
+                <AtListItem
+                  title='出生日期'
+                  extraText={this.state.selectedDate}
+                >
+                </AtListItem>
+              </AtList>
+            </Picker> 
+          }
           <BkInput 
             name='address' 
             title='详细地址' 
