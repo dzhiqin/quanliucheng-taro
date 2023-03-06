@@ -670,7 +670,7 @@ export default function PaymentDetail() {
             }
             {
               orderInfo.payState === PAY_STATUS_EN.unpay && orderInfo.orderType === ORDER_TYPE_CN.医保单 && custom.feat.YiBaoCard &&
-              <BkButton title='医保支付' icon='icons/card.png' theme='primary' disabled={busy} onClick={dealWithPay.bind(null,PAY_TYPE_CN.医保)} />
+              <BkButton title='医保支付' icon='icons/card.png' theme='primary' loading={busy} onClick={dealWithPay.bind(null,PAY_TYPE_CN.医保)} />
             }
           </View>
         }
@@ -687,7 +687,7 @@ export default function PaymentDetail() {
             }
             {
               orderInfoFromList.payState === PAY_STATUS_EN.unpay && orderInfoFromList.orderType === ORDER_TYPE_CN.医保单 && custom.feat.YiBaoCard &&
-              <BkButton title='医保支付' icon='icons/card.png' theme='primary' disabled={busy} onClick={dealWithPay.bind(null,PAY_TYPE_CN.医保)} />
+              <BkButton title='医保支付' icon='icons/card.png' theme='primary' loading={busy} onClick={dealWithPay.bind(null,PAY_TYPE_CN.医保)} />
             }
           </View>
         }

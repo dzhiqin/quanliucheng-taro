@@ -67,8 +67,8 @@ export default function HospCards(props: {onCard:Function}){
           {
             hospCard && 
             <View>
-              <View style='color: white'>您好，{process.env.TARO_ENV === 'alipay'? getPrivacyName(hospCard.name) : hospCard.name}</View>
-              <View className='single-card-txt'>住院卡号{hospCard?.cardNo}</View>
+              <View className='single-card-name'>您好，{process.env.TARO_ENV === 'alipay'? getPrivacyName(hospCard.name) : hospCard.name}</View>
+              <View className='single-card-txt'>住院卡号:{hospCard?.cardNo}</View>
             </View>
           }
           {

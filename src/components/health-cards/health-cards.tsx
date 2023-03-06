@@ -101,7 +101,7 @@ export default function HealthCards(props: {
       <View className='swiper-item' onClick={navToCardDetail.bind(null,item)} style={process.env.TARO_ENV === 'weapp' ? '' : 'padding-top: 60rpx;'}>
         <View className='swiper-item-info'>
           <View className='swiper-item-name'>您好，{process.env.TARO_ENV === 'alipay' ? getPrivacyName(item.name) : item.name}</View>
-          <View className='swiper-item-card'>诊疗卡号{item.cardNo}</View>
+          <View className='swiper-item-card'>卡号:{item.cardNo}</View>
         </View>
         {
           item.isDefault &&
@@ -118,8 +118,8 @@ export default function HealthCards(props: {
         <View className='add-card single-card'>
             <View className='single-card-content' onClick={navToCardDetail.bind(null,selectedCard)}>
               <View>
-                <View style='color: white'>您好，{process.env.TARO_ENV === 'alipay'? getPrivacyName(selectedCard.name) : selectedCard.name}</View>
-                <View className='single-card-txt'>诊疗卡号{selectedCard.cardNo}</View>
+                <View className='single-card-name'>您好，{process.env.TARO_ENV === 'alipay'? getPrivacyName(selectedCard.name) : selectedCard.name}</View>
+                <View className='single-card-txt'>卡号:{selectedCard.cardNo}</View>
               </View>
               {
                 selectedCard.isDefault &&

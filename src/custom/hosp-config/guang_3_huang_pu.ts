@@ -68,7 +68,8 @@ const config = {
     },
     bindCard:{
       rebind: true
-    }
+    },
+    inHospCard:false
   },
   reportsPage:{
     hideInHosp: true, // 隐藏住院报告入口

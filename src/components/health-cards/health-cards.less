@@ -5,24 +5,30 @@
     height: 270rpx;
   }
   .swiper-item {
-    height: 300rpx;
+    height: 140rpx;
     background-image: url("https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/applets-imgs/card_back.png");
     background-size:contain;
     background-repeat: no-repeat;
     font-size: 32rpx;
     color: white;
     display: flex;
-    padding: 40rpx;
+    padding: 20rpx;
     justify-content: space-between;
     position: relative;
-
+    &-name {
+      font-size: 32rpx;
+      font-weight: 500;
+    }
     &-icon {
       width: 48rpx;
       height: 48rpx;
-      margin-top: 20rpx;
+      // margin-top: 20rpx;
+      position: absolute;
+      top: 60rpx;
+      right: 20rpx
     }
     &-card{
-      font-size: 26rpx;
+      font-size: 30rpx;
       margin-top: 10rpx;
     }
   }
@@ -48,20 +54,25 @@
 .single-card{
   &-content{
     display: flex;
-    justify-content: space-between;
+    // justify-content: space-between;
     padding: 40rpx;
     width: 100%;
-    align-items: center;
+    // align-items: center;
     position: relative;
   }
   &-txt {
     margin-top: 10rpx;
     color: white;
-    font-size: 26rpx;
+    font-size: 30rpx;
   }
   &-icon{
     width: 48rpx;
     height: 48rpx;
+  }
+  &-name{
+    color: white;
+    font-weight: 500;
+    font-size: 32rpx;
   }
   &-switch{
     background-color: #B7E5FF;
@@ -69,9 +80,12 @@
     font-size: 24rpx;
     color: #0A3A6E;
     line-height: 64rpx;
+    font-weight: 300;
     height: 64rpx;
     padding-left: 20rpx;
-    font-weight: 300;
+    position: absolute;
+    right: 20rpx;
+    top: 60rpx
   }
 }
 .add-card{
@@ -80,7 +94,7 @@
   background-repeat: no-repeat;
   border-radius: 20rpx;
   display: flex;
-  align-items: center;
+  // align-items: center;
   height: 192rpx;
   width: 100%;
   &-avatar {

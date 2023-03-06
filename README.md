@@ -58,15 +58,18 @@
 例如广三老院区：
 ```
 type HospName = 
-  'guang_san_li_wan' |
+  'guang_3_li_wan' |
   'en_ping_fu_you' |
   'li_wan_gu_ke' |
   'shun_de_jun_an' | 
-  'jin_sha_zhou'
-const hospName:HospName = 'jin_sha_zhou'
-const hospConfig = require(`./hosp-config/${hospName}`)
-
-export const custom = hospConfig.default
+  'jin_sha_zhou'|
+  'guang_3_huang_pu' |
+  'li_wan_zhong_xin' | 
+  'jin_sha_zhou_alipay' |
+  'guang_1_alipay'
+const hospName:HospName = 'guang_3_li_wan'
+const hospConfig = require(`./hosp-config/${hospName}.ts`)
+export const custom = hospConfig.default as HospConfig
 ```
 
 **微信小程序开发预览：**
