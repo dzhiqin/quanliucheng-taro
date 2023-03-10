@@ -271,6 +271,10 @@ export default class BindCard extends React.Component {
         result = false
         msg = '请输入正确的出生日期'
       }
+      if(key === 'patientName' && value.length < 2){
+        result = false
+        msg = '请输入正确的姓名，不少于2个字'
+      }
     }
     return {result, msg}
   }

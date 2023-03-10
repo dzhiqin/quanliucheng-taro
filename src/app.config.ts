@@ -117,7 +117,8 @@ const subPackages = [
     pages: [
       'payment-list/payment-list',
       'payment-detail/payment-detail',
-      'order-list/order-list'
+      'order-list/order-list',
+      'medinsurance-payment-detail/index'
     ]
   },
   {

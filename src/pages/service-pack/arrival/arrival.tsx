@@ -198,7 +198,12 @@ export default function BindingCard() {
                       item.state == 1 && 
                       <BkButton title='已报到' theme='cancel' />
                     }
+                    {
+                      !item.state &&
+                      <BkButton title='报到' theme={`${distance <= 200 ? 'primary' : 'cancel'}`} onClick={handleClick.bind(null,item)} />
+                    }
                   </View>
+                  
                 </BkPanel>
               )
             }

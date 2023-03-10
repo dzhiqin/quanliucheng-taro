@@ -38,6 +38,7 @@ import ResultPage from '@/components/result-page/result-page'
 import {custom} from '@/custom/index'
 import { getPrivacyName, getQueryValue } from '@/utils/tools'
 import { reportCmPV_YL } from '@/utils/cloudMonitorHelper'
+import Qrcode from 'qrcode'
 
 enum resultEnum {
   default = '',
@@ -81,7 +82,9 @@ export default function PaymentDetail() {
   let card = CardsHealper.getDefault()
   const [busy,setBusy] = useState(false)
   const [orderInfo,setOrderInfo] = useState({} as OrderInfoParams)
-  const [open,setOpen] = useState(false)
+  const [open,setOpen] = useState(true)
+  const [qrcodeSrc,setQrcodeSrc] = useState('')
+  let currentCardNo = ''
   let orderInfoFromList = {
     orderId: '',
     clinicNo: '',
@@ -105,6 +108,11 @@ export default function PaymentDetail() {
   }else{
     from = params.from as PAYMENT_FROM
     orderInfoFromList = JSON.parse(params.orderInfo)
+    const currentCard = CardsHealper.getDefault()
+    currentCardNo = currentCard.cardNo
+    Qrcode.toDataURL(currentCard.cardNo).then(url => {
+      setQrcodeSrc(url)
+    })
   }
   console.log(`from=${from},scene=${scene}`)
   console.log('orderInfo='+params.orderInfo)
@@ -249,9 +257,9 @@ export default function PaymentDetail() {
           setPayResult(resultEnum.success)
           setPayResultMsg('缴费成功')
         })
-        .catch(()=>{
+        .catch((err)=>{
           setPayResult(resultEnum.fail)
-          setPayResultMsg('缴费失败，所缴金额将原路退回')
+          setPayResultMsg('缴费失败，所缴金额将原路退回'+err?.message)
           setBusy(false)
           loadingService(false)
         })
@@ -269,9 +277,9 @@ export default function PaymentDetail() {
           setPayResult(resultEnum.success)
           setPayResultMsg('缴费成功')
           loadingService(false)
-        }).catch(() => {
+        }).catch((err) => {
           setPayResult(resultEnum.fail)
-          setPayResultMsg('缴费失败，所缴金额将原路退回')
+          setPayResultMsg('缴费失败，所缴金额将原路退回'+err?.message)
           setBusy(false)
           loadingService(false)
         })
@@ -389,10 +397,10 @@ export default function PaymentDetail() {
           <View className='flat-title' style='margin-right: 10rpx'>发药窗口</View>
           <View>{item.disWin}</View>
         </View>
-        {
+        {/* {
           item.visitNoCode &&
           <Image src={`data:image/jpg;base64,${item.visitNoCode}`} className='barcode' />
-        }
+        } */}
         
       </BkPanel>
     )
@@ -411,9 +419,9 @@ export default function PaymentDetail() {
         setOrderId('');
         loadingService(false)
       })
-      .catch(()=>{
+      .catch((err)=>{
         setPayResult(resultEnum.fail)
-        setPayResultMsg('缴费失败，所缴金额将原路退回')
+        setPayResultMsg('缴费失败，所缴金额将原路退回'+err?.message)
         setBusy(false)
         setOrderId('');
         loadingService(false)
@@ -598,6 +606,13 @@ export default function PaymentDetail() {
           }
         </BkPanel>
         {
+          qrcodeSrc &&
+          <View className='payment-detail-qrcode'>
+            <View>诊疗卡号：{currentCardNo}</View>
+            <Image style='width: 200px; height: 200px;' src={qrcodeSrc}></Image>
+          </View>
+        }
+        {
           orderInfoFromList && custom.paymentOrderPage.tackingMedicineGuide && orderInfoFromList.orderState !== ORDER_STATUS_EN.unpay &&
           <View className='medicine-guide'>
             {
@@ -610,7 +625,7 @@ export default function PaymentDetail() {
             }
           </View>
         }
-        <AtAccordion title='药品详情' open={open} onClick={() => setOpen(!open)}>
+        <AtAccordion title='详情列表' open={open} onClick={() => setOpen(!open)}>
           {
             list.length > 0 &&
             <BkPanel style='margin: 10rpx'>
