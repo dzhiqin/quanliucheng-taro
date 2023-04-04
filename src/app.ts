@@ -5,7 +5,7 @@ import * as Taro from '@tarojs/taro'
 import "taro-ui/dist/style/index.scss"  // 全局引入样式
 import './app.less'
 import { fetchBranchHospital, fetchInHospCards } from './service/api'
-import { CardsHealper } from './utils'
+import { CardsHealper,setGlobalData } from './utils'
 import { CARD_ACTIONS } from './enums'
 import { modalService } from './service/toast-service'
 import monitor from '@/utils/alipayLogger'
@@ -20,7 +20,13 @@ class App extends Component {
     this.buildTarget = process.env.TARO_ENV
   }
   componentDidMount () {}
-
+  componentDidShow(options) {
+    console.log('app on show',options.scene);
+    if(options.scene === 1038){
+      setGlobalData('scene',options.scene)
+      setGlobalData('authCode',options.referrerInfo.extraData.authCode)
+    }
+  }
   async onLaunch (options) {
     // 单页调试时方便使用
     // const token = Taro.getStorageSync('token')

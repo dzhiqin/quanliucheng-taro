@@ -79,10 +79,12 @@ const config = {
     clinicReportTabs: [
       {title: '检验', value: REPORT_ITEM_TYPE_CN.化验},
       {title: '检查', value: REPORT_ITEM_TYPE_CN.检查},
+      {title: '病理', value: REPORT_ITEM_TYPE_CN.病理},
     ],
     hospReportTabs: [
       {title: '检验', value: REPORT_ITEM_TYPE_CN.化验},
       {title: '检查', value: REPORT_ITEM_TYPE_CN.检查},
+      {title: '病理', value: REPORT_ITEM_TYPE_CN.病理},
     ]
   },
   subscribes: {

@@ -221,6 +221,7 @@ const config:HospConfig = {
   
   paymentOrderPage: {
     tackingMedicineGuide: true //取药指引
-  }
+  },
+  yibaoParams: null,
 }
 export default config

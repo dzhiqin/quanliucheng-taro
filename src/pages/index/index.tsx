@@ -1,6 +1,7 @@
 import * as Taro from '@tarojs/taro'
 import { useEffect, useState } from 'react'
 import { View, Image } from '@tarojs/components'
+import { getGlobalData } from '@/utils/globalData'
 import * as React from 'react'
 import {custom} from '@/custom/index'
 import FunctionBoxes from '@/components/function-boxes/function-boxes'
@@ -33,6 +34,11 @@ export default function Index() {
   const onConfirm = () => {
     setShow(false)
   }
+  Taro.useDidShow(() => {
+    if(getGlobalData('scene') === 1038 && getGlobalData('authCode')){
+      console.log('get auth code: ',getGlobalData('authCode'));
+    }
+  })
   // const NoticeItem = (props) => {
   //   return(
   //     <View className='notice-item'>{props.children}</View>

@@ -16,7 +16,7 @@ const config = {
   // subUrl: 'https://gysycustomize.wedoublecare.com', // 测试环境
   indexPage: {
     quickEntrance: {
-      enable: false,
+      enable: true,
       tabList: [
         // {
         //   title: '门诊',
@@ -56,11 +56,16 @@ const config = {
             //   appId: 'wx8e0b79a7f627ca18',
             //   path: `pages/invoiceDisplayDWDZ/invoiceDisplayDWDZ?q=${encodeURIComponent("https://www.chinaebill.cn/d?t=501&a=89AMy0Cj6&d=44060122_8040675619_3f7484_20221118&s=B62B74A4D1")}`
             // },
+            // {
+            //   name: "云胶片",
+            //   icon: imgUrl.new_home_icon10,
+            //   event: "navigate",
+            //   url: `/pages/service-pack/web-view-page/web-view-page?pageType=cloudFilm`
+            // },
             {
-              name: "云胶片",
+              name: "免密授权",
               icon: imgUrl.new_home_icon10,
-              event: "navigate",
-              url: `/pages/service-pack/web-view-page/web-view-page?pageType=cloudFilm`
+              event: "click",
             },
           ]
         }
@@ -107,6 +112,14 @@ const config = {
   },
   paymentOrderPage: {
     tackingMedicineGuide: true //取药指引
+  },
+  yibaoParams: {
+    orgChnlCrtfCodg: 'BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxvShtXBpXvc4WkWexOKgovx',//  机构渠道认证编码
+    orgCodg: 'H44010300017', //定点医药机构编码 
+    bizType: '04107', //线上核验业务类型编码 
+    orgAppId: '1GPA6UN3P0AU3F60C80A0000B246C727', // 定点医药机构应用ID 
+    cityCode: '440108', //城市编码
+    channel: 'AAGE84GHsRIzjSdxPaPQtNqU' //渠道号（微信医保平台分配）
   }
 }
 const mergedConfig = mergeRecursive(DefaultConfig, config)

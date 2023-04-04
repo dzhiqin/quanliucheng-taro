@@ -212,11 +212,12 @@ export const TaroNavToYiBao = (callback) => {
     })
   }
 }
-export const TaroNavToMiniProgram = (data:{appId: string, path: string}) => {
+export const TaroNavToMiniProgram = (data:{appId: string, path: string, envVersion?: 'trial' | 'release' | 'develop'}) => {
   return new Promise((resolve,reject)=>{
     Taro.navigateToMiniProgram({
       appId:data.appId,
       path:data.path,
+      envVersion: data.envVersion || 'release',
       success: (res) => {resolve(res)},
       complete: () => {}
     }).catch(err => {
