@@ -74,7 +74,7 @@ export default function RegisterNoticeModal(props:
             {
               noticeContent ? 
               <View dangerouslySetInnerHTML={{__html: noticeContent}}></View> :
-              <View>暂无内容</View>
+              <View>加载中...</View>
             }
           </View>
           <View className={`notice-modal-footer ${enable ? 'enable' : 'disable'}`} onClick={handleConfirm.bind(this)}>

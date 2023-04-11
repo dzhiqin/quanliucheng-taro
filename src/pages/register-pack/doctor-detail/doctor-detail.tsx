@@ -12,7 +12,6 @@ import './doctor-detail.less'
 import { CardsHealper } from '@/utils/cards-healper'
 import BaseModal from '@/components/base-modal/base-modal'
 import { getImageSrc } from '@/utils/image-src'
-// import {mockList} from './mock'
 
 interface Options {
   doctorId: string,
@@ -68,6 +67,7 @@ export default function DoctorDefault() {
     desc: ''
   })
   const [doctorInfo,setDoctorInfo] = useState({
+    doctorId: '',
     sourceType: '',
     regType:'',
     regFee: '',
@@ -109,7 +109,7 @@ export default function DoctorDefault() {
       patientName: card.name,
       deptId: options.deptId, 
       deptName: options.deptName,
-      doctorId: doctorDetail.doctorId,
+      doctorId: doctorDetail.doctorId || doctorInfo.doctorId,
       doctorName: doctorDetail.name || doctorDetail.doctorName,
       regDate: selectedDate,
       scheduleId: item.scheduleId,
@@ -184,7 +184,6 @@ export default function DoctorDefault() {
           modalService({content: msg})
           setBusy(false)
         }else{
-          // res.data.timePoints=mockList
           setList(res.data.timePoints.map(item => {
             return {
               ...item,

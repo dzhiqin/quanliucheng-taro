@@ -64,7 +64,7 @@ export default function OrderCreate() {
   const [regFee,setRegFee] = useState(null)
   const [treatFee,setTreatFee] = useState(null)
   // const [feeTypes,setFeeTypes] = useState([])
-  const [feeType,setCurrentFeeType] = useState('')
+  const [currentFeeObj,setCurrentFeeObj] = useState({feeName: '',feeCode: ''})
   const [result,setResult] = useState(resultEnum.default)
   const [feeOptions,setFeeOptions] = useState([])
   const [showNotice,setShowNotice] = useState(false)
@@ -80,7 +80,8 @@ export default function OrderCreate() {
       cardNo: card.cardNo,
       patientId: card.patientId,
       regFee: _regFee? _regFee : regFee,
-      treatFee: _treatFee ? _treatFee : treatFee
+      treatFee: _treatFee ? _treatFee : treatFee,
+      feeType: currentFeeObj.feeCode || orderParams.feeType
     }
     return params
   }
@@ -99,14 +100,15 @@ export default function OrderCreate() {
       regDoctor: doctorId,
       schemaId: scheduleId,
       regTypeId,
-      pactCode: '1'
+      pactCode: '1',
+      feeType: currentFeeObj.feeCode
     }
     return params
   }
   const onFeeTypeChange = (e) => {
     const index = e.detail.value
     const value = feeOptions[index]
-    setCurrentFeeType(value)
+    setCurrentFeeObj(value)
   }
   const checkOrderStatus = (orderId: string) => {
     return new Promise((resolve,reject) => {
@@ -167,7 +169,6 @@ export default function OrderCreate() {
         toastService({title: '您已取消缴费',onClose: () => loadingService(false)})
         cancelRegOrder({orderId: orderId})
       }else{
-        // console.log('支付失败:',taroErr.data);
         loadingService(false)
       }
       setBusy(false)
@@ -178,7 +179,6 @@ export default function OrderCreate() {
       if(res.resultCode === 0){
         const {totalEnergy} = res.data
         setEnergy(totalEnergy)
-        // setShowGreenToast(true)
         setIsShow(true)
       }
     })
@@ -187,7 +187,6 @@ export default function OrderCreate() {
     return new Promise((resolve,reject) => {
       getEpidemiologicalSurveyState()
       .then(res => {
-        // console.log('checkEpiLogicalSurvey',res);
         if(res.resultCode === 0){
           resolve({result: true, message:'success'})
         }else{
@@ -337,16 +336,16 @@ export default function OrderCreate() {
   useEffect(() => {
     fetchRegFeeType().then(res => {
       if(res.resultCode == 0){
-        // setFeeTypes(res.data)
-        let arr = []
-        res.data.forEach(i => {
-          arr.push(i.feeName)
-        })
-        setFeeOptions(arr)
-        setCurrentFeeType(arr[0])
+        setFeeOptions(res.data)
+        setCurrentFeeObj(res.data[0])
       }
     })
   },[])
+  // useEffect(() => {
+  //   if(!currentFeeObj.feeCode) return
+  //   setBusy(true)
+  //   fetchFee().then(() => setBusy(false))
+  // },[currentFeeObj.feeCode])
   Taro.useDidShow(() => {
     if(isShow){
       setShowGreenToast(true)
@@ -367,6 +366,7 @@ export default function OrderCreate() {
       patientName: card.name
     }
     setOrder(orderParams)
+    // if(custom.hospName === 'gy3yhp' && !currentFeeObj.feeCode) return // 特殊处理，未获取feecode的情况下不进行挂号金额查询
     fetchOrderFee(buildFeeParams()).then(res => {
       if(res.resultCode === 0){
         setRegFee(res.data.regFee)
@@ -429,15 +429,30 @@ export default function OrderCreate() {
             <View className='order-create-item'>
               <View className='order-create-item-title'>费用类型</View>
               <View className='order-create-item-value'>
-                <Picker mode='selector' range={feeOptions} onChange={onFeeTypeChange} >
+                <Picker mode='selector' range={feeOptions.map(i => i.feeName)} onChange={onFeeTypeChange} >
                   <View className='flex-between'>
-                    <View>{feeType}</View>
+                    <View>{currentFeeObj.feeName}</View>
                     <AtIcon value='chevron-right' size='20' color='#999'></AtIcon>
                   </View>
                 </Picker>
               </View>
             </View>
           }
+          {/* {
+            // 临时处理
+            custom.hospName === 'gy3yhp' && 
+            <View className='order-create-item'>
+              <View className='order-create-item-title'>费用类型</View>
+              <View className='order-create-item-value'>
+                <Picker mode='selector' range={feeTypeOptionsTemp.map(i => i.name)} onChange={onFeeTypeTempChange} >
+                  <View className='flex-between'>
+                    <View>{feeTypeOptionsTemp.find(i => i.id === feeType)?.name}</View>
+                    <AtIcon value='chevron-right' size='20' color='#999'></AtIcon>
+                  </View>
+                </Picker>
+              </View>
+            </View>
+          } */}
         </BkPanel>
         {
           process.env.TARO_ENV === 'alipay' && custom.feat.greenTree &&

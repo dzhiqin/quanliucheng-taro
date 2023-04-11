@@ -4,14 +4,12 @@ import { mergeRecursive } from '@/utils/tools'
 import DefaultConfig from './default'
 
 const config = {
-  // latitude: 23.206463,
-  // longitude: 113.492037,
   latitude: 23.206595,
   longitude: 113.491739,
   hospName: "gy3yhp",
   banner: 'https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/applets-imgs/banner2.png',
   logo: "https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/lwgk/20220309-basic/gysy.png",
-  hospitalName: "广州医科大学附属第三医院黄埔院区",
+  hospitalName: "广医三院黄埔院区",
   // baseUrl: "https://applets.gdbkyz.com", // 倍康测试
   baseUrl: "https://gysy-applets.wedoublecare.com",// 正式环境 43.139.42.75:30091
   // baseUrl: "http://43.139.42.75:30091", // 测试

@@ -16,15 +16,15 @@ const config = {
   // subUrl: 'https://gysycustomize.wedoublecare.com', // 测试环境
   indexPage: {
     quickEntrance: {
-      enable: false,
+      enable: true,
       tabList: [
         {
-          title: '门诊',
+          title: '其他',
           entrances: [
             {
               icon: imgUrl.new_home_icon6,
-              name: '登陆授权',
-              event: 'auth',
+              name: '体检预约',
+              event: 'health',
               scope: ''
             }, 
             

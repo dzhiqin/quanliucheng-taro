@@ -9,7 +9,7 @@ const config = {
   hospName: "gy3ylw",
   banner: 'https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/applets-imgs/banner2.png',
   logo: "https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/lwgk/20220309-basic/gysy.png",
-  hospitalName: "广州医科大学附属第三医院",
+  hospitalName: "广医三院荔湾院区",
   // baseUrl: "https://applets.gdbkyz.com", // 倍康测试
   baseUrl: "https://gysy.wedoublecare.com",  // 旧正式环境
   // baseUrl: "https://weixin2.gy3y.com", // 新正式环境(未启用)

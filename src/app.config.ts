@@ -164,6 +164,12 @@ if(process.env.TARO_ENV === 'weapp'){
 }
 if(process.env.TARO_ENV === 'alipay'){
   config.subPackages = subPackages
-  
+  const plugins = {
+    "heHealth": {
+      "version": "*",
+      "provider": "2021003179663281"
+    }
+  }
+  config.plugins = plugins
 }
 export default config
