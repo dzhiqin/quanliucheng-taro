@@ -15,6 +15,10 @@ const config = {
   // baseUrl: "https://weixin2.gy3y.com", // 新正式环境(未启用)
   // subUrl: 'https://gysycustomize.wedoublecare.com', // 测试环境
   indexPage: {
+    banner: { // 轮播图组件
+      enable: true,
+      url: 'https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/common/gy3ylw-banner.png'
+    },
     quickEntrance: {
       enable: true,
       tabList: [

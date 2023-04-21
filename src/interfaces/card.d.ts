@@ -10,7 +10,7 @@ export interface Card {
   address: string;
   isDefault: true;
   gender: string;
-  birthday: string;
+  birthdate: string;
   patientId: string;  // 患者id，后端返回，同cardNo？
   isGetCode?: true;
   cardType: string;          // 证件类型

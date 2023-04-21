@@ -65,6 +65,7 @@ export default function OrderCreate() {
   const [treatFee,setTreatFee] = useState(null)
   // const [feeTypes,setFeeTypes] = useState([])
   const [currentFeeObj,setCurrentFeeObj] = useState({feeName: '',feeCode: ''})
+  const [appointedFeeType, setAppointedFeeType] = useState('')
   const [result,setResult] = useState(resultEnum.default)
   const [feeOptions,setFeeOptions] = useState([])
   const [showNotice,setShowNotice] = useState(false)
@@ -72,16 +73,16 @@ export default function OrderCreate() {
   const [isShow,setIsShow] = useState(false)
   const [showGreenModal,setShowGreenModal] = useState(false)
   const [energy,setEnergy] = useState(0)
-  const buildOrderParams = (_regFee?,_treatFee?) => {
+  const buildOrderParams = (_regFee=undefined,_treatFee=undefined) => {
     const orderParams = Taro.getStorageSync('orderParams')
     const card = CardsHealper.getDefault()
     const params = {
       ...orderParams,
       cardNo: card.cardNo,
       patientId: card.patientId,
-      regFee: _regFee? _regFee : regFee,
-      treatFee: _treatFee ? _treatFee : treatFee,
-      feeType: currentFeeObj.feeCode || orderParams.feeType
+      regFee: _regFee !== undefined ? _regFee : regFee,
+      treatFee: _treatFee !== undefined ? _treatFee : treatFee,
+      feeType: appointedFeeType || currentFeeObj.feeCode || orderParams.feeType
     }
     return params
   }
@@ -101,7 +102,6 @@ export default function OrderCreate() {
       schemaId: scheduleId,
       regTypeId,
       pactCode: '1',
-      feeType: currentFeeObj.feeCode
     }
     return params
   }
@@ -285,6 +285,7 @@ export default function OrderCreate() {
       const feeRes:any = await fetchFee()
       if(feeRes.success){
         orderParams = buildOrderParams(feeRes.data.regFee, feeRes.data.treatFee)
+        handleCreateRegOrder(orderParams)
       }else{
         loadingService(false)
         modalService({content: feeRes.msg})
@@ -293,7 +294,10 @@ export default function OrderCreate() {
       }
     }else{
       orderParams = buildOrderParams()
+      handleCreateRegOrder(orderParams)
     }
+  }
+  const handleCreateRegOrder = (orderParams) => {
     createRegOrder(orderParams).then(res => {
       if(res.resultCode === 0){
         const {nonceStr, orderId, paySign, signType, payString, timeStamp, orderNo} = res.data
@@ -371,6 +375,7 @@ export default function OrderCreate() {
       if(res.resultCode === 0){
         setRegFee(res.data.regFee)
         setTreatFee(res.data.treatFee)
+        res.data.feeType && setAppointedFeeType(res.data.feeType)
       }
     })
   }
@@ -383,6 +388,7 @@ export default function OrderCreate() {
           const _treatFee = res.data.treatFee
           setRegFee(_regFee)
           setTreatFee(_treatFee)
+          res.data.feeType && setAppointedFeeType(res.data.feeType)
           resolve({success: true, data: {regFee: _regFee,treatFee: _treatFee}})
         }else{
           resolve({success: false, msg: '获取金额失败'})

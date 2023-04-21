@@ -110,7 +110,7 @@ export enum CARD_ACTIONS {
   SET_DEFAULT_CARD = 'SET_DEFAULT_CARD',
   REMOVE_CARD = 'REMOVE_CARD'
 }
-export enum GH_REPORT_APIS {
+export enum GH_REPORT_APIS { //上报光华平台的api
   CreateCardWX,
   GetCreateRegOrder,
   GetBillStatus,
@@ -118,4 +118,12 @@ export enum GH_REPORT_APIS {
   GetCheckDetail,
   GetOrderList, 
   GetBillOrderRecord
+}
+export enum INPATIENT_REG_STATUS {
+  NOT_SUBMIT = 0,
+  SUBMITTED = 1
+}
+export enum GENDER {
+  MALE = '0',
+  FEMALE = '1'
 }

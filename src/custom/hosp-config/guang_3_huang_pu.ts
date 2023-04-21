@@ -16,6 +16,10 @@ const config = {
   // baseUrl: "http://192.168.4.83:5002",
   // subUrl: 'https://gysycustomize.wedoublecare.com', // 附加功能环境
   indexPage: {
+    banner: { // 轮播图组件
+      enable: true,
+      url: 'https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/common/gy3yhp-banner.png'
+    },
     quickEntrance: {
       tabList: [
         {

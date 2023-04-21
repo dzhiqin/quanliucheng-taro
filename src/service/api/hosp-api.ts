@@ -86,3 +86,9 @@ export const fetchInHospBillCategories = (data: {registerId: string, billDate: s
 export const unbindHospCard = (data: {id: number}) => {
   return Post(fullUrl('api/applet/inpatient/InHospital/Unbound',data))
 }
+export const fetchInpatientRegNotices = (data: {idenNo: string, patientName: string}) => {
+  return Post(fullUrl('api/applet/inpatient/InHospital/GetMedicalNotice'),data)
+}
+export const fetchInpatientRegInfo = (data: {idenNo: string, inHospDate: string, patientName: string}) => {
+ return Post(fullUrl('api/applet/inHospital/GetMedicalRecords'),data)
+}

@@ -126,11 +126,12 @@ const subPackages = [
     name: 'hospitalization',
     pages: [
       'checklist/checklist',
-      'checkin/checkin',
       'binding-card/binding-card',
       'deposit/deposit',
       'checklist-detail/checklist-detail',
-      'card-list/card-list'
+      'card-list/card-list',
+      'inpatient-registration/inpatient-registration',
+      'inpatient-notices/inpatient-notices'
     ]
   },
   {

@@ -51,11 +51,12 @@ const config = {
         {
           title: '住院',
           entrances: [
-            // {
-            //   icon: imgUrl.new_home_icon9,
-            //   name: '住院登记',
-            //   event: 'navigate',
-            // }, 
+            {
+              icon: imgUrl.new_home_icon9,
+              name: '住院登记',
+              event: 'navigate',
+              url: '/pages/hosp-pack/inpatient-notices/inpatient-notices',
+            }, 
             // {
             //   icon: imgUrl.zybk,
             //   name: '住院绑卡',

@@ -15,8 +15,35 @@ const config = {
   baseUrl: "https://lwzxyy-applets.wedoublecare.com",  // 正式环境
   // subUrl: 'https://gysycustomize.wedoublecare.com', // 测试环境
   indexPage: {
-    quickEntrance: {
+    functionBox:{ // 功能模块组件
       enable: true,
+      list: [
+        {
+          icon: imgUrl.new_home_icon3,
+          title: '预约挂号',
+          event: 'register',
+          desc: '专家名医提前约',
+          tag: 'green'
+        },
+        {
+          icon: imgUrl.new_home_icon4,
+          title: '就诊缴费',
+          event: 'navigate',
+          desc: '线上缴费免排队',
+          url: '/pages/payment-pack/payment-list/payment-list'
+        },
+        // {
+        //   icon: imgUrl.new_home_icon5,
+        //   title: '查看报告',
+        //   event: 'navigate',
+        //   desc: '检查检验随时查',
+        //   url: '/pages/reports-pack/reports-type/reports-type',
+        //   tag: 'green'
+        // }
+      ]
+    },
+    quickEntrance: {
+      enable: false,
       tabList: [
         // {
         //   title: '门诊',
