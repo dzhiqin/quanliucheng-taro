@@ -131,7 +131,8 @@ const subPackages = [
       'checklist-detail/checklist-detail',
       'card-list/card-list',
       'inpatient-registration/inpatient-registration',
-      'inpatient-notices/inpatient-notices'
+      'inpatient-notices/inpatient-notices',
+      'discharge-settlement/discharge-settlement'
     ]
   },
   {

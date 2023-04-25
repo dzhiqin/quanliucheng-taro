@@ -98,7 +98,8 @@ export default function PaymentDetail() {
     serialNo: '',
     payState: undefined,
     orderState: undefined,
-    orderType: undefined
+    orderType: undefined,
+    patientName: ''
   }
   let scanParams = null
   let from: PAYMENT_FROM = null
@@ -110,7 +111,7 @@ export default function PaymentDetail() {
     orderInfoFromList = JSON.parse(params.orderInfo)
     const currentCard = CardsHealper.getDefault()
     currentCardNo = currentCard.cardNo
-    Qrcode.toDataURL(currentCard.cardNo).then(url => {
+    Qrcode.toDataURL(orderInfoFromList.cardNo || currentCard.cardNo).then(url => {
       setQrcodeSrc(url)
     })
   }
@@ -532,7 +533,7 @@ export default function PaymentDetail() {
   const renderName = () => {
     let name = ''
     if(orderInfoFromList){
-      name = card?.name
+      name = orderInfoFromList.patientName || card?.name
     }else(
       name = orderInfo.patientName
     )
@@ -608,7 +609,7 @@ export default function PaymentDetail() {
         {
           qrcodeSrc &&
           <View className='payment-detail-qrcode'>
-            <View>诊疗卡号：{currentCardNo}</View>
+            <View>诊疗卡号：{orderInfoFromList.cardNo || currentCardNo}</View>
             <Image style='width: 200px; height: 200px;' src={qrcodeSrc}></Image>
           </View>
         }

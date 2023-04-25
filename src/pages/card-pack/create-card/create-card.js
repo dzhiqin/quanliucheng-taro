@@ -52,12 +52,13 @@ export default class BindCard extends React.Component {
         nationality: '中国',
         parentName: '',
         parentId: '',
-        wechatCode: Taro.getCurrentInstance().router.params.wechatCode || ''
+        wechatCode: Taro.getCurrentInstance().router.params.wechatCode || '',
       }
     }
     this.handleSendSms = this.handleSendSms.bind(this)
     this.onScanResult = this.onScanResult.bind(this)
     this.onSubmit = this.onSubmit.bind(this)
+    // this.onRegionChange = this.onRegionChange.bind(this)
     // this.handleCardChange = this.handleCardChange.bind(this)
   }
   
@@ -221,6 +222,7 @@ export default class BindCard extends React.Component {
     }
     let params = {
       ...card,
+      // address: this.state.region.join('') + card.address,
       isHaveCard: card.isHaveCard,
       openId: Taro.getStorageSync('openId')
     }
@@ -276,10 +278,21 @@ export default class BindCard extends React.Component {
         msg = '请输入正确的姓名，不少于2个字'
       }
     }
+    // if(!this.state.region.length) {
+    //   result = false
+    //   msg = '请选择省市区'
+    // }else{
+    //   const fullAddress = this.state.region.join('') + this.state.card.address
+    //   if(fullAddress.length >34){
+    //     result = false
+    //     msg = '联系地址应小于35个字符，如果使用地图选点请检查是否重复输入省市区'
+    //   }
+    // }
+    
     return {result, msg}
   }
   handleCardChange (stateName,value) {
-    console.log(`statename=${stateName};value=${value}`);
+    // console.log(`statename=${stateName};value=${value}`);
     if(typeof value === 'string'){
       value = value.trim()
     }
@@ -398,6 +411,9 @@ export default class BindCard extends React.Component {
       currentGenderValue: data.gender.text
     })
   }
+  // onRegionChange(e){
+  //   this.setState({region: e.detail.value})
+  // }
   getAddressFromMap() {
     loadingService(true)
     TaroGetLocation({type: 'wgs84'}).then(res => {
@@ -409,7 +425,7 @@ export default class BindCard extends React.Component {
           this.setState({
             card:{
               ...this.state.card,
-              address: data.address
+              address: data.address + data.name
             }
           })
         },
@@ -598,6 +614,15 @@ export default class BindCard extends React.Component {
               </AtList>
             </Picker> 
           }
+          {/* <Picker mode='region' onChange={this.onRegionChange} value={this.state.region}>
+            <AtList>
+              <AtListItem
+                title='省市区'
+                extraText={this.state.region.join(' ')}
+              >
+              </AtListItem>
+            </AtList>
+          </Picker> */}
           <BkInput 
             name='address' 
             title='详细地址' 

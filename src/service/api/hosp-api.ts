@@ -90,5 +90,17 @@ export const fetchInpatientRegNotices = (data: {idenNo: string, patientName: str
   return Post(fullUrl('api/applet/inpatient/InHospital/GetMedicalNotice'),data)
 }
 export const fetchInpatientRegInfo = (data: {idenNo: string, inHospDate: string, patientName: string}) => {
- return Post(fullUrl('api/applet/inHospital/GetMedicalRecords'),data)
+  return Post(fullUrl('api/applet/inHospital/GetMedicalRecords'),data)
+}
+export const fetchDischargeInfo = (data: {inCardNo: string}) => {
+  return Post(fullUrl('api/applet/inHospital/GetOutPatientList',data))
+}
+export const notifyHisToDischarge = (data: {inCardNo: string, registerId: string}) => {
+  return Post(fullUrl('api/applet/inHospital/TryMakeUpToHis',data))
+}
+export const handleDisChangeSettlement = (data: {money: number, registerId: string, inCardNo: string}) => {
+  return Post(fullUrl('api/applet/inHospital/MakeUpPay'),data)
+}
+export const fetchDischargeOrderStatus = (data: {orderNo: string}) => {
+  return Post(fullUrl('api/applet/inHospital/CheckOrderStatus',data))
 }
