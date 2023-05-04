@@ -11,8 +11,8 @@ const config = {
   banner: 'https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/applets-imgs/banner2.png',
   logo: "https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/common/li-wan-zhong-xin.jpeg",
   hospitalName: "广州市荔湾中心医院",
-  // baseUrl: "http://119.29.152.149:30102", // 测试
-  baseUrl: "https://lwzxyy-applets.wedoublecare.com",  // 正式环境
+  baseUrl: "http://119.29.97.234:30102", // 测试
+  // baseUrl: "https://lwzxyy-applets.wedoublecare.com",  // 正式环境
   // subUrl: 'https://gysycustomize.wedoublecare.com', // 测试环境
   indexPage: {
     functionBox:{ // 功能模块组件
@@ -43,7 +43,7 @@ const config = {
       ]
     },
     quickEntrance: {
-      enable: false,
+      enable: true,
       tabList: [
         // {
         //   title: '门诊',
@@ -141,6 +141,8 @@ const config = {
     tackingMedicineGuide: true //取药指引
   },
   yibaoParams: {
+    path: 'auth/pages/bindcard/auth/index?openType=getAuthCode&bizType=04107&cityCode=440108&channel=AAGE84GHsRIzjSdxPaPQtNqU&orgChnlCrtfCodg=BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxvShtXBpXvc4WkWexOKgovx&orgCodg=H44010300017&orgAppId=1GPA6UN3P0AU3F60C80A0000B246C727',
+    appId: 'wxe183cd55df4b4369',
     orgChnlCrtfCodg: 'BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxvShtXBpXvc4WkWexOKgovx',//  机构渠道认证编码
     orgCodg: 'H44010300017', //定点医药机构编码 
     bizType: '04107', //线上核验业务类型编码 

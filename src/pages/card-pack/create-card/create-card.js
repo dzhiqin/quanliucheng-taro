@@ -37,6 +37,8 @@ export default class BindCard extends React.Component {
       smsCode: '',
       smsCodeValid: '',
       count: 0,
+      useReginSelector: true,
+      region: custom.region,
       card: {
         patientName: '',
         idenType: 0,
@@ -58,7 +60,7 @@ export default class BindCard extends React.Component {
     this.handleSendSms = this.handleSendSms.bind(this)
     this.onScanResult = this.onScanResult.bind(this)
     this.onSubmit = this.onSubmit.bind(this)
-    // this.onRegionChange = this.onRegionChange.bind(this)
+    this.onRegionChange = this.onRegionChange.bind(this)
     // this.handleCardChange = this.handleCardChange.bind(this)
   }
   
@@ -222,7 +224,7 @@ export default class BindCard extends React.Component {
     }
     let params = {
       ...card,
-      // address: this.state.region.join('') + card.address,
+      address: this.state.useReginSelector ? this.state.region.join('') + card.address : card.address,
       isHaveCard: card.isHaveCard,
       openId: Taro.getStorageSync('openId')
     }
@@ -288,6 +290,19 @@ export default class BindCard extends React.Component {
     //     msg = '联系地址应小于35个字符，如果使用地图选点请检查是否重复输入省市区'
     //   }
     // }
+    if(this.state.useReginSelector){
+      if(!this.state.region.length){
+        result = false
+        msg = '请选择省市区'
+      }else{
+        const fullAddress = this.state.region.join('') + this.state.card.address
+        if(fullAddress.length > 34){
+          result = false
+          msg = '联系地址应小于35个字符'
+        }
+      }
+      
+    }
     
     return {result, msg}
   }
@@ -408,53 +423,68 @@ export default class BindCard extends React.Component {
         birthday: data.birth.text
       },
       selectedDate: data.birth.text,
-      currentGenderValue: data.gender.text
+      currentGenderValue: data.gender.text,
+      useReginSelector: false
     })
   }
-  // onRegionChange(e){
-  //   this.setState({region: e.detail.value})
-  // }
+  onRegionChange(e){
+    this.setState({region: e.detail.value})
+  }
   getAddressFromMap() {
-    loadingService(true)
-    TaroGetLocation({type: 'wgs84'}).then(res => {
-      loadingService(false)
-      Taro.chooseLocation({
-        latitude: res.latitude,
-        longitude: res.longitude,
-        success: (data) => {
-          this.setState({
-            card:{
-              ...this.state.card,
-              address: data.address + data.name
-            }
-          })
-        },
-        fail: () => {
-          toastService({title: '未选择地址'})
+    modalService({
+      content: '是否使用地图选点功能？',
+      showCancel:true,
+      success: res => {
+        if(res.cancel){
+          this.setState({useReginSelector: true})
+          this.handleCardChange('address','')
         }
-      })
-    }).catch(err => {
-      if(err.errMsg==='getLocation:fail auth deny'){
-        loadingService(false)
-        Taro.showModal({
-          content: '检测到您没有打开小程序的定位授权，是否手动打开？',
-          confirmText: '确认',
-          cancelText: '取消',
-          success: result => {
-            if(result.confirm){
-              Taro.openSetting({
-                success: () => {}
+        if(res.confirm){
+          this.setState({useReginSelector: false})
+          loadingService(true)
+          TaroGetLocation({type: 'wgs84'}).then(res => {
+            loadingService(false)
+            Taro.chooseLocation({
+              latitude: res.latitude,
+              longitude: res.longitude,
+              success: (data) => {
+                this.setState({
+                  card:{
+                    ...this.state.card,
+                    address: data.address + data.name
+                  }
+                })
+              },
+              fail: () => {
+                toastService({title: '未选择地址'})
+              }
+            })
+          }).catch(err => {
+            if(err.errMsg==='getLocation:fail auth deny'){
+              loadingService(false)
+              Taro.showModal({
+                content: '检测到您没有打开小程序的定位授权，是否手动打开？',
+                confirmText: '确认',
+                cancelText: '取消',
+                success: result => {
+                  if(result.confirm){
+                    Taro.openSetting({
+                      success: () => {}
+                    })
+                  }else{
+                    Taro.navigateBack()
+                  }
+                }
               })
             }else{
-              Taro.navigateBack()
+              toastService({title: '获取位置失败',onClose: () => {loadingService(false)}})
+              console.error(err)
             }
-          }
-        })
-      }else{
-        toastService({title: '获取位置失败',onClose: () => {loadingService(false)}})
-        console.error(err)
+          })
+        }
       }
     })
+    
   }
   handleSendSms() {
     if(this.state.count > 0) return
@@ -613,6 +643,18 @@ export default class BindCard extends React.Component {
                 </AtListItem>
               </AtList>
             </Picker> 
+          }
+          {
+            this.state.useReginSelector &&
+            <Picker mode='region' onChange={this.onRegionChange} value={this.state.region}>
+              <AtList>
+                <AtListItem
+                  title='省市区'
+                  extraText={this.state.region.join(' ')}
+                >
+                </AtListItem>
+              </AtList>
+            </Picker>
           }
           {/* <Picker mode='region' onChange={this.onRegionChange} value={this.state.region}>
             <AtList>

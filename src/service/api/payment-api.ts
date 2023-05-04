@@ -20,6 +20,7 @@ export interface PayOrderParams {
     "orderDoctor": string,
     "orderDate": string,
     "payType": string,
+    "payAuthCode"?: string
 }
 export const createPaymentOrder = (data: PayOrderParams) => {
   return Post(fullUrl('api/applet/paybill/Bill/CreateBillOrder'),data)
@@ -30,7 +31,7 @@ export const handlePayment = (data: {orderId: string, payType: string | number})
 export const cancelPayment = (data: {orderId: string}) => {
   return Post(fullUrl('api/applet/paybill/Bill/CancelPay'),data)
 }
-export const handleRefund = (data: {orderId: string}) => {
+export const handleBillOrderRefund = (data: {orderId: string,payAuthCode?: string}) => {
   return Post(fullUrl('api/applet/paybill/Bill/Refund'),data)
 }
 export const fetchPaymentOrderList = (data) => {
@@ -65,4 +66,7 @@ export const fetchPaymentOrderInvoice = (data: {serialNo: string}) => {
 }
 export const handleHeSuanRefund = (data:{orderId: string}) => {
   return Post(fullUrl('api/customize/applet/HeSuan/HeSuanRefund'),data)
+}
+export const fetchBillOrderInfo = (data: {orderId}) => {
+  return Post(fullUrl('api/applet/paybill/Bill/GetPaymentDetails',data))
 }

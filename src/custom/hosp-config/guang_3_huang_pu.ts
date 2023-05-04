@@ -12,7 +12,7 @@ const config = {
   hospitalName: "广医三院黄埔院区",
   // baseUrl: "https://applets.gdbkyz.com", // 倍康测试
   baseUrl: "https://gysy-applets.wedoublecare.com",// 正式环境 43.139.42.75:30091
-  // baseUrl: "http://43.139.42.75:30091", // 测试
+  // baseUrl: "http://119.29.97.234:30102", // 测试
   // baseUrl: "http://192.168.4.83:5002",
   // subUrl: 'https://gysycustomize.wedoublecare.com', // 附加功能环境
   indexPage: {

@@ -1,4 +1,4 @@
-const delay = (mileSeconds = 2200) =>{
+const delay = (mileSeconds = 3000) =>{
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve('')

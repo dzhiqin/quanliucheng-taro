@@ -8,6 +8,7 @@ const config = {
   longitude: 113.206014,
   hospName: "jszyy",
   isPrivate: true,
+  region: ['广东省','广州市','白云区'],
   banner: 'https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/common/jinshazhou-banner.png',
   logo: "https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/common/jszyy.png",
   hospitalName: "广州中医药大学金沙洲医院",

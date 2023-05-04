@@ -2,7 +2,7 @@
   <view class="hd">
     <view class="info">
       <view class="info-hd">付款给</view>
-      <view class="info-bd">*****医院</view>
+      <view class="info-bd">{{hospitalName}}</view>
     </view>
     <view class="info-icon">
       <image class="info-icon-img" src="/assets/info-icon.png" alt="" />
@@ -13,25 +13,25 @@
     <view class="box">
       <view class="box-hd">
         <view class="box-hd-label">费用总额</view>
-        <view class="box-hd-value">342.23元</view>
+        <view class="box-hd-value">{{orderInfo.totalFee}}元</view>
       </view>
       <view class="box-bd">
         <view class="box-item">
           <view class="box-bd-label">医保基金支付</view>
-          <view class="box-bd-value">233元</view>
+          <view class="box-bd-value">{{orderInfo.insuranceFee}}元</view>
         </view>
         <view class="box-item">
           <view class="box-bd-label">个人帐户支付</view>
-          <view class="box-bd-value">233元</view>
+          <view class="box-bd-value">{{orderInfo.personalFee}}元</view>
         </view>
         <view class="box-item">
           <view class="box-bd-label">其他抵扣金额</view>
-          <view class="box-bd-value">233元</view>
+          <view class="box-bd-value">{{orderInfo.otherFee || 0}}元</view>
         </view>
       </view>
       <view class="box-ft">
         <view class="box-ft-label">现金支付</view>
-        <view class="box-ft-value">56元</view>
+        <view class="box-ft-value">{{orderInfo.cashFee}}元</view>
       </view>
       <view
         class="box-append"
@@ -47,9 +47,9 @@
   <view class="ft">
     <view class="pay">
       <view class="pay-label">您还需支付：</view>
-      <view class="pay-value">¥5823</view>
+      <view class="pay-value">¥{{orderInfo.cashFee}}</view>
     </view>
-    <view class="btn">去支付</view>
+    <view class="btn" bindtap="handlePay">去支付</view>
   </view>
   <view
     class="actionsheet"
@@ -61,7 +61,31 @@
         <icon class="actionsheet-icon-close" bindtap="handleActionsheet"></icon>
       </view>
       <view class="actionsheet-bd">
-        <view 
+        <view class="actionsheet-box" wx:for="{{list}}" wx:key="itemName">
+          <view class="actionsheet-box-bd">
+            <view class="actionsheet-box-item">
+              <view class="actionsheet-box-item-label">费用类型</view>
+              <view class="actionsheet-box-item-sublabel">{{item.type}}</view>
+            </view>
+            <view class="actionsheet-box-item">
+              <view class="actionsheet-box-item-label">项目名称</view>
+              <view class="actionsheet-box-item-sublabel">{{item.itemName}}</view>
+            </view>
+            <view class="actionsheet-box-item">
+              <view class="actionsheet-box-item-label">项目数量</view>
+              <view class="actionsheet-box-item-sublabel">{{item.count}}{{item.unit}}</view>
+            </view>
+            <view class="actionsheet-box-item">
+              <view class="actionsheet-box-item-label">单价</view>
+              <view class="actionsheet-box-item-sublabel">{{item.itemPrice}}</view>
+            </view>
+            <view class="actionsheet-box-item">
+              <view class="actionsheet-box-item-label">小计</view>
+              <view class="actionsheet-box-item-sublabel">{{item.money}}</view>
+            </view>
+          </view>
+        </view>
+        <!-- <view 
           class="actionsheet-box"
           wx:for="{{prescriptionList}}"
           wx:key="title">
@@ -80,7 +104,7 @@
                 class="actionsheet-box-item-value {{boxItem.highlight ? 'em' : ''}}">{{boxItem.value}}</view>
             </view>
           </view>
-        </view>
+        </view> -->
       </view>
     </scroll-view>
   </view>

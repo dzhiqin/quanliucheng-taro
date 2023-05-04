@@ -80,7 +80,8 @@ export enum HEALTH_CARD_TYPE_EN {
 export enum PAYMENT_FROM {
   orderList = 'orderList',
   paymentList = 'paymentList',
-  scanQRCode = 'scanQRCode'
+  scanQRCode = 'scanQRCode',
+  message = 'message'
 }
 export enum PAY_RESULT {
   INIT = '',

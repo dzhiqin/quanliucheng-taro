@@ -22,7 +22,9 @@ import {
   handleLogin,
   TaroAliPayment,
   AlipaySubscribeService,
-  TaroNavigateService
+  TaroNavigateService,
+  fetchBillOrderInfo,
+  handleBillOrderRefund
 } from '@/service/api'
 import { CardsHealper } from '@/utils/cards-healper'
 import './payment-detail.less'
@@ -39,6 +41,7 @@ import {custom} from '@/custom/index'
 import { getPrivacyName, getQueryValue } from '@/utils/tools'
 import { reportCmPV_YL } from '@/utils/cloudMonitorHelper'
 import Qrcode from 'qrcode'
+import { getGlobalData, setGlobalData } from '@/utils/globalData'
 
 enum resultEnum {
   default = '',
@@ -69,7 +72,8 @@ interface OrderInfoParams {
   mdtrtMode?: string,
   hospitalCode?: string,
   pactCode?: string,
-  feeTypeId?: string
+  feeTypeId?: string,
+  orderState?: ORDER_STATUS_EN
 }
 // 注意进入页面场景有3：
 // 1-从缴费列表进入；2-从订单列表进入；3-扫码进入
@@ -106,6 +110,8 @@ export default function PaymentDetail() {
   if(scene){
     from = PAYMENT_FROM.scanQRCode
     scanParams = { preQRCodePayId: getQueryValue(scene, 'prepayid')}
+  }else if(params.orderId){
+    from = PAYMENT_FROM.message
   }else{
     from = params.from as PAYMENT_FROM
     orderInfoFromList = JSON.parse(params.orderInfo)
@@ -142,6 +148,10 @@ export default function PaymentDetail() {
         setBusy(false)
         return
       }
+    }
+    if(custom.yibaoParams && type === PAY_TYPE_CN.医保){
+      TaroNavToMiniProgram({appId: custom.yibaoParams.appId,path: custom.yibaoParams.path})
+      return
     }
     if(from === PAYMENT_FROM.orderList){
       // 从订单列表进入的，直接用orderId支付，不需再创建订单
@@ -322,7 +332,8 @@ export default function PaymentDetail() {
       orderDept: orderInfoFromList.orderDept,
       orderDoctor: orderInfoFromList.orderDoctor,
       orderDate: orderInfoFromList.orderDate,
-      payType: type
+      payType: type,
+      payAuthCode: getGlobalData('authCode') || ''
     }
     return paymentParams
   }
@@ -369,6 +380,9 @@ export default function PaymentDetail() {
   },[orderInfoFromList.orderId])
   const handleClickNavitator = (execRoom) => {
     TaroNavToZhongXun(execRoom)
+  }
+  const handleAuthorize = () => {
+    TaroNavToMiniProgram({appId: custom.yibaoParams.appId,path: custom.yibaoParams.path})
   }
   const handleCancel = () => {
     Taro.showLoading({title: '取消中……',mask:true})
@@ -441,7 +455,60 @@ export default function PaymentDetail() {
         }
       })
     })
+    if(getGlobalData('scene') === 1038 && getGlobalData('authCode')){
+      if(billOrderId){
+        handleRefund()
+      }else{
+        handleYiBao2Payment()
+      }
+    }
   })
+  const handleRefund = () => {
+    handleBillOrderRefund({orderId: billOrderId, payAuthCode: getGlobalData('authCode')}).then(res => {
+      if(res.resultCode === 0){
+        modalService({content:'退款操作成功',success: () => {
+          Taro.redirectTo({url: '/pages/payment-pack/payment-list/payment-list'})
+        }})
+      }else{
+        modalService({content:res.message})
+      }
+    }).finally(() => {
+      setGlobalData('authCode','')
+    })
+  }
+  const handleYiBao2Payment = () => {
+    // 医保2.0
+    createPaymentOrder(buildPaymentParams(PAY_TYPE_CN.医保)).then(res => {
+      if(res.resultCode === 0){
+        const query = {
+          clinicNo: orderInfoFromList.clinicNo,
+          cardNo: card.cardNo,
+          recipeSeq: orderInfoFromList.recipeSeq,
+          patientId: card.patientId,
+          orderId: res.data.orderId
+        }
+        TaroNavigateService('/pages/payment-pack/medinsurance-payment-detail/index?query='+JSON.stringify(query))
+        setGlobalData('authCode', '')
+      }else{
+        loadingService(false)
+        modalService({title: '创建订单失败', content: res.message})
+        setBusy(false)
+      }
+    })
+  }
+  const getOrderInfo = () => {
+    fetchBillOrderInfo({orderId:params.orderId}).then(res => {
+      if(res.resultCode ===0){
+        const {totalFee: prescMoney,orderState, orderDate, orderDeptName:orderDept, orderDoctorName:orderDoctor, clinicNo, userCard: {patientName,cardNo},pactCode} = res.data
+        setOrderInfo({
+          prescMoney,orderState,orderDate,orderDept,orderDoctor,clinicNo,patientName,cardNo,
+          pactCode,recipeSeq: '',orderType: '',orderId: '',serialNo: ''
+        })
+      }else{
+        modalService({content: res.message})
+      }
+    })
+  }
   const getOrderInfoByQRCode = () => {
     fetchPaymentOrderDetailByQRCode(scanParams).then(res => {
       // 扫码进入的因接口返回字段不同╮(╯▽╰)╭，需要重新对齐数据
@@ -514,6 +581,19 @@ export default function PaymentDetail() {
         }
       }
       getOrderInfoByQRCode()
+    }else if(from === PAYMENT_FROM.message) {
+      loadingService(true)
+      const openId = Taro.getStorageSync('openId')
+      if(!openId){
+        const loginRes:any = await handleLogin()
+        if(!loginRes.result){
+          loadingService(false)
+          modalService({content: loginRes.message})
+          return
+        }
+      }
+      getOrderInfo()
+      billOrderId = params.orderId
     }else if(from === PAYMENT_FROM.paymentList){
       const param = {
         cardNo: orderInfoFromList.cardNo,
@@ -603,6 +683,12 @@ export default function PaymentDetail() {
             orderInfoFromList && orderInfoFromList.orderDept === '新冠疫苗/核酸' && orderInfoFromList.payState === PAY_STATUS_EN.paid && 
             <View className='flex-justify-center'>
               <BkButton title='取消预约' theme='danger' disabled={busy} onClick={handleCancel} />
+            </View>
+          }
+          {
+            orderInfo && custom.yibaoParams && (orderInfo.orderState === ORDER_STATUS_EN.paySuccess || orderInfo.orderState === ORDER_STATUS_EN.paySuccess_and_His_fail) &&
+            <View className='flex-justify-center'>
+              <BkButton title='确认退款' theme='danger' disabled={busy} onClick={handleAuthorize} />
             </View>
           }
         </BkPanel>
