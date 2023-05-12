@@ -11,8 +11,8 @@ const config = {
   banner: 'https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/applets-imgs/banner2.png',
   logo: "https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/common/li-wan-zhong-xin.jpeg",
   hospitalName: "广州市荔湾中心医院",
-  baseUrl: "http://119.29.97.234:30102", // 测试
-  // baseUrl: "https://lwzxyy-applets.wedoublecare.com",  // 正式环境
+  // baseUrl: "http://119.29.97.234:30102", // 测试
+  baseUrl: "https://lwzxyy-applets.wedoublecare.com",  // 正式环境
   // subUrl: 'https://gysycustomize.wedoublecare.com', // 测试环境
   indexPage: {
     functionBox:{ // 功能模块组件
@@ -32,14 +32,14 @@ const config = {
           desc: '线上缴费免排队',
           url: '/pages/payment-pack/payment-list/payment-list'
         },
-        // {
-        //   icon: imgUrl.new_home_icon5,
-        //   title: '查看报告',
-        //   event: 'navigate',
-        //   desc: '检查检验随时查',
-        //   url: '/pages/reports-pack/reports-type/reports-type',
-        //   tag: 'green'
-        // }
+        {
+          icon: imgUrl.new_home_icon5,
+          title: '查看报告',
+          event: 'navigate',
+          desc: '检查检验随时查',
+          url: '/pages/reports-pack/reports-type/reports-type',
+          tag: 'green'
+        }
       ]
     },
     quickEntrance: {

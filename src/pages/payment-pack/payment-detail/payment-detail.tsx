@@ -198,7 +198,7 @@ export default function PaymentDetail() {
     Taro.showLoading({title: '支付中……'})
     handlePayment({orderId: id, payType: Number(payType)})
     .then(res => {
-      if(res.data.jumpUrl && res.data.appid){
+      if(res.data?.jumpUrl && res.data?.appid){
         loadingService(false)
         Taro.navigateToMiniProgram({
           appId: res.data.appid,

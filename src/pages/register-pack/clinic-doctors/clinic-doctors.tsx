@@ -64,11 +64,19 @@ export default function ClinicDoctors(props) {
   const renderTickets = (item) => {
     if(item.isHalt) return '停诊'
     if(!item.isTimePoint) return '无号'
-    // eslint-disable-next-line no-restricted-globals
-    if(isNaN(parseInt(item.leaveCount))) return item.leaveCount
-    if(item.leaveCount > 9999) return '不限号' // 特殊处理
-    if(item.leaveCount > 0) return `剩余:${item.leaveCount}`
-    return '满号'
+    if(item.leaveTotalCount== 0) return '满号'
+    if(item.leaveTotalCount > 9999) return '不限号' // 特殊处理
+    if(item.leaveTotalCount > 0) return `剩余:${item.leaveTotalCount}`
+    return item.leaveTotalCount
+  }
+  const renderTitle = (item) => {
+    const nameAndTitle = `${item.doctorName} ${item.title}`
+    // if(item.regFee){
+    //   return nameAndTitle+` ￥${item.regFee}`
+    // }else{
+    //   return nameAndTitle
+    // }
+    return nameAndTitle
   }
   return(
     <View className='clinic-doctors'>
@@ -92,7 +100,7 @@ export default function ClinicDoctors(props) {
               list.map((item,index)=>
                 <AtListItem 
                   key={item.doctorId} 
-                  title={item.doctorName} 
+                  title={renderTitle(item)} 
                   note={item.address} 
                   thumb={item.faceUrl} 
                   onClick={onClick.bind(null,item)} 

@@ -7,6 +7,7 @@ import { REG_TYPE } from '@/enums/index'
 import { fetchRegisterNotice } from '@/service/api/card-api'
 import BkButton from '@/components/bk-button/bk-button'
 import './notice.less'
+import BkLoading from '@/components/bk-loading/bk-loading'
 
 export default function Notice() {
   const handleClick = (e) => {
@@ -20,12 +21,15 @@ export default function Notice() {
   }
   const [appointmentNoticeHtml,setAppointmentNoticeHtml] = useState(undefined)
   const [introdayNoticeHtml,setIntrodayNoticeHtml] = useState(undefined)
+  const [busy,setBusy] = useState(false)
   useEffect(() => {
     Taro.setStorageSync('isReg', REG_TYPE.introday)
   },[])
   Taro.useDidShow(() => {
+    setBusy(true)
     fetchRegisterNotice().then((res) => {
       if(res.resultCode === 0){
+        setBusy(false)
         const notices = res.data
         const appointmentRTStr = notices.find(item => item.typeStr === '预约挂号须知').content
         const introdayRTStr = notices.find(item => item.typeStr === '当天挂号须知').content
@@ -34,6 +38,13 @@ export default function Notice() {
       }
     }) 
   })
+  const renderContent = () => {
+    if(current === 0){
+      return <View dangerouslySetInnerHTML={{__html: introdayNoticeHtml}}></View>
+    }else if(current === 1){
+      return <View dangerouslySetInnerHTML={{__html: appointmentNoticeHtml}}></View>
+    }
+  }
   return(
     <View style='padding: 20rpx;'>
       <View>
@@ -45,14 +56,19 @@ export default function Notice() {
         />
       </View>
       {
-        current === 0 ? 
-        <View dangerouslySetInnerHTML={{__html: introdayNoticeHtml}}></View> :
-        <View dangerouslySetInnerHTML={{__html: appointmentNoticeHtml}}></View>
+        busy &&
+        <BkLoading loading={busy} msg='加载中...' />
       }
-      <View style='padding: 40rpx'>
-        <BkButton title='立即挂号' onClick={onClick} />
-      </View>
-
+      {
+        !busy &&
+        <View>
+          {renderContent()}
+          <View style='padding: 40rpx'>
+            <BkButton title='立即挂号' onClick={onClick} />
+          </View>
+        </View>
+        
+      }
     </View>
   )
 }

@@ -92,7 +92,7 @@ export default function BindCard(){
   return(
     <View className='bind-card'>
       <AtForm onSubmit={onSubmit}>
-        <BkInput name='patientName' title='姓名' type='text' placeholder='请输入姓名' value={form.patientName} maxLength={15} onChange={onFormChange.bind(null,'patientName')}></BkInput>
+        <BkInput name='patientName' title='姓名' type='text' placeholder='请输入姓名' value={form.patientName} maxLength={30} onChange={onFormChange.bind(null,'patientName')}></BkInput>
         {/* <AtInput 
           name='idenNo' 
           title='身份证号' 

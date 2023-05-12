@@ -56,7 +56,7 @@ export default function Personal() {
             <View className='panel-name'>缴费订单</View>
           </View>
         </BkPanel>
-        {// 临时方案
+        {/* {// 临时方案
           custom.hospName !== 'lwzxyy' &&
           <BkPanel arrow onClick={onClickPanel.bind(this,'/pages/reports-pack/reports-type/reports-type')} style='margin-top: 20rpx'>
             <View className='panel'>
@@ -64,7 +64,13 @@ export default function Personal() {
               <View className='panel-name'>检查检验单</View>
             </View>
           </BkPanel>
-        }
+        } */}
+        <BkPanel arrow onClick={onClickPanel.bind(this,'/pages/reports-pack/reports-type/reports-type')} style='margin-top: 20rpx'>
+          <View className='panel'>
+            <Image src={orderGreenPng} className='panel-icon'></Image>
+            <View className='panel-name'>检查检验单</View>
+          </View>
+        </BkPanel>
         <BkPanel arrow onClick={onClickPanel.bind(this,process.env.TARO_ENV==='weapp' ? '/pages/card-pack/cards-list/cards-list': '/pages/card-pack/cards-list-alipay/cards-list-alipay')} style='margin-top: 20rpx'>
           <View className='panel'>
             <Image src={healthCardPng} className='panel-icon'></Image>

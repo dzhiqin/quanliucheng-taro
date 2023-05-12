@@ -264,6 +264,10 @@ export default function DoctorDefault() {
             <text className='doctor-detail-title'>{doctorDetail.deptName}</text>
             <text className='doctor-detail-title'>{doctorInfo.title}</text>
           </View>
+          {/* {
+            doctorInfo.regFee &&
+            <View className='doctor-detail-name'>挂号费：{doctorInfo.regFee}元</View>
+          } */}
           {
             doctorDetail.desc && 
             <View className='doctor-detail-skilled'>

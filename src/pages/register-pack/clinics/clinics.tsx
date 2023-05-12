@@ -92,6 +92,11 @@ export default function Clinics() {
       TaroNavigateService('card-pack','cards-list','action=jumpOut')
       return
     }
+    // if(custom.hospName === 'gy3yhp' && item.deptName === '生殖医学科'){
+    //   // 特殊处理广三黄埔区的生殖科跳转到柔济孕宝小程序
+    //   TaroNavigateService('card-pack','cards-list','action=jumpOut')
+    //   return
+    // }
     setCurrentDept(index)
     setDeptId(item.deptId)
     Taro.setStorageSync('deptInfo',item)

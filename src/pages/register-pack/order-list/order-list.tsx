@@ -162,13 +162,13 @@ export default function OrderList() {
                     <View className='order-list-card-text'>{item.location}</View>
                   </View>
                 }
-                {
+                {/* {
                   item.regNo &&
                   <View className='order-list-card-item'>
                     <View className='order-list-card-title'>排队号：</View>
                     <View className='order-list-card-text'>{item.regNo}</View>
                   </View>
-                }
+                } */}
                 {
                   item.serialNo && 
                   <View className='order-list-card-item'>

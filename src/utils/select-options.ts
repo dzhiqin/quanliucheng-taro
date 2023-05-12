@@ -5,6 +5,10 @@ export const  idenTypeOptions =
     id: 0,
     name: '身份证'
   },
+  {
+    id:7,
+    name: '出生证'
+  },
   // {
   //   id:4,
   //   name: '门诊卡'
@@ -26,6 +30,10 @@ export const  idenTypeOptions =
     name: '军官证'
   },
   {
+    id: 4,
+    name: '门诊卡'
+  },
+  {
     id:5,
     name: '港澳居民来往内地通行证'
   },
@@ -33,79 +41,15 @@ export const  idenTypeOptions =
     id:6,
     name: '台湾居民来往内地通行证'
   },
-  {
-    id:7,
-    name: '出生证'
-  },
+  
   {
     id:8,
     name: '港澳居民身份证'
   },
   {
-    id:9,
+    id:10,
     name: '其他'
   }
-  
-  // {
-  //   id: 0,
-  //   name: '身份证'
-  // },
-  // {
-  //   id: 4,
-  //   name: '门诊卡'
-  // },
-  // {
-  //   id: 20,
-  //   name: '儿童(无证件)'
-  // },
-  // {
-  //   id: 1,
-  //   name: '健康卡'
-  // },
-  // {
-  //   id: 2,
-  //   name: '康众卡'
-  // },
-  // {
-  //   id: 3,
-  //   name: '市民卡'
-  // },
-  // {
-  //   id: 5,
-  //   name: '医保卡'
-  // },
-  // {
-  //   id: 6,
-  //   name: '电话'
-  // },
-  // {
-  //   id: 7,
-  //   name: '医疗证'
-  // },
-  // {
-  //   id: 8,
-  //   name: '患者ID'
-  // },
-  // {
-  //   id: 10,
-  //   name: '港澳来往内地通行证回乡证'
-  // },
-  // {
-  //   id: 11,
-  //   name: '台湾来往大陆通行证台胞证'
-  // },
-  // {
-  //   id: 12,
-  //   name: '护照'
-  // },
-  // {
-  //   id: 13,
-  //   name: '电子健康码'
-  // },
-  // {
-  //   id: 14,
-  //   name: '出生证'
-  // }
 ]
 export const feeTypeOptions = 
 [
