@@ -19,7 +19,6 @@ import {
   createPaymentOrderByQRCode,
   TaroNavToMiniProgram,
   fetchMedicineGuideList,
-  handleLogin,
   TaroAliPayment,
   AlipaySubscribeService,
   TaroNavigateService,
@@ -42,6 +41,7 @@ import { getPrivacyName, getQueryValue } from '@/utils/tools'
 import { reportCmPV_YL } from '@/utils/cloudMonitorHelper'
 import Qrcode from 'qrcode'
 import { getGlobalData, setGlobalData } from '@/utils/globalData'
+import BkLoading from '@/components/bk-loading/bk-loading'
 
 enum resultEnum {
   default = '',
@@ -58,7 +58,7 @@ interface OrderInfoParams {
   orderDoctor: string,
   orderType: ORDER_TYPE_CN | string,
   prescMoney: string,
-  serialNo: string,
+  serialNo?: string,
   payState?: PAY_STATUS_EN,
   cardNo?: string,
   idenNo?: string,
@@ -73,10 +73,11 @@ interface OrderInfoParams {
   hospitalCode?: string,
   pactCode?: string,
   feeTypeId?: string,
-  orderState?: ORDER_STATUS_EN
+  orderState?: ORDER_STATUS_EN,
+  oweMoney?:string
 }
-// 注意进入页面场景有3：
-// 1-从缴费列表进入；2-从订单列表进入；3-扫码进入
+// 注意进入页面场景有4：
+// 1-从缴费列表进入；2-从订单列表进入；3-扫码进入; 4-点击退款消息进入
 export default function PaymentDetail() {
   const payButtonText = process.env.TARO_ENV === 'weapp' ? '微信支付' : '支付宝支付'
   const featConfig = custom.feat
@@ -84,45 +85,35 @@ export default function PaymentDetail() {
   const params = router.params
   const scene = params.scene ? decodeURIComponent(params.scene) : null
   let card = CardsHealper.getDefault()
+  let preQRCodePayId = ''
+  let from: PAYMENT_FROM = PAYMENT_FROM.orderList
   const [busy,setBusy] = useState(false)
-  const [orderInfo,setOrderInfo] = useState({} as OrderInfoParams)
-  const [open,setOpen] = useState(true)
-  const [qrcodeSrc,setQrcodeSrc] = useState('')
-  let currentCardNo = ''
-  let orderInfoFromList = {
-    orderId: '',
-    clinicNo: '',
-    recipeSeq: '',
-    prescMoney: '',
-    cardNo: '',
-    orderDept: '',
-    orderDoctor: '',
-    orderDate: '',
-    oweMoney: '',
-    serialNo: '',
-    payState: undefined,
-    orderState: undefined,
-    orderType: undefined,
-    patientName: ''
-  }
-  let scanParams = null
-  let from: PAYMENT_FROM = null
+  const [loading,setLoading] = useState(true)
   if(scene){
     from = PAYMENT_FROM.scanQRCode
-    scanParams = { preQRCodePayId: getQueryValue(scene, 'prepayid')}
+    preQRCodePayId = getQueryValue(scene, 'prepayid')
   }else if(params.orderId){
     from = PAYMENT_FROM.message
   }else{
     from = params.from as PAYMENT_FROM
-    orderInfoFromList = JSON.parse(params.orderInfo)
-    const currentCard = CardsHealper.getDefault()
-    currentCardNo = currentCard.cardNo
-    Qrcode.toDataURL(orderInfoFromList.cardNo || currentCard.cardNo).then(url => {
+    Qrcode.toDataURL(card.cardNo).then(url => {
       setQrcodeSrc(url)
     })
   }
+  const [orderInfo,setOrderInfo] = useState(() => {
+    if(from === PAYMENT_FROM.scanQRCode || from === PAYMENT_FROM.message){
+      return {} as OrderInfoParams
+    }else{
+      const orderInfoFromList = JSON.parse(params.orderInfo)
+      orderInfoFromList.cardNo = card.cardNo
+      orderInfoFromList.patientName = card.name
+      return orderInfoFromList as OrderInfoParams
+    }
+  })
+  const [open,setOpen] = useState(true)
+  const [qrcodeSrc,setQrcodeSrc] = useState('')
   console.log(`from=${from},scene=${scene}`)
-  console.log('orderInfo='+params.orderInfo)
+  console.log('params orderInfo='+params.orderInfo)
   let billOrderId
   const [_orderId,setOrderId] = useState('')
   const [list,setList] = useState([])
@@ -155,7 +146,7 @@ export default function PaymentDetail() {
     }
     if(from === PAYMENT_FROM.orderList){
       // 从订单列表进入的，直接用orderId支付，不需再创建订单
-      payOrderById(orderInfoFromList.orderId,type)
+      payOrderById(orderInfo.orderId,type)
     }else if(from === PAYMENT_FROM.scanQRCode){
       createPaymentOrderByQRCode(buildPaymentParamsQRCode(type)).then(res => {
         if(res.resultCode === 0){
@@ -325,13 +316,13 @@ export default function PaymentDetail() {
   const buildPaymentParams = (type: PAY_TYPE_CN) => {
     const paymentParams: PayOrderParams ={
       patientId: card.patientId,
-      clinicNo: orderInfoFromList.clinicNo,
-      recipeSeq: orderInfoFromList.recipeSeq,
+      clinicNo: orderInfo.clinicNo,
+      recipeSeq: orderInfo.recipeSeq,
       orderType: type === PAY_TYPE_CN.医保 ? ORDER_TYPE_CN.医保单 : ORDER_TYPE_CN.自费单,
-      prescFee: orderInfoFromList.prescMoney,
-      orderDept: orderInfoFromList.orderDept,
-      orderDoctor: orderInfoFromList.orderDoctor,
-      orderDate: orderInfoFromList.orderDate,
+      prescFee: orderInfo.prescMoney,
+      orderDept: orderInfo.orderDept,
+      orderDoctor: orderInfo.orderDoctor,
+      orderDate: orderInfo.orderDate,
       payType: type,
       payAuthCode: getGlobalData('authCode') || ''
     }
@@ -353,7 +344,6 @@ export default function PaymentDetail() {
       if(res.resultCode === 0){
         const invoiceUrl = res.data.invoiceUrl
         Taro.setStorageSync('webViewSrc',invoiceUrl)
-        // Taro.navigateTo({url: '/pages/web-view-page/web-view-page'})
         // 跳转到外部小程序
         const pathParams = `pages/invoiceDisplayDWDZ/invoiceDisplayDWDZ?q=${encodeURIComponent(invoiceUrl)}`
         TaroNavToMiniProgram({
@@ -368,16 +358,16 @@ export default function PaymentDetail() {
     })
   }
   React.useEffect(() => {
-    if(!orderInfoFromList.orderId) return
+    if(!orderInfo.orderId) return
     if(!Taro.getStorageSync('token')) return
-    fetchMedicineGuideList({orderId: orderInfoFromList.orderId}).then(res => {
+    fetchMedicineGuideList({orderId: orderInfo.orderId}).then(res => {
       if(res.resultCode === 0){
         setMedicineList(res.data)
       }else{
         modalService({content: res.message})
       }
     })
-  },[orderInfoFromList.orderId])
+  },[orderInfo.orderId])
   const handleClickNavitator = (execRoom) => {
     TaroNavToZhongXun(execRoom)
   }
@@ -387,7 +377,7 @@ export default function PaymentDetail() {
   const handleCancel = () => {
     Taro.showLoading({title: '取消中……',mask:true})
     setBusy(true)
-    const orderId = orderInfo.orderId || orderInfoFromList.orderId
+    const orderId = orderInfo.orderId
     handleHeSuanRefund({orderId})
     .then(res => {
       setBusy(false)
@@ -443,17 +433,19 @@ export default function PaymentDetail() {
       })
     }
     Taro.eventCenter.on(CARD_ACTIONS.UPDATE_ALL, () => {
-      // 如果是直接从消息通知跳转进来的，可监听CARD_ACTIONS.UPDATE_ALL事件，即登录完成后再调接口获取数据
-      fetchPaymentOrderDetail({billOrderId}).then(res => {
-        if(res.resultCode === 0){
-          setList(res.data)
-        }
-      })
-      fetchMedicineGuideList({orderId: orderInfoFromList.orderId}).then(res => {
-        if(res.resultCode === 0){
-          setMedicineList(res.data)
-        }
-      })
+      setLoading(false)
+      if(from === PAYMENT_FROM.scanQRCode){
+        getOrderInfoByQRCode()
+      }else if(from === PAYMENT_FROM.message){
+        getOrderInfo()
+        billOrderId = params.orderId
+        // 如果是直接从消息通知跳转进来的，可监听CARD_ACTIONS.UPDATE_ALL事件，即登录完成后再调接口获取数据
+        billOrderId && fetchPaymentOrderDetail({billOrderId}).then(res => {
+          if(res.resultCode === 0){
+            setList(res.data)
+          }
+        })
+      }
     })
     if(getGlobalData('scene') === 1038 && getGlobalData('authCode')){
       if(billOrderId){
@@ -481,9 +473,9 @@ export default function PaymentDetail() {
     createPaymentOrder(buildPaymentParams(PAY_TYPE_CN.医保)).then(res => {
       if(res.resultCode === 0){
         const query = {
-          clinicNo: orderInfoFromList.clinicNo,
+          clinicNo: orderInfo.clinicNo,
           cardNo: card.cardNo,
-          recipeSeq: orderInfoFromList.recipeSeq,
+          recipeSeq: orderInfo.recipeSeq,
           patientId: card.patientId,
           orderId: res.data.orderId
         }
@@ -510,25 +502,16 @@ export default function PaymentDetail() {
     })
   }
   const getOrderInfoByQRCode = () => {
-    fetchPaymentOrderDetailByQRCode(scanParams).then(res => {
+    fetchPaymentOrderDetailByQRCode({preQRCodePayId:Number(preQRCodePayId)}).then(res => {
       // 扫码进入的因接口返回字段不同╮(╯▽╰)╭，需要重新对齐数据
       loadingService(false)
       if(res.resultCode === 0){
-        const data = res.data
+        const {cardNo,patientName,clinicNo,feeTypeId,idenNo,orderDate,orderDept,orderDoctor,pactCode,patientId,prescMoney,orderId,recipeSeq} = res.data
         setOrderInfo({
-          ...data,
-          orderId: data.orderId ? data.orderId : '',
-          orderType: data.pactCode,
-          prescMoney: data.sumMoney,
-          payState: PAY_STATUS_EN.unpay,
-          feeTypeId: data.feeTypeId
+          cardNo,patientId,patientName,clinicNo,feeTypeId,idenNo,orderDate,orderDept,orderDoctor,prescMoney,
+          orderId,orderType: pactCode,payState: PAY_STATUS_EN.unpay,recipeSeq
         })
-        const param = {
-          cardNo: data.cardNo,
-          clinicNo: data.clinicNo,
-          recipeSeq: data.recipeSeq,
-          patientId: data.patientId
-        }
+        const param = {cardNo,clinicNo,recipeSeq,patientId}
         getOrderDetailFromHis(param)
       }else{
         modalService({content: res.message})
@@ -568,72 +551,48 @@ export default function PaymentDetail() {
     if(custom.feat.guangHuaMonitor.enable){
       reportCmPV_YL({title: '门诊缴费',params})
     }
-    if(from === PAYMENT_FROM.scanQRCode){
-      loadingService(true)
-      const openId = Taro.getStorageSync('openId')
-      if(!openId){
-        // 重新登陆获取openid
-        const loginRes:any = await handleLogin()
-        if(!loginRes.result){
-          loadingService(false)
-          modalService({content: loginRes.message})
-          return
-        }
-      }
-      getOrderInfoByQRCode()
-    }else if(from === PAYMENT_FROM.message) {
-      loadingService(true)
-      const openId = Taro.getStorageSync('openId')
-      if(!openId){
-        const loginRes:any = await handleLogin()
-        if(!loginRes.result){
-          loadingService(false)
-          modalService({content: loginRes.message})
-          return
-        }
-      }
-      getOrderInfo()
-      billOrderId = params.orderId
-    }else if(from === PAYMENT_FROM.paymentList){
+    if(from === PAYMENT_FROM.paymentList){
+      setLoading(false)
       const param = {
-        cardNo: orderInfoFromList.cardNo,
-        clinicNo: orderInfoFromList.clinicNo,
-        recipeSeq: orderInfoFromList.recipeSeq,
+        cardNo: orderInfo.cardNo,
+        clinicNo: orderInfo.clinicNo,
+        recipeSeq: orderInfo.recipeSeq,
         patientId: card.patientId
       }
       getOrderDetailFromHis(param)
     }else if(from === PAYMENT_FROM.orderList){
+      setLoading(false)
       const param = {
-        billOrderId: orderInfoFromList.orderId
+        billOrderId: orderInfo.orderId
       }
-      billOrderId = orderInfoFromList.orderId
+      billOrderId = orderInfo.orderId
       getOrderDetailFromData(param)
     }
   })
   const renderName = () => {
-    let name = ''
-    if(orderInfoFromList){
-      name = orderInfoFromList.patientName || card?.name
-    }else(
-      name = orderInfo.patientName
-    )
+    let name = orderInfo.patientName
     if(process.env.TARO_ENV === 'alipay'){
       name = getPrivacyName(name)
     }
     return name
   }
-  if(payResult === resultEnum.default){
+  if(loading){
+    return (
+      <BkLoading msg='加载中...' loading={loading} />
+    )
+  }
+  else if(payResult === resultEnum.default){
     return(
       <View className='payment-detail'>
         <SubscribeNotice show={showNotice}></SubscribeNotice>
         <View className='payment-detail-header'>
-          <View className='payment-detail-header-price'>￥{orderInfoFromList ? orderInfoFromList.prescMoney : orderInfo.prescMoney}</View>
+          <View className='payment-detail-header-price'>￥{orderInfo.prescMoney}</View>
           <View className='payment-detail-header-text'>缴费详情</View>
         </View>
         <BkPanel>
           <View className='flex'>
             <View className='flat-title'>流水号</View>
-            <View className='payment-detail-item-text'>{orderInfoFromList ? orderInfoFromList.clinicNo : orderInfo.clinicNo}</View>
+            <View className='payment-detail-item-text'>{orderInfo.clinicNo}</View>
           </View>
           <View className='flex'>
             <View className='flat-title'>姓名</View>
@@ -641,46 +600,40 @@ export default function PaymentDetail() {
           </View>
           <View className='flex'>
             <View className='flat-title'>开单科室</View>
-            <View className='payment-detail-item-text'>{orderInfoFromList ? orderInfoFromList.orderDept : orderInfo.orderDept}</View>
+            <View className='payment-detail-item-text'>{orderInfo.orderDept}</View>
           </View>
           {
-            ((orderInfoFromList && orderInfoFromList.orderDoctor) || (orderInfo && orderInfo.orderDoctor)) &&
+            orderInfo.orderDoctor &&
             <View className='flex'>
               <View className='flat-title'>开单医生</View>
-              <View className='payment-detail-item-text'>{orderInfoFromList ? orderInfoFromList.orderDoctor : orderInfo.orderDoctor}</View>
+              <View className='payment-detail-item-text'>{orderInfo.orderDoctor}</View>
             </View>
           }
           
           <View className='flex'>
             <View className='flat-title'>开单时间</View>
-            <View className='payment-detail-item-text'>{orderInfoFromList ? orderInfoFromList.orderDate : orderInfo.orderDate}</View>
+            <View className='payment-detail-item-text'>{orderInfo.orderDate}</View>
           </View>
           <View className='flex'>
             <View className='flat-title'>总金额</View>
-            <View className='payment-detail-item-text price-color'>{orderInfoFromList ? orderInfoFromList.prescMoney : orderInfo.prescMoney} 元</View>
+            <View className='payment-detail-item-text price-color'>{orderInfo.prescMoney} 元</View>
           </View>
           {
-            orderInfoFromList && orderInfoFromList.oweMoney &&
+            orderInfo.oweMoney &&
             <View className='flex'>
               <View className='flat-title'>欠费金额</View>
-              <View className='payment-detail-item-text price-color'>{orderInfoFromList.oweMoney}</View>
+              <View className='payment-detail-item-text price-color'>{orderInfo.oweMoney}</View>
             </View>
           }
           {
-            orderInfoFromList && orderInfoFromList.serialNo && 
+            orderInfo.serialNo && 
             <View className='flex'>
               <View className='flat-title'>电子发票</View>
-              <View className='payment-detail-item-text clickable' onClick={showInvoice.bind(null,orderInfoFromList)}>点击查看</View>
+              <View className='payment-detail-item-text clickable' onClick={showInvoice.bind(null,orderInfo)}>点击查看</View>
             </View>
           }
           {
-            orderInfo && orderInfo.orderDept === '新冠疫苗/核酸' && orderInfo.payState === PAY_STATUS_EN.paid && 
-            <View className='flex-justify-center'>
-              <BkButton title='取消预约' theme='danger' disabled={busy} onClick={handleCancel} />
-            </View>
-          }
-          {
-            orderInfoFromList && orderInfoFromList.orderDept === '新冠疫苗/核酸' && orderInfoFromList.payState === PAY_STATUS_EN.paid && 
+            orderInfo.orderDept === '新冠疫苗/核酸' && orderInfo.payState === PAY_STATUS_EN.paid && 
             <View className='flex-justify-center'>
               <BkButton title='取消预约' theme='danger' disabled={busy} onClick={handleCancel} />
             </View>
@@ -695,12 +648,12 @@ export default function PaymentDetail() {
         {
           qrcodeSrc &&
           <View className='payment-detail-qrcode'>
-            <View>诊疗卡号：{orderInfoFromList.cardNo || currentCardNo}</View>
+            <View>诊疗卡号：{orderInfo.cardNo}</View>
             <Image style='width: 200px; height: 200px;' src={qrcodeSrc}></Image>
           </View>
         }
         {
-          orderInfoFromList && custom.paymentOrderPage.tackingMedicineGuide && orderInfoFromList.orderState !== ORDER_STATUS_EN.unpay &&
+          from === PAYMENT_FROM.orderList && custom.paymentOrderPage.tackingMedicineGuide && orderInfo.orderState !== ORDER_STATUS_EN.unpay &&
           <View className='medicine-guide'>
             {
               medicineList.length > 0 &&
@@ -733,7 +686,8 @@ export default function PaymentDetail() {
                     }
                     <View className='payment-detail-medicine-item'>
                       <text>数量：</text>
-                      <text>{item.count}</text>
+                      {/* 注意，getorderdetail接口和getBillOrderItem接口返回的数量字段不同，一个是account，一个是count */}
+                      <text>{item.count || item.account}</text>
                       <text>&nbsp;&nbsp;&nbsp;&nbsp;</text>
                       <text>单位：</text>
                       <text>{item.unit}</text>
@@ -772,23 +726,6 @@ export default function PaymentDetail() {
             }
             {
               orderInfo.payState === PAY_STATUS_EN.unpay && orderInfo.orderType === ORDER_TYPE_CN.医保单 && custom.feat.YiBaoCard &&
-              <BkButton title='医保支付' icon='icons/card.png' theme='primary' loading={busy} onClick={dealWithPay.bind(null,PAY_TYPE_CN.医保)} />
-            }
-          </View>
-        }
-        {
-          orderInfoFromList && orderInfoFromList.orderState === ORDER_STATUS_EN.unpay &&
-          <View className='flex-around' style='padding: 40rpx'>
-            {
-              orderInfoFromList.payState === PAY_STATUS_EN.unpay && process.env.TARO_ENV === 'weapp' &&
-              <BkButton title='微信支付' icon='icons/wechat.png' theme='info' disabled={busy} onClick={dealWithPay.bind(null,PAY_TYPE_CN.微信)} />
-            }
-            {
-              orderInfoFromList.payState === PAY_STATUS_EN.unpay && process.env.TARO_ENV === 'alipay' &&
-              <BkButton title='支付宝支付' icon='icons/alipay.png' theme='primary' disabled={busy} onClick={dealWithPay.bind(null,PAY_TYPE_CN.支付宝)} />
-            }
-            {
-              orderInfoFromList.payState === PAY_STATUS_EN.unpay && orderInfoFromList.orderType === ORDER_TYPE_CN.医保单 && custom.feat.YiBaoCard &&
               <BkButton title='医保支付' icon='icons/card.png' theme='primary' loading={busy} onClick={dealWithPay.bind(null,PAY_TYPE_CN.医保)} />
             }
           </View>
