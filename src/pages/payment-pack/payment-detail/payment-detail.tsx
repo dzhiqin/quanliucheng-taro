@@ -23,7 +23,7 @@ import {
   AlipaySubscribeService,
   TaroNavigateService,
   fetchBillOrderInfo,
-  handleBillOrderRefund
+  handleBillOrderRefund,
 } from '@/service/api'
 import { CardsHealper } from '@/utils/cards-healper'
 import './payment-detail.less'
@@ -432,7 +432,8 @@ export default function PaymentDetail() {
         loadingService(false)
       })
     }
-    Taro.eventCenter.on(CARD_ACTIONS.UPDATE_ALL, () => {
+    const openId = Taro.getStorageSync('openId')
+    !openId && Taro.eventCenter.on(CARD_ACTIONS.UPDATE_ALL, () => {
       setLoading(false)
       if(from === PAYMENT_FROM.scanQRCode){
         getOrderInfoByQRCode()
@@ -551,8 +552,22 @@ export default function PaymentDetail() {
     if(custom.feat.guangHuaMonitor.enable){
       reportCmPV_YL({title: '门诊缴费',params})
     }
-    if(from === PAYMENT_FROM.paymentList){
+    // check login status
+    const openId = Taro.getStorageSync('openId')
+    if(openId){
       setLoading(false)
+    }
+    if(from === PAYMENT_FROM.scanQRCode && openId){
+      getOrderInfoByQRCode()
+    }else if(from === PAYMENT_FROM.message && openId){
+      getOrderInfo()
+      billOrderId = params.orderId
+      billOrderId && fetchPaymentOrderDetail({billOrderId}).then(res => {
+        if(res.resultCode === 0){
+          setList(res.data)
+        }
+      })
+    }else if(from === PAYMENT_FROM.paymentList){
       const param = {
         cardNo: orderInfo.cardNo,
         clinicNo: orderInfo.clinicNo,
@@ -561,7 +576,6 @@ export default function PaymentDetail() {
       }
       getOrderDetailFromHis(param)
     }else if(from === PAYMENT_FROM.orderList){
-      setLoading(false)
       const param = {
         billOrderId: orderInfo.orderId
       }

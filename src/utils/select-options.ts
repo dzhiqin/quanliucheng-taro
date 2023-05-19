@@ -1,5 +1,6 @@
+import { custom } from "../custom"
 
-export const  idenTypeOptions = 
+let IDTypes = 
 [
   {
     id: 0,
@@ -9,10 +10,6 @@ export const  idenTypeOptions =
     id:7,
     name: '出生证'
   },
-  // {
-  //   id:4,
-  //   name: '门诊卡'
-  // },
   {
     id:20,
     name: '儿童(无证件)'
@@ -51,6 +48,10 @@ export const  idenTypeOptions =
     name: '其他'
   }
 ]
+if(custom.hospName === 'jszyy'){
+  IDTypes = IDTypes.filter(item => item.id !== 20)
+}
+export const idenTypeOptions = IDTypes
 export const feeTypeOptions = 
 [
   {

@@ -8,7 +8,7 @@ type HospName =
   'li_wan_zhong_xin' | 
   'jin_sha_zhou_alipay' |
   'guang_1_alipay'
-const hospName:HospName = 'guang_3_li_wan'
+const hospName:HospName = 'li_wan_zhong_xin'
 const hospConfig = require(`./hosp-config/${hospName}.ts`)
 
 export const custom = hospConfig.default as HospConfig

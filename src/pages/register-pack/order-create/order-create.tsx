@@ -73,7 +73,7 @@ export default function OrderCreate() {
   const [isShow,setIsShow] = useState(false)
   const [showGreenModal,setShowGreenModal] = useState(false)
   const [energy,setEnergy] = useState(0)
-  const buildOrderParams = (_regFee=undefined,_treatFee=undefined) => {
+  const buildOrderParams = (_regFee=undefined,_treatFee=undefined,_feeType='') => {
     const orderParams = Taro.getStorageSync('orderParams')
     const card = CardsHealper.getDefault()
     const params = {
@@ -82,7 +82,7 @@ export default function OrderCreate() {
       patientId: card.patientId,
       regFee: _regFee !== undefined ? _regFee : regFee,
       treatFee: _treatFee !== undefined ? _treatFee : treatFee,
-      feeType: appointedFeeType || currentFeeObj.feeCode || orderParams.feeType
+      feeType: _feeType || appointedFeeType || currentFeeObj.feeCode || orderParams.feeType
     }
     return params
   }
@@ -124,7 +124,7 @@ export default function OrderCreate() {
     })
   }
   const handleAliPayment = (params: {tradeNo: string,orderId: string, orderNo: string}) => {
-    TaroAliPayment({tradeNo: params.tradeNo}).then(payRes => {
+    TaroAliPayment({tradeNo: params.tradeNo}).then((payRes:any) => {
       const data = JSON.parse(payRes.data)
       if(data.resultCode === '9000'){
         requestTry(checkOrderStatus.bind(null,params.orderId)).then(() => {
@@ -284,7 +284,7 @@ export default function OrderCreate() {
       // return
       const feeRes:any = await fetchFee()
       if(feeRes.success){
-        orderParams = buildOrderParams(feeRes.data.regFee, feeRes.data.treatFee)
+        orderParams = buildOrderParams(feeRes.data.regFee, feeRes.data.treatFee,feeRes.data.feeType)
         handleCreateRegOrder(orderParams)
       }else{
         loadingService(false)
@@ -386,10 +386,11 @@ export default function OrderCreate() {
         if(res.resultCode === 0){
           const _regFee = res.data.regFee
           const _treatFee = res.data.treatFee
+          const _feeType = res.data.feeType
           setRegFee(_regFee)
           setTreatFee(_treatFee)
-          res.data.feeType && setAppointedFeeType(res.data.feeType)
-          resolve({success: true, data: {regFee: _regFee,treatFee: _treatFee}})
+          _feeType && setAppointedFeeType(_feeType)
+          resolve({success: true, data: {regFee: _regFee,treatFee: _treatFee,feeType: _feeType}})
         }else{
           resolve({success: false, msg: '获取金额失败'})
         }

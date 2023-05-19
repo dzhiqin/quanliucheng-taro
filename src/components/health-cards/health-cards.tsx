@@ -115,7 +115,7 @@ export default function HealthCards(props: {
   const RenderSwitch = () => {
     return(
       <View style='padding:40rpx 40rpx 0'>
-        <View className='add-card single-card'>
+        <View className='single-card'>
             <View className='single-card-content' onClick={navToCardDetail.bind(null,selectedCard)}>
               <View>
                 <View className='single-card-name'>您好，{process.env.TARO_ENV === 'alipay'? getPrivacyName(selectedCard.name) : selectedCard.name}</View>

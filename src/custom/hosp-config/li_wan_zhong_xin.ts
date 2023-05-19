@@ -111,7 +111,7 @@ const config = {
       }
     },
     register:{
-      popupNotice:false
+      popupNotice:true
     },
   },
   reportsPage:{
