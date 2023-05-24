@@ -91,7 +91,7 @@ class App extends Component {
             if(custom.feat.inHospCard){
               fetchInHospCards().then(cardsRes => {
                 if(cardsRes.resultCode === 0){
-                  Taro.setStorageSync('hospCard',cardsRes.data.find(i => i.isDefault))
+                  cardsRes.data && Taro.setStorageSync('hospCard',cardsRes.data.find(i => i.isDefault))
                   CardsHealper.updateAllCards().then(() => Taro.eventCenter.trigger(CARD_ACTIONS.UPDATE_ALL))  
                 }else{
                   if(cardsRes.message === '暂无数据') {

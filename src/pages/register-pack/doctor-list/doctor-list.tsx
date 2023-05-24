@@ -112,7 +112,7 @@ export default function DoctorList() {
         }
       </View>
       <BaseModal show={show} custom closeOutside cancel={() => setShow(false)}>
-        <View style='font-weight: 500;'>{doctorInfo.doctorName} {doctorInfo.title}</View>
+        <View style='font-weight: bold;'>{doctorInfo.doctorName} {doctorInfo.title}</View>
         <View>擅长领域：{doctorInfo.specialty}</View>
       </BaseModal>
     </View>

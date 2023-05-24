@@ -28,7 +28,7 @@ export default function DefaultReport(props:{
     if(params.text){
       return(
         <View className='card-item'>
-          <View style='font-weight: 500'>{params.title}:</View>
+          <View style='font-weight: bold'>{params.title}:</View>
           <View>{params.text}</View>
         </View>
       )

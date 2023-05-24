@@ -141,7 +141,7 @@ export default function PaymentDetail() {
       }
     }
     if(custom.yibaoParams && type === PAY_TYPE_CN.医保){
-      TaroNavToMiniProgram({appId: custom.yibaoParams.appId,path: custom.yibaoParams.path})
+      TaroNavToMiniProgram({appId: custom.yibaoParams.appId,path: custom.yibaoParams.path, envVersion: 'trial'})
       return
     }
     if(from === PAYMENT_FROM.orderList){
@@ -372,7 +372,7 @@ export default function PaymentDetail() {
     TaroNavToZhongXun(execRoom)
   }
   const handleAuthorize = () => {
-    TaroNavToMiniProgram({appId: custom.yibaoParams.appId,path: custom.yibaoParams.path})
+    TaroNavToMiniProgram({appId: custom.yibaoParams.appId,path: custom.yibaoParams.path, envVersion: 'trial'})
   }
   const handleCancel = () => {
     Taro.showLoading({title: '取消中……',mask:true})
@@ -448,6 +448,8 @@ export default function PaymentDetail() {
         })
       }
     })
+    console.log('payment detail onshow',getGlobalData('scene'));
+    console.log('billorderid',billOrderId)
     if(getGlobalData('scene') === 1038 && getGlobalData('authCode')){
       if(billOrderId){
         handleRefund()
@@ -472,6 +474,7 @@ export default function PaymentDetail() {
   const handleYiBao2Payment = () => {
     // 医保2.0
     createPaymentOrder(buildPaymentParams(PAY_TYPE_CN.医保)).then(res => {
+      setGlobalData('authCode', '')
       if(res.resultCode === 0){
         const query = {
           clinicNo: orderInfo.clinicNo,
@@ -481,7 +484,6 @@ export default function PaymentDetail() {
           orderId: res.data.orderId
         }
         TaroNavigateService('/pages/payment-pack/medinsurance-payment-detail/index?query='+JSON.stringify(query))
-        setGlobalData('authCode', '')
       }else{
         loadingService(false)
         modalService({title: '创建订单失败', content: res.message})

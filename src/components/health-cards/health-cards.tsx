@@ -114,7 +114,7 @@ export default function HealthCards(props: {
 
   const RenderSwitch = () => {
     return(
-      <View style='padding:40rpx 40rpx 0'>
+      <View style='padding:30rpx 30rpx 0'>
         <View className='single-card'>
             <View className='single-card-content' onClick={navToCardDetail.bind(null,selectedCard)}>
               <View>

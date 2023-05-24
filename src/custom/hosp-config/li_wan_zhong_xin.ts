@@ -11,8 +11,8 @@ const config = {
   banner: 'https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/applets-imgs/banner2.png',
   logo: "https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/common/li-wan-zhong-xin.jpeg",
   hospitalName: "广州市荔湾中心医院",
-  // baseUrl: "http://119.29.97.234:30102", // 测试
-  baseUrl: "https://lwzxyy-applets.wedoublecare.com",  // 正式环境
+  baseUrl: "http://119.29.97.234:30102", // 测试
+  // baseUrl: "https://lwzxyy-applets.wedoublecare.com",  // 正式环境
   // subUrl: 'https://gysycustomize.wedoublecare.com', // 测试环境
   indexPage: {
     functionBox:{ // 功能模块组件
@@ -102,6 +102,7 @@ const config = {
   feat: {
     hc_title: '广州市卫生健康委员会',
     bindCard: {
+      rebind: true,
       smsVerify: {
         enable: true,
         apiKey: 'N68313eb24',
