@@ -232,7 +232,7 @@ export default function OrderList(){
               <BkPanel key={index} style='margin-bottom: 40rpx' onClick={onClickItem.bind(null,item)} arrow>
                 <View className='order-list-item'>
                   <View className='order-list-item-title flat-title'>门诊号:</View>
-                  <View className='order-list-item-text'>{item.clinicCode}</View>
+                  <View className='order-list-item-text' style='overflow-wrap: anywhere;'>{item.clinicCode}</View>
                 </View>
                 <View className='order-list-item'>
                   <View className='order-list-item-title flat-title'>订单状态:</View>

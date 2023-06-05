@@ -56,23 +56,29 @@ const config = {
         //     }
         //   ]
         // },
-        // {
-        //   title: '住院',
-        //   entrances: [
-        //     {
-        //       icon: imgUrl.new_home_icon10,
-        //       name: '住院押金',
-        //       event: 'navigate',
-        //       url: '/pages/hosp-pack/deposit/deposit',
-        //     }, 
-        //     {
-        //       icon: imgUrl.new_home_icon11,
-        //       name: '每日清单',
-        //       event: 'navigate',
-        //       url: '/pages/hosp-pack/checklist/checklist',
-        //     }
-        //   ]
-        // },
+        {
+          title: '住院',
+          entrances: [
+            {
+              icon: imgUrl.zybk,
+              name: '住院绑卡',
+              event: 'navigate',
+              url: '/pages/hosp-pack/binding-card/binding-card',
+            }, 
+            {
+              icon: imgUrl.new_home_icon10,
+              name: '住院押金',
+              event: 'navigate',
+              url: '/pages/hosp-pack/deposit/deposit',
+            }, 
+            {
+              icon: imgUrl.new_home_icon11,
+              name: '每日清单',
+              event: 'navigate',
+              url: '/pages/hosp-pack/checklist/checklist',
+            }
+          ]
+        },
         {
           title: "其他",
           entrances:[
@@ -93,6 +99,12 @@ const config = {
               name: "免密授权",
               icon: imgUrl.new_home_icon10,
               event: "click",
+            },
+            {
+              name: "退款测试",
+              icon: imgUrl.new_home_icon10,
+              event: "navigate",
+              url: `/pages/payment-pack/payment-detail/payment-detail?orderId=16995&from=message`
             },
           ]
         }
@@ -144,6 +156,7 @@ const config = {
   yibaoParams: {
     path: 'auth/pages/bindcard/auth/index?openType=getAuthCode&bizType=04107&cityCode=440108&channel=AAGE84GHsRIzjSdxPaPQtNqU&orgChnlCrtfCodg=BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxvShtXBpXvc4WkWexOKgovx&orgCodg=H44010300017&orgAppId=1GPA6UN3P0AU3F60C80A0000B246C727',
     appId: 'wxe183cd55df4b4369',
+    envVersion: 'trial',
     orgChnlCrtfCodg: 'BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxvShtXBpXvc4WkWexOKgovx',//  机构渠道认证编码
     orgCodg: 'H44010300017', //定点医药机构编码 
     bizType: '04107', //线上核验业务类型编码 

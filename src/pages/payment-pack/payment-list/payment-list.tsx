@@ -2,10 +2,8 @@ import * as Taro from '@tarojs/taro'
 import * as React from 'react'
 import { View } from '@tarojs/components'
 import HealthCards from '@/components/health-cards/health-cards'
-import { CardsHealper } from '@/utils/cards-healper'
-import { modalService } from '@/service/toast-service'
 import { fetchPaymentListFromHis, TaroNavigateService } from '@/service/api'
-import { useState,useEffect } from 'react'
+import { useState } from 'react'
 import BkLoading from '@/components/bk-loading/bk-loading'
 import './payment-list.less'
 import BkPrice from '@/components/bk-price/bk-price'
@@ -27,13 +25,6 @@ export default function PaymentList() {
     })
   }
   
-  useEffect(() => {
-    const card = CardsHealper.getDefault()
-    if(!card){
-      modalService({content: '请先绑卡',success: ()=> {TaroNavigateService('card-pack','cards-list',null,true) }})
-      return
-    }
-  },[])
   const handleClick = (item) => {
     // 缴费单的信息要从列表带过去
     item.payState = PAY_STATUS_EN.unpay  // 默认未支付状态

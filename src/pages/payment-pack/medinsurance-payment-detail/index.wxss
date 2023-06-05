@@ -198,7 +198,34 @@
   border-top: 2rpx solid rgba(0, 0, 0, 0.2);
   transform: scaleY(0.5);
 }
+.charge-append{
+  color: #909399;
+  padding: 40rpx;
+  padding-bottom: 0;
+}
+.charge-append-btns{
+  padding-top: 20rpx;
+  display: flex;
+  justify-content: space-between;
+  gap: 40rpx;
+}
+.charge-append-btn{
+  flex:1;
+  text-align: center;
+  font-size: 28rpx;
+  padding: 14rpx;
+  border-radius: 10rpx;
+  border-width: 2rpx;
+  border-style: solid;
+}
+.charge-append-btn-active{
+  color: #3B71E8;
+  border-color: #3B71E8;
+  background-color: rgb(236,240,251);
 
+}
+.charge-append-btn-unactive{
+  border-color: #909399;
+  background-color: rgb(246,246,246);
 
-
-
+}

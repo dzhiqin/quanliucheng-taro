@@ -114,13 +114,20 @@ export default function PaymentDetail() {
   const [qrcodeSrc,setQrcodeSrc] = useState('')
   console.log(`from=${from},scene=${scene}`)
   console.log('params orderInfo='+params.orderInfo)
-  let billOrderId
+  const [refundOrderId,setRefundOrderId] = useState(() => {
+    if(from === PAYMENT_FROM.message){
+      return params.orderId
+    }else{
+      return ''
+    }
+  })
   const [_orderId,setOrderId] = useState('')
   const [list,setList] = useState([])
   const [payResult,setPayResult] = useState(resultEnum.default)
   const [payResultMsg,setPayResultMsg] = useState('')
   const [showNotice,setShowNotice] = useState(false)
   const [medicineList,setMedicineList] = useState([])
+  const [needFetchInfo,setFetchInfo] = useState(false)
   const dealWithPay = async(type) => {
     setBusy(true)
     let subRes
@@ -343,7 +350,6 @@ export default function PaymentDetail() {
       loadingService(false)
       if(res.resultCode === 0){
         const invoiceUrl = res.data.invoiceUrl
-        Taro.setStorageSync('webViewSrc',invoiceUrl)
         // 跳转到外部小程序
         const pathParams = `pages/invoiceDisplayDWDZ/invoiceDisplayDWDZ?q=${encodeURIComponent(invoiceUrl)}`
         TaroNavToMiniProgram({
@@ -372,7 +378,7 @@ export default function PaymentDetail() {
     TaroNavToZhongXun(execRoom)
   }
   const handleAuthorize = () => {
-    TaroNavToMiniProgram({appId: custom.yibaoParams.appId,path: custom.yibaoParams.path, envVersion: 'trial'})
+    TaroNavToMiniProgram({appId: custom.yibaoParams.appId,path: custom.yibaoParams.path, envVersion: custom.yibaoParams.envVersion})
   }
   const handleCancel = () => {
     Taro.showLoading({title: '取消中……',mask:true})
@@ -439,27 +445,27 @@ export default function PaymentDetail() {
         getOrderInfoByQRCode()
       }else if(from === PAYMENT_FROM.message){
         getOrderInfo()
-        billOrderId = params.orderId
         // 如果是直接从消息通知跳转进来的，可监听CARD_ACTIONS.UPDATE_ALL事件，即登录完成后再调接口获取数据
-        billOrderId && fetchPaymentOrderDetail({billOrderId}).then(res => {
+        refundOrderId && fetchPaymentOrderDetail({billOrderId: refundOrderId}).then(res => {
           if(res.resultCode === 0){
             setList(res.data)
           }
         })
       }
     })
-    console.log('payment detail onshow',getGlobalData('scene'));
-    console.log('billorderid',billOrderId)
     if(getGlobalData('scene') === 1038 && getGlobalData('authCode')){
-      if(billOrderId){
+      if(refundOrderId){
         handleRefund()
+      }else if(needFetchInfo){
+        setFetchInfo(false)
+        getOrderInfoByQRCode()
       }else{
         handleYiBao2Payment()
       }
     }
   })
   const handleRefund = () => {
-    handleBillOrderRefund({orderId: billOrderId, payAuthCode: getGlobalData('authCode')}).then(res => {
+    handleBillOrderRefund({orderId: refundOrderId, payAuthCode: getGlobalData('authCode')}).then(res => {
       if(res.resultCode === 0){
         modalService({content:'退款操作成功',success: () => {
           Taro.redirectTo({url: '/pages/payment-pack/payment-list/payment-list'})
@@ -516,6 +522,9 @@ export default function PaymentDetail() {
         })
         const param = {cardNo,clinicNo,recipeSeq,patientId}
         getOrderDetailFromHis(param)
+      }else if(res.resultCode === 4){
+        setFetchInfo(true)
+        handleAuthorize()
       }else{
         modalService({content: res.message})
       }
@@ -563,8 +572,7 @@ export default function PaymentDetail() {
       getOrderInfoByQRCode()
     }else if(from === PAYMENT_FROM.message && openId){
       getOrderInfo()
-      billOrderId = params.orderId
-      billOrderId && fetchPaymentOrderDetail({billOrderId}).then(res => {
+      refundOrderId && fetchPaymentOrderDetail({billOrderId:refundOrderId}).then(res => {
         if(res.resultCode === 0){
           setList(res.data)
         }
@@ -581,7 +589,9 @@ export default function PaymentDetail() {
       const param = {
         billOrderId: orderInfo.orderId
       }
-      billOrderId = orderInfo.orderId
+      if(orderInfo.orderState === 5||orderInfo.orderState === 2){
+        setRefundOrderId(orderInfo.orderId)
+      }
       getOrderDetailFromData(param)
     }
   })
@@ -608,7 +618,7 @@ export default function PaymentDetail() {
         <BkPanel>
           <View className='flex'>
             <View className='flat-title'>流水号</View>
-            <View className='payment-detail-item-text'>{orderInfo.clinicNo}</View>
+            <View className='payment-detail-item-text' style='overflow-wrap: anywhere;'>{orderInfo.clinicNo}</View>
           </View>
           <View className='flex'>
             <View className='flat-title'>姓名</View>

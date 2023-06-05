@@ -70,3 +70,6 @@ export const handleHeSuanRefund = (data:{orderId: string}) => {
 export const fetchBillOrderInfo = (data: {orderId}) => {
   return Post(fullUrl('api/applet/paybill/Bill/GetPaymentDetails',data))
 }
+export const individualAccountEnable = (data) => {
+  return Post(fullUrl('api/applet/paybill/Bill/GetCharges'),data)
+}

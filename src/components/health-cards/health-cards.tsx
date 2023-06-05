@@ -46,6 +46,7 @@ export default function HealthCards(props: {
       for(let i =0;i< cardsList.length;i++){
         if(cardsList[i].isDefault){
           setCurrentIndex(i)
+          onCard(cardsList[i])
           setSelected(cardsList[i])
           break
         }

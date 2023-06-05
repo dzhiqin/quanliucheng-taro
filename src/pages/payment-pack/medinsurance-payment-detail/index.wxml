@@ -39,6 +39,13 @@
         查看明细
       </view>
     </view>
+    <view class="charge-append">
+      <text>个人账户支付</text>
+      <view class="charge-append-btns">
+        <view class="'charge-append-btn' {{ useIndividualAccount ? 'charge-append-btn-active' : 'charge-append-btn-unactive'}}" bindtap="onChangeAccount">使用</view>
+        <view class="'charge-append-btn' {{ !useIndividualAccount ? 'charge-append-btn-active' : 'charge-append-btn-unactive'}}" bindtap="onChangeAccount">不使用</view>
+      </view>
+    </view>
     <view class="bd-append">
       <i class="bd-append-icon"></i>
       <view class="bd-append-text">医保移动支付</view>

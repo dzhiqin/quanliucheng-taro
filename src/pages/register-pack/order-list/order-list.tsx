@@ -62,7 +62,6 @@ export default function OrderList() {
           appId: 'wx8e0b79a7f627ca18',
           path: pathParams
         })
-        // Taro.setStorageSync('webViewSrc',invoiceUrl)
         // Taro.navigateTo({url: '/pages/web-view-page/web-view-page'})
       }else{
         modalService({title: '获取电子发票失败：',content: res.message})
@@ -116,7 +115,7 @@ export default function OrderList() {
                 }
                 <View className='order-list-card-item'>
                   <View className='order-list-card-title'>订单编号：</View>
-                  <View className='order-list-card-text'>{item.orderNo}</View>
+                  <View className='order-list-card-text' style='overflow-wrap: anywhere;'>{item.orderNo}</View>
                 </View>
                 <View className='order-list-card-item'>
                   <View className='order-list-card-title'>就诊人：</View>
@@ -152,7 +151,7 @@ export default function OrderList() {
                   item.visitNo &&
                   <View className='order-list-card-item'>
                     <View className='order-list-card-title'>流水号：</View>
-                    <View className='order-list-card-text'>{item.visitNo}</View>
+                    <View className='order-list-card-text' style='overflow-wrap: anywhere;'>{item.visitNo}</View>
                   </View>
                 }
                 {
