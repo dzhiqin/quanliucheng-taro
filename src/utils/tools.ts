@@ -154,3 +154,9 @@ export const compareVersion = (v1,v2) => {
 
   return 0
 }
+export const WECHAT_APP = (() => {
+  return process.env.TARO_ENV === 'wechat'
+})()
+export const ALIPAY_APP = (() => {
+  return process.env.TARO_ENV === 'alipay'
+})()

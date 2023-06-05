@@ -27,7 +27,12 @@ const config = {
               event: 'health',
               scope: ''
             }, 
-            
+            {
+              icon: imgUrl.new_home_icon7,
+              name: '免密授权',
+              event: 'auth',
+              scope: 'nhsamp,auth_user'
+            }, 
           ]
         },
         

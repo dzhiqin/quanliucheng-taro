@@ -7,6 +7,7 @@ import './quick-entrance.less'
 import { TaroNavToMiniProgram,handleAuthCode, TaroNavigateService } from '@/service/api'
 import { modalService } from '@/service/toast-service'
 import { custom } from '@/custom/index'
+import { ALIPAY_APP, WECHAT_APP } from '@/utils/tools'
 
 export default function QuickEntrance(props: {
   quickEntrance?:any
@@ -64,13 +65,13 @@ export default function QuickEntrance(props: {
           scopes: item.scope.split(','),
           success: res => {
             const {authCode} = res
-            // modalService({content: authCode,confirmText: 'copy',success: () => {
-            //   my.setClipboard({text: authCode})
-            // }})
-            handleAuthCode({code: authCode,authType: ''}).then(authRes => {
-              console.log('authRes',authRes);
+            modalService({content: authCode,confirmText: 'copy',success: () => {
+              my.setClipboard({text: authCode})
+            }})
+            // handleAuthCode({code: authCode,authType: ''}).then(authRes => {
+            //   console.log('authRes',authRes);
               
-            })
+            // })
           }
         })
       }else{

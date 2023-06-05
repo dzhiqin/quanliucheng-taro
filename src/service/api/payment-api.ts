@@ -52,7 +52,7 @@ export const fetchMedicineInfo = (data: {orderId: string}) => {
 export const fetchPaymentInvoice = (data: {serialNo: string}) => {
   return Post(fullUrl('api/applet/paybill/Bill/GetBillInvoiceInfo'),data)
 }
-export const fetchPaymentOrderDetailByQRCode = (data: {preQRCodePayId: number}) => {
+export const fetchPaymentOrderDetailByQRCode = (data: {preQRCodePayId: number,payAuthCode?:string}) => {
   return Post(fullUrl('api/customize/applet/Bill/GetPrescriptionQRCodeInfo'),data)
 }
 export const createPaymentOrderByQRCode = (data) => {
