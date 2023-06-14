@@ -9,6 +9,7 @@ import { AlipaySubscribeService, createCard, TaroSubscribeService } from '@/serv
 import { custom } from '@/custom/index'
 import { loadingService, modalService, toastService } from '@/service/toast-service';
 import { CardsHealper } from '@/utils/cards-healper';
+import { WEAPP,ALIPAYAPP } from '@/utils/tools';
 
 export default function BindCard(){
   const [form,setForm] = useState({
@@ -48,10 +49,10 @@ export default function BindCard(){
     const {result,msg} = formValidator()
     if(result){
       let subRes
-      if(process.env.TARO_ENV === 'weapp'){
+      if(WEAPP){
         subRes = await TaroSubscribeService(custom.subscribes.bindCardNotice)
       }
-      if(process.env.TARO_ENV === 'alipay'){
+      if(ALIPAYAPP){
         subRes = await AlipaySubscribeService(custom.subscribes.bindCardNotice)
       }
       if(subRes.result) {

@@ -11,6 +11,7 @@ import { modalService } from '@/service/toast-service'
 import { useState } from 'react'
 import BkLoading from '@/components/bk-loading/bk-loading'
 import BkPrice from '@/components/bk-price/bk-price'
+import { WEAPP, ALIPAYAPP } from '@/utils/tools'
 
 export default function Recovery() {
   const [data,setData] = useState({
@@ -63,14 +64,14 @@ export default function Recovery() {
   }
   const dealWithPay = async() => {
     let subRes
-    if(process.env.TARO_ENV === 'weapp'){
+    if(WEAPP){
       subRes = await TaroSubscribeService(custom.subscribes.paySuccessNotice, custom.subscribes.refundNotice)
       if(!subRes.result){
         setShowNotice(true)
         return
       }
     }
-    if(process.env.TARO_ENV === 'alipay'){
+    if(ALIPAYAPP){
       subRes = await AlipaySubscribeService(custom.subscribes.paySuccessNotice, custom.subscribes.orderCancelReminder)
       if(!subRes.result){
         modalService({content: subRes.msg})
@@ -114,7 +115,7 @@ export default function Recovery() {
     return(
       <View className='recovery'>
         <SubscribeNotice show={showNotice}></SubscribeNotice>
-        <View className='recovery-title'>&#12288;&#12288;尊敬的用户您好，{data.orderDate}因发票系统故障导致您的缴费订单自动退费，为不影响您后续到广医三院就诊，请您进行手工补缴，谢谢。</View>
+        <View className='recovery-title'>&#12288;&#12288;尊敬的用户您好，{data.orderDate}因发票系统故障导致您的缴费订单自动退费，给您造成了不便。为不影响您后续到{custom.hospitalName}就诊，请您进行手工补缴，谢谢配合。</View>
         <BkPanel>
           <View className='flex'>
             <View className='flat-title'>姓名：</View>

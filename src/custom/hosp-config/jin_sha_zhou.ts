@@ -12,7 +12,7 @@ const config = {
   banner: 'https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/common/jinshazhou-banner.png',
   logo: "https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/common/jszyy.png",
   hospitalName: "广州中医药大学金沙洲医院",
-  // baseUrl: "https://applets.gdbkyz.com", // 倍康测试
+  // baseUrl: "http://119.29.97.234:30082", // 医保测试环境
   baseUrl: "https://jszyy-applets.wedoublecare.com",  // 正式环境
   // subUrl: 'https://gysycustomize.wedoublecare.com', // 测试环境
   indexPage: {
@@ -22,6 +22,11 @@ const config = {
         {
           title: '门诊',
           entrances: [
+            {
+              icon: imgUrl.zybk,
+              name: '免密授权',
+              event: 'click',
+            }, 
             // {
             //   icon: imgUrl.new_home_icon6,
             //   name: '报到候诊',
@@ -128,6 +133,17 @@ const config = {
     refundNotice: '',//退费通知
     bindCardNotice: '',//绑卡成功提醒
   },
+  yibaoParams: {
+    path: 'auth/pages/bindcard/auth/index?openType=getAuthCode&bizType=04107&cityCode=440108&channel=AAGx8JTn8nVQxHkPp2rpCOLZ&orgChnlCrtfCodg=BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxsNta9ZJYODCgmT5ajL0Ke9&orgCodg=H44011100745&orgAppId=1GQQ6P3I81GQ3F60C80A0000A17BE977',
+    appId: 'wxe183cd55df4b4369',
+    envVersion: 'trial',
+    orgChnlCrtfCodg: 'BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxsNta9ZJYODCgmT5ajL0Ke9',//  机构渠道认证编码
+    orgCodg: 'H44011100745', //定点医药机构编码 
+    bizType: '04107', //线上核验业务类型编码 
+    orgAppId: '1GQQ6P3I81GQ3F60C80A0000A17BE977', // 定点医药机构应用ID 
+    cityCode: '440108', //城市编码
+    channel: 'AAGx8JTn8nVQxHkPp2rpCOLZ' //渠道号（微信医保平台分配）
+  }
 }
 const mergedConfig = mergeRecursive(DefaultConfig,config)
 export default mergedConfig

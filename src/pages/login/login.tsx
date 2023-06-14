@@ -9,6 +9,7 @@ import { CardsHealper } from '@/utils/cards-healper'
 import './login.less'
 import { loadingService, modalService, toastService } from '@/service/toast-service'
 import { AtButton } from 'taro-ui'
+import { WEAPP } from '@/utils/tools'
 
 export default function Login() {
   useEffect(() => {
@@ -36,9 +37,9 @@ export default function Login() {
       loadingService(false)
       if(result.resultCode === 0){
         CardsHealper.saveCards(result.data).then(() => {
-          Taro.redirectTo({url: process.env.TARO_ENV === 'weapp' ? '/pages/card-pack/cards-list/cards-list' : '/pages/card-pack/cards-list-alipay/cards-list-alipay'})
+          Taro.redirectTo({url: WEAPP ? '/pages/card-pack/cards-list/cards-list' : '/pages/card-pack/cards-list-alipay/cards-list-alipay'})
           // if(result.data.length === 0){
-          //   Taro.redirectTo({url: process.env.TARO_ENV === 'weapp' ? '/pages/card-pack/cards-list/cards-list' : '/pages/card-pack/cards-list-alipay/cards-list-alipay'})
+          //   Taro.redirectTo({url: WEAPP ? '/pages/card-pack/cards-list/cards-list' : '/pages/card-pack/cards-list-alipay/cards-list-alipay'})
           // }else{
           //   Taro.navigateBack()
           // }
@@ -59,7 +60,7 @@ export default function Login() {
     if(process.env.TARO_ENV === 'alipay'){
       updateCardsAndNavigate()
     }
-    if(process.env.TARO_ENV === 'weapp'){
+    if(WEAPP){
       Taro.getUserProfile({
         desc: '用于完善用户资料',
         success: (res) => {

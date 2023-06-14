@@ -2,9 +2,10 @@ import { View } from '@tarojs/components'
 import { custom } from '@/custom/index'
 import * as React from 'react'
 import { AtIcon } from 'taro-ui'
+import { WEAPP } from '@/utils/tools'
 
 export default function RegisterNotice () {
-  const payButtonText = process.env.TARO_ENV === 'weapp' ? '微信支付' : '支付宝支付'
+  const payButtonText = WEAPP ? '微信支付' : '支付宝支付'
   const PaymentTips = () => {
     switch(custom.hospName){
       case 'gy3yhp': return null;

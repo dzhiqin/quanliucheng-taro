@@ -16,7 +16,7 @@ import { Card } from 'src/interfaces/card'
 import { custom } from '@/custom/index'
 import { requestTry } from '@/utils/retry'
 import './order-list.less'
-import { getQueryValue } from '@/utils/index'
+import { getQueryValue,WEAPP,ALIPAYAPP } from '@/utils/index'
 import { reportCmPV_YL } from '@/utils/cloudMonitorHelper'
 
 const tabs = [{title: '15日内订单',value: 'current'},{title: '历史订单',value: 'history'}]
@@ -47,14 +47,14 @@ export default function OrderList(){
   }
   const dealWithPay = async (type,orderInfo) => {
     let subRes
-    if(process.env.TARO_ENV === 'weapp'){
+    if(WEAPP){
       subRes = await TaroSubscribeService(custom.subscribes.paySuccessNotice,custom.subscribes.refundNotice)
       if(!subRes.result){
         setShowNotice(true)
         return
       }
     }
-    if(process.env.TARO_ENV === 'alipay'){
+    if(ALIPAYAPP){
       subRes = await AlipaySubscribeService(custom.subscribes.paySuccessNotice,custom.subscribes.orderCancelReminder)
       if(!subRes.result){
         modalService({content: subRes.msg})
@@ -75,7 +75,7 @@ export default function OrderList(){
     handlePayment({orderId: id, payType: payType}).then(res => {
       if(res.data.jumpUrl && res.data.appid){
         loadingService(false)
-        if(process.env.TARO_ENV === 'weapp'){
+        if(WEAPP){
           Taro.navigateToMiniProgram({
             appId: res.data.appid,
             path: res.data.jumpUrl
@@ -90,7 +90,7 @@ export default function OrderList(){
       }else{
         const {nonceStr, paySign, signType, timeStamp, pay_appid, pay_url} = res.data
         if(payType === PAY_TYPE_CN.医保){
-          if(process.env.TARO_ENV === 'weapp'){
+          if(WEAPP){
             Taro.showLoading({title: '正在打开医保小程序'})
             Taro.navigateToMiniProgram({
               appId: pay_appid,
@@ -102,10 +102,10 @@ export default function OrderList(){
           }
           loadingService(false)
         }else{
-          if(process.env.TARO_ENV === 'weapp'){
+          if(WEAPP){
             handleWeappPay({nonceStr,paySign,timeStamp,package: res.data.package,signType,orderId:id})
           }
-          if(process.env.TARO_ENV === 'alipay'){
+          if(ALIPAYAPP){
             const tradeNo = getQueryValue(res.data.package, 'trade_no')
             handleAliPay({tradeNo, orderId: id})
           }
@@ -259,11 +259,11 @@ export default function OrderList(){
                 </View>
                 <View className='flex-around'>
                   {
-                    item.orderState === ORDER_STATUS_EN.unpay && process.env.TARO_ENV === 'weapp' &&
+                    item.orderState === ORDER_STATUS_EN.unpay && WEAPP &&
                     <BkButton theme='info' icon='icons/wechat.png' title='微信支付' disabled={busy} onClick={dealWithPay.bind(null,PAY_TYPE_CN.微信,item)} />
                   }
                                     {
-                    item.orderState === ORDER_STATUS_EN.unpay && process.env.TARO_ENV === 'alipay' &&
+                    item.orderState === ORDER_STATUS_EN.unpay && ALIPAYAPP &&
                     <BkButton theme='primary' icon='icons/alipay.png' title='支付宝支付' disabled={busy} onClick={dealWithPay.bind(null,PAY_TYPE_CN.支付宝,item)} />
                   }
                   {

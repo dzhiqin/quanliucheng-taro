@@ -28,7 +28,7 @@ import SubscribeNotice from '@/components/subscribe-notice/subscribe-notice'
 import './order-create.less'
 import {custom} from '@/custom/index'
 import RegisterNotice from './notice'
-import { getPrivacyName, getQueryValue } from '@/utils/tools'
+import { getPrivacyName, getQueryValue, WEAPP, ALIPAYAPP } from '@/utils/tools'
 import GreenEnergyBubble  from '@/images/icons/green-energy-bubble.png'
 import GreenEnergyToast from '../../../components/green-energy-toast/green-energy-toast'
 import GreenEnergyModal from './green-energy-modal'
@@ -202,7 +202,7 @@ export default function OrderCreate() {
     if(busy) return
     setBusy(true)
     let subRes
-    if(process.env.TARO_ENV === 'weapp'){
+    if(WEAPP){
       subRes = await TaroSubscribeService(
         custom.subscribes.appointmentNotice,
         custom.subscribes.appointmentCancelNotice,
@@ -213,7 +213,7 @@ export default function OrderCreate() {
         return
       }
     }
-    if(process.env.TARO_ENV === 'alipay'){
+    if(ALIPAYAPP){
       my.getAuthCode({
         scopes: ['auth_user','hospital_order'],
         success: res => {
@@ -302,7 +302,7 @@ export default function OrderCreate() {
       if(res.resultCode === 0){
         const {nonceStr, orderId, paySign, signType, payString, timeStamp, orderNo} = res.data
         if(payString){
-          if(process.env.TARO_ENV === 'weapp'){
+          if(WEAPP){
             const payParams = {
               nonceStr,
               paySign,
@@ -312,7 +312,7 @@ export default function OrderCreate() {
             }
             handleTaroPayment(payParams,orderId)
           }
-          if(process.env.TARO_ENV === 'alipay'){
+          if(ALIPAYAPP){
             const tradeNo = getQueryValue(payString,'trade_no')
             handleAliPayment({tradeNo,orderId,orderNo})
           }
@@ -409,7 +409,7 @@ export default function OrderCreate() {
         <BkPanel style='margin: 40rpx'>
           <View className='order-create-item'>
             <View className='order-create-item-title'>就诊人</View>
-            <View className='order-create-item-value'>{process.env.TARO_ENV === 'alipay' ? getPrivacyName(order.patientName) : order.patientName}</View>
+            <View className='order-create-item-value'>{ALIPAYAPP ? getPrivacyName(order.patientName) : order.patientName}</View>
           </View>
           <View className='order-create-item'>
             <View className='order-create-item-title'>就诊科室</View>
@@ -462,7 +462,7 @@ export default function OrderCreate() {
           } */}
         </BkPanel>
         {
-          process.env.TARO_ENV === 'alipay' && custom.feat.greenTree &&
+          ALIPAYAPP && custom.feat.greenTree &&
           <View className='order-create-tips flex-justify-center' onClick={() => setShowGreenModal(true)}>
             <Image src={GreenEnergyBubble} className='order-create-tips-icon'></Image>
             <View>预约挂号预计得蚂蚁森林能量</View>

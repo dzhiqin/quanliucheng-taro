@@ -142,7 +142,7 @@ const subPackages = [
       'arrival/arrival',
       'waiting-list/waiting-list',
       'arrival-service/arrival-service',
-      'investigation/investigation',
+      'survey/survey',
       'epidemiological-survey/epidemiological-survey',
       'epidemiological-survey/result',
       'deposit/deposit',

@@ -5,7 +5,7 @@ import * as Taro from '@tarojs/taro'
 import "taro-ui/dist/style/index.scss"  // 全局引入样式
 import './app.less'
 import { fetchBranchHospital, fetchInHospCards } from './service/api'
-import { CardsHealper,setGlobalData } from './utils'
+import { CardsHealper,setGlobalData,WEAPP,ALIPAYAPP } from './utils'
 import { CARD_ACTIONS } from './enums'
 import { modalService } from './service/toast-service'
 import monitor from '@/utils/alipayLogger'
@@ -117,7 +117,7 @@ class App extends Component {
   }
   handleGetCode() {
     return new Promise((resolve) => {
-      if(process.env.TARO_ENV === 'weapp'){
+      if(WEAPP){
         Taro.login({
           success: res => {
             const {code} = res
@@ -125,7 +125,7 @@ class App extends Component {
           }
         })
       }
-      if(process.env.TARO_ENV === 'alipay'){
+      if(ALIPAYAPP){
         my.getAuthCode({
           success: res => {
             const {authCode} = res

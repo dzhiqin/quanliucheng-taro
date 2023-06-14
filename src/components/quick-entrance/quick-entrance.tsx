@@ -5,7 +5,7 @@ import * as Taro from '@tarojs/taro'
 import BkTabs from '../bk-tabs/bk-tabs'
 import './quick-entrance.less'
 import { TaroNavToMiniProgram,handleAuthCode, TaroNavigateService } from '@/service/api'
-import { modalService } from '@/service/toast-service'
+import { modalService,loadingService } from '@/service/toast-service'
 import { custom } from '@/custom/index'
 import { ALIPAY_APP, WECHAT_APP } from '@/utils/tools'
 
@@ -48,10 +48,7 @@ export default function QuickEntrance(props: {
       })
     }
     if(item.event === 'click'){
-      // const {orgChnlCrtfCodg, orgCodg, bizType, orgAppId, cityCode, channel} = custom.yibaoParams
-      // const path = `auth/pages/bindcard/auth/index?openType=getAuthCode&cityCode=${cityCode}&channel=${channel}&orgChnlCrtfCodg=${orgChnlCrtfCodg}&orgCodg=${orgCodg}&bizType=${bizType}&orgAppId=${orgAppId}`
-      const path = 'auth/pages/bindcard/auth/index?openType=getAuthCode&bizType=04107&cityCode=440108&channel=AAGE84GHsRIzjSdxPaPQtNqU&orgChnlCrtfCodg=BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxvShtXBpXvc4WkWexOKgovx&orgCodg=H44010300017&orgAppId=1GPA6UN3P0AU3F60C80A0000B246C727'
-      TaroNavToMiniProgram({appId: 'wxe183cd55df4b4369', path, envVersion: 'trial'})
+      TaroNavToMiniProgram({appId: custom.yibaoParams.appId, path: custom.yibaoParams.path, envVersion: custom.yibaoParams.envVersion})
     }
     if(item.event === 'health'){
       my.navigateTo({

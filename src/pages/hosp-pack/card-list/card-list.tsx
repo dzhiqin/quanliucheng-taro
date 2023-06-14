@@ -24,7 +24,7 @@ export default function CardList(){
       loadingService(false)
       if(res.resultCode === 0){
         setList(res.data)
-        Taro.setStorageSync('hospCard',res.data.find(i => i.isDefault))
+        res.data && Taro.setStorageSync('hospCard',res.data.find(i => i.isDefault))
       }else{
         modalService({content: res.message})
       }

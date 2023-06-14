@@ -1,11 +1,11 @@
 import * as Taro from '@tarojs/taro'
 import { modalService, toastService } from '../toast-service'
 import { custom } from '@/custom/index'
-import { compareVersion } from '@/utils/tools'
+import { compareVersion,WEAPP,ALIPAYAPP } from '@/utils/tools'
 
 type subscribeServiceRes =  {result: boolean, msg: string, data?: any }
 export const TaroGetSubscribeSettings = (...ids) => {  
-  if(process.env.TARO_ENV === 'alipay') return ({result: true})
+  if(ALIPAYAPP) return ({result: true})
   return new Promise(resolve => {
     Taro.getSetting({
       withSubscriptions: true,
@@ -28,7 +28,7 @@ export const TaroGetSubscribeSettings = (...ids) => {
   })
 }
 export const AlipaySubscribeService = (...tempIds) =>{
-  if(process.env.TARO_ENV === 'weapp') return {result: true}
+  if(WEAPP) return {result: true}
   tempIds = tempIds.filter(i => i && i.trim())
   if(tempIds.length === 0) {
     return {result: false,msg: '没有订阅任何模板消息'}
@@ -57,7 +57,7 @@ export const AlipaySubscribeService = (...tempIds) =>{
 }
 export const TaroSubscribeService = (...tempIds) => {
   if(custom.isPrivate) return {result: true}
-  if(process.env.TARO_ENV === 'alipay') return {result: true}
+  if(ALIPAYAPP) return {result: true}
   if(!tempIds || tempIds.length === 0) {
     return {result: false,msg: '没有订阅任何模板消息'}
   }else if(tempIds.length > 3) {
@@ -192,7 +192,7 @@ export const TaroNavToZhongXun = (execRoom) => {
 }
 export const TaroNavToYiBao = (callback) => {
   // 跳转到医保小程序
-  if(process.env.TARO_ENV === 'weapp'){
+  if(WEAPP){
     Taro.navigateToMiniProgram({
       appId: 'wxe1022cca111d18be',
       path: 'pages/cert/bind/bind?from=AAHTx-oeOuLWz2nBYKez06kN&cityid=440100',
@@ -202,7 +202,7 @@ export const TaroNavToYiBao = (callback) => {
       }
     })
   }
-  if(process.env.TARO_ENV === 'alipay'){
+  if(ALIPAYAPP){
     Taro.navigateToMiniProgram({
       appId: '77700284',
       path: 'pages/medical/index/',

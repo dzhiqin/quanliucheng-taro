@@ -10,6 +10,7 @@ import { TaroGetLocation, TaroSubscribeService } from '@/service/api'
 import './edit-card.less'
 import { idCardValidator, phoneValidator, validateMessages } from '@/utils/validators'
 import { custom } from '@/custom/index'
+import { WEAPP } from '@/utils/tools'
 
 export default function EditCard () {
   const router = Taro.useRouter()
@@ -65,7 +66,7 @@ export default function EditCard () {
       return
     }
     let subRes
-    if(process.env.TARO_ENV === 'weapp'){
+    if(WEAPP){
       subRes = await TaroSubscribeService(custom.subscribes.bindCardNotice)
     }
     if(subRes.result){

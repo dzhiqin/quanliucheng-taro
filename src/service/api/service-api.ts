@@ -58,3 +58,9 @@ export const sendSmsByFeiGe = (data: {mobile: string, content: number}) => {
     template_id
   })
 }
+export const getSurvey = () => {
+  return Get(fullUrl('api/applet/Questionnaire/GetAfterDiagnosisSatisfactionSurvey'))
+}
+export const submitSurvey = (data) => {
+  return Post(fullUrl('api/applet/Questionnaire/SaveAfterDiagnosisSatisfactionSurvey'),data)
+}

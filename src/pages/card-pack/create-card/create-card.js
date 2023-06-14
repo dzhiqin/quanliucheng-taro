@@ -15,7 +15,7 @@ import { loadingService, modalService, toastService } from '@/service/toast-serv
 import BkInput from '@/components/bk-input/bk-input'
 import './create-card.less'
 import { reportCmPV_YL } from '@/utils/cloudMonitorHelper'
-import { getRandomNumber } from '@/utils/tools'
+import { getRandomNumber,WEAPP,ALIPAYAPP } from '@/utils/tools'
 
 export default class BindCard extends React.Component {
   constructor (props) {
@@ -150,7 +150,7 @@ export default class BindCard extends React.Component {
       return
     }
     let subRes
-    if(process.env.TARO_ENV === 'weapp'){
+    if(WEAPP){
       subRes = await TaroSubscribeService(custom.subscribes.bindCardNotice)
       if(subRes.result){
         this.handleCreateCard()
@@ -158,7 +158,7 @@ export default class BindCard extends React.Component {
         this.setState({showNotice: true})
       }
     }
-    if(process.env.TARO_ENV === 'alipay'){
+    if(ALIPAYAPP){
       subRes = await AlipaySubscribeService(custom.subscribes.bindCardNotice)
       if(subRes.result){
         this.handleCreateCard()
@@ -212,7 +212,7 @@ export default class BindCard extends React.Component {
   }
   buildCardParams() {
     let card
-    if(process.env.TARO_ENV === 'weapp'){
+    if(WEAPP){
       card = this.state.card
     }else{
       card = {
@@ -232,7 +232,7 @@ export default class BindCard extends React.Component {
   }
   formValidator() {
     let keys,card
-    if(process.env.TARO_ENV === 'alipay'){
+    if(ALIPAYAPP){
       card = {
         ...this.state.card,
         patientName: this.state.realName,
@@ -522,7 +522,7 @@ export default class BindCard extends React.Component {
       <View className='create-card'>
         <SubscribeNotice show={this.state.showNotice} />
         {
-          process.env.TARO_ENV === 'weapp' &&
+          WEAPP &&
           <ocr-scan onsuccess={this.onScanResult}></ocr-scan>
         }
         <AtForm
@@ -532,13 +532,13 @@ export default class BindCard extends React.Component {
             onChange={this.handleCardChange.bind(this,'patientName')}
           ></BkInput> */}
           {
-            process.env.TARO_ENV === 'weapp' &&
+            WEAPP &&
             <BkInput name='patientName' title='姓名' type='text' placeholder='请输入姓名' value={this.state.card.patientName} maxLength={30} 
               onChange={this.handleCardChange.bind(this,'patientName')}
             ></BkInput>
           }
           {
-            process.env.TARO_ENV === 'alipay' &&
+            ALIPAYAPP &&
             <BkInput name='patientName' title='姓名' type='text' placeholder='请输入姓名' value={this.state.card.patientName} maxLength={30} 
               onBlur={this.handlePatientNameChange.bind(this)}
               onFocus={this.handleOnFocus.bind(this,'patientName',this.state.realName)}
@@ -555,7 +555,7 @@ export default class BindCard extends React.Component {
           </Picker>
 
           {
-            this.state.currentIdenTypeValue !== '儿童(无证件)' && process.env.TARO_ENV === 'weapp' &&
+            this.state.currentIdenTypeValue !== '儿童(无证件)' && WEAPP &&
             <AtInput 
               name='idenNo' 
               title='证件号码' 
@@ -567,7 +567,7 @@ export default class BindCard extends React.Component {
             </AtInput> 
           }
           {
-            this.state.currentIdenTypeValue !== '儿童(无证件)' && process.env.TARO_ENV === 'alipay' &&
+            this.state.currentIdenTypeValue !== '儿童(无证件)' && ALIPAYAPP &&
             <AtInput 
               name='idenNo' 
               title='证件号码' 
@@ -581,7 +581,7 @@ export default class BindCard extends React.Component {
           }
 
           {
-            process.env.TARO_ENV === 'weapp' &&
+            WEAPP &&
             <BkInput 
               name='phone' 
               title='电话号码' 
@@ -593,7 +593,7 @@ export default class BindCard extends React.Component {
             />
           }
           {
-            process.env.TARO_ENV === 'weapp' && custom.feat.bindCard.smsVerify.enable &&
+            WEAPP && custom.feat.bindCard.smsVerify.enable &&
             <BkInput 
               name='smsCode' 
               title='验证码' 
@@ -607,7 +607,7 @@ export default class BindCard extends React.Component {
             </BkInput>
           }
           {
-            process.env.TARO_ENV === 'alipay' && 
+            ALIPAYAPP && 
             <BkInput 
               name='phone' 
               title='电话号码' 
@@ -620,7 +620,7 @@ export default class BindCard extends React.Component {
             />
           }
           {
-            this.state.currentIdenTypeValue !== '门诊卡' && process.env.TARO_ENV === 'weapp' &&
+            this.state.currentIdenTypeValue !== '门诊卡' && WEAPP &&
             <Picker mode='selector' range={this.state.genders} onChange={this.onGenderChange.bind(this)} value={this.state.currentGenderIndex}  >
               <AtList>
                 <AtListItem
@@ -633,7 +633,7 @@ export default class BindCard extends React.Component {
           }
           
           {
-            this.state.currentIdenTypeValue !== '门诊卡' && process.env.TARO_ENV === 'weapp' &&
+            this.state.currentIdenTypeValue !== '门诊卡' && WEAPP &&
             <Picker mode='date' onChange={this.onDateChange.bind(this)} value={this.state.selectedDate} >
               <AtList>
                 <AtListItem
