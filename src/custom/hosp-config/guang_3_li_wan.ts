@@ -13,7 +13,6 @@ const config = {
   hospitalName: "广医三院荔湾院区",
   // baseUrl: "https://applets.gdbkyz.com", // 倍康测试
   baseUrl: "https://gysy.wedoublecare.com",  // 旧正式环境
-  // baseUrl: "https://weixin2.gy3y.com", // 新正式环境(未启用)
   // subUrl: 'https://gysycustomize.wedoublecare.com', // 测试环境
   indexPage: {
     banner: { // 轮播图组件

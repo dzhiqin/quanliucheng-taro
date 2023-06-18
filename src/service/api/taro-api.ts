@@ -222,6 +222,7 @@ export const TaroNavToMiniProgram = (data:{appId: string, path: string, envVersi
       complete: () => {}
     }).catch(err => {
       toastService({title: '您已取消跳转'})
+      reject('failed')
     })
   })
 }

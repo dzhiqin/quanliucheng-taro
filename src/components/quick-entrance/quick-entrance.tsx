@@ -7,7 +7,6 @@ import './quick-entrance.less'
 import { TaroNavToMiniProgram,handleAuthCode, TaroNavigateService } from '@/service/api'
 import { modalService,loadingService } from '@/service/toast-service'
 import { custom } from '@/custom/index'
-import { ALIPAY_APP, WECHAT_APP } from '@/utils/tools'
 
 export default function QuickEntrance(props: {
   quickEntrance?:any

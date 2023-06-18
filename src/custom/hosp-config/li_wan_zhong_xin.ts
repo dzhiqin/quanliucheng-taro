@@ -104,7 +104,7 @@ const config = {
               name: "退款测试",
               icon: imgUrl.new_home_icon10,
               event: "navigate",
-              url: `/pages/payment-pack/payment-detail/payment-detail?orderId=16995&from=message`
+              url: `/pages/payment-pack/payment-detail/payment-detail?orderId=18707&from=message`
             },
           ]
         }

@@ -160,3 +160,23 @@ export const WEAPP = (() => {
 export const ALIPAYAPP = (() => {
   return process.env.TARO_ENV === 'alipay'
 })()
+export const flatToTree = (items) => {
+  const result = []
+  const itemMap = {}
+  // 转成json对象
+  for(let item of items){
+    itemMap[item.id] = {...item, children: []}
+  }
+  // 重组父子关系对象
+  for(let item of items){
+    const id = item.id
+    const pid = item.pid
+    const treeItem = itemMap[id]
+    if(pid === 0){
+      result.push(treeItem)
+    }else{
+      itemMap[pid].children.push(treeItem)
+    }
+  }
+  return result
+}

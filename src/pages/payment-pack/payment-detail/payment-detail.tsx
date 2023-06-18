@@ -459,7 +459,9 @@ export default function PaymentDetail() {
     }
   }
   const weChatYiBaoAuth = () => {
-    TaroNavToMiniProgram({appId: custom.yibaoParams.appId,path: custom.yibaoParams.path, envVersion: custom.yibaoParams.envVersion})
+    TaroNavToMiniProgram({appId: custom.yibaoParams.appId,path: custom.yibaoParams.path, envVersion: custom.yibaoParams.envVersion}).catch(err => {
+      setBusy(false)
+    })
   }
   const alipayYiBaoAuth = () => {
     return new Promise((resolve) => {
@@ -638,7 +640,7 @@ export default function PaymentDetail() {
           psnNo,medType,mdtrtId,insuType,mdtrtMode
         } = res.data
         setOrderInfo({
-          cardNo,patientId,patientName,clinicNo,feeTypeId,idenNo,orderDate,orderDept,orderDoctor,prescMoney,
+          cardNo,patientId,patientName,clinicNo,feeTypeId,idenNo,orderDate,orderDept,orderDoctor,prescMoney, 
           orderId,orderType: pactCode,payState: PAY_STATUS_EN.unpay,recipeSeq,psnNo,medType,mdtrtId,insuType,mdtrtMode
         })
         const param = {cardNo,clinicNo,recipeSeq,patientId}
