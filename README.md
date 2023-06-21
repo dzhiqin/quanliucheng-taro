@@ -98,7 +98,8 @@ export const custom = hospConfig.default as HospConfig
 * 医生详情页: 
   * 小程序码：pages/register-pack/doctor-detail/doctor-detail?scene=${encodeURIComponent({slices: branchId_deptId_doctorId})}
   * 二维码：pages/register-pack/doctor-detail/doctor-detail?slices=${JSON.stringfy({branchId: xx,deptId: xx,doctorId: xx,regDate: xx})}
-
+* 问卷调查：pages/service-pack/survey/survey?orderId=xxx
+流调表： pages/service-pack/epidemiological-survey/epidemiological-survey
 * 预约挂号： pages/register-pack/clinics/clinics
 
 **关于接口书写：** 

@@ -124,7 +124,7 @@ export default function CardDetail(props: any) {
           </View>
           <View className='card-item'>
             <View>证件号码</View>
-            <View>{card.idenNo.replace(/(\d{4})\d*([0-9a-zA-Z]{4})/, "$1******$2" )}</View>
+            <View>{card.idenNo?.replace(/(\d{4})\d*([0-9a-zA-Z]{4})/, "$1******$2" )}</View>
           </View>
           <View className='card-item'>
             <View>手机号</View>

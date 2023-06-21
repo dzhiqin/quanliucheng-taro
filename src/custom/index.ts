@@ -8,7 +8,7 @@ type HospName =
   'li_wan_zhong_xin' | 
   'jin_sha_zhou_alipay' |
   'guang_1_alipay'
-const hospName:HospName = 'li_wan_zhong_xin'
+const hospName:HospName = 'jin_sha_zhou'
 const hospConfig = require(`./hosp-config/${hospName}.ts`)
 
 export const custom = hospConfig.default as HospConfig
@@ -93,6 +93,7 @@ export interface HospConfig {
     }
     YiBaoCard: boolean,
     register: {
+      changeFeeType: boolean,
       cancelReservedTime: number,
       popupNotice: boolean,
       intradayAndAppointment: boolean,

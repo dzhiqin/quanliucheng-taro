@@ -12,8 +12,8 @@ const config = {
   banner: 'https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/common/jinshazhou-banner.png',
   logo: "https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/common/jszyy.png",
   hospitalName: "广州中医药大学金沙洲医院",
-  // baseUrl: "http://119.29.97.234:30082", // 医保测试环境
-  baseUrl: "https://jszyy-applets.wedoublecare.com",  // 正式环境
+  baseUrl: "http://119.29.97.234:30082", // 医保测试环境
+  // baseUrl: "https://jszyy-applets.wedoublecare.com",  // 正式环境
   // subUrl: 'https://gysycustomize.wedoublecare.com', // 测试环境
   indexPage: {
     quickEntrance: {
@@ -103,7 +103,7 @@ const config = {
       checkEpiLogicalSurvey: false, // 是否要先填流调表才可以挂号
     },
     hospitalNavigation: true,  // 院内导航
-    inHospCard: false,
+    inHospCard: true,
     arrivalService: {
       arrival: true,
       waitingList: true

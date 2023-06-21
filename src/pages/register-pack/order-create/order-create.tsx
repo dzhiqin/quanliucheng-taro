@@ -65,7 +65,8 @@ export default function OrderCreate() {
   const [treatFee,setTreatFee] = useState(null)
   // const [feeTypes,setFeeTypes] = useState([])
   const [currentFeeObj,setCurrentFeeObj] = useState({feeName: '',feeCode: ''})
-  const [appointedFeeType, setAppointedFeeType] = useState('')
+  // const [appointedFeeType, setAppointedFeeType] = useState('')
+  let appointedFeeType = ''
   const [result,setResult] = useState(resultEnum.default)
   const [feeOptions,setFeeOptions] = useState([])
   const [showNotice,setShowNotice] = useState(false)
@@ -73,7 +74,7 @@ export default function OrderCreate() {
   const [isShow,setIsShow] = useState(false)
   const [showGreenModal,setShowGreenModal] = useState(false)
   const [energy,setEnergy] = useState(0)
-  const buildOrderParams = (_regFee=undefined,_treatFee=undefined,_feeType='') => {
+  const buildOrderParams = (_regFee=undefined,_treatFee=undefined) => {
     const orderParams = Taro.getStorageSync('orderParams')
     const card = CardsHealper.getDefault()
     const params = {
@@ -82,7 +83,7 @@ export default function OrderCreate() {
       patientId: card.patientId,
       regFee: _regFee !== undefined ? _regFee : regFee,
       treatFee: _treatFee !== undefined ? _treatFee : treatFee,
-      feeType: _feeType || appointedFeeType || currentFeeObj.feeCode || orderParams.feeType
+      feeType: custom.feat.register.changeFeeType ? currentFeeObj.feeCode : (appointedFeeType || orderParams.feeType)
     }
     return params
   }
@@ -284,7 +285,8 @@ export default function OrderCreate() {
       // return
       const feeRes:any = await fetchFee()
       if(feeRes.success){
-        orderParams = buildOrderParams(feeRes.data.regFee, feeRes.data.treatFee,feeRes.data.feeType)
+        appointedFeeType = feeRes.data.feeType
+        orderParams = buildOrderParams(feeRes.data.regFee, feeRes.data.treatFee)
         handleCreateRegOrder(orderParams)
       }else{
         loadingService(false)
@@ -337,14 +339,6 @@ export default function OrderCreate() {
       modalService({content: JSON.stringify(err,null,2)})
     })
   }
-  useEffect(() => {
-    fetchRegFeeType().then(res => {
-      if(res.resultCode == 0){
-        setFeeOptions(res.data)
-        setCurrentFeeObj(res.data[0])
-      }
-    })
-  },[])
   // useEffect(() => {
   //   if(!currentFeeObj.feeCode) return
   //   setBusy(true)
@@ -354,6 +348,14 @@ export default function OrderCreate() {
     if(isShow){
       setShowGreenToast(true)
       setIsShow(false)
+    }
+    if(custom.feat.register.changeFeeType){
+      fetchRegFeeType().then(res => {
+        if(res.resultCode == 0){
+          setFeeOptions(res.data)
+          setCurrentFeeObj(res.data[0])
+        }
+      })
     }
   })
   Taro.useReady(() => {
@@ -375,7 +377,7 @@ export default function OrderCreate() {
       if(res.resultCode === 0){
         setRegFee(res.data.regFee)
         setTreatFee(res.data.treatFee)
-        res.data.feeType && setAppointedFeeType(res.data.feeType)
+        appointedFeeType = res.data.feeType
       }
     })
   }
@@ -389,7 +391,7 @@ export default function OrderCreate() {
           const _feeType = res.data.feeType
           setRegFee(_regFee)
           setTreatFee(_treatFee)
-          _feeType && setAppointedFeeType(_feeType)
+          appointedFeeType = _feeType
           resolve({success: true, data: {regFee: _regFee,treatFee: _treatFee,feeType: _feeType}})
         }else{
           resolve({success: false, msg: '获取金额失败'})

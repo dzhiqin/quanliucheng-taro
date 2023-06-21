@@ -171,6 +171,7 @@ const config:HospConfig = {
     },
     YiBaoCard: true, // 医保卡
     register: {
+      changeFeeType: false,
       cancelReservedTime: 3600 * 1000 * 2, // 取消挂号预留时间，默认2小时
       popupNotice: true,// 挂号提示弹窗
       intradayAndAppointment: false,// 是否区分当天挂号和预约挂号

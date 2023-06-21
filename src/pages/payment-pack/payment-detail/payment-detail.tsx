@@ -140,6 +140,7 @@ export default function PaymentDetail() {
   }
   const dealWithPay = async(type) => {
     setBusy(true)
+    loadingService(true,'支付中')
     const subRes:any = await handleSubscribe()
     if(!subRes.result){
       if(WEAPP){
@@ -149,6 +150,7 @@ export default function PaymentDetail() {
         modalService({content: subRes.msg})
       }
       setBusy(false)
+      loadingService(false)
       return
     }
     if(custom.yibaoParams && type === PAY_TYPE_CN.医保){
@@ -159,7 +161,12 @@ export default function PaymentDetail() {
       }
       if(ALIPAYAPP){
         const result:any = await alipayYiBaoAuth()
-        if(!result.success) return
+        if(!result.success){
+          setBusy(false)
+          loadingService(false)
+          return
+        } 
+          
       }
     }
     // let subRes
@@ -454,13 +461,19 @@ export default function PaymentDetail() {
     }
     if(ALIPAYAPP){
       alipayYiBaoAuth().then((res:any) => {
-        if(res.success) handleRefund()
+        if(res.success){
+          handleRefund()
+        }else{
+          setBusy(false)
+          loadingService(false)
+        }
       })
     }
   }
   const weChatYiBaoAuth = () => {
     TaroNavToMiniProgram({appId: custom.yibaoParams.appId,path: custom.yibaoParams.path, envVersion: custom.yibaoParams.envVersion}).catch(err => {
       setBusy(false)
+      loadingService(false)
     })
   }
   const alipayYiBaoAuth = () => {
@@ -595,6 +608,7 @@ export default function PaymentDetail() {
           TaroNavigateService('/pages/payment-pack/medinsurance-payment-detail/index?query='+JSON.stringify(query))
         }else{
           modalService({title: '创建订单失败', content: res.data.message})
+          setGlobalData('authCode','')
           setBusy(false)
         }
       })
