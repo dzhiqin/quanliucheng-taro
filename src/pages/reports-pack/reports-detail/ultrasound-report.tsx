@@ -6,7 +6,7 @@ import './reports-detail.less'
 import { loadingService,toastService } from '@/service/toast-service'
 import DefaultReport from './default-report'
 
-export default function AltraSoundReport(props) {
+export default function UltraSoundReport(props) {
   const {checkItems,examId,itemType} = props
   const [busy,setBusy] = React.useState(false)
   const handleViewPdf = () => {

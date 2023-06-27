@@ -62,7 +62,7 @@ export default function HospCards(props: {onCard:Function}){
   }
   return (
     <View style='padding: 40rpx 40rpx 0'>
-      <View className='add-card single-card'>
+      <View className='single-card'>
         <View className='single-card-content' onClick={navToCardDetail.bind(null,hospCard)}>
           {
             hospCard && 

@@ -131,11 +131,13 @@ const config = {
     showImageDetail: false,
     clinicReportTabs: [  // 门诊报告分类
       {title: '化验', value: REPORT_ITEM_TYPE_CN.化验},
-      {title: '检查', value: REPORT_ITEM_TYPE_CN.检查}
+      {title: '检查', value: REPORT_ITEM_TYPE_CN.检查},
+      {title: '病理', value: REPORT_ITEM_TYPE_CN.病理},
     ],
     hospReportTabs: [  // 住院报告分类
       {title: '化验', value: REPORT_ITEM_TYPE_CN.化验},
-      {title: '检查', value: REPORT_ITEM_TYPE_CN.检查}
+      {title: '检查', value: REPORT_ITEM_TYPE_CN.检查},
+      {title: '病理', value: REPORT_ITEM_TYPE_CN.病理},
     ]
   },
   subscribes: {

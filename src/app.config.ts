@@ -88,7 +88,8 @@ const subPackages = [
       'clinic-doctors/clinic-doctors',
       'order-create/order-create',
       'order-list/order-list',
-      'doctors/doctors'
+      'doctors/doctors',
+      'intelligent-guidance/intelligent-guidance'
     ]
   },
   {

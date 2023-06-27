@@ -9,7 +9,7 @@ import './reports-detail.less'
 import { loadingService, modalService } from '@/service/toast-service'
 import BkLoading from '@/components/bk-loading/bk-loading'
 import TestReport from './test-report'
-import AltraSoundReport from './ultrasound-report'
+import UltraSoundReport from './ultrasound-report'
 import DefaultReport from './default-report'
 import { custom } from '@/custom/index'
 import GreenEnergyToast from '@/components/green-energy-toast/green-energy-toast'
@@ -71,7 +71,7 @@ export default function ReportsDetail() {
         }
         {
           itemType === REPORT_ITEM_TYPE_CN.产前超声 &&
-          <AltraSoundReport checkItems={checkItems} examId={examId} itemType={itemType} />
+          <UltraSoundReport checkItems={checkItems} examId={examId} itemType={itemType} />
         }
         {
           itemType !== REPORT_ITEM_TYPE_CN.化验 && itemType !== REPORT_ITEM_TYPE_CN.产前超声 &&

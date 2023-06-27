@@ -18,7 +18,10 @@ export default function TestReport(props: {
   const {checkItems,examId,itemType} = props
   let urls = []
   checkItems.forEach(item => {
-    if(item.url){
+    if(item.url && typeof (item.url === 'object')){
+      urls = urls.concat(item.url)
+    }
+    if(item.url && typeof (item.url === 'string')){
       urls.push(item.url)
     }
   })
@@ -86,12 +89,11 @@ export default function TestReport(props: {
       {
         setting.showImageDetail && 
         <View className='reports-detail-content'>
-          <Image src={checkItems[0]? checkItems[0].url : ''} />
+          {
+            urls.length && 
+            urls.map((url,index) => <Image src={url} key={index} />)
+          }
           <View className='reports-detail-footer'>
-            {/* {
-              checkItems[0] && checkItems[0].url &&
-              <BkButton title='查看图片' onClick={onClick.bind(null,checkItems[0]? checkItems[0].url : '')} />
-            } */}
             {
               urls.length > 0 && 
               <BkButton title='查看图片' onClick={showImages.bind(null,urls)} />
