@@ -18,10 +18,10 @@ export default function TestReport(props: {
   const {checkItems,examId,itemType} = props
   let urls = []
   checkItems.forEach(item => {
-    if(item.url && typeof (item.url === 'object')){
+    if(item.url && (typeof item.url === 'object')){
       urls = urls.concat(item.url)
     }
-    if(item.url && typeof (item.url === 'string')){
+    if(item.url && (typeof item.url === 'string')){
       urls.push(item.url)
     }
   })
@@ -128,7 +128,7 @@ export default function TestReport(props: {
         </View>
       }
       {// 特殊处理
-        custom.hospName === 'gy3yhp' && 
+        (custom.hospName === 'gy3yhp' || custom.hospName === 'lwzxyy') && 
         <AtButton customStyle='margin: 40rpx' type='primary' loading={busy} circle onClick={handleFetchPdfUrl}>查看pdf</AtButton>
       }
     </View>

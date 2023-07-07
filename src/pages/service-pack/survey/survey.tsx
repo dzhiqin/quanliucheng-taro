@@ -32,7 +32,7 @@ export default function Survey(){
     // setBusy(false)
     // end
 
-    getSurvey().then(res => {
+    getSurvey({typeId: params.typeId}).then(res => {
       setBusy(false)
       if(res.resultCode === 0){
         const { questionnaireId, questionnaireSubjectList, questionnaireTitle } = res.data
@@ -196,6 +196,7 @@ export default function Survey(){
     )
   }
   const validator = () => {
+    console.log('answers=',answers.current);
     return answers.current.every(item => {
       if(item.parentId){
         const parentObj = answers.current.find(i => i.id === item.parentId)

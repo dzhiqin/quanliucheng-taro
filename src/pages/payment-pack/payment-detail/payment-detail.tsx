@@ -577,7 +577,9 @@ export default function PaymentDetail() {
     }
   })
   const handleRefund = () => {
+    loadingService(true,'退款中')
     handleBillOrderRefund({orderId: refundOrderId, payAuthCode: getGlobalData('authCode')}).then(res => {
+      loadingService(false)
       if(res.resultCode === 0){
         modalService({content:'退款操作成功',success: () => {
           Taro.redirectTo({url: '/pages/payment-pack/payment-list/payment-list'})
@@ -602,7 +604,9 @@ export default function PaymentDetail() {
       query.orderId = orderInfo.orderId
       TaroNavigateService('/pages/payment-pack/medinsurance-payment-detail/index?query='+JSON.stringify(query))
     }else{
+      loadingService(true,'医保支付中')
       handleCreatePaymentOrder(PAY_TYPE_CN.医保).then((res:any) => {
+        loadingService(false)
         if(res.success){
           query.orderId = res.data.orderId
           TaroNavigateService('/pages/payment-pack/medinsurance-payment-detail/index?query='+JSON.stringify(query))
