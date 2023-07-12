@@ -76,46 +76,51 @@ interface OrderInfoParams {
   orderState?: ORDER_STATUS_EN,
   oweMoney?:string
 }
-// 注意进入页面场景有4：
-// 1-从缴费列表进入；2-从订单列表进入；3-扫码进入; 4-点击退款消息进入
+// 注意进入页面场景有：
+// 1-从缴费列表进入；2-从订单列表进入；3-扫码进入; 4-点击退款消息进入; 5-点击缴费成功消息进入（入参和订单列表进入的一样）
 export default function PaymentDetail() {
   const payButtonText = WEAPP ? '微信支付' : '支付宝支付'
   const featConfig = custom.feat
   const router = useRouter()
   const params = router.params
   const scene = params.scene ? decodeURIComponent(params.scene) : null
-  let card = CardsHealper.getDefault()
+  const card = CardsHealper.getDefault()
   let preQRCodePayId = ''
-  let from: PAYMENT_FROM = PAYMENT_FROM.orderList
+  const from = React.useRef(PAYMENT_FROM.orderList) 
   const [busy,setBusy] = useState(false)
   const [loading,setLoading] = useState(true)
   if(scene){
-    from = PAYMENT_FROM.scanQRCode
+    from.current = PAYMENT_FROM.scanQRCode
     preQRCodePayId = getQueryValue(scene, 'prepayid')
   }else if(params.orderId){
-    from = PAYMENT_FROM.message
+    from.current = PAYMENT_FROM.message
   }else{
-    from = params.from as PAYMENT_FROM
-    Qrcode.toDataURL(card.cardNo).then(url => {
+    from.current = params.from as PAYMENT_FROM
+    const cardNo = card ? card.cardNo : JSON.parse(params.orderInfo).cardNo
+    cardNo && Qrcode.toDataURL(cardNo).then(url => {
       setQrcodeSrc(url)
     })
   }
   const [orderInfo,setOrderInfo] = useState(() => {
-    if(from === PAYMENT_FROM.scanQRCode || from === PAYMENT_FROM.message){
+    if(from.current === PAYMENT_FROM.scanQRCode || from.current === PAYMENT_FROM.message){
       return {} as OrderInfoParams
     }else{
-      const orderInfoFromList = JSON.parse(params.orderInfo)
-      orderInfoFromList.cardNo = card.cardNo
-      orderInfoFromList.patientName = card.name
-      return orderInfoFromList as OrderInfoParams
+      try{
+        const orderInfoFromList = JSON.parse(params.orderInfo)
+        return orderInfoFromList as OrderInfoParams
+      }catch(err){
+        console.error(err);
+        modalService({title: '解析错误',content: params.orderInfo})
+        return {} as OrderInfoParams
+      }
     }
   })
   const [open,setOpen] = useState(true)
   const [qrcodeSrc,setQrcodeSrc] = useState('')
-  console.log(`from=${from},scene=${scene}`)
+  console.log(`from=${from.current},scene=${scene}`)
   console.log('params orderInfo='+params.orderInfo)
   const [refundOrderId,setRefundOrderId] = useState(() => {
-    if(from === PAYMENT_FROM.message){
+    if(from.current === PAYMENT_FROM.message){
       return params.orderId
     }else{
       return ''
@@ -217,7 +222,7 @@ export default function PaymentDetail() {
     //     }
     //   })
     // }
-    if(from === PAYMENT_FROM.orderList){
+    if(from.current === PAYMENT_FROM.orderList){
       // 从订单列表进入的，直接用orderId支付，不需再创建订单
       payOrderById(orderInfo.orderId,type)
     }else{
@@ -236,7 +241,7 @@ export default function PaymentDetail() {
   } 
   const handleCreatePaymentOrder = (payType) => {
     return new Promise((resolve) => {
-      if(from === PAYMENT_FROM.paymentList){
+      if(from.current === PAYMENT_FROM.paymentList){
         createPaymentOrder(buildPaymentParams(payType)).then(res => {
           if(res.resultCode === 0){
             resolve({success: true,data: {orderId: res.data.orderId}})
@@ -245,7 +250,7 @@ export default function PaymentDetail() {
           }
         })
       }
-      if(from === PAYMENT_FROM.scanQRCode){
+      if(from.current === PAYMENT_FROM.scanQRCode){
         createPaymentOrderByQRCode(buildPaymentParamsQRCode(payType)).then(res => {
           if(res.resultCode === 0){
             resolve({success: true,data: {orderId: res.data.orderId}})
@@ -553,9 +558,9 @@ export default function PaymentDetail() {
     const openId = Taro.getStorageSync('openId')
     !openId && Taro.eventCenter.on(CARD_ACTIONS.UPDATE_ALL, () => {
       setLoading(false)
-      if(from === PAYMENT_FROM.scanQRCode){
+      if(from.current === PAYMENT_FROM.scanQRCode){
         getOrderInfoByQRCode()
-      }else if(from === PAYMENT_FROM.message){
+      }else if(from.current === PAYMENT_FROM.message){
         getOrderInfo()
         // 如果是直接从消息通知跳转进来的，可监听CARD_ACTIONS.UPDATE_ALL事件，即登录完成后再调接口获取数据
         refundOrderId && fetchPaymentOrderDetail({billOrderId: refundOrderId}).then(res => {
@@ -600,7 +605,7 @@ export default function PaymentDetail() {
       patientId: card.patientId,
       orderId: ''
     }
-    if(from === PAYMENT_FROM.orderList){
+    if(from.current === PAYMENT_FROM.orderList){
       query.orderId = orderInfo.orderId
       TaroNavigateService('/pages/payment-pack/medinsurance-payment-detail/index?query='+JSON.stringify(query))
     }else{
@@ -709,16 +714,16 @@ export default function PaymentDetail() {
     if(openId){
       setLoading(false)
     }
-    if(from === PAYMENT_FROM.scanQRCode && openId){
+    if(from.current === PAYMENT_FROM.scanQRCode && openId){
       getOrderInfoByQRCode()
-    }else if(from === PAYMENT_FROM.message && openId){
+    }else if(from.current === PAYMENT_FROM.message && openId){
       getOrderInfo()
       refundOrderId && fetchPaymentOrderDetail({billOrderId:refundOrderId}).then(res => {
         if(res.resultCode === 0){
           setList(res.data)
         }
       })
-    }else if(from === PAYMENT_FROM.paymentList){
+    }else if(from.current === PAYMENT_FROM.paymentList){
       const param = {
         cardNo: orderInfo.cardNo,
         clinicNo: orderInfo.clinicNo,
@@ -726,7 +731,7 @@ export default function PaymentDetail() {
         patientId: card.patientId
       }
       getOrderDetailFromHis(param)
-    }else if(from === PAYMENT_FROM.orderList){
+    }else if(from.current === PAYMENT_FROM.orderList){
       const param = {
         billOrderId: orderInfo.orderId
       }
@@ -820,7 +825,7 @@ export default function PaymentDetail() {
           </View>
         }
         {
-          from === PAYMENT_FROM.orderList && custom.paymentOrderPage.tackingMedicineGuide && orderInfo.orderState !== ORDER_STATUS_EN.unpay &&
+          from.current === PAYMENT_FROM.orderList && custom.paymentOrderPage.tackingMedicineGuide && orderInfo.orderState !== ORDER_STATUS_EN.unpay &&
           <View className='medicine-guide'>
             {
               medicineList.length > 0 &&

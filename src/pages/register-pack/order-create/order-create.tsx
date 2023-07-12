@@ -66,7 +66,8 @@ export default function OrderCreate() {
   // const [feeTypes,setFeeTypes] = useState([])
   const [currentFeeObj,setCurrentFeeObj] = useState({feeName: '',feeCode: ''})
   // const [appointedFeeType, setAppointedFeeType] = useState('')
-  let appointedFeeType = ''
+  // let appointedFeeType = ''
+  const appointedFeeType = React.useRef('') // 广三黄埔区 需要增加feeType参数
   const [result,setResult] = useState(resultEnum.default)
   const [feeOptions,setFeeOptions] = useState([])
   const [showNotice,setShowNotice] = useState(false)
@@ -83,7 +84,7 @@ export default function OrderCreate() {
       patientId: card.patientId,
       regFee: _regFee !== undefined ? _regFee : regFee,
       treatFee: _treatFee !== undefined ? _treatFee : treatFee,
-      feeType: custom.feat.register.changeFeeType ? currentFeeObj.feeCode : (appointedFeeType || orderParams.feeType)
+      feeType: custom.feat.register.changeFeeType ? currentFeeObj.feeCode : (appointedFeeType.current || orderParams.feeType)
     }
     return params
   }
@@ -283,17 +284,19 @@ export default function OrderCreate() {
     if( (!regFee && !treatFee && regFee !== 0 && treatFee !== 0) ) {
       // toastService({title: '正在获取费用信息，请稍后……'})
       // return
-      const feeRes:any = await fetchFee()
-      if(feeRes.success){
-        appointedFeeType = feeRes.data.feeType
-        orderParams = buildOrderParams(feeRes.data.regFee, feeRes.data.treatFee)
-        handleCreateRegOrder(orderParams)
-      }else{
-        loadingService(false)
-        modalService({content: feeRes.msg})
-        setResult(resultEnum.fail)
-        return
-      }
+      loadingService(false)
+      return  // 费用赋值未成功时直接返回
+      // const feeRes:any = await fetchFee()
+      // if(feeRes.success){
+      //   appointedFeeType.current = feeRes.data.feeType
+      //   orderParams = buildOrderParams(feeRes.data.regFee, feeRes.data.treatFee)
+      //   handleCreateRegOrder(orderParams)
+      // }else{
+      //   loadingService(false)
+      //   modalService({content: feeRes.msg})
+      //   setResult(resultEnum.fail)
+      //   return
+      // }
     }else{
       orderParams = buildOrderParams()
       handleCreateRegOrder(orderParams)
@@ -371,14 +374,22 @@ export default function OrderCreate() {
       patienttId: card.patientId,
       patientName: card.name
     }
-    setOrder(orderParams)
+    // setOrder(orderParams)
     // if(custom.hospName === 'gy3yhp' && !currentFeeObj.feeCode) return // 特殊处理，未获取feecode的情况下不进行挂号金额查询
+    loadingService(true,'正在获取费用')
     fetchOrderFee(buildFeeParams()).then(res => {
+      setOrder(orderParams)
+      loadingService(false)
       if(res.resultCode === 0){
         setRegFee(res.data.regFee)
         setTreatFee(res.data.treatFee)
-        appointedFeeType = res.data.feeType
+        appointedFeeType.current = res.data.feeType
+      }else{
+        modalService({title: "获取金额失败", content: res.message+''})
       }
+    }).catch((err) => {
+      loadingService(false)
+      modalService({content: JSON.stringify(err)})
     })
   }
  
@@ -391,7 +402,7 @@ export default function OrderCreate() {
           const _feeType = res.data.feeType
           setRegFee(_regFee)
           setTreatFee(_treatFee)
-          appointedFeeType = _feeType
+          appointedFeeType.current = _feeType
           resolve({success: true, data: {regFee: _regFee,treatFee: _treatFee,feeType: _feeType}})
         }else{
           resolve({success: false, msg: '获取金额失败'})

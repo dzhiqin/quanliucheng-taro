@@ -12,8 +12,8 @@ const config = {
   banner: 'https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/common/jinshazhou-banner.png',
   logo: "https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/common/jszyy.png",
   hospitalName: "广州中医药大学金沙洲医院",
-  // baseUrl: "http://119.29.97.234:30082", // 医保测试环境
-  baseUrl: "https://jszyy-applets.wedoublecare.com",  // 正式环境
+  baseUrl: "http://119.29.97.234:30082", // 医保测试环境
+  // baseUrl: "https://jszyy-applets.wedoublecare.com",  // 正式环境
   // subUrl: 'https://gysycustomize.wedoublecare.com', // 测试环境
   indexPage: {
     quickEntrance: {
@@ -57,7 +57,13 @@ const config = {
               name: '电子诊疗卡',
               event: 'navigate',
               url: '/pages/card-pack/cards-list/cards-list'
-            }
+            },
+            {
+              name: "退款测试",
+              icon: imgUrl.new_home_icon10,
+              event: "navigate",
+              url: `/pages/payment-pack/payment-detail/payment-detail?orderId=75250&from=message`
+            },
           ]
         },
         {

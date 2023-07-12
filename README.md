@@ -93,8 +93,9 @@ export const custom = hospConfig.default as HospConfig
 * 门诊检查报告列表:pages/reports-pack/reports-list/reports-list?reportType=0&tab=1  
 **注意**：tab的值和配置文件中的顺序有关，如果clinicReportTabs第一项是检验报告，则门诊检验报告列表链接的tab=0
 * 科室医生排班表: pages/register-pack/doctor-list/doctor-list?deptId=xxx&deptName=xxx
-* 缴费详情页: pages/payment-pack/payment-detail/payment-detail?scene=${encodeURIComponent('prepayid=xxx')},扫小程序码进入缴费详情页，获取参数用decodeURIComponent
-* 缴费详情页: pages/payment-pack/payment-detail/payment-detail?orderId=xxx,退款消息进入缴费详情页
+* 缴费详情页1: pages/payment-pack/payment-detail/payment-detail?scene=${encodeURIComponent('prepayid=xxx')},扫小程序码进入缴费详情页，获取参数用decodeURIComponent
+* 缴费详情页2: pages/payment-pack/payment-detail/payment-detail?orderId=xxx,退款消息进入缴费详情页
+* 缴费详情页3：pages/payment-pack/payment-detail/payment-detail?orderInfo=${JSON.string(object)}&from=orderList， 缴费成功消息进入缴费详情，入参格式和从缴费列表进入的场景一样
 * 医生详情页: 
   * 小程序码：pages/register-pack/doctor-detail/doctor-detail?scene=${encodeURIComponent({slices: branchId_deptId_doctorId})}
   * 二维码：pages/register-pack/doctor-detail/doctor-detail?slices=${JSON.stringfy({branchId: xx,deptId: xx,doctorId: xx,regDate: xx})}
