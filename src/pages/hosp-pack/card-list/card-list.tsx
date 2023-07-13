@@ -98,8 +98,6 @@ export default function CardList(){
   const handleUnbindSuccess = (_card) => {
     setShow(false)
     const newList = list.filter(i => i.id !== _card.id)
-    console.log('unbind success new list',newList);
-    
     if(newList.length === 0) {
       setList([])
       Taro.removeStorageSync('hospCard')

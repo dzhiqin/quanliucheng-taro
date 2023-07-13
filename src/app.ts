@@ -24,7 +24,7 @@ class App extends Component {
     console.log('app on show',options.scene);
     if(options.scene === 1038){
       setGlobalData('scene',options.scene)
-      setGlobalData('authCode',options.referrerInfo.extraData.authCode)
+      setGlobalData('authCode',options.referrerInfo?.extraData?.authCode)
     }
   }
   async onLaunch (options) {

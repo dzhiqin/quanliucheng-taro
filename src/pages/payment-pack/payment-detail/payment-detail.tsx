@@ -77,7 +77,7 @@ interface OrderInfoParams {
   oweMoney?:string
 }
 // 注意进入页面场景有：
-// 1-从缴费列表进入；2-从订单列表进入；3-扫码进入; 4-点击退款消息进入; 5-点击缴费成功消息进入（入参和订单列表进入的一样）
+// 1-从缴费列表进入；2-从订单列表进入；3-扫码进入; 4-点击退款消息进入; 5-点击缴费成功消息进入from=orderList（入参和订单列表进入的一样）
 export default function PaymentDetail() {
   const payButtonText = WEAPP ? '微信支付' : '支付宝支付'
   const featConfig = custom.feat
@@ -96,10 +96,6 @@ export default function PaymentDetail() {
     from.current = PAYMENT_FROM.message
   }else{
     from.current = params.from as PAYMENT_FROM
-    const cardNo = card ? card.cardNo : JSON.parse(params.orderInfo).cardNo
-    cardNo && Qrcode.toDataURL(cardNo).then(url => {
-      setQrcodeSrc(url)
-    })
   }
   const [orderInfo,setOrderInfo] = useState(() => {
     if(from.current === PAYMENT_FROM.scanQRCode || from.current === PAYMENT_FROM.message){
@@ -405,7 +401,7 @@ export default function PaymentDetail() {
   }
   const buildPaymentParams = (type: PAY_TYPE_CN) => {
     const paymentParams: PayOrderParams ={
-      patientId: card.patientId,
+      patientId: card?.patientId,
       clinicNo: orderInfo.clinicNo,
       recipeSeq: orderInfo.recipeSeq,
       orderType: type === PAY_TYPE_CN.医保 ? ORDER_TYPE_CN.医保单 : ORDER_TYPE_CN.自费单,
@@ -570,6 +566,10 @@ export default function PaymentDetail() {
         })
       }
     })
+    if(getGlobalData('scene') === 1038 && !getGlobalData('authCode')){
+      // 取消医保支付
+      setBusy(false)
+    }
     if(getGlobalData('scene') === 1038 && getGlobalData('authCode')){
       if(refundOrderId){
         handleRefund()
@@ -590,6 +590,7 @@ export default function PaymentDetail() {
           Taro.redirectTo({url: '/pages/payment-pack/payment-list/payment-list'})
         }})
       }else{
+        setBusy(false)
         modalService({content:res.message})
       }
     }).finally(() => {
@@ -600,21 +601,23 @@ export default function PaymentDetail() {
     // 医保2.0
     const query = {
       clinicNo: orderInfo.clinicNo,
-      cardNo: card.cardNo,
+      cardNo: card?.cardNo,
       recipeSeq: orderInfo.recipeSeq,
-      patientId: card.patientId,
+      patientId: card?.patientId,
       orderId: ''
     }
     if(from.current === PAYMENT_FROM.orderList){
       query.orderId = orderInfo.orderId
-      TaroNavigateService('/pages/payment-pack/medinsurance-payment-detail/index?query='+JSON.stringify(query))
+      // TaroNavigateService('/pages/payment-pack/medinsurance-payment-detail/index?query='+JSON.stringify(query))
+      Taro.redirectTo({url: '/pages/payment-pack/medinsurance-payment-detail/index?query='+JSON.stringify(query)})
     }else{
       loadingService(true,'医保支付中')
       handleCreatePaymentOrder(PAY_TYPE_CN.医保).then((res:any) => {
         loadingService(false)
         if(res.success){
           query.orderId = res.data.orderId
-          TaroNavigateService('/pages/payment-pack/medinsurance-payment-detail/index?query='+JSON.stringify(query))
+          // TaroNavigateService('/pages/payment-pack/medinsurance-payment-detail/index?query='+JSON.stringify(query))
+        Taro.redirectTo({url: '/pages/payment-pack/medinsurance-payment-detail/index?query='+JSON.stringify(query)})
         }else{
           modalService({title: '创建订单失败', content: res.data.message})
           setGlobalData('authCode','')
@@ -728,7 +731,7 @@ export default function PaymentDetail() {
         cardNo: orderInfo.cardNo,
         clinicNo: orderInfo.clinicNo,
         recipeSeq: orderInfo.recipeSeq,
-        patientId: card.patientId
+        patientId: card?.patientId
       }
       getOrderDetailFromHis(param)
     }else if(from.current === PAYMENT_FROM.orderList){
@@ -739,6 +742,9 @@ export default function PaymentDetail() {
         setRefundOrderId(orderInfo.orderId)
       }
       getOrderDetailFromData(param)
+      orderInfo.cardNo && Qrcode.toDataURL(orderInfo.cardNo).then(url => {
+        setQrcodeSrc(url)
+      })
     }
   })
   const renderName = () => {

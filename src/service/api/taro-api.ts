@@ -299,7 +299,7 @@ const handleSubscribe = async () => {
     if(!subsRes.result){
       // setShowNotice(true)
     }else{
-      Taro.navigateTo({
+      Taro.redirectTo({
         url: '/pages/login/login'
       })
     }
@@ -337,7 +337,7 @@ export const TaroRemindAuthModal = async() => {
         handleSubscribe()
       },
       fail: err => {
-        modalService({title: '订阅失败',content: JSON.stringify(err), success: () => Taro.navigateTo({url: '/pages/login/login'})})
+        modalService({title: '订阅失败',content: JSON.stringify(err), success: () => Taro.redirectTo({url: '/pages/login/login'})})
       }
     })
   }

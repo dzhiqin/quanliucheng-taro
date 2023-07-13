@@ -14,7 +14,13 @@ Page({
       totalFee:'',insuranceFee:'',personalFee:'',cashFee:'',otherFee:''
     },
     useIndividualAccount: true,
-    actionsheetVisible: false
+    actionsheetVisible: false,
+    payFlag: ''
+  },
+  onShow() {
+    if(this.data.orderId && this.data.payFlag === 'paying'){
+      Taro.navigateBack()
+    }
   },
   handleActionsheet() {
     this.actionsheetVisible = !this.actionsheetVisible;
@@ -53,15 +59,18 @@ Page({
   },
   handlePay() {
     loadingService(true,'支付中')
+    this.setData({payFlag: 'paying'})
     handlePayment({orderId: this.data.orderId,payType: PAY_TYPE_CN.医保}).then(res => {
       if(res.resultCode === 0){
         const {pay_appid,pay_url} = res.data
         TaroNavToMiniProgram({appId:pay_appid,path: pay_url}).then(() => {
-          Taro.redirectTo({url: '/pages/payment-pack/payment-list/payment-list'})
+          // Taro.redirectTo({url: '/pages/payment-pack/payment-list/payment-list'})
         }).catch(() => {
+          this.setData({payFlag: ''})
           cancelPayment({orderId: this.data.orderId})
         })
       }else{
+        this.setData({payFlag: ''})
         loadingService(false),
         modalService({content: res.message})
       }

@@ -54,7 +54,7 @@ export default function PaymentList() {
               }
             </View>
           :
-            <BkLoading msg='暂无缴费单' loading={loading} />
+            <BkLoading msg='暂无待缴费的订单' loading={loading} />
         }
       </View>
     </View>
