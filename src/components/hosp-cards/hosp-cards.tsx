@@ -39,9 +39,8 @@ export default function HospCards(props: {onCard:Function}){
   })
   const handleSetCard = (card) => {
     setHospCard(card)
-    if(!card) return
     onCard(card)
-    QrCode.toDataURL(card.cardNo).then(url => {
+    card?.cardNo && QrCode.toDataURL(card.cardNo).then(url => {
       setQrcodeSrc(url)
     })
   }

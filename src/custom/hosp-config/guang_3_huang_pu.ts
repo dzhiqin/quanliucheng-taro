@@ -10,8 +10,7 @@ const config = {
   banner: 'https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/applets-imgs/banner2.png',
   logo: "https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/lwgk/20220309-basic/gysy.png",
   hospitalName: "广医三院黄埔院区",
-  // baseUrl: "https://applets.gdbkyz.com", // 倍康测试
-  // baseUrl: "http://43.139.42.75:30091",
+  // baseUrl: "http://119.29.97.234:30095", // 倍康测试
   baseUrl: "https://gysy-applets.wedoublecare.com",// 正式环境
   // subUrl: 'https://gysycustomize.wedoublecare.com', // 附加功能环境
   indexPage: {
@@ -55,6 +54,7 @@ const config = {
     }
   },
   feat:{
+    wxLogger: true,
     YiBaoCard: false, // 医保卡
     register: {
       cancelReservedTime: 0, // 取消挂号预留时间，默认2小时

@@ -40,7 +40,7 @@ export default function BindingCard() {
     inDate: '',
     dateCount: '',
     inHospStatus: '',
-    inDept: '',
+    inpDeptName: '',
     payCount: '',
     inpBalance: '',
     registerId: ''
@@ -87,11 +87,11 @@ export default function BindingCard() {
   const getData = (card) => {
     getInHospInfo({inCardNo: card.cardNo}).then(res => {
       if(res.resultCode === 0 && res.data){
-        const {inDate, dateCount, inpStatus, inDept, payCount, inpBalance, registerId} = res.data
+        const {inDate, dateCount, inpStatus, inpDeptName, payCount, inpBalance, registerId} = res.data
         setInfo({
           inDate,dateCount,
           inHospStatus: inHospStatusObj[inpStatus],
-          inDept,payCount,inpBalance,registerId
+          inpDeptName,payCount,inpBalance,registerId
         })
       }else{
         modalService({content: '没有住院信息'})
@@ -198,8 +198,20 @@ export default function BindingCard() {
     setShowDetail(false)
   }
   const onHospCard = (_card) => {
-    setHospCard(_card)
-    getData(_card)
+    if(_card){
+      setHospCard(_card)
+      getData(_card)
+    }else{
+      setInfo({
+        inDate:'',
+        dateCount: '',
+        inHospStatus: '',
+        inpDeptName:'',
+        payCount:'',
+        inpBalance:'',
+        registerId:'',
+      })
+    }
   }
   return(
     <View>
@@ -256,7 +268,7 @@ export default function BindingCard() {
             </View>
             <View className='card-item'>
               <View>住院科室：</View>
-              <View>{info.inDept}</View>
+              <View>{info.inpDeptName}</View>
             </View>
             <View className='card-item'>
               <View>预缴金余额：</View>
@@ -267,7 +279,7 @@ export default function BindingCard() {
           <BkTabs block onTabChange={onMoneyChange} tabs={moneyTabs} style='margin: 40rpx 0;'></BkTabs>
           <View className='flex'>
             <View>手动输入金额：</View>
-            <Input type='number' value={money} placeholder='' onInput={inputMoneyChange} style='border-bottom: 1rpx solid #ccc;'></Input>
+            <Input type='digit' value={money} placeholder='' onInput={inputMoneyChange} style='border-bottom: 1rpx solid #ccc;'></Input>
             <View>元</View>
           </View>
           <View style='padding: 40rpx'>

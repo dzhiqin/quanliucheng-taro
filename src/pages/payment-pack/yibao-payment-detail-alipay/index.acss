@@ -1,0 +1,231 @@
+@import './actionsheet.acss';
+
+.page-index {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+.hd {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  color: #fff;
+  padding: 64rpx 40rpx 40rpx 40rpx;
+  box-sizing: border-box;
+}
+.bg {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  height: 340rpx;
+  background-color: #3B71E8;
+  border-radius: 0 0 60rpx 60rpx;
+  z-index: 0;
+}
+.info {
+  background-color: unset;
+  box-shadow: unset;
+  position: relative;
+  z-index: 1;
+  color: #fff;
+}
+.info-hd {
+  font-size: 28rpx;
+  line-height: 40rpx;
+  color: rgba(255, 255, 255, 0.6);
+}
+.info-bd {
+  font-size: 36rpx;
+  line-height: 50rpx;
+  margin-top: 6rpx;
+  font-weight: bold;
+}
+.info-icon {
+  position: relative;
+  z-index: 1;
+  width: 80rpx;
+  height: 80rpx;
+}
+.info-icon-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.bd {
+  flex: 1;
+  position: relative;
+  z-index: 1;
+}
+.box {
+  border-radius: 16rpx;
+  background-color: #fff;
+  margin: 0 40rpx;
+  padding: 0 40rpx;
+  padding-bottom: 34rpx;
+  box-shadow: 0 6rpx 20rpx #E6E6E6;
+}
+.box-hd {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  padding: 48rpx 0 36rpx;
+  color: #606266;
+}
+.box-hd:before {
+  content: '';
+  position: absolute;
+  left: -16rpx;
+  bottom: 0;
+  right: -16rpx;
+  border-bottom: 2rpx dashed #D8D8D8;
+  transform: scaleY(0.5);
+}
+.box-hd-label {
+  font-weight: bold;
+}
+.box-hd-value {
+  font-weight: bold;
+}
+.box-bd {
+  padding-top: 38rpx;
+}
+.box-item {
+  display: flex;
+  justify-content: space-between;
+  color: #909399;
+  font-size: 28rpx;
+  line-height: 40rpx;
+  padding-bottom: 20rpx;
+}
+.box-item:last-child {
+  padding-bottom: 0;
+}
+.box-ft {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 40rpx;
+  padding-bottom: 34rpx;
+  font-size: 32rpx;
+  color: #3B71E8;
+}
+.box-ft-label {
+  font-weight: bold;
+}
+.box-ft-value {
+  font-weight: bold;
+}
+.box-append {
+  position: relative;
+  font-size: 28rpx;
+  line-height: 40rpx;
+  color: #606266;
+  text-align: center;
+  padding: 40rpx 0 6rpx;
+}
+.box-append:before {
+  content: '';
+  position: absolute;
+  left: -16rpx;
+  top: 0;
+  right: -16rpx;
+  border-top: 2rpx dashed #D8D8D8;
+  transform: scaleY(0.5);
+}
+.bd-append {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 64rpx;
+  margin-bottom: 64rpx;
+}
+.bd-append-icon {
+  display: block;
+  width: 80rpx;
+  height: 24rpx;
+  background: url('data:image/png;base64,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') center center no-repeat;
+  background-size: 100% 100%;
+  margin-right: 16rpx;
+}
+.bd-append-text {
+  font-size: 28rpx;
+  line-height: 40rpx;
+  color: #909399;
+  font-weight: bold;
+}
+.ft {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 28rpx;
+  padding-left: 32rpx;
+  padding-right: 32rpx;
+  padding-bottom: calc(28rpx + constant(safe-area-inset-bottom));
+  padding-bottom: calc(28rpx + env(safe-area-inset-bottom));
+}
+.pay {
+  display: flex;
+}
+.pay-label {
+  font-size: 32rpx;
+  line-height: 48rpx;
+  color:rgba(0, 0, 0, 0.6);
+  margin-right: 10rpx;
+}
+.pay-value {
+  font-size: 44rpx;
+  line-height: 48rpx;
+  color: #3B71E8;
+  font-weight: bold;
+}
+.btn {
+  font-size: 36rpx;
+  font-weight: bold;
+  line-height: 48rpx;
+  color: #fff;
+  background-color: #0D7CFF;
+  padding: 20rpx 46rpx;
+  border-radius: 48rpx;
+}
+.ft:before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  border-top: 2rpx solid rgba(0, 0, 0, 0.2);
+  transform: scaleY(0.5);
+}
+.charge-append{
+  color: #909399;
+  padding: 40rpx;
+  padding-bottom: 0;
+}
+.charge-append-btns{
+  padding-top: 20rpx;
+  display: flex;
+  justify-content: space-between;
+  gap: 40rpx;
+}
+.charge-append-btn{
+  flex:1;
+  text-align: center;
+  font-size: 28rpx;
+  padding: 14rpx;
+  border-radius: 10rpx;
+  border-width: 2rpx;
+  border-style: solid;
+}
+.charge-append-btn-active{
+  color: #3B71E8;
+  border-color: #3B71E8;
+  background-color: rgb(236,240,251);
+
+}
+.charge-append-btn-unactive{
+  border-color: #909399;
+  background-color: rgb(246,246,246);
+
+}

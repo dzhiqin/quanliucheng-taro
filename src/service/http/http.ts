@@ -3,6 +3,7 @@ import * as Taro from '@tarojs/taro'
 import { modalService } from '../toast-service'
 import monitor from '@/utils/alipayLogger'
 import { ORDER_STATUS_EN } from '@/enums/index'
+import wxLog from '@/utils/log.weapp'
 
 interface Response {
   resultCode: number
@@ -78,6 +79,11 @@ const Request = (
           console.log(`【入参】${ data ? JSON.stringify(data) : '无'}`);
           console.log(`【token】${getHeaderAuth().token}`)
           console.log(`【返回】`,res.data)
+        }else{
+          if(custom.feat.wxLogger){
+            wxLog.info(`【请求】${url}; 【入参】${ data ? JSON.stringify(data) : '无'}; 【耗时】${endTime - startTime}ms`)
+            wxLog.info(res.data)
+          }
         }
         if(custom.feat.guangHuaMonitor.enable){
           if(res.data.resultCode === 1) return

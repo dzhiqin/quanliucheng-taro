@@ -115,11 +115,18 @@ const subPackages = [
   {
     root: 'pages/payment-pack',
     name: 'payments',
-    pages: [
+    pages: process.env.TARO_ENV === 'weapp' ? 
+    [
       'payment-list/payment-list',
       'payment-detail/payment-detail',
       'order-list/order-list',
-      'medinsurance-payment-detail/index'
+      'yibao-payment-detail/index'
+    ] :
+    [
+      'payment-list/payment-list',
+      'payment-detail/payment-detail',
+      'order-list/order-list',
+      'yibao-payment-detail-alipay/index'
     ]
   },
   {

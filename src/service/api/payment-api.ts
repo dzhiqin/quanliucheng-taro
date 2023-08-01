@@ -20,7 +20,8 @@ export interface PayOrderParams {
     "orderDoctor": string,
     "orderDate": string,
     "payType": string,
-    "payAuthCode"?: string
+    "payAuthCode"?: string,
+    "longiLatitude"?: string
 }
 export const createPaymentOrder = (data: PayOrderParams) => {
   return Post(fullUrl('api/applet/paybill/Bill/CreateBillOrder'),data)

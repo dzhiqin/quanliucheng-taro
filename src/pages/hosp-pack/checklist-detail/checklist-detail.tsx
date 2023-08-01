@@ -6,7 +6,6 @@ import { fetchAllInHospBillDetail, fetchInHospBillCategories, fetchInHospBillDet
 import { loadingService, modalService } from '@/service/toast-service'
 import { useState } from 'react'
 import VirtualList from '@tarojs/components/virtual-list'
-import BkPanel from '@/components/bk-panel/bk-panel'
 import BkTabs from '@/components/bk-tabs/bk-tabs'
 import BkLoading from '@/components/bk-loading/bk-loading'
 import './checklist-detail.less'
@@ -25,7 +24,7 @@ export default function ChecklistDetail() {
   const card = Taro.getStorageSync('hospCard')
   const Row = React.memo(({id,index,style,data}) => {
     return (
-      <BkPanel >
+      <View className='checklist-detail-panel'>
         <View className='checklist-detail-item'>
           <text>编码：</text>
           <text className='checklist-detail-item-value'>{data[index].itemCode}</text>
@@ -58,7 +57,7 @@ export default function ChecklistDetail() {
             <text className='checklist-detail-item-value'>{data[index].costs} 元</text>
           </View>
         </View>
-      </BkPanel>
+      </View>
     )
   })
   const getBillCategories = () => {
@@ -123,7 +122,8 @@ export default function ChecklistDetail() {
   return(
     <View className='checklist-detail'>
       <BkTabs tabs={tabList} current={currentTab} block onTabChange={onTabChange.bind(this)} />
-      <View>{billDate}住院费用清单</View>
+      <View className='checklist-detail-title'>{billDate}住院费用清单</View>
+      <View className='checklist-detail-content'>
       {
         list.length > 0
         ?
@@ -132,13 +132,15 @@ export default function ChecklistDetail() {
           width='100%' 
           itemData={list}
           itemCount={list.length}  
-          itemSize={200}
+          itemSize={180}
         >
           {Row} 
         </VirtualList>
         :
         <BkLoading loading={busy} msg='暂无明细' />
       }
+      </View>
+      
     </View>
   )
 }

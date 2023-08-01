@@ -144,6 +144,7 @@ const config:HospConfig = {
     }
   },
   feat:{
+    wxLogger: false,
     hc_title: '广东省卫生健康委员会',
     invoice: true, // 电子发票
     guangHuaMonitor: {
@@ -224,6 +225,8 @@ const config:HospConfig = {
   paymentOrderPage: {
     tackingMedicineGuide: true //取药指引
   },
-  yibaoParams: null,
+  yibao2: {
+    enable: false
+  },
 }
 export default config

@@ -27,13 +27,17 @@ export default function QuickEntrance(props: {
   const onClickItem = (item) => {
     if(item.event==='navigate'){
       TaroNavigateService(item.url)
-    }
-    if(item.event === 'jump'){
+    }else if(item.event === 'jump'){
       TaroNavToMiniProgram({appId: item.appId, path: item.path}).then(() => {
         console.log('跳转小程序成功');
       })
-    }
-    if(item.event === 'subscribe'){
+    }else if(item.event === 'health'){
+      my.navigateTo({
+        url: "plugin://heHealth/pages/home/index?stationId=HL01826"
+      });
+  
+    }else if(item.event === 'subscribe'){
+      // 调试用
       my.requestSubscribeMessage({
         entityIds: item.tempId.split(','),
         success: res => {
@@ -45,17 +49,32 @@ export default function QuickEntrance(props: {
           
         }
       })
-    }
-    if(item.event === 'click'){
-      TaroNavToMiniProgram({appId: custom.yibaoParams.appId, path: custom.yibaoParams.path, envVersion: custom.yibaoParams.envVersion})
-    }
-    if(item.event === 'health'){
-      my.navigateTo({
-        url: "plugin://heHealth/pages/home/index?stationId=HL01826"
+    }else if(item.event === 'getLocation'){
+      // 调试用
+      my.getSystemInfo({
+        success: (res) => {
+            console.log('getSystemInfo',res);
+        },
+        fail: (err) => {
+            console.log(err);
+        }
+      })
+      my.getLocation({
+        type: 1, // 获取经纬度和省市区县数据
+        success: (res) => {
+          console.log(res);
+          modalService({content: JSON.stringify(res)})
+        },
+        fail: (res) => {
+          my.alert({ title: '定位失败', content: JSON.stringify(res) });
+          my.showAuthGuide({
+            authType: "LBS"
+          });
+        },
+        complete: () => {},
       });
-  
-    }
-    if(item.event === 'auth'){
+    }else if(item.event === 'auth'){
+      // 调试用
       if(item.scope){
         my.getAuthCode({
           scopes: item.scope.split(','),

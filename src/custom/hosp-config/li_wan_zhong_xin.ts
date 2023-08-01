@@ -11,8 +11,8 @@ const config = {
   banner: 'https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/applets-imgs/banner2.png',
   logo: "https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/common/li-wan-zhong-xin.jpeg",
   hospitalName: "广州市荔湾中心医院",
-  baseUrl: "http://119.29.97.234:30102", // 测试
-  // baseUrl: "https://lwzxyy-applets.wedoublecare.com",  // 正式环境
+  // baseUrl: "http://119.29.97.234:30102", // 测试
+  baseUrl: "https://lwzxyy-applets.wedoublecare.com",  // 正式环境
   // subUrl: 'https://gysycustomize.wedoublecare.com', // 测试环境
   indexPage: {
     functionBox:{ // 功能模块组件
@@ -65,12 +65,12 @@ const config = {
               event: 'navigate',
               url: '/pages/hosp-pack/binding-card/binding-card',
             }, 
-            {
-              icon: imgUrl.new_home_icon10,
-              name: '住院押金',
-              event: 'navigate',
-              url: '/pages/hosp-pack/deposit/deposit',
-            }, 
+            // {
+            //   icon: imgUrl.new_home_icon10,
+            //   name: '住院押金',
+            //   event: 'navigate',
+            //   url: '/pages/hosp-pack/deposit/deposit',
+            // }, 
             {
               icon: imgUrl.new_home_icon11,
               name: '每日清单',
@@ -79,35 +79,22 @@ const config = {
             }
           ]
         },
-        {
-          title: "其他",
-          entrances:[
-            // {
-            //   name: "电子票夹",
-            //   icon: imgUrl.new_home_icon10,
-            //   event: "jump",
-            //   appId: 'wx8e0b79a7f627ca18',
-            //   path: `pages/invoiceDisplayDWDZ/invoiceDisplayDWDZ?q=${encodeURIComponent("https://www.chinaebill.cn/d?t=501&a=89AMy0Cj6&d=44060122_8040675619_3f7484_20221118&s=B62B74A4D1")}`
-            // },
-            // {
-            //   name: "云胶片",
-            //   icon: imgUrl.new_home_icon10,
-            //   event: "navigate",
-            //   url: `/pages/service-pack/web-view-page/web-view-page?pageType=cloudFilm`
-            // },
-            {
-              name: "免密授权",
-              icon: imgUrl.new_home_icon10,
-              event: "click",
-            },
-            {
-              name: "退款测试",
-              icon: imgUrl.new_home_icon10,
-              event: "navigate",
-              url: `/pages/payment-pack/payment-detail/payment-detail?orderId=18707&from=message`
-            },
-          ]
-        }
+        // {
+        //   title: "其他",
+        //   entrances:[
+        //     {
+        //       name: "免密授权",
+        //       icon: imgUrl.new_home_icon10,
+        //       event: "click",
+        //     },
+        //     {
+        //       name: "退款测试",
+        //       icon: imgUrl.new_home_icon10,
+        //       event: "navigate",
+        //       url: `/pages/payment-pack/payment-detail/payment-detail?orderId=18707&from=message`
+        //     },
+        //   ]
+        // }
       ]
     }
   },
@@ -155,7 +142,8 @@ const config = {
   paymentOrderPage: {
     tackingMedicineGuide: true //取药指引
   },
-  yibaoParams: {
+  yibao2: {
+    enable: true,
     path: 'auth/pages/bindcard/auth/index?openType=getAuthCode&bizType=04107&cityCode=440108&channel=AAGE84GHsRIzjSdxPaPQtNqU&orgChnlCrtfCodg=BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxvShtXBpXvc4WkWexOKgovx&orgCodg=H44010300017&orgAppId=1GPA6UN3P0AU3F60C80A0000B246C727',
     appId: 'wxe183cd55df4b4369',
     envVersion: 'trial',

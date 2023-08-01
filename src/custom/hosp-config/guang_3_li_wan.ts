@@ -60,6 +60,7 @@ const config = {
     }
   },
   feat: {
+    wxLogger: true,
     bindCard: {
       rebind: true,
       updateNotice: true,

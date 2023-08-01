@@ -22,8 +22,8 @@ class App extends Component {
   componentDidMount () {}
   componentDidShow(options) {
     console.log('app on show',options.scene);
+    setGlobalData('scene',options.scene)
     if(options.scene === 1038){
-      setGlobalData('scene',options.scene)
       setGlobalData('authCode',options.referrerInfo?.extraData?.authCode)
     }
   }
@@ -92,6 +92,7 @@ class App extends Component {
               fetchInHospCards().then(cardsRes => {
                 if(cardsRes.resultCode === 0){
                   cardsRes.data && Taro.setStorageSync('hospCard',cardsRes.data.find(i => i.isDefault))
+                  !cardsRes.data && Taro.setStorageSync('hospCard','')
                   CardsHealper.updateAllCards().then(() => Taro.eventCenter.trigger(CARD_ACTIONS.UPDATE_ALL))  
                 }else{
                   if(cardsRes.message === '暂无数据') {

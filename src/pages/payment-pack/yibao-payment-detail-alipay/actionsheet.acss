@@ -1,0 +1,94 @@
+.actionsheet-mask {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 1000;
+}
+.actionsheet-panel {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: #fff;
+  z-index: 1001;
+  border-radius: 32rpx 32rpx 0 0;
+  max-height: 93vh;
+  overflow-y: auto;
+  padding-bottom: constant(safe-area-inset-bottom);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.actionsheet-hd {
+  display: flex;
+  justify-content: space-between;
+  padding: 54rpx 40rpx 34rpx;
+}
+.actionsheet-hd-tt {
+  font-size: 40rpx;
+  line-height: 56rpx;
+  letter-spacing: 2rpx;
+  font-weight: bold;
+  color: #303133;
+}
+.actionsheet-icon-close {
+  display: block;
+  width: 48rpx;
+  height: 48rpx;
+  background: url('data:image/png;base64,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') center center no-repeat;
+  background-size: 100% 100%;
+}
+.actionsheet-box {
+  border: 2rpx solid #F8F8F8;
+  border-radius: 12rpx;
+  margin: 20rpx;
+}
+.actionsheet-box-hd {
+  position: relative;
+  font-size: 32rpx;
+  line-height: 44rpx;
+  font-weight: bold;
+  color: #303133;
+  margin: 50rpx 0 34rpx;
+  padding: 0 40rpx;
+}
+.actionsheet-box-hd:before {
+  content: '';
+  position: absolute;
+  left: 8rpx;
+  top: 50%;
+  width: 8rpx;
+  height: 34rpx;
+  transform: translateY(-50%);
+  background-color: #3B71EB;
+}
+.actionsheet-box-bd {
+  padding: 40rpx;
+  border-top: 2rpx solid #F8F8F8;
+}
+.actionsheet-box-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 28rpx;
+  line-height: 40rpx;
+}
+.actionsheet-box-item + .actionsheet-box-item {
+  margin-top: 24rpx;
+}
+.actionsheet-box-item-label {
+  color: #606266;
+}
+.actionsheet-box-item-sublabel {
+  color: #909399;
+}
+.actionsheet-box-item-value {
+  color: #606266;
+}
+.actionsheet-box-item-value.em {
+  color: #3B71EB;
+}
+
+
+
+

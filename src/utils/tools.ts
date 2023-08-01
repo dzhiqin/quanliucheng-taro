@@ -6,6 +6,7 @@ const key = '5cf59db892044f7c84d02aeb'
 const iv = 'cf0d3a19'
 export const getBirthdayByIdCard = (id) => {
   let date = ''
+  if(!id) return date
   if (id.length == 15) {
     var year = id.substring(6, 8)
     var month = id.substring(8, 10)
@@ -127,6 +128,7 @@ export const getPrivacyPhone = (phone) => {
   return phone.replace(/(\d{3})\d*([0-9a-zA-Z]{2})/, "$1******$2" )
 }
 export const getPrivacyName = (name) => {
+  if(!name) return ''
   return new Array(name.length).join('*') + name.substr(-1);
 }
 export const compareVersion = (v1,v2) => {

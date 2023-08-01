@@ -8,7 +8,7 @@ type HospName =
   'li_wan_zhong_xin' | 
   'jin_sha_zhou_alipay' |
   'guang_1_alipay'
-const hospName:HospName = 'guang_3_li_wan'
+const hospName:HospName = 'jin_sha_zhou_alipay'
 const hospConfig = require(`./hosp-config/${hospName}.ts`)
 
 export const custom = hospConfig.default as HospConfig
@@ -66,6 +66,7 @@ export interface HospConfig {
     }
   },
   feat: {
+    wxLogger: boolean,
     hc_title: string,
     invoice: boolean,
     guangHuaMonitor: {
@@ -118,5 +119,16 @@ export interface HospConfig {
   paymentOrderPage: {
     tackingMedicineGuide: boolean //取药指引
   },
-  yibaoParams: any
+  yibao2: {
+    enable: boolean,
+    path?: string,
+    appId?: string,
+    envVersion?: string,
+    orgChnlCrtfCodg?: string,//  机构渠道认证编码
+    orgCodg?: string, //定点医药机构编码 
+    bizType?: string, //线上核验业务类型编码 
+    orgAppId?: string, // 定点医药机构应用ID 
+    cityCode?: string, //城市编码
+    channel?: string //渠道号（微信医保平台分配）
+  }
 }

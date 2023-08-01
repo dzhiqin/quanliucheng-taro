@@ -42,6 +42,7 @@ import { reportCmPV_YL } from '@/utils/cloudMonitorHelper'
 import Qrcode from 'qrcode'
 import { getGlobalData, setGlobalData } from '@/utils/globalData'
 import BkLoading from '@/components/bk-loading/bk-loading'
+import wxLog from '@/utils/log.weapp'
 
 enum resultEnum {
   default = '',
@@ -93,6 +94,7 @@ export default function PaymentDetail() {
     from.current = PAYMENT_FROM.scanQRCode
     preQRCodePayId = getQueryValue(scene, 'prepayid')
   }else if(params.orderId){
+    // 特殊处理：带参数orderId默认是从退款消息进入页面
     from.current = PAYMENT_FROM.message
   }else{
     from.current = params.from as PAYMENT_FROM
@@ -102,6 +104,11 @@ export default function PaymentDetail() {
       return {} as OrderInfoParams
     }else{
       try{
+        // 调试用
+        if(custom.hospName === 'gy3ylw' && (getGlobalData('scene') === 1014 || getGlobalData('scene') === 1107) && custom.feat.wxLogger){
+          wxLog.info(`从订阅消息进入小程序，页面入参：${params}`)
+          setGlobalData('scene','')
+        }
         const orderInfoFromList = JSON.parse(params.orderInfo)
         return orderInfoFromList as OrderInfoParams
       }catch(err){
@@ -114,7 +121,7 @@ export default function PaymentDetail() {
   const [open,setOpen] = useState(true)
   const [qrcodeSrc,setQrcodeSrc] = useState('')
   console.log(`from=${from.current},scene=${scene}`)
-  console.log('params orderInfo='+params.orderInfo)
+  console.log('params ='+JSON.stringify(params))
   const [refundOrderId,setRefundOrderId] = useState(() => {
     if(from.current === PAYMENT_FROM.message){
       return params.orderId
@@ -141,83 +148,42 @@ export default function PaymentDetail() {
   }
   const dealWithPay = async(type) => {
     setBusy(true)
-    loadingService(true,'支付中')
     const subRes:any = await handleSubscribe()
     if(!subRes.result){
       if(WEAPP){
         setShowNotice(true)
       }
       if(ALIPAYAPP){
-        modalService({content: subRes.msg})
+        modalService({content: subRes.msg.message,title: '订阅消息失败'})
       }
       setBusy(false)
       loadingService(false)
       return
     }
-    if(custom.yibaoParams && type === PAY_TYPE_CN.医保){
+    loadingService(true,'支付中')
+    if(custom.yibao2.enable && type === PAY_TYPE_CN.医保){
       if(WEAPP){
         weChatYiBaoAuth()
         // 腾讯医保授权需要跳转到医保小程序，授权完成返回页面后在onshow里继续支付流程
         return
-      }
-      if(ALIPAYAPP){
+      }else if(ALIPAYAPP){
         const result:any = await alipayYiBaoAuth()
         if(!result.success){
           setBusy(false)
           loadingService(false)
+          modalService({content: '医保授权失败'})
           return
-        } 
-          
+        }
+        const locationRes:any = await alipayGetLocation()
+        if(!locationRes.success){
+          setBusy(false)
+          loadingService(false)
+          return
+        }
+        handleYiBao2Payment()
+        return
       }
     }
-    // let subRes
-    // if(WEAPP){
-    //   subRes = await TaroSubscribeService(custom.subscribes.paySuccessNotice,custom.subscribes.refundNotice)
-    //   if(!subRes.result){
-    //     setShowNotice(true)
-    //     setBusy(false)
-    //     return
-    //   }
-    // }
-    // if(ALIPAYAPP){
-    //   subRes = await AlipaySubscribeService(custom.subscribes.paySuccessNotice,custom.subscribes.orderCancelReminder)
-    //   if(!subRes.result){
-    //     modalService({content: subRes.msg})
-    //     setBusy(false)
-    //     return
-    //   }
-    // }
-
-    // if(custom.yibaoParams && type === PAY_TYPE_CN.医保){
-    //   TaroNavToMiniProgram({appId: custom.yibaoParams.appId,path: custom.yibaoParams.path, envVersion: 'trial'})
-    //   return
-    // }
-    // if(from === PAYMENT_FROM.orderList){
-    //   // 从订单列表进入的，直接用orderId支付，不需再创建订单
-    //   payOrderById(orderInfo.orderId,type)
-    // }else if(from === PAYMENT_FROM.scanQRCode){
-    //   createPaymentOrderByQRCode(buildPaymentParamsQRCode(type)).then(res => {
-    //     if(res.resultCode === 0){
-    //       setOrderId(res.data.orderId)
-    //       payOrderById(res.data.orderId,type)
-    //     }else{
-    //       loadingService(false)
-    //       modalService({title: '创建订单失败',content: res.message})
-    //       setBusy(false)
-    //     }
-    //   })
-    // }else if(from === PAYMENT_FROM.paymentList) {
-    //   createPaymentOrder(buildPaymentParams(type)).then(res => {
-    //     if(res.resultCode === 0){
-    //       setOrderId(res.data.orderId)
-    //       payOrderById(res.data.orderId,type)
-    //     }else{
-    //       loadingService(false)
-    //       modalService({title: '创建订单失败', content: res.message})
-    //       setBusy(false)
-    //     }
-    //   })
-    // }
     if(from.current === PAYMENT_FROM.orderList){
       // 从订单列表进入的，直接用orderId支付，不需再创建订单
       payOrderById(orderInfo.orderId,type)
@@ -245,8 +211,7 @@ export default function PaymentDetail() {
             resolve({success:false,data: {message: res.message}})
           }
         })
-      }
-      if(from.current === PAYMENT_FROM.scanQRCode){
+      }else if(from.current === PAYMENT_FROM.scanQRCode){
         createPaymentOrderByQRCode(buildPaymentParamsQRCode(payType)).then(res => {
           if(res.resultCode === 0){
             resolve({success: true,data: {orderId: res.data.orderId}})
@@ -410,7 +375,8 @@ export default function PaymentDetail() {
       orderDoctor: orderInfo.orderDoctor,
       orderDate: orderInfo.orderDate,
       payType: type,
-      payAuthCode: getGlobalData('authCode') || ''
+      payAuthCode: getGlobalData('authCode') || '',
+      longiLatitude: getGlobalData('longiLatitude') || ''
     }
     return paymentParams
   }
@@ -472,7 +438,7 @@ export default function PaymentDetail() {
     }
   }
   const weChatYiBaoAuth = () => {
-    TaroNavToMiniProgram({appId: custom.yibaoParams.appId,path: custom.yibaoParams.path, envVersion: custom.yibaoParams.envVersion}).catch(err => {
+    TaroNavToMiniProgram({appId: custom.yibao2.appId,path: custom.yibao2.path, envVersion: custom.yibao2.envVersion}).catch(err => {
       setBusy(false)
       loadingService(false)
     })
@@ -491,6 +457,27 @@ export default function PaymentDetail() {
           resolve({success: false})
         }
       })
+    })
+  }
+  const alipayGetLocation = () => {
+    return new Promise((resolve) => {
+      my.getLocation({
+        type: 1, // 获取经纬度和省市区县数据
+        success: (res) => {
+          const { latitude, longitude } = res
+          setGlobalData('longiLatitude', longitude +','+ latitude)
+          resolve({success: true})
+        },
+        fail: (res) => {
+          my.alert({ title: '定位失败', content: JSON.stringify(res) });
+          my.showAuthGuide({
+            authType: "LBS"
+          });
+          resolve({success: false})
+        },
+        complete: () => {},
+      });
+      
     })
   }
   const handleCancel = () => {
@@ -559,11 +546,14 @@ export default function PaymentDetail() {
       }else if(from.current === PAYMENT_FROM.message){
         getOrderInfo()
         // 如果是直接从消息通知跳转进来的，可监听CARD_ACTIONS.UPDATE_ALL事件，即登录完成后再调接口获取数据
-        refundOrderId && fetchPaymentOrderDetail({billOrderId: refundOrderId}).then(res => {
-          if(res.resultCode === 0){
-            setList(res.data)
-          }
-        })
+        // refundOrderId && fetchPaymentOrderDetail({billOrderId: refundOrderId}).then(res => {
+        //   if(res.resultCode === 0){
+        //     setList(res.data)
+        //   }
+        // })
+        refundOrderId && getOrderDetailFromData({billOrderId: refundOrderId})
+      }else if(from.current === PAYMENT_FROM.orderList){
+        orderInfo.orderId && getOrderDetailFromData({billOrderId: orderInfo.orderId})
       }
     })
     if(getGlobalData('scene') === 1038 && !getGlobalData('authCode')){
@@ -608,16 +598,16 @@ export default function PaymentDetail() {
     }
     if(from.current === PAYMENT_FROM.orderList){
       query.orderId = orderInfo.orderId
-      // TaroNavigateService('/pages/payment-pack/medinsurance-payment-detail/index?query='+JSON.stringify(query))
-      Taro.redirectTo({url: '/pages/payment-pack/medinsurance-payment-detail/index?query='+JSON.stringify(query)})
+      WEAPP && Taro.redirectTo({url: '/pages/payment-pack/yibao-payment-detail/index?query='+JSON.stringify(query)})
+      ALIPAYAPP && Taro.redirectTo({url: '/pages/payment-pack/yibao-payment-detail-alipay/index?query='+JSON.stringify(query)})
     }else{
       loadingService(true,'医保支付中')
       handleCreatePaymentOrder(PAY_TYPE_CN.医保).then((res:any) => {
         loadingService(false)
         if(res.success){
           query.orderId = res.data.orderId
-          // TaroNavigateService('/pages/payment-pack/medinsurance-payment-detail/index?query='+JSON.stringify(query))
-        Taro.redirectTo({url: '/pages/payment-pack/medinsurance-payment-detail/index?query='+JSON.stringify(query)})
+          WEAPP && Taro.redirectTo({url: '/pages/payment-pack/yibao-payment-detail/index?query='+JSON.stringify(query)})
+          ALIPAYAPP && Taro.redirectTo({url: '/pages/payment-pack/yibao-payment-detail-alipay/index?query='+JSON.stringify(query)})
         }else{
           modalService({title: '创建订单失败', content: res.data.message})
           setGlobalData('authCode','')
@@ -625,23 +615,6 @@ export default function PaymentDetail() {
         }
       })
     }
-    // createPaymentOrder(buildPaymentParams(PAY_TYPE_CN.医保)).then(res => {
-    //   setGlobalData('authCode', '')
-    //   if(res.resultCode === 0){
-    //     const query = {
-    //       clinicNo: orderInfo.clinicNo,
-    //       cardNo: card.cardNo,
-    //       recipeSeq: orderInfo.recipeSeq,
-    //       patientId: card.patientId,
-    //       orderId: res.data.orderId
-    //     }
-    //     TaroNavigateService('/pages/payment-pack/medinsurance-payment-detail/index?query='+JSON.stringify(query))
-    //   }else{
-    //     loadingService(false)
-    //     modalService({title: '创建订单失败', content: res.message})
-    //     setBusy(false)
-    //   }
-    // })
   }
   const getOrderInfo = () => {
     fetchBillOrderInfo({orderId:params.orderId}).then(res => {
@@ -657,6 +630,7 @@ export default function PaymentDetail() {
     })
   }
   const getOrderInfoByQRCode = () => {
+    loadingService(true,'加载中')
     fetchPaymentOrderDetailByQRCode({preQRCodePayId:Number(preQRCodePayId),payAuthCode: getGlobalData('authCode')}).then(res => {
       // 扫码进入的因接口返回字段不同╮(╯▽╰)╭，需要重新对齐数据
       loadingService(false)
@@ -698,6 +672,7 @@ export default function PaymentDetail() {
     billOrderId: string
   }) => {
     if(!Taro.getStorageSync('token')) return
+    loadingService(true)
     fetchPaymentOrderDetail(param).then(res => {
       loadingService(false)
       if(res.resultCode === 0){
@@ -721,11 +696,12 @@ export default function PaymentDetail() {
       getOrderInfoByQRCode()
     }else if(from.current === PAYMENT_FROM.message && openId){
       getOrderInfo()
-      refundOrderId && fetchPaymentOrderDetail({billOrderId:refundOrderId}).then(res => {
-        if(res.resultCode === 0){
-          setList(res.data)
-        }
-      })
+      // refundOrderId && fetchPaymentOrderDetail({billOrderId:refundOrderId}).then(res => {
+      //   if(res.resultCode === 0){
+      //     setList(res.data)
+      //   }
+      // })
+      refundOrderId && getOrderDetailFromData({billOrderId: refundOrderId})
     }else if(from.current === PAYMENT_FROM.paymentList){
       const param = {
         cardNo: orderInfo.cardNo,
@@ -758,8 +734,7 @@ export default function PaymentDetail() {
     return (
       <BkLoading msg='加载中...' loading={loading} />
     )
-  }
-  else if(payResult === resultEnum.default){
+  }else if(payResult === resultEnum.default){
     return(
       <View className='payment-detail'>
         <SubscribeNotice show={showNotice}></SubscribeNotice>
@@ -817,7 +792,7 @@ export default function PaymentDetail() {
             </View>
           }
           {
-            orderInfo && custom.yibaoParams && (orderInfo.orderState === ORDER_STATUS_EN.paySuccess || orderInfo.orderState === ORDER_STATUS_EN.paySuccess_and_His_fail) &&
+            orderInfo && custom.yibao2.enable && (orderInfo.orderState === ORDER_STATUS_EN.paySuccess || orderInfo.orderState === ORDER_STATUS_EN.paySuccess_and_His_fail) &&
             <View className='flex-justify-center'>
               <BkButton title='确认退款' theme='danger' disabled={busy} onClick={handleClickRefund} />
             </View>

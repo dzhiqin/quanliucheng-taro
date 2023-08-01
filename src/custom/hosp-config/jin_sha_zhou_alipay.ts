@@ -11,8 +11,8 @@ const config = {
   banner: 'https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/common/jinshazhou-banner.png',
   logo: "https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/common/jszyy.png",
   hospitalName: "广州中医药大学金沙洲医院",
-  // baseUrl: "https://applets.gdbkyz.com", // 倍康测试
-  baseUrl: "https://jszyy-zfb.wedoublecare.com",  // 正式环境
+  baseUrl: "http://119.29.97.234:30082", // 医保测试
+  // baseUrl: "https://jszyy-zfb.wedoublecare.com",  // 正式环境
   // subUrl: 'https://gysycustomize.wedoublecare.com', // 测试环境
   indexPage: {
     quickEntrance: {
@@ -33,6 +33,11 @@ const config = {
               event: 'auth',
               scope: 'nhsamp,auth_user'
             }, 
+            {
+              icon: imgUrl.new_home_icon7,
+              name: '经纬度',
+              event: 'getLocation',
+            }
           ]
         },
         
@@ -51,7 +56,7 @@ const config = {
       oneClickAuth: false,    // 一键授权，直接绑定健康卡
       updateNotice: false, // 绑卡和解绑发送消息通知
     },
-    YiBaoCard: false, // 医保卡
+    YiBaoCard: true, // 医保卡
     register: {
       cancelReservedTime: 0, // 取消挂号预留时间
       popupNotice: true,// 挂号提示弹窗
@@ -65,7 +70,7 @@ const config = {
     arrivalService: {
       arrival: true,
       waitingList: true
-    }
+    }    
   },
   reportsPage:{
     hideInHosp: true, // 隐藏住院报告入口
@@ -88,6 +93,9 @@ const config = {
     bindCardNotice: 'd730066b4c2a48db96d02c704b02be33', // 绑卡成功通知 once
     visitProgressReminder: '', // 问诊进度提醒 longterm notyet
   },
+  yibao2: {
+    enable: true
+  }
 }
 const mergedConfig = mergeRecursive(DefaultConfig,config)
 export default mergedConfig

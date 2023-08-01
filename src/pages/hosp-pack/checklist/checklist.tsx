@@ -61,9 +61,14 @@ export default function BindingCard() {
     TaroNavigateService('hosp-pack','checklist-detail',`billDate=${item.billDate}&registerId=${registerId? registerId : _registerId}`)
   }
   const onHospCard = (hospCard) => {
-    setCard(hospCard)
-    getList(hospCard.cardNo)
-    handleGetInHospInfo(hospCard.cardNo)
+    if(hospCard){
+      setCard(hospCard)
+      getList(hospCard.cardNo)
+      handleGetInHospInfo(hospCard.cardNo)
+    }else{
+      setList([])
+    }
+    
   }
   return(
     <View className='checklist'>

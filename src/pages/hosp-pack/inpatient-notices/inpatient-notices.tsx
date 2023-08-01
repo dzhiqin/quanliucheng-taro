@@ -18,8 +18,12 @@ export default function InpatientNotices() {
   const [showModal, setShowModal] = useState(false)
   const [record, setRecord] = useState({inHospDate: '',brxm: '',sfzh: '',brzyid:'',brxb:''})
   const onHospCard = (card) => {
-    getList(card)
-    setCurrentCard(card)
+    if(card){
+      getList(card)
+      setCurrentCard(card)
+    }else{
+      setList([])
+    }
   }
   const getList = (card) => {
     fetchInpatientRegNotices({idenNo: card.idenNo, patientName: card.patientName}).then(res => {

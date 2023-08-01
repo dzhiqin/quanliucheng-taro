@@ -33,12 +33,12 @@ const config = {
             //   event: 'navigate',
             //   url: '/pages/service-pack/arrival-service/arrival-service'
             // }, 
-            {
-              icon: imgUrl.new_home_icon10,
-              name: '问卷调查',
-              event: 'navigate',
-              url: '/pages/service-pack/survey/survey?typeId=1'
-            },
+            // {
+            //   icon: imgUrl.new_home_icon10,
+            //   name: '问卷调查',
+            //   event: 'navigate',
+            //   url: '/pages/service-pack/survey/survey?typeId=1'
+            // },
             {
               icon: imgUrl.new_home_icon10,
               name: '挂号充值',
@@ -62,19 +62,19 @@ const config = {
               name: "退款测试",
               icon: imgUrl.new_home_icon10,
               event: "navigate",
-              url: `/pages/payment-pack/payment-detail/payment-detail?orderId=75250&from=message`
+              url: `/pages/payment-pack/payment-detail/payment-detail?orderId=74036&from=message`
             },
           ]
         },
         {
           title: '住院',
           entrances: [
-            {
-              icon: imgUrl.new_home_icon9,
-              name: '住院登记',
-              event: 'navigate',
-              url: '/pages/hosp-pack/inpatient-notices/inpatient-notices',
-            }, 
+            // {
+            //   icon: imgUrl.new_home_icon9,
+            //   name: '住院登记',
+            //   event: 'navigate',
+            //   url: '/pages/hosp-pack/inpatient-notices/inpatient-notices',
+            // }, 
             // {
             //   icon: imgUrl.zybk,
             //   name: '住院绑卡',
@@ -98,6 +98,7 @@ const config = {
     },
   },
   feat:{
+    wxLogger: true,
     hc_title: '广州市卫生健康委员会',
     bindCard: {
       rebind: true,
@@ -145,7 +146,8 @@ const config = {
     refundNotice: '',//退费通知
     bindCardNotice: '',//绑卡成功提醒
   },
-  yibaoParams: {
+  yibao2: {
+    enable: true,
     path: 'auth/pages/bindcard/auth/index?openType=getAuthCode&bizType=04107&cityCode=440108&channel=AAGx8JTn8nVQxHkPp2rpCOLZ&orgChnlCrtfCodg=BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxsNta9ZJYODCgmT5ajL0Ke9&orgCodg=H44011100745&orgAppId=1GQQ6P3I81GQ3F60C80A0000A17BE977',
     appId: 'wxe183cd55df4b4369',
     envVersion: 'trial',
