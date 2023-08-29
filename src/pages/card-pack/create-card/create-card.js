@@ -172,11 +172,12 @@ export default class BindCard extends React.Component {
     loadingService(true)
     createCard(this.buildCardParams())
     .then(res => {
-      if(res.resultCode === 0){
+      if(res.resultCode === 0 || res.resultCode ===4){ // resultCode=4 用于判断诊疗卡绑卡成功但是申领电子健康卡失败的情况
         CardsHealper.updateAllCards().then(() => {
           toastService({title: '创建成功', icon: 'success', onClose: () => {Taro.navigateBack();loadingService(false)}})
         })
       }else{
+        // 被resultCode=4的情况兼容，怕有的接口没改过来先保留此段代码
         let msg = ''
         if (/成功创建患者档案信息/.test(res.message)) {
           msg = '诊疗卡创建成功'

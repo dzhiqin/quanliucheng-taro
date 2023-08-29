@@ -37,6 +37,11 @@ const config = {
               icon: imgUrl.new_home_icon7,
               name: '经纬度',
               event: 'getLocation',
+            },
+            {
+              icon: imgUrl.new_home_icon7,
+              name: '重定向',
+              event: 'redirect',
             }
           ]
         },

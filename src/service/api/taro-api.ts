@@ -93,18 +93,33 @@ export const getSetting = () => {
     }
   })
 }
-export const TaroAliPayment = (data:{tradeNo: string}) => {
-  return new Promise((resolve) => {
-    my.tradePay({
-      tradeNO: data.tradeNo,
-      success: res => {
-        resolve({success: true,data: JSON.stringify(res)})
-      },
-      fail: err => {
-        resolve({success: false,data: JSON.stringify(err)})
-      }
+export const TaroAliPayment = (data:{tradeNo?: string, orderStr?: string}) => {
+  if(data.tradeNo){
+    return new Promise((resolve) => {
+      my.tradePay({
+        tradeNO: data.tradeNo,
+        success: res => {
+          resolve({success: true,data: JSON.stringify(res)})
+        },
+        fail: err => {
+          resolve({success: false,data: JSON.stringify(err)})
+        }
+      })
     })
-  })
+  }else if(data.orderStr){
+    return new Promise((resolve) => {
+      my.tradePay({
+        orderStr: data.orderStr,
+        success: res => {
+          resolve({success: true,data: JSON.stringify(res)})
+        },
+        fail: err => {
+          resolve({success: false,data: JSON.stringify(err)})
+        }
+      })
+    })
+  }
+  
   
 }
 interface paymentParams {

@@ -4,8 +4,8 @@ import * as React from 'react'
 import * as Taro from '@tarojs/taro'
 import BkTabs from '../bk-tabs/bk-tabs'
 import './quick-entrance.less'
-import { TaroNavToMiniProgram,handleAuthCode, TaroNavigateService } from '@/service/api'
-import { modalService,loadingService } from '@/service/toast-service'
+import { TaroNavToMiniProgram, TaroNavigateService } from '@/service/api'
+import { modalService } from '@/service/toast-service'
 import { custom } from '@/custom/index'
 
 export default function QuickEntrance(props: {
@@ -28,14 +28,20 @@ export default function QuickEntrance(props: {
     if(item.event==='navigate'){
       TaroNavigateService(item.url)
     }else if(item.event === 'jump'){
-      TaroNavToMiniProgram({appId: item.appId, path: item.path}).then(() => {
+      TaroNavToMiniProgram({appId: item.appId, path: item.path, envVersion: item.envVersion}).then(() => {
         console.log('跳转小程序成功');
       })
     }else if(item.event === 'health'){
+      // 金沙洲跳转体检小程序
       my.navigateTo({
         url: "plugin://heHealth/pages/home/index?stationId=HL01826"
       });
-  
+    }else if(item.event === 'location'){
+      Taro.openLocation({
+        latitude: custom.latitude,
+        longitude: custom.longitude,
+        name: custom.address
+      })
     }else if(item.event === 'subscribe'){
       // 调试用
       my.requestSubscribeMessage({
@@ -101,6 +107,16 @@ export default function QuickEntrance(props: {
         })
       }
       
+    }else if(item.event==='redirect'){
+      my.ap.openURL({
+        url: 'https://render.alipay.com/p/s/medical-card-online/www/online-pay.html?returnUrl=alipays%3A%2F%2Fplatformapi%2Fstartapp%3FappId%3D2021003171691188%26page%3Dpages%2Fpayment-pack%2Fpayment-list%2Fpayment-list&openapiAppId=2021003171691188&reqBizNo=1191312',
+        success: (res) => {
+          console.log('openURL success', res)
+        },
+        fail: (err) => {
+          console.log('openURL success', err)
+        }
+      });
     }
   }
   

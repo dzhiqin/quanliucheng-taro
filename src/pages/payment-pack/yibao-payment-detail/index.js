@@ -1,9 +1,10 @@
 import * as Taro from '@tarojs/taro'
 import { fetchPaymentDetailFromHis,fetchBillOrderInfo,handlePayment,
-  TaroNavToMiniProgram,cancelPayment,individualAccountEnable } from "@/service/api"
+  TaroNavToMiniProgram,cancelPayment,individualAccountEnable, fetchPaymentOrderStatus } from "@/service/api"
 import { loadingService, modalService } from "@/service/toast-service"
 import { custom } from "@/custom/index"
-import { PAY_TYPE_CN } from "@/enums/index"
+import { PAY_TYPE_CN,ORDER_STATUS_EN } from "@/enums/index"
+import { requestTry } from '@/utils/retry'
 
 // eslint-disable-next-line no-undef
 Page({
@@ -19,8 +20,40 @@ Page({
   },
   onShow() {
     if(this.data.orderId && this.data.payFlag === 'paying'){
-      Taro.navigateBack()
+      loadingService(true)
+      requestTry(this.checkOrderStatus)
+      .then(() => {
+        Taro.navigateBack()
+        loadingService(false)
+      })
+      .catch((err) => {
+        loadingService(false)
+        let message = ''
+        switch(err.data){
+          case 0: message = '未支付';break;
+          case 1: message = '支付中';break;
+          case 2: message = '支付成功';break;
+          case 3: message = '支付失败';break;
+          case 4: message = '支付成功且通知His成功';break;
+          case 5: message = '支付成功但通知His失败';break;
+          case 6: message = '取消支付';break;
+        }
+        modalService({content: message})
+      })
     }
+  },
+  checkOrderStatus() {
+    return new Promise((resolve,reject) => {
+      fetchPaymentOrderStatus({orderId: this.data.orderId}).then(res => {
+        if(res.resultCode === 0 && res.data === ORDER_STATUS_EN.paySuccess_and_His_success){
+          resolve(res.message)
+        }else{
+          reject(res)
+        }
+      }).catch(err => {
+        reject(err)
+      })
+    })
   },
   handleActionsheet() {
     this.actionsheetVisible = !this.actionsheetVisible;

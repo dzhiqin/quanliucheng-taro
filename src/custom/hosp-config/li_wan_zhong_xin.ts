@@ -11,10 +11,14 @@ const config = {
   banner: 'https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/applets-imgs/banner2.png',
   logo: "https://bkyz-applets-1252354869.cos.ap-guangzhou.myqcloud.com/common/li-wan-zhong-xin.jpeg",
   hospitalName: "广州市荔湾中心医院",
-  // baseUrl: "http://119.29.97.234:30102", // 测试
-  baseUrl: "https://lwzxyy-applets.wedoublecare.com",  // 正式环境
+  address: '广州市荔湾区荔湾路35号',
+  baseUrl: "http://119.29.97.234:30102", // 测试
+  // baseUrl: "https://lwzxyy-applets.wedoublecare.com",  // 正式环境
   // subUrl: 'https://gysycustomize.wedoublecare.com', // 测试环境
   indexPage: {
+    navCard:{ // 导航卡组件
+      enable: false
+    },
     functionBox:{ // 功能模块组件
       enable: true,
       list: [
@@ -39,7 +43,15 @@ const config = {
           desc: '检查检验随时查',
           url: '/pages/reports-pack/reports-type/reports-type',
           tag: 'green'
-        }
+        },
+        // {
+        //   icon: imgUrl.new_home_icon3,
+        //   title: '智能分诊',
+        //   event: 'navigate',
+        //   desc: '智能科室挂号',
+        //   url: '/pages/register-pack/intelligent-guidance/intelligent-guidance',
+        //   tag: 'green'
+        // }
       ]
     },
     quickEntrance: {
@@ -65,12 +77,12 @@ const config = {
               event: 'navigate',
               url: '/pages/hosp-pack/binding-card/binding-card',
             }, 
-            // {
-            //   icon: imgUrl.new_home_icon10,
-            //   name: '住院押金',
-            //   event: 'navigate',
-            //   url: '/pages/hosp-pack/deposit/deposit',
-            // }, 
+            {
+              icon: imgUrl.new_home_icon10,
+              name: '住院押金',
+              event: 'navigate',
+              url: '/pages/hosp-pack/deposit/deposit',
+            }, 
             {
               icon: imgUrl.new_home_icon11,
               name: '每日清单',
@@ -79,26 +91,43 @@ const config = {
             }
           ]
         },
-        // {
-        //   title: "其他",
-        //   entrances:[
-        //     {
-        //       name: "免密授权",
-        //       icon: imgUrl.new_home_icon10,
-        //       event: "click",
-        //     },
-        //     {
-        //       name: "退款测试",
-        //       icon: imgUrl.new_home_icon10,
-        //       event: "navigate",
-        //       url: `/pages/payment-pack/payment-detail/payment-detail?orderId=18707&from=message`
-        //     },
-        //   ]
-        // }
+        {
+          title: "其他",
+          entrances:[
+            {
+              name: "病案复印",
+              icon: imgUrl.new_home_icon11,
+              event: "jump",
+              appId: 'wx00e00ce740025edd',
+              path: 'pages/index/index?scene=b%3D1100088630603',
+              envVersion: 'release'
+            },
+            {
+              name: "健康教育",
+              icon: imgUrl.new_home_icon12,
+              event: "jump",
+              appId: 'wx165570c8c0d96e17',
+              path: 'pages/science/science',
+              envVersion: 'release'
+            },
+            {
+              name: '医院导航',
+              icon: imgUrl.new_home_icon13,
+              event: 'location'
+            }
+            // {
+            //   name: "退款测试",
+            //   icon: imgUrl.new_home_icon10,
+            //   event: "navigate",
+            //   url: `/pages/payment-pack/payment-detail/payment-detail?orderId=18707&from=message`
+            // },
+          ]
+        }
       ]
     }
   },
   feat: {
+    wxLogger: true,
     hc_title: '广州市卫生健康委员会',
     bindCard: {
       rebind: true,
@@ -120,11 +149,17 @@ const config = {
       {title: '化验', value: REPORT_ITEM_TYPE_CN.化验},
       {title: '检查', value: REPORT_ITEM_TYPE_CN.检查},
       {title: '病理', value: REPORT_ITEM_TYPE_CN.病理},
+      {title: '放射', value: REPORT_ITEM_TYPE_CN.放射},
+      {title: '超声', value: REPORT_ITEM_TYPE_CN.超声},
+      {title: '内镜', value: REPORT_ITEM_TYPE_CN.内镜},
     ],
     hospReportTabs: [  // 住院报告分类
       {title: '化验', value: REPORT_ITEM_TYPE_CN.化验},
       {title: '检查', value: REPORT_ITEM_TYPE_CN.检查},
       {title: '病理', value: REPORT_ITEM_TYPE_CN.病理},
+      {title: '放射', value: REPORT_ITEM_TYPE_CN.放射},
+      {title: '超声', value: REPORT_ITEM_TYPE_CN.超声},
+      {title: '内镜', value: REPORT_ITEM_TYPE_CN.内镜},
     ]
   },
   subscribes: {
@@ -142,17 +177,31 @@ const config = {
   paymentOrderPage: {
     tackingMedicineGuide: true //取药指引
   },
-  yibao2: {
-    enable: true,
-    path: 'auth/pages/bindcard/auth/index?openType=getAuthCode&bizType=04107&cityCode=440108&channel=AAGE84GHsRIzjSdxPaPQtNqU&orgChnlCrtfCodg=BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxvShtXBpXvc4WkWexOKgovx&orgCodg=H44010300017&orgAppId=1GPA6UN3P0AU3F60C80A0000B246C727',
+  // 医保测试参数
+  // yibao2: {
+  //   enable: true,
+  //   path: 'auth/pages/bindcard/auth/index?openType=getAuthCode&bizType=04107&cityCode=440108&channel=AAGE84GHsRIzjSdxPaPQtNqU&orgChnlCrtfCodg=BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxvShtXBpXvc4WkWexOKgovx&orgCodg=H44010300017&orgAppId=1GPA6UN3P0AU3F60C80A0000B246C727',
+  //   appId: 'wxe183cd55df4b4369',
+  //   envVersion: 'trial',
+  //   orgChnlCrtfCodg: 'BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxvShtXBpXvc4WkWexOKgovx',//  机构渠道认证编码
+  //   orgCodg: 'H44010300017', //定点医药机构编码 
+  //   bizType: '04107', //线上核验业务类型编码 
+  //   orgAppId: '1GPA6UN3P0AU3F60C80A0000B246C727', // 定点医药机构应用ID 
+  //   cityCode: '440108', //城市编码
+  //   channel: 'AAGE84GHsRIzjSdxPaPQtNqU' //渠道号（微信医保平台分配）
+  // }
+  // 医保正式参数
+  yibao2:{
+    enable:true,
+    path: 'auth/pages/bindcard/auth/index?openType=getAuthCode&bizType=04107&cityCode=440108&channel=AAHSZsUP-DIHHxdJxaHYMJhF&orgChnlCrtfCodg=BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxvShtXBpXvc4WkWexOKgovx&orgCodg=H44010300017&orgAppId=1H11EIFBA029E1470B0A0000882F2DEE',
     appId: 'wxe183cd55df4b4369',
-    envVersion: 'trial',
-    orgChnlCrtfCodg: 'BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxvShtXBpXvc4WkWexOKgovx',//  机构渠道认证编码
-    orgCodg: 'H44010300017', //定点医药机构编码 
-    bizType: '04107', //线上核验业务类型编码 
-    orgAppId: '1GPA6UN3P0AU3F60C80A0000B246C727', // 定点医药机构应用ID 
-    cityCode: '440108', //城市编码
-    channel: 'AAGE84GHsRIzjSdxPaPQtNqU' //渠道号（微信医保平台分配）
+    envVersion: 'release',
+    orgChnlCrtfCodg:'BqK1kMStlhVDgN2uHf4EsLK/F2LjZPYJ81nK2eYQqxvShtXBpXvc4WkWexOKgovx',
+    orgCode: 'H44010300017',
+    bizType: '04107',
+    orgAppId: '1H11EIFBA029E1470B0A0000882F2DEE',
+    cityCode: '440108',
+    channel: 'AAHSZsUP-DIHHxdJxaHYMJhF'
   }
 }
 const mergedConfig = mergeRecursive(DefaultConfig, config)

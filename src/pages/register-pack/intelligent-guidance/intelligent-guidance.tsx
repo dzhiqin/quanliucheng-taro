@@ -12,7 +12,6 @@ import { useState } from "react"
 import { toastService } from "@/service/toast-service"
 
 export default function IntelligentGuidance() {
-  
   const [genderIndex,setGenderIndex] = useState(0)
   const genderArray = [{title: '男性'},{title: '女性'}]
   const [side,setSide] = useState(true)
@@ -29,7 +28,6 @@ export default function IntelligentGuidance() {
   }
   const ManFront = () => {
     const handleClick = (e) => {
-      console.log(e);
       toastService({title: e})
     }
     return(
@@ -54,7 +52,7 @@ export default function IntelligentGuidance() {
     return (
       <View className='guidance-man'>
         <View onClick={handleClick.bind(this,'head')} className='guidance-man-back-head' />
-        <View onClick={handleClick.bind(this,'neck')} className='guidance-man-back-neck'></View>
+        <View onClick={handleClick.bind(this,'back')} className='guidance-man-back-neck'></View>
         <View onClick={handleClick.bind(this,'chest')} className='guidance-man-back-chest'></View>
         <View onClick={handleClick.bind(this,'waist')} className='guidance-man-back-waist'></View>
         <View onClick={handleClick.bind(this,'left-arm')} className='guidance-man-back-leftarm'></View>
@@ -93,7 +91,7 @@ export default function IntelligentGuidance() {
       <View className='guidance-woman'>
         <View onClick={handleClick.bind(this,'head')} className='guidance-woman-back-head' />
         <View onClick={handleClick.bind(this,'neck')} className='guidance-woman-back-neck'></View>
-        <View onClick={handleClick.bind(this,'chest')} className='guidance-woman-back-chest'></View>
+        <View onClick={handleClick.bind(this,'back')} className='guidance-woman-back-chest'></View>
         <View onClick={handleClick.bind(this,'waist')} className='guidance-woman-back-waist'></View>
         <View onClick={handleClick.bind(this,'left-arm')} className='guidance-woman-back-leftarm'></View>
         <View onClick={handleClick.bind(this,'right-arm')} className='guidance-woman-back-rightarm'></View>

@@ -28,7 +28,7 @@ export default function BindCard(){
     setBusy(true)
     loadingService(true)
     createCard(form).then(res => {
-      if(res.resultCode === 0 || (/成功创建患者档案信息/.test(res.message))){
+      if(res.resultCode === 0 || (/成功创建患者档案信息/.test(res.message)) || (/诊疗卡绑卡成功/.test(res.message))){
         setBusy(false)
         CardsHealper.updateAllCards().then(() => {
           toastService({title: '绑卡成功',icon: 'success', onClose: () => {Taro.navigateBack();loadingService(false)}})

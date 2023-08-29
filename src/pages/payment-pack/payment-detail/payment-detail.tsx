@@ -24,6 +24,7 @@ import {
   TaroNavigateService,
   fetchBillOrderInfo,
   handleBillOrderRefund,
+  handleAuthCode
 } from '@/service/api'
 import { CardsHealper } from '@/utils/cards-healper'
 import './payment-detail.less'
@@ -106,7 +107,7 @@ export default function PaymentDetail() {
       try{
         // 调试用
         if(custom.hospName === 'gy3ylw' && (getGlobalData('scene') === 1014 || getGlobalData('scene') === 1107) && custom.feat.wxLogger){
-          wxLog.info(`从订阅消息进入小程序，页面入参：${params}`)
+          wxLog.info(`从订阅消息进入小程序，页面入参：${JSON.stringify(params)}`)
           setGlobalData('scene','')
         }
         const orderInfoFromList = JSON.parse(params.orderInfo)
@@ -135,7 +136,7 @@ export default function PaymentDetail() {
   const [payResultMsg,setPayResultMsg] = useState('')
   const [showNotice,setShowNotice] = useState(false)
   const [medicineList,setMedicineList] = useState([])
-  const [needFetchInfo,setFetchInfo] = useState(false)
+  const [needFetchInfo,setFetchInfo] = useState(false) // 特殊处理：针对扫码进详情页但是未医保授权的情况，处理为先授权再根据needFetchInfo在授权结束后重新获取订单信息
   const handleSubscribe = async() => {
     let subRes
     if(WEAPP){
@@ -207,6 +208,8 @@ export default function PaymentDetail() {
         createPaymentOrder(buildPaymentParams(payType)).then(res => {
           if(res.resultCode === 0){
             resolve({success: true,data: {orderId: res.data.orderId}})
+          }else if(res.resultCode === 4){
+            resolve({success: false,data: {message: "需要医保支付授权", url: res.data}})
           }else{
             resolve({success:false,data: {message: res.message}})
           }
@@ -257,7 +260,15 @@ export default function PaymentDetail() {
         loadingService(false)
         modalService({content: res.message})
       }else{
-        const {nonceStr, paySign, signType, timeStamp, pay_appid, pay_url} = res.data
+        const {nonceStr, paySign, signType, timeStamp, pay_appid, pay_url,orderStr} = res.data
+        // if(payType === PAY_TYPE_CN.医保){
+        //   WEAPP && Taro.navigateToMiniProgram({appId: pay_appid, path: pay_url}) // 腾讯医保是跳转到医保小程序支付
+        //   ALIPAYAPP && orderStr && handleAliPay({orderStr, orderId: id})  // 支付宝医保是调用预授权支付
+        // }else{
+        //   const tradeNo = getQueryValue(res.data.package, 'trade_no')
+        //   WEAPP && handleWeappPay({nonceStr,paySign,timeStamp,package: res.data.package,signType,id})
+        //   ALIPAYAPP && handleAliPay({tradeNo, orderId: id})
+        // }
         if(payType === PAY_TYPE_CN.医保 && pay_url){
           if(ALIPAYAPP) {
             modalService({content: '跳转支付宝医保小程序联调中'})
@@ -278,7 +289,6 @@ export default function PaymentDetail() {
             handleAliPay({tradeNo, orderId: id})
           }
         }
-        
       }
     }).catch((err) => {
       setBusy(false)
@@ -319,9 +329,8 @@ export default function PaymentDetail() {
       }
     })
   }
-  const handleAliPay = (options: {tradeNo: string, orderId: string}) => {
+  const handleAliPay = (options: {tradeNo?: string, orderId: string}) => {
     TaroAliPayment({tradeNo: options.tradeNo}).then((payRes:any) => {
-      console.log(payRes);
       const data = JSON.parse(payRes.data)
       if(data.resultCode === '9000'){
         // loadingService(false)
@@ -449,8 +458,12 @@ export default function PaymentDetail() {
         scopes: ['nhsamp','auth_user'],// 主动授权：auth_user，静默授权：auth_base
         success: res => {
           const { authCode } = res
-          setGlobalData('authCode',authCode)
-          resolve({success: true})
+          handleAuthCode({code: authCode,authType: 'basic'}).then((authRes) => {
+            // console.log('authRes',authRes);
+            setGlobalData('authCode',authCode)
+            resolve({success: true})
+          })
+          
         },
         fail: err => {
           modalService({content: err.message})
@@ -546,11 +559,6 @@ export default function PaymentDetail() {
       }else if(from.current === PAYMENT_FROM.message){
         getOrderInfo()
         // 如果是直接从消息通知跳转进来的，可监听CARD_ACTIONS.UPDATE_ALL事件，即登录完成后再调接口获取数据
-        // refundOrderId && fetchPaymentOrderDetail({billOrderId: refundOrderId}).then(res => {
-        //   if(res.resultCode === 0){
-        //     setList(res.data)
-        //   }
-        // })
         refundOrderId && getOrderDetailFromData({billOrderId: refundOrderId})
       }else if(from.current === PAYMENT_FROM.orderList){
         orderInfo.orderId && getOrderDetailFromData({billOrderId: orderInfo.orderId})
@@ -558,6 +566,7 @@ export default function PaymentDetail() {
     })
     if(getGlobalData('scene') === 1038 && !getGlobalData('authCode')){
       // 取消医保支付
+      loadingService(false)
       setBusy(false)
     }
     if(getGlobalData('scene') === 1038 && getGlobalData('authCode')){
@@ -609,7 +618,19 @@ export default function PaymentDetail() {
           WEAPP && Taro.redirectTo({url: '/pages/payment-pack/yibao-payment-detail/index?query='+JSON.stringify(query)})
           ALIPAYAPP && Taro.redirectTo({url: '/pages/payment-pack/yibao-payment-detail-alipay/index?query='+JSON.stringify(query)})
         }else{
-          modalService({title: '创建订单失败', content: res.data.message})
+          if(res.data.url){
+            my.ap.openURL({
+              url: res.data.url,
+              success: (result) => {
+                console.log('openURL success', result)
+              },
+              fail: (err) => {
+                console.log('openURL success', err)
+              }
+            });
+          }else{
+            modalService({title: '创建订单失败', content: res.data.message})
+          }
           setGlobalData('authCode','')
           setBusy(false)
         }
@@ -696,11 +717,6 @@ export default function PaymentDetail() {
       getOrderInfoByQRCode()
     }else if(from.current === PAYMENT_FROM.message && openId){
       getOrderInfo()
-      // refundOrderId && fetchPaymentOrderDetail({billOrderId:refundOrderId}).then(res => {
-      //   if(res.resultCode === 0){
-      //     setList(res.data)
-      //   }
-      // })
       refundOrderId && getOrderDetailFromData({billOrderId: refundOrderId})
     }else if(from.current === PAYMENT_FROM.paymentList){
       const param = {
@@ -723,6 +739,18 @@ export default function PaymentDetail() {
       })
     }
   })
+  const handleShowOrderInfo = () => {
+    if(custom.hospName === 'jszyy'){
+      // 特殊处理 金沙洲医院 支付宝小程序要求缴费成功后有取药指引
+      const options = {
+        ...orderInfo,
+        payState: PAY_STATUS_EN.paid
+      }
+      Taro.redirectTo({url: `/pages/payment-pack/payment-detail/payment-detail?orderInfo=${JSON.stringify(options)}&from=${PAYMENT_FROM.orderList}`})
+    }else{
+      TaroNavigateService('payment-pack', 'order-list')
+    }
+  }
   const renderName = () => {
     let name = orderInfo.patientName
     if(ALIPAYAPP){
@@ -747,10 +775,14 @@ export default function PaymentDetail() {
             <View className='flat-title'>流水号</View>
             <View className='payment-detail-item-text' style='overflow-wrap: anywhere;'>{orderInfo.clinicNo}</View>
           </View>
-          <View className='flex'>
-            <View className='flat-title'>姓名</View>
-            <View className='payment-detail-item-text'>{renderName()}</View>
-          </View>
+          {
+            orderInfo.patientName &&
+            <View className='flex'>
+              <View className='flat-title'>姓名</View>
+              <View className='payment-detail-item-text'>{renderName()}</View>
+            </View>
+          }
+
           <View className='flex'>
             <View className='flat-title'>开单科室</View>
             <View className='payment-detail-item-text'>{orderInfo.orderDept}</View>
@@ -878,7 +910,7 @@ export default function PaymentDetail() {
               <BkButton title='支付宝支付' icon='icons/alipay.png' theme='primary' disabled={busy} onClick={dealWithPay.bind(null,PAY_TYPE_CN.支付宝)} />
             }
             {
-              orderInfo.payState === PAY_STATUS_EN.unpay && orderInfo.orderType === ORDER_TYPE_CN.医保单 && custom.feat.YiBaoCard &&
+              orderInfo.payState === PAY_STATUS_EN.unpay && orderInfo.orderType === ORDER_TYPE_CN.医保单 &&
               <BkButton title='医保支付' icon='icons/card.png' theme='primary' disabled={busy} onClick={dealWithPay.bind(null,PAY_TYPE_CN.医保)} />
             }
           </View>
@@ -922,7 +954,7 @@ export default function PaymentDetail() {
             payResult === resultEnum.success &&
             <View>
               <BkButton theme='primary' title='返回首页' onClick={() => Taro.switchTab({url: '/pages/index/index'})} style='margin-bottom: 40rpx' />
-              <BkButton theme='info' title='查看订单' onClick={() => TaroNavigateService('payment-pack', 'order-list')} />
+              <BkButton theme='info' title='查看订单' onClick={handleShowOrderInfo} />
             </View>
           }
         </View>

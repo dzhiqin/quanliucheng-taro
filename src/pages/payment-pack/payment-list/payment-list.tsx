@@ -24,7 +24,6 @@ export default function PaymentList() {
       setLoading(false)
     })
   }
-  
   const handleClick = (item) => {
     // 缴费单的信息要从列表带过去
     item.payState = PAY_STATUS_EN.unpay  // 默认未支付状态

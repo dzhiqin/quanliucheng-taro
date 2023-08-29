@@ -1,5 +1,6 @@
 type HospName = 
   'guang_3_li_wan' |
+  'guang_3_li_wan_test' |
   'en_ping_fu_you' |
   'li_wan_gu_ke' |
   'shun_de_jun_an' | 
@@ -8,7 +9,7 @@ type HospName =
   'li_wan_zhong_xin' | 
   'jin_sha_zhou_alipay' |
   'guang_1_alipay'
-const hospName:HospName = 'jin_sha_zhou_alipay'
+const hospName:HospName = 'guang_3_li_wan_test'
 const hospConfig = require(`./hosp-config/${hospName}.ts`)
 
 export const custom = hospConfig.default as HospConfig
@@ -23,6 +24,7 @@ export interface HospConfig {
   region: string[],
   hospName: string,
   hospitalName: string,
+  address: string,
   logo: string,
   baseUrl: string,
   subUrl: string,
@@ -123,7 +125,7 @@ export interface HospConfig {
     enable: boolean,
     path?: string,
     appId?: string,
-    envVersion?: string,
+    envVersion?: 'trial' | 'release' | 'develop',
     orgChnlCrtfCodg?: string,//  机构渠道认证编码
     orgCodg?: string, //定点医药机构编码 
     bizType?: string, //线上核验业务类型编码 

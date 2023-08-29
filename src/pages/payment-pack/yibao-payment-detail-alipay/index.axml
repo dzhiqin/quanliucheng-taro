@@ -70,7 +70,7 @@
         </view>
       </view>
       <view class="actionsheet-bd">
-        <view class="actionsheet-box" wx:for="{{list}}" wx:key="itemName">
+        <view class="actionsheet-box" a:for="{{list}}" a:key="itemName">
           <view class="actionsheet-box-bd">
             <view class="actionsheet-box-item">
               <view class="actionsheet-box-item-label">费用类型</view>
